@@ -16,6 +16,7 @@ function createServer() {
       requireResolversForResolveType: false
     },
     // get the context for every request
+    // so we can access the db from the resolvers
     context: req => ({ ...req, db })
   });
 }

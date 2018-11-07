@@ -1,12 +1,12 @@
 const mutations = {
   createUser(parent, args, ctx, info) {
-    // create a dog!
+    // create a user!
     const newUser = { name: args.name, email: args.email, password: args.password };
 
     // put it in database, etc
-    // dogs.push(newDog);
+    // users.push(newUser);
 
     //return it
-    return newDog;
+    return newUser;
   }
 };
