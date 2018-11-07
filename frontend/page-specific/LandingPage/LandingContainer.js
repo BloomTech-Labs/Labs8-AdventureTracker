@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import Header from './Header';
+import InfoPanel from './InfoPanel';
 
 const LandingWrapper = styled.div`
   height: 100%;
@@ -14,13 +15,14 @@ const BackgroundImage = styled.img`
   left: 0;
   height: 100%;
   width: 100%;
-  z-index: -1;
+  z-index: -1000;
 `;
 
 const LandingContainer = () => (
   <LandingWrapper>
     <Header />
-    <BackgroundImage src="../../static/hiking-girl.jpg" />
+    <BackgroundImage src="../../static/LandingPage/hiking-girl.jpg" />
+    <InfoPanel />
   </LandingWrapper>
 );
 

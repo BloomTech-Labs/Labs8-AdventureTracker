@@ -27,7 +27,7 @@ const HeaderWrapper = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 12rem;
+  height: 10rem;
   width: 100%;
   margin: 0 auto;
   padding: 0 6rem;
