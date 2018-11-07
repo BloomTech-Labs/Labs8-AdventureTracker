@@ -1,8 +1,9 @@
 import Link from 'next/link';
+import LandingContainer from '../page-specific/LandingPage/LandingContainer';
 
 const Home = props => (
   <div>
-    <p>Hola!</p>
+    <LandingContainer />
   </div>
 );
 
