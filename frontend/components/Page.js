@@ -10,7 +10,11 @@ const theme = {
   lightgrey: '#E1E1E1',
   offWhite: '#EDEDED',
   maxWidth: '1000px',
-  bs: '0 12px 24px 0 rgba(0, 0, 0, 0.09)'
+  bs: '0 12px 24px 0 rgba(0, 0, 0, 0.09)',
+  orange: '#EA6200',
+  white: '#E9E9E9',
+  red: '#D10000',
+  opacityblack: 'rgba(29,27,27,51%)'
 };
 
 const StyledPage = styled.div`
