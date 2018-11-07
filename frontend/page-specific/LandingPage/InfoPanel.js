@@ -35,6 +35,7 @@ const BuyBtn = styled.button`
   border: none;
   border-radius: 3px;
   font-size: 5rem;
+  cursor: pointer;
 `;
 const InfoPanel = () => (
   <InfoPanelWrapper>
