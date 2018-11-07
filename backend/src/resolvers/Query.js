@@ -1,7 +1,7 @@
 module.exports = mutations;
 
 const Query = {
-  dogs(parent, args, ctx, info) {
+  user(parent, args, ctx, info) {
     // Data!  can come from anywhere, API, DB call, etc
     return [{ name: 'Penny' }, { name: 'Snoopy' }];
   }

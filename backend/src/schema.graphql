@@ -1,4 +1,12 @@
+type User {
+  name: String!
+  email: String!
+  password: String!
+}
+
+
 type Mutation {
+  createUser(name: String!, email: String!, password: String!): User
   createTrip(title: String, description: String, image: String, largeImage: String): Trip!
   updateTrip(id: ID!, title: String, description: String): Trip!
   deleteTrip(id: ID!): Trip

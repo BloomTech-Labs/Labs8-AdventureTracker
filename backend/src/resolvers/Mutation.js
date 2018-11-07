@@ -1,7 +1,7 @@
 const mutations = {
-  createDog(parent, args, ctx, info) {
+  createUser(parent, args, ctx, info) {
     // create a dog!
-    const newDog = { name: args.name };
+    const newUser = { name: args.name, email: args.email, password: args.password };
 
     // put it in database, etc
     // dogs.push(newDog);
