@@ -1,5 +1,3 @@
-module.exports = mutations;
-
 const Query = {
   dogs(parent, args, ctx, info) {
     // Data!  can come from anywhere, API, DB call, etc

@@ -1,4 +1,4 @@
-const mutations = {
+const Mutations = {
   createDog(parent, args, ctx, info) {
     // create a dog!
     const newDog = { name: args.name };
@@ -10,3 +10,5 @@ const mutations = {
     return newDog;
   }
 };
+
+module.exports = Mutations;
