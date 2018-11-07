@@ -26,7 +26,10 @@ const Info = styled.p`
 const BoldWord = styled.strong`
   font-weight: 600;
 `;
-const BuyBtn = styled.button`
+const BuyBtn = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   color: #e9e9e9;
   background: #d10000;
   height: 12rem;
@@ -48,7 +51,7 @@ const InfoPanel = () => (
     <Info>
       <BoldWord>Find</BoldWord> the best routes for your journey
     </Info>
-    <BuyBtn>Buy Now</BuyBtn>
+    <BuyBtn href = "/buy">Buy Now</BuyBtn>
   </InfoPanelWrapper>
 );
 

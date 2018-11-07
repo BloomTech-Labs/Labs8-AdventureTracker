@@ -8,7 +8,10 @@ const Logo = styled.h1`
 const ButtonGroup = styled.div`
   display: flex;
 `;
-const Login = styled.button`
+const Login = styled.a`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   height: 6rem;
   width: 18rem;
   border: none;
@@ -39,8 +42,8 @@ const Header = () => (
   <HeaderWrapper>
     <Logo>Adventure Tracker</Logo>
     <ButtonGroup>
-      <Login>Login</Login>
-      <SignUp>Sign-Up</SignUp>
+      <Login href="/login">Login</Login>
+      <SignUp href="/sign-up">Sign-Up</SignUp>
     </ButtonGroup>
   </HeaderWrapper>
 );
