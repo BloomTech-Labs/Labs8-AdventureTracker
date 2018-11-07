@@ -3,7 +3,6 @@ import Header from './Header';
 import InfoPanel from './InfoPanel';
 
 const LandingWrapper = styled.div`
-  height: 100%;
   width: 100%;
 `;
 
