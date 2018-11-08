@@ -66,9 +66,6 @@ const Mutations = {
     return user;
   },
   async deleteUser(parent, { id }, ctx, info) {
-    if (!id) {
-      throw new Error('User not found');
-    }
     const deletedUser = await ctx.db.mutation.deleteUser({
       where: {
         id
