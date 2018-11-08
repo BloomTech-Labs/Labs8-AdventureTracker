@@ -1,12 +1,14 @@
 import Link from 'next/link';
+import Signup from '../components/Signup';
 
-const SignUp = () => (
+const SignUpPage = () => (
   <div>
     <p>This is the Sign-Up page</p>
+    <Signup />
     <Link href="/triplist">
       <button>Complete</button>
     </Link>
   </div>
 );
 
-export default SignUp;
+export default SignUpPage;
