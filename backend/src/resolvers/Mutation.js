@@ -85,6 +85,8 @@ const Mutations = {
     });
     // return the user
     return user;
+  },
+  
   async deleteUser(parent, { id }, ctx, info) {
     const deletedUser = await ctx.db.mutation.deleteUser({
       where: {
