@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
-import styled, { ThemeProvider, injectGlobal } from 'styled-components';
+import styled, { ThemeProvider, injectGlobal, withTheme } from 'styled-components';
 import Header from './Header';
 import Meta from './Meta';
 
 const theme = {
-  red: '#FF0000',
-  black: '#393939',
-  grey: '#3A3A3A',
-  lightgrey: '#E1E1E1',
-  offWhite: '#EDEDED',
-  maxWidth: '1000px',
-  bs: '0 12px 24px 0 rgba(0, 0, 0, 0.09)',
+  black: '#2E2E2E',
+  brown: '#973f00',
   orange: '#EA6200',
   white: '#E9E9E9',
   red: '#D10000',
@@ -23,13 +18,8 @@ const StyledPage = styled.div`
 `;
 
 injectGlobal`
-  @font-face {
-    font-family: 'radnika_next';
-    src: url('/static/radnikanext-medium-webfont.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-  }
   html {
+    @import url('https://fonts.googleapis.com/css?family=Saira:400,700');
     box-sizing: border-box;
     font-size: 62.5%;
   }
@@ -41,20 +31,21 @@ injectGlobal`
     margin: 0;
     font-size: 1.5rem;
     line-height: 4rem;
-    font-family: 'radnika_next';
+    font-family: 'Saira', sans-serif;
   }
   a {
     text-decoration: none;
     color: ${theme.black};
   }
-  button {  font-family: 'radnika_next'; }
 `;
 
+// withTheme allows all pages to have access to theme prop
+const StyledPageWithTheme = withTheme(StyledPage);
 class Page extends Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <StyledPage>{this.props.children}</StyledPage>
+        <StyledPageWithTheme>{this.props.children}</StyledPageWithTheme>
       </ThemeProvider>
     );
   }
