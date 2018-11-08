@@ -1,9 +1,11 @@
-# type Mutation {
-#   createTrip(title: String, description: String, image: String, largeImage: String): Trip!
-#   updateTrip(id: ID!, title: String, description: String): Trip!
-#   deleteTrip(id: ID!): Trip
-#   signup(email: String!, password: String!, name: String!): User!
-# }
+# import * from './generated/prisma.graphql'
+
+type Mutation {
+  createTrip(title: String, description: String): Trip!
+  updateTrip(id: ID!, title: String, description: String): Trip!
+  deleteTrip(id: ID!): Trip
+  signup(email: String!, password: String!, name: String!): User!
+}
 
 # type Query {
 #   trips(where: TripWhereInput, orderBy: TripOrderByInput, skip: Int, first: Int): [Trip]!
@@ -11,15 +13,6 @@
 #   tripsConnection(where: ItemWhereInput): TripConnection!
 # }
 
-type Dog {
-  name: String!
-}
-
-type Mutation {
-  # take in a "name" and : means return that type
-  createDog(name: String!): Dog
-}
-
 type Query {
-  dogs: [Dog]!
+  trips: [Trip]!
 }

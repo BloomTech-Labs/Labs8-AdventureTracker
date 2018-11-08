@@ -12,17 +12,13 @@ type User {
   email: String! @unique
   password: String!
   resetToken: String
-  resetTokenExpiry: String
+  resetTokenExpiry: Float
   permissions: [Permission]
 }
 
-# type Trip {
-#   id: ID! @unique
-#   title: String!
-#   description: String!
-#   image: String
-#   largeImage: String
-#   createAt: DateTime!
-#   updateAt: DateTime!
-#   user: User!
-# }
+type Trip {
+  id: ID! @unique
+  title: String!
+  description: String!
+  #user: User!
+}

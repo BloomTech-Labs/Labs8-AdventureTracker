@@ -1,13 +1,17 @@
 const Mutations = {
-  createDog(parent, args, ctx, info) {
-    // create a dog!
-    const newDog = { name: args.name };
+  async createTrip(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
 
-    // put it in database, etc
-    // dogs.push(newDog);
-
-    //return it
-    return newDog;
+    const trip = await ctx.db.mutation.createTrip(
+      {
+        data: {
+          // Below is the same as manually adding in each field
+          ...args
+        }
+      },
+      info
+    );
+    return trip;
   }
 };
 

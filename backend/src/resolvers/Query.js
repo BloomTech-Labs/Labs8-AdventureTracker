@@ -1,7 +1,7 @@
 const Query = {
-  dogs(parent, args, ctx, info) {
-    // Data!  can come from anywhere, API, DB call, etc
-    return [{ name: 'Penny' }, { name: 'Snoopy' }];
+  async trips(parent, args, ctx, info) {
+    const trips = await ctx.db.query.trip();
+    return trips;
   }
 };
 
