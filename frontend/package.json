@@ -9,8 +9,7 @@
     "start": "NODE_ENV=production node server.js",
     "export": "npm run build && next export",
     "test": "NODE_ENV=test jest --watch",
-    "test-win": "SET NODE_ENV=test&& jest --watch",
-    "heroku-postbuild": "next build"
+    "test-win": "SET NODE_ENV=test&& jest --watch"
   },
   "author": "",
   "license": "ISC",
