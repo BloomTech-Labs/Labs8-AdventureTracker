@@ -18,13 +18,8 @@ const StyledPage = styled.div`
 `;
 
 injectGlobal`
-  @font-face {
-    font-family: 'radnika_next';
-    src: url('/static/radnikanext-medium-webfont.woff2') format('woff2');
-    font-weight: normal;
-    font-style: normal;
-  }
   html {
+    @import url('https://fonts.googleapis.com/css?family=Saira:400,700');
     box-sizing: border-box;
     font-size: 62.5%;
   }
@@ -36,13 +31,12 @@ injectGlobal`
     margin: 0;
     font-size: 1.5rem;
     line-height: 4rem;
-    font-family: 'radnika_next';
+    font-family: 'Saira', sans-serif;
   }
   a {
     text-decoration: none;
     color: ${theme.black};
   }
-  button {  font-family: 'radnika_next'; }
 `;
 
 // withTheme allows all pages to have access to theme prop
