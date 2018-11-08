@@ -3,6 +3,7 @@
 type Mutation {
   # createTrip(title: String, description: String): Trip!
   signup(name: String!, email: String!, password: String!): User!
+  signin(name: String!, password: String!): User!
   # updateTrip(id: ID!, title: String, description: String): Trip!
   # deleteTrip(id: ID!): Trip
 }
