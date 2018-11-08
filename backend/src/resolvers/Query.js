@@ -1,8 +1,11 @@
+const { forwardTo } = require('prisma-binding');
 const Query = {
-  dogs(parent, args, ctx, info) {
-    // Data!  can come from anywhere, API, DB call, etc
-    return [{ name: 'Penny' }, { name: 'Snoopy' }];
-  }
+  // trips: forwardTo('db'),
+  users: forwardTo('db')
+  // async trips(parent, args, ctx, info) {
+  //   const trips = await ctx.db.query.trips();
+  //   return trips;
+  // }
 };
 
 module.exports = Query;
