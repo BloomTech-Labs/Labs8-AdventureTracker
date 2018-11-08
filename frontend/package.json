@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "next -p 7777",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
+    "export": "npm run build && next export",
     "test": "NODE_ENV=test jest --watch",
     "test-win": "SET NODE_ENV=test&& jest --watch",
     "heroku-postbuild": "next build"
