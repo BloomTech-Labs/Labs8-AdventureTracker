@@ -2,9 +2,9 @@
 
 type Mutation {
   createTrip(title: String, description: String): Trip!
-  updateTrip(id: ID!, title: String, description: String): Trip!
-  deleteTrip(id: ID!): Trip
-  signup(email: String!, password: String!, name: String!): User!
+  # updateTrip(id: ID!, title: String, description: String): Trip!
+  # deleteTrip(id: ID!): Trip
+  # signup(email: String!, password: String!, name: String!): User!
 }
 
 # type Query {
