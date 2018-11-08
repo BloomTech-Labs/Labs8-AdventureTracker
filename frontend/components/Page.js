@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import styled, { ThemeProvider, injectGlobal } from 'styled-components';
+import styled, { ThemeProvider, injectGlobal, withTheme } from 'styled-components';
 import Header from './Header';
 import Meta from './Meta';
 
@@ -45,11 +45,13 @@ injectGlobal`
   button {  font-family: 'radnika_next'; }
 `;
 
+// withTheme allows all pages to have access to theme prop
+const StyledPageWithTheme = withTheme(StyledPage);
 class Page extends Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <StyledPage>{this.props.children}</StyledPage>
+        <StyledPageWithTheme>{this.props.children}</StyledPageWithTheme>
       </ThemeProvider>
     );
   }
