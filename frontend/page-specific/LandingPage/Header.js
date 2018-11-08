@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const Logo = styled.h1`
-  color: #e9e9e9;
+  color: ${props => props.theme.white};
   font-size: 5rem;
 `;
 
@@ -16,8 +16,8 @@ const Login = styled.a`
   width: 18rem;
   border: none;
   border-radius: 10px;
-  color: #e9e9e9;
-  background: #ea6200;
+  color: ${props => props.theme.white};
+  background: ${props => props.theme.orange};
   cursor: pointer;
   font-size: 3rem;
   &:first-child {
@@ -34,9 +34,9 @@ const HeaderWrapper = styled.nav`
   width: 100%;
   margin: 0 auto;
   padding: 0 6rem;
-  color: #e9e9e9;
-  background: #973f00;
-  border-bottom: 6px solid #2e2e2e;
+  color: ${props => props.theme.white};
+  background: ${props => props.theme.brown};
+  border-bottom: 6px solid ${props => props.theme.black};
 `;
 const Header = () => (
   <HeaderWrapper>

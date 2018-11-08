@@ -7,10 +7,10 @@ const InfoPanelWrapper = styled.aside`
   bottom: 0;
   width: 40%;
   padding: 0 5rem;
-  background: rgba(29, 27, 27, 51%);
+  background: ${props => props.theme.opacityblack};
   text-transform: capitalize;
   z-index: -10;
-  color: #e9e9e9;
+  color: ${props => props.theme.white};
 `;
 const Info = styled.p`
   font-size: 3.2rem;
@@ -30,8 +30,8 @@ const BuyBtn = styled.a`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #e9e9e9;
-  background: #d10000;
+  color: white;
+  background: ${props => props.theme.red};
   height: 12rem;
   width: 100%;
   text-transform: capitalize;
