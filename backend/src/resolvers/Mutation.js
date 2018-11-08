@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+
 const Mutations = {
   // async createTrip(parent, args, ctx, info) {
   //   // TODO: Check if they are logged in
@@ -63,6 +64,18 @@ const Mutations = {
     });
     // Return the user to the browser
     return user;
+  },
+  async deleteUser(parent, { id }, ctx, info) {
+    if (!id) {
+      throw new Error('User not found');
+    }
+    const deletedUser = await ctx.db.mutation.deleteUser({
+      where: {
+        id
+      }
+    });
+
+    return deletedUser;
   }
 };
 
