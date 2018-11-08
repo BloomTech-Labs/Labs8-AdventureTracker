@@ -1,7 +1,3 @@
-type AggregateTrip {
-  count: Int!
-}
-
 type AggregateUser {
   count: Int!
 }
@@ -13,16 +9,14 @@ type BatchPayload {
 scalar Long
 
 type Mutation {
-  createTrip(data: TripCreateInput!): Trip!
-  updateTrip(data: TripUpdateInput!, where: TripWhereUniqueInput!): Trip
-  updateManyTrips(data: TripUpdateInput!, where: TripWhereInput): BatchPayload!
-  upsertTrip(where: TripWhereUniqueInput!, create: TripCreateInput!, update: TripUpdateInput!): Trip!
-  deleteTrip(where: TripWhereUniqueInput!): Trip
-  deleteManyTrips(where: TripWhereInput): BatchPayload!
   createUser(data: UserCreateInput!): User!
   updateUser(data: UserUpdateInput!, where: UserWhereUniqueInput!): User
   updateManyUsers(data: UserUpdateInput!, where: UserWhereInput): BatchPayload!
-  upsertUser(where: UserWhereUniqueInput!, create: UserCreateInput!, update: UserUpdateInput!): User!
+  upsertUser(
+    where: UserWhereUniqueInput!
+    create: UserCreateInput!
+    update: UserUpdateInput!
+  ): User!
   deleteUser(where: UserWhereUniqueInput!): User
   deleteManyUsers(where: UserWhereInput): BatchPayload!
 }
@@ -50,137 +44,34 @@ enum Permission {
   TRIPCREATE
   TRIPDELETE
   TRIPUPDATE
+  PERMISSIONUPDATE
 }
 
 type Query {
-  trip(where: TripWhereUniqueInput!): Trip
-  trips(where: TripWhereInput, orderBy: TripOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Trip]!
-  tripsConnection(where: TripWhereInput, orderBy: TripOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): TripConnection!
   user(where: UserWhereUniqueInput!): User
-  users(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [User]!
-  usersConnection(where: UserWhereInput, orderBy: UserOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): UserConnection!
+  users(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): [User]!
+  usersConnection(
+    where: UserWhereInput
+    orderBy: UserOrderByInput
+    skip: Int
+    after: String
+    before: String
+    first: Int
+    last: Int
+  ): UserConnection!
   node(id: ID!): Node
 }
 
 type Subscription {
-  trip(where: TripSubscriptionWhereInput): TripSubscriptionPayload
   user(where: UserSubscriptionWhereInput): UserSubscriptionPayload
-}
-
-type Trip {
-  id: ID!
-  title: String!
-  description: String!
-}
-
-type TripConnection {
-  pageInfo: PageInfo!
-  edges: [TripEdge]!
-  aggregate: AggregateTrip!
-}
-
-input TripCreateInput {
-  title: String!
-  description: String!
-}
-
-type TripEdge {
-  node: Trip!
-  cursor: String!
-}
-
-enum TripOrderByInput {
-  id_ASC
-  id_DESC
-  title_ASC
-  title_DESC
-  description_ASC
-  description_DESC
-  createdAt_ASC
-  createdAt_DESC
-  updatedAt_ASC
-  updatedAt_DESC
-}
-
-type TripPreviousValues {
-  id: ID!
-  title: String!
-  description: String!
-}
-
-type TripSubscriptionPayload {
-  mutation: MutationType!
-  node: Trip
-  updatedFields: [String!]
-  previousValues: TripPreviousValues
-}
-
-input TripSubscriptionWhereInput {
-  mutation_in: [MutationType!]
-  updatedFields_contains: String
-  updatedFields_contains_every: [String!]
-  updatedFields_contains_some: [String!]
-  node: TripWhereInput
-  AND: [TripSubscriptionWhereInput!]
-  OR: [TripSubscriptionWhereInput!]
-  NOT: [TripSubscriptionWhereInput!]
-}
-
-input TripUpdateInput {
-  title: String
-  description: String
-}
-
-input TripWhereInput {
-  id: ID
-  id_not: ID
-  id_in: [ID!]
-  id_not_in: [ID!]
-  id_lt: ID
-  id_lte: ID
-  id_gt: ID
-  id_gte: ID
-  id_contains: ID
-  id_not_contains: ID
-  id_starts_with: ID
-  id_not_starts_with: ID
-  id_ends_with: ID
-  id_not_ends_with: ID
-  title: String
-  title_not: String
-  title_in: [String!]
-  title_not_in: [String!]
-  title_lt: String
-  title_lte: String
-  title_gt: String
-  title_gte: String
-  title_contains: String
-  title_not_contains: String
-  title_starts_with: String
-  title_not_starts_with: String
-  title_ends_with: String
-  title_not_ends_with: String
-  description: String
-  description_not: String
-  description_in: [String!]
-  description_not_in: [String!]
-  description_lt: String
-  description_lte: String
-  description_gt: String
-  description_gte: String
-  description_contains: String
-  description_not_contains: String
-  description_starts_with: String
-  description_not_starts_with: String
-  description_ends_with: String
-  description_not_ends_with: String
-  AND: [TripWhereInput!]
-  OR: [TripWhereInput!]
-  NOT: [TripWhereInput!]
-}
-
-input TripWhereUniqueInput {
-  id: ID
 }
 
 type User {

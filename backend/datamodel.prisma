@@ -4,6 +4,7 @@ enum Permission {
   TRIPCREATE
   TRIPDELETE
   TRIPUPDATE
+  PERMISSIONUPDATE
 }
 
 type User {
@@ -16,9 +17,9 @@ type User {
   permissions: [Permission]
 }
 
-type Trip {
-  id: ID! @unique
-  title: String!
-  description: String!
-  #user: User!
-}
+# type Trip {
+#   id: ID! @unique
+#   title: String!
+#   description: String!
+#   user: User!
+# }

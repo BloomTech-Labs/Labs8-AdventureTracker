@@ -1,10 +1,10 @@
 # import * from './generated/prisma.graphql'
 
 type Mutation {
-  createTrip(title: String, description: String): Trip!
+  # createTrip(title: String, description: String): Trip!
+  signup(name: String!, email: String!, password: String!): User!
   # updateTrip(id: ID!, title: String, description: String): Trip!
   # deleteTrip(id: ID!): Trip
-  # signup(email: String!, password: String!, name: String!): User!
 }
 
 # type Query {
@@ -14,5 +14,6 @@ type Mutation {
 # }
 
 type Query {
-  trips: [Trip]!
+  # trips: [Trip]!
+  users: [User]!
 }
