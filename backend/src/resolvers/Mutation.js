@@ -14,5 +14,3 @@ const Mutations = {
     return trip;
   }
 };
-
-module.exports = Mutations;
