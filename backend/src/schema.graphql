@@ -1,9 +1,13 @@
 # import * from './generated/prisma.graphql'
+type SuccessMessage {
+  message: String
+}
 
 type Mutation {
   # createTrip(title: String, description: String): Trip!
   signup(name: String!, email: String!, password: String!): User!
-  signin(name: String!, password: String!): User!
+  signin(email: String!, password: String!): User!
+  signout: SuccessMessage
   # updateTrip(id: ID!, title: String, description: String): Trip!
   # deleteTrip(id: ID!): Trip
   deleteUser(id: ID!): User!
