@@ -1,7 +1,6 @@
 import Nav from './Nav';
 import styled from 'styled-components';
 // imported styled component
-import Test from './styles/Test';
 
 const Logo = styled.h1`
   font-size: 4rem;

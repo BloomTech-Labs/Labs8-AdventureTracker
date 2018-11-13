@@ -20,7 +20,7 @@ const BackgroundImage = styled.img`
 const LandingContainer = () => (
   <LandingWrapper>
     <Header />
-    <BackgroundImage src="../../static/LandingPage/hiking-girl.jpg" />
+    <BackgroundImage src="../../static/hiking-girl.jpg" />
     <InfoPanel />
   </LandingWrapper>
 );
