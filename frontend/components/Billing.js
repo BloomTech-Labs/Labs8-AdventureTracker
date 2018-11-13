@@ -4,12 +4,13 @@ import { Mutation } from 'react-apollo';
 import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import Error from './ErrorMessage';
+import User, { CURRENT_USER_QUERY } from './User';
 
 class Billing extends Component {
     render() {
         return (
             <div>
-                hey
+                Please pay with credit card
             </div>
         )
 
