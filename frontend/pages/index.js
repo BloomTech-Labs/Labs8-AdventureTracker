@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import LandingContainer from '../page-specific/LandingPage/LandingContainer';
+import LandingContainer from '../components/home/LandingContainer';
 
 const Home = props => (
   <div>
