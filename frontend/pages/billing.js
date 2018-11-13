@@ -1,8 +1,13 @@
 import Link from 'next/link';
+import Billing from '../components/Billing';
 
-const Billing = () => (
+
+const BillingPage = () => (
   <div>
     <p>This is the Billing page</p>
+    <div>
+    <Billing />
+  </div>
     <Link href="/triplist">
       <button>Trip List</button>
     </Link>
@@ -15,4 +20,4 @@ const Billing = () => (
   </div>
 );
 
-export default Billing;
+export default BillingPage;
