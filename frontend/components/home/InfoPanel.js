@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-
+import PrimaryLinkBtn from '../styles/PrimaryLinkBtn';
 const InfoPanelWrapper = styled.aside`
   position: absolute;
   top: 0;
@@ -26,19 +26,12 @@ const Info = styled.p`
 const BoldWord = styled.strong`
   font-weight: 600;
 `;
-const BuyBtn = styled.a`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
+const BuyBtn = styled(PrimaryLinkBtn)`
   background: ${props => props.theme.red};
   height: 12rem;
   width: 100%;
   text-transform: capitalize;
-  border: none;
-  border-radius: 3px;
   font-size: 5rem;
-  cursor: pointer;
 `;
 const InfoPanel = () => (
   <InfoPanelWrapper>
@@ -51,7 +44,7 @@ const InfoPanel = () => (
     <Info>
       <BoldWord>Find</BoldWord> the best routes for your journey
     </Info>
-    <BuyBtn href = "/billing">Buy Now</BuyBtn>
+    <BuyBtn href="/billing">Buy Now</BuyBtn>
   </InfoPanelWrapper>
 );
 
