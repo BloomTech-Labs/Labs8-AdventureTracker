@@ -49,19 +49,25 @@ const Mutations = {
     // create the user in the database
     const user = await ctx.db.mutation.createUser({
       data: {
-        ...args,
+        ...args, // name, email, password
         password,
-        permissions: { set: ['USER'] }
+        // default new people as "USER"
+        permissions: { set: ['USER'] } // uses `set` because is enum
       },
+      // info is what is returned to the client
       info
     });
+
+    // We just signed up - so go ahead and log the new user in!
     // create the JWT
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+
     // we set the jwt as a cookie on the response
     ctx.response.cookie('token', token, {
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     });
+
     // Return the user to the browser
     return user;
   },
