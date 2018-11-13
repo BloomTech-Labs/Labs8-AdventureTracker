@@ -22,4 +22,5 @@ type Mutation {
 type Query {
   # trips: [Trip]!
   users: [User]!
+  me: User
 }
