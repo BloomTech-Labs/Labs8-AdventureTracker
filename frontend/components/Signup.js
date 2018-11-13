@@ -46,7 +46,7 @@ class Signup extends Component {
                 <h2>Sign Up for an Account</h2>
                 {/* TODO Clean up error messages */}
                 <Error error={error} />
-                <label htmlfor="email">
+                <label htmlFor="email">
                   Email
                   <input
                     type="email"
@@ -56,7 +56,7 @@ class Signup extends Component {
                     onChange={this.updateState}
                   />
                 </label>
-                <label htmlfor="name">
+                <label htmlFor="name">
                   Name
                   <input
                     type="text"
@@ -66,7 +66,7 @@ class Signup extends Component {
                     onChange={this.updateState}
                   />
                 </label>
-                <label htmlfor="password">
+                <label htmlFor="password">
                   Password
                   <input
                     type="password"
