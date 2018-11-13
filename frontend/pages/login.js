@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import styled from 'styled-components';
-import Signin from '../components/Signin';
+import Login from '../components/Login';
 
 const Columns = styled.div`
   display: grid;
@@ -8,10 +8,10 @@ const Columns = styled.div`
   grid-gap: 20px;
 `;
 
-const Login = () => (
+const LoginPage = () => (
   <div>
     <Columns>
-      <Signin />
+      <Login />
     </Columns>
     <Link href="/triplist">
       <button>Complete</button>
@@ -19,4 +19,4 @@ const Login = () => (
   </div>
 );
 
-export default Login;
+export default LoginPage;
