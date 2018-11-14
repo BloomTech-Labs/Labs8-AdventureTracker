@@ -1,10 +1,24 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import Form from './styles/Form';
 import Error from './ErrorMessage';
+import Router from 'next/router';
 import { CURRENT_USER_QUERY } from './User';
+import {
+  Form,
+  FormLabel,
+  FormHeader,
+  FormBox,
+  FormGroup,
+  FormFieldset,
+  FormTitle
+} from './styles/FormStyles';
+import { PrimaryBtn } from './styles/ButtonStyles';
+import styled from 'styled-components';
 
+const LoginBtn = styled(PrimaryBtn)`
+  margin: 0 0 0 auto;
+`;
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
     signin(email: $email, password: $password) {
@@ -17,7 +31,6 @@ const SIGNIN_MUTATION = gql`
 
 class Signin extends Component {
   state = {
-    name: '',
     password: '',
     email: ''
   };
@@ -37,35 +50,44 @@ class Signin extends Component {
             onSubmit={async e => {
               e.preventDefault();
               await signup();
-              this.setState({ name: '', email: '', password: '' });
+              this.setState({ email: '', password: '' });
+              Router.push({
+                pathname: '/triplist'
+              });
             }}
           >
-            <fieldset disabled={loading} aria-busy={loading}>
-              <h2>Sign into your account</h2>
+            <FormHeader height={'10rem'}>Adventure Tracker</FormHeader>
+            <FormFieldset disabled={loading} aria-busy={loading}>
+              <FormTitle>Login</FormTitle>
               <Error error={error} />
-              <label htmlFor="email">
-                Email
-                <input
+              <FormGroup>
+                <FormLabel htmlFor="email" width={'8rem'}>
+                  Email
+                </FormLabel>
+                <FormBox
                   type="email"
                   name="email"
-                  placeholder="email"
+                  placeholder="Enter Email"
+                  id="email"
                   value={this.state.email}
                   onChange={this.saveToState}
                 />
-              </label>
-              <label htmlFor="password">
-                Password
-                <input
+              </FormGroup>
+              <FormGroup>
+                <FormLabel htmlFor="password" width={'10rem'}>
+                  Password
+                </FormLabel>
+                <FormBox
                   type="password"
                   name="password"
-                  placeholder="password"
+                  placeholder="Enter Password"
+                  id="password"
                   value={this.state.password}
                   onChange={this.saveToState}
                 />
-              </label>
-
-              <button type="submit">Sign In!</button>
-            </fieldset>
+              </FormGroup>
+              <LoginBtn type="submit">Login</LoginBtn>
+            </FormFieldset>
           </Form>
         )}
       </Mutation>
