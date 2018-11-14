@@ -15,7 +15,7 @@ import {
 import { PrimaryBtn } from './styles/ButtonStyles';
 import styled from 'styled-components';
 
-const SubmitBtn = styled(PrimaryBtn)`
+const LoginBtn = styled(PrimaryBtn)`
   margin: 0 0 0 auto;
 `;
 const SIGNIN_MUTATION = gql`
@@ -82,7 +82,7 @@ class Signin extends Component {
                   onChange={this.saveToState}
                 />
               </FormGroup>
-              <SubmitBtn type="submit">Login</SubmitBtn>
+              <LoginBtn type="submit">Login</LoginBtn>
             </FormFieldset>
           </Form>
         )}
