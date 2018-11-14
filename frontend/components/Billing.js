@@ -6,16 +6,17 @@ import gql from 'graphql-tag';
 import Error from './ErrorMessage';
 import User, { CURRENT_USER_QUERY } from './User';
 
-class Billing extends Component {
+class Payment extends Component {
     render() {
         return (
             <div>
-                Please pay with credit card
+            <StripeCheckout>
+            </StripeCheckout>
             </div>
-        )
+        );
 
     }
 
 }
 
-export default Billing;
+export default Payment;
