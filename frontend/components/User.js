@@ -13,8 +13,10 @@ const CURRENT_USER_QUERY = gql`
   }
 `;
 
+// build a User component
 const User = props => (
   <Query {...props} query={CURRENT_USER_QUERY}>
+    {/* render prop */}
     {payload => props.children(payload)}
   </Query>
 );

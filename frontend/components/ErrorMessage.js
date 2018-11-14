@@ -9,6 +9,8 @@ const ErrorStyles = styled.div`
   margin: 2rem 0;
   border: 1px solid rgba(0, 0, 0, 0.05);
   border-left: 5px solid red;
+  font-size: 1.5rem;
+  color: ${props => props.theme.black};
   p {
     margin: 0;
     font-weight: 100;
