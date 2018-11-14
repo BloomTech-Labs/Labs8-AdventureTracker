@@ -52,7 +52,7 @@ const FormHeader = styled.div`
   justify-content: center;
   align-items: center;
   background: ${props => props.theme.orange};
-  height: ${props => props.height};
+  height: ${props => (props.height ? props.height : '10rem')};
   width: ${props => (props.width ? props.width : '100%')};
   font-size: 4rem;
   font-weight: 600;
