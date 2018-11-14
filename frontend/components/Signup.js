@@ -71,7 +71,7 @@ class Signup extends Component {
               onSubmit={async e => {
                 e.preventDefault();
                 await signup();
-                this.setState({ name: '', email: '', password: '', password2: '' });
+                this.setState({ name: '', email: '', password: '', password2: '', step: 1 });
               }}
             >
               <FormHeader>Adventure Tracker</FormHeader>
