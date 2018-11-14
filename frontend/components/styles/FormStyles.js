@@ -27,8 +27,8 @@ const Form = styled.form`
   textarea,
   select {
     &:focus {
-      outline: 0;
-      border-color: ${props => props.theme.red};
+      outline: 1;
+      border-color: green;
     }
   }
   fieldset {
