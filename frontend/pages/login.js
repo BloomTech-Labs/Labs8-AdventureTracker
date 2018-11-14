@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import styled from 'styled-components';
-import Signin from '../components/Signin';
+import Login from '../components/Login';
 
-const Login = () => (
+const LoginPage = () => (
   <div>
-    <Signin />
+    <Login />
   </div>
 );
 
-export default Login;
+export default LoginPage;
