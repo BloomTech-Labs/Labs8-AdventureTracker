@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import Router from 'next/router';
 import {
   Form,
   FormLabel,
@@ -72,6 +73,9 @@ class Signup extends Component {
                 e.preventDefault();
                 await signup();
                 this.setState({ name: '', email: '', password: '', password2: '', step: 1 });
+                Router.push({
+                  pathname: '/triplist'
+                });
               }}
             >
               <FormHeader>Adventure Tracker</FormHeader>

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Error from './ErrorMessage';
+import Router from 'next/router';
 import { CURRENT_USER_QUERY } from './User';
 import {
   Form,
@@ -50,6 +51,9 @@ class Signin extends Component {
               e.preventDefault();
               await signup();
               this.setState({ email: '', password: '' });
+              Router.push({
+                pathname: '/triplist'
+              });
             }}
           >
             <FormHeader height={'10rem'}>Adventure Tracker</FormHeader>
