@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import axios from 'axios';
 import Error from './ErrorMessage';
 import Router from 'next/router';
 import {
@@ -34,9 +35,11 @@ class Signin extends Component {
     password: '',
     email: ''
   };
+
   saveToState = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
+
   render() {
     return (
       <Mutation
@@ -86,6 +89,7 @@ class Signin extends Component {
                   onChange={this.saveToState}
                 />
               </FormGroup>
+              <a href="http://localhost:4444/auth/facebook">Facebook Login</a>
               <LoginBtn type="submit">Login</LoginBtn>
             </FormFieldset>
           </Form>
