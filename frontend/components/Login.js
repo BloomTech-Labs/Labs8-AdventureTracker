@@ -3,7 +3,6 @@ import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import Error from './ErrorMessage';
 import Router from 'next/router';
-import { CURRENT_USER_QUERY } from './User';
 import {
   Form,
   FormLabel,
@@ -39,11 +38,7 @@ class Signin extends Component {
   };
   render() {
     return (
-      <Mutation
-        mutation={SIGNIN_MUTATION}
-        variables={this.state}
-        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-      >
+      <Mutation mutation={SIGNIN_MUTATION} variables={this.state}>
         {(signup, { error, loading }) => (
           <Form
             method="post"

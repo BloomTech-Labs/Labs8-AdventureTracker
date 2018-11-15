@@ -71,11 +71,12 @@ const Mutations = {
     // Return the user to the browser
     return user;
   },
+  // {email, password} is destructuring args
   async signin(parent, { email, password }, ctx, info) {
     // check if there is a user with that email
     const user = await ctx.db.query.user({ where: { email } });
     if (!user) {
-      throw new Error(`No such user found for username ${name}`);
+      throw new Error(`No such user found for email ${email}`);
     }
     // check if their password is correct
     const valid = await bcrypt.compare(password, user.password);
@@ -92,7 +93,6 @@ const Mutations = {
     // return the user
     return user;
   },
-
   async deleteUser(parent, { id }, ctx, info) {
     const deletedUser = await ctx.db.mutation.deleteUser({
       where: {

@@ -1,7 +1,15 @@
 import Link from 'next/link';
+import User from '../components/User';
 
 const TripList = () => (
   <div>
+    <User>
+      {/* destructure the payload & `me` query */}
+      {({ data: { me } }) => {
+        if (me) return <p>Welcome {me.name}!</p>;
+        return null;
+      }}
+    </User>
     <p>This is the Trip List page</p>
     <Link href="/">
       <button>Landing Page</button>
