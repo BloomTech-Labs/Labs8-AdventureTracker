@@ -12,9 +12,6 @@ const Settings = () => (
     <Link href="/invoice">
       <button>Invoices</button>
     </Link>
-    <Link href="/app">
-      <button>Sample Trip</button>
-    </Link>
   </div>
 );
 
