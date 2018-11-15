@@ -14,6 +14,7 @@ import {
 } from './styles/FormStyles';
 import { PrimaryBtn } from './styles/ButtonStyles';
 import styled from 'styled-components';
+import { CURRENT_USER_QUERY } from './User';
 
 const LoginBtn = styled(PrimaryBtn)`
   margin: 0 0 0 auto;
@@ -38,7 +39,11 @@ class Signin extends Component {
   };
   render() {
     return (
-      <Mutation mutation={SIGNIN_MUTATION} variables={this.state}>
+      <Mutation
+        mutation={SIGNIN_MUTATION}
+        variables={this.state}
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+      >
         {(signup, { error, loading }) => (
           <Form
             method="post"
