@@ -16,6 +16,9 @@ const TripList = () => (
       <Link href="/">
         <button>Landing Page</button>
       </Link>
+      <Link href="/app">
+        <button>Sample Trip</button>
+      </Link>
       <Link href="/billing">
         <button>Billing</button>
       </Link>
