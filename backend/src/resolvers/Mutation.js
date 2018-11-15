@@ -1,5 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const stripe = require('../stripe');
 
 const Mutations = {
   // async createTrip(parent, args, ctx, info) {
@@ -107,5 +108,13 @@ const Mutations = {
     return { message: 'Goodbye' };
   }
 };
+
+// **** CODE THAT DEALS WITH STRIPE *****
+// TURNS TOKEN INTO A CHARGE THAT SHOWS IN STRIPE ACCOUNT
+// const charge = await stripe.charges.create({
+//   amount,
+//   currency: 'USD',
+//   source: args.token,
+// });
 
 module.exports = Mutations;
