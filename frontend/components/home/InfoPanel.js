@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import PrimaryLinkBtn from '../styles/PrimaryLinkBtn';
+import { PrimaryLinkBtn } from '../styles/PrimaryLinkBtn';
 const InfoPanelWrapper = styled.aside`
   position: absolute;
   top: 0;

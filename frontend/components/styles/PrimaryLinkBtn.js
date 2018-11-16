@@ -13,4 +13,4 @@ const PrimaryLinkBtn = styled.a`
   font-size: 3rem;
 `;
 
-export default PrimaryLinkBtn;
+export { PrimaryLinkBtn };

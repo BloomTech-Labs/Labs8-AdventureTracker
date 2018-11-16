@@ -14,11 +14,16 @@ import {
   FormTitle
 } from './styles/FormStyles';
 import { PrimaryBtn } from './styles/ButtonStyles';
+import { FacebookBtn } from './styles/LinkBtnStyles';
+import { PrimaryLinkBtn } from './styles/PrimaryLinkBtn';
 import styled from 'styled-components';
 import { CURRENT_USER_QUERY } from './User';
 
 const LoginBtn = styled(PrimaryBtn)`
-  margin: 0 0 0 auto;
+  margin: 0 0 3rem auto;
+`;
+const SignupInsteadBtn = styled(PrimaryLinkBtn)`
+  width: 100%;
 `;
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -89,9 +94,12 @@ class Signin extends Component {
                   onChange={this.saveToState}
                 />
               </FormGroup>
-              <a href="http://localhost:4444/auth/facebook">Facebook Login</a>
-              {/* <a href="https://adventuretracker.now.sh/auth/facebook">Facebook Login</a> */}
               <LoginBtn type="submit">Login</LoginBtn>
+              <FacebookBtn href="https://adventuretracker.now.sh/auth/facebook">
+                Login with Facebook
+              </FacebookBtn>
+              <SignupInsteadBtn href="/sign-up">Sign-Up instead?</SignupInsteadBtn>
+              {/* <FacebookBtn href="http://localhost:4444/auth/facebook">Facebook</FacebookBtn> */}
             </FormFieldset>
           </Form>
         )}

@@ -9,8 +9,9 @@ const theme = {
   orange: '#EA6200',
   white: '#E9E9E9',
   red: '#D10000',
+  blue: '#0075FF',
   opacityblack: 'rgba(29,27,27,51%)',
-  opacitygrey: '#909090'
+  opacitygrey: 'rgba(71,71,71,86%)'
 };
 
 const StyledPage = styled.div`
