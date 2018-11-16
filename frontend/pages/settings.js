@@ -1,5 +1,5 @@
 import Link from 'next/link';
-
+import SettingsComponent from '../components/Settings';
 const Settings = () => (
   <div>
     <p>This is the Settings page</p>
@@ -15,6 +15,7 @@ const Settings = () => (
     <Link href="/app">
       <button>Sample Trip</button>
     </Link>
+    <SettingsComponent />
   </div>
 );
 
