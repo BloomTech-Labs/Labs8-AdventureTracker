@@ -13,20 +13,22 @@ import {
 } from './styles/FormStyles';
 import styled from 'styled-components';
 import { PrimaryBtn } from './styles/ButtonStyles';
+import { FacebookBtn } from './styles/LinkBtnStyles';
 import Error from './ErrorMessage';
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
 `;
 const BackBtn = styled(PrimaryBtn)`
-  background: ${props => props.theme.opacitygrey};
+  background: grey;
+  width: 12rem;
 `;
 const NextBtn = styled(PrimaryBtn)`
-  margin: 0 0 0 auto;
+  margin: 0 0 3rem auto;
 `;
 
 const SignUpBtn = styled(PrimaryBtn)`
-  margin: 0 0 0 auto;
+  margin: 0 0 3rem auto;
 `;
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
@@ -165,6 +167,9 @@ class Signup extends Component {
                       );
                   }
                 })()}
+                <FacebookBtn href="https://adventuretracker.now.sh/auth/facebook">
+                  Sign-Up with Facebook
+                </FacebookBtn>
               </FormFieldset>
             </Form>
           );
