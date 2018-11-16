@@ -14,6 +14,7 @@ import {
 import styled from 'styled-components';
 import { PrimaryBtn } from './styles/ButtonStyles';
 import { FacebookBtn } from './styles/LinkBtnStyles';
+import { PrimaryLinkBtn } from './styles/PrimaryLinkBtn';
 import Error from './ErrorMessage';
 const ButtonGroup = styled.div`
   display: flex;
@@ -26,10 +27,13 @@ const BackBtn = styled(PrimaryBtn)`
 const NextBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
 `;
-
+const LoginInsteadBtn = styled(PrimaryLinkBtn)`
+  width: 100%;
+`;
 const SignUpBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
 `;
+
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
     signup(email: $email, name: $name, password: $password) {
@@ -170,6 +174,7 @@ class Signup extends Component {
                 <FacebookBtn href="https://adventuretracker.now.sh/auth/facebook">
                   Sign-Up with Facebook
                 </FacebookBtn>
+                <LoginInsteadBtn href="/login">Login instead?</LoginInsteadBtn>
               </FormFieldset>
             </Form>
           );
