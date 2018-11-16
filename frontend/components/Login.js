@@ -90,6 +90,7 @@ class Signin extends Component {
                 />
               </FormGroup>
               <a href="http://localhost:4444/auth/facebook">Facebook Login</a>
+              {/* <a href="https://adventuretracker.now.sh/auth/facebook">Facebook Login</a> */}
               <LoginBtn type="submit">Login</LoginBtn>
             </FormFieldset>
           </Form>
