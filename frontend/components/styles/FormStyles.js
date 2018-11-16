@@ -16,7 +16,7 @@ const Form = styled.form`
   display: flex;
   position: absolute;
   left: 50%;
-  top: 5%;
+  top: 0;
   transform: translateX(-50%);
   flex-flow: column;
   justify-content: space-around;
