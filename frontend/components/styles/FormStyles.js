@@ -20,7 +20,7 @@ const Form = styled.form`
   width: 100%;
   max-width: 50rem;
   color: ${props => props.theme.white};
-  background: #474747;
+  background: ${props => props.theme.opacitygrey};
   height: 100%;
 
   input,
