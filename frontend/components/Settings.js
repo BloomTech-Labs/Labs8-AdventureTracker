@@ -17,17 +17,18 @@ import { CURRENT_USER_QUERY } from './User';
 
 const PasswordForm = styled(Form)`
   max-width: 56rem;
-  height: 64rem;
+  height: 60rem;
   background: ${props => props.theme.grey };
   border-radius: 8px;
 `;
 const PasswordTitle = styled(FormTitle)`
   color: ${props => props.theme.black};
   line-height: 1;
+  font-weight: 700;
 `;
 const SaveBtn = styled(PrimaryBtn)`
   margin: 0 0 0 auto;
-  background: ${props => props.theme.lightblue};
+  background: ${props => props.theme.orange};
 `;
 const CHANGE_PASSWORD_MUTATION = gql`
   mutation CHANGE_PASSWORD_MUTATION($email: String, $password: String) {
