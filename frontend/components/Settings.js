@@ -27,7 +27,7 @@ const PasswordTitle = styled(FormTitle)`
   font-weight: 700;
 `;
 const PasswordBox = styled(FormBox)`
-  border: ${props => props.passwordMatch ? "none" : "3px solid red"};
+  /* border: ${props => props.passwordMatch ? "none" : "3px solid red"}; */
 `;
 const SaveBtn = styled(PrimaryBtn)`
   margin: 0 0 0 auto;
@@ -48,23 +48,12 @@ class Settings extends Component {
     oldPassword: '',
     newPassword: '',
     email: '',
-    passwordMatch: true,
   };
   saveToState = e => {
     //The passwordMatch function runs when setState is finished. It is like async await.
-    this.setState({ [e.target.name]: e.target.value }, () => this.passwordMatch());
+    this.setState({ [e.target.name]: e.target.value });
   };
-  passwordMatch = () => {
-    const { oldPassword, newPassword } = this.state;
-    // console.log(oldPassword === newPassword)
-    //Checks if they both have text and if they match or not
-    if(oldPassword && newPassword && oldPassword !== newPassword) {
-      this.setState({ passwordMatch: false });
-    }
-    else if(oldPassword === newPassword) {
-      this.setState({ passwordMatch: true });
-    }
-  }
+ 
   render() {
     const { passwordMatch } = this.state;
     return (
@@ -98,7 +87,6 @@ class Settings extends Component {
                     placeholder="Enter Old Password"
                     id="oldPassword"
                     value={this.state.password}
-                    passwordMatch={passwordMatch}
                     onChange={(e) => {
                       this.saveToState(e);
                     }}
@@ -114,7 +102,6 @@ class Settings extends Component {
                     placeholder="Enter New Password"
                     id="newPassword"
                     value={this.state.password}
-                    passwordMatch={passwordMatch}
                     onChange={(e) => {
                       this.saveToState(e);
                     }}
