@@ -1,21 +1,11 @@
-<<<<<<< HEAD
-const express = require('express');
-=======
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook');
->>>>>>> 8cbf2b2781ac6749a2fb60a78608985ae7f16fe3
 const cookieParser = require('cookie-parser');
 var secure = require('express-force-https');
 const jwt = require('jsonwebtoken');
-require('./services/passport');
 require('dotenv').config({ path: 'variables.env' });
 const createServer = require('./createServer');
-
 const db = require('./db');
-
-const app = express();
-
-require('./routes/authRoutes')(app);
 
 const server = createServer();
 const express = server.express;
