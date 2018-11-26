@@ -108,14 +108,15 @@ const Mutations = {
     ctx.response.clearCookie('token');
     return { message: 'Goodbye' };
   },
-  async changePassword(parent, { email, oldPassword, newPassword }, ctx, info) {
+  async changePassword(parent, { email, myEmail, oldPassword, newPassword }, ctx, info) {
     // Gets user by email
+    if (myEmail !== email) {
+      throw new Error("The current email input does not match the current user's email");
+    }
     const user = await ctx.db.query.user({ where: { email } });
-    console.log(user.email);
     if (!user) {
       throw new Error('User not found');
     }
-    //TODO: Need to check if email matches the currently logged in user's email
 
     //Checks if the user added the correct, current password
     const valid = await bcrypt.compare(oldPassword, user.password);

@@ -12,7 +12,6 @@ const Query = {
       // returning null when a person is not logged in
       return null;
     }
-
     // found the user
     return ctx.db.query.user(
       {
