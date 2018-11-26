@@ -107,7 +107,39 @@ const Mutations = {
   signout(parent, args, ctx, info) {
     ctx.response.clearCookie('token');
     return { message: 'Goodbye' };
-  }
+  },
+  async changePassword(parent, { email, oldPassword, newPassword}, ctx, info) {
+    // Gets user by email
+    const user = await ctx.db.query.user({ where: { email }});
+    console.log(user.email);
+    if(!user) {
+      throw new Error("User not found");
+    }
+    //TODO: Need to check if email matches the currently logged in user's email
+
+    //Checks if the user added the correct, current password
+    const valid = await bcrypt.compare(oldPassword, user.password);
+    if(!valid) {
+      throw new Error("Old Password is incorrect");
+    }
+
+    //No point in modifying the database if the user put in the same password in both input boxes
+    if(oldPassword === newPassword) {
+      throw new Error("Both old password and new password are the same.");
+    }
+    //hashing the newPassword and updates the user afterwards
+    const hashedPassword = await hashPassword(newPassword);
+    const updatedUser = await ctx.db.mutation.updateUser({
+      where: {
+        email: user.email
+      },
+      data: {
+        password: hashedPassword
+      }
+    });
+
+    return updatedUser;
+  },
 };
 
 // **** CODE THAT DEALS WITH STRIPE *****
