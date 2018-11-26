@@ -60,6 +60,7 @@ class Settings extends Component {
             onSubmit={async e => {
               e.preventDefault();
               await changePassword();
+              console.log();
               this.setState({
                 oldPassword: '',
                 newPassword: '',
@@ -79,7 +80,7 @@ class Settings extends Component {
                   name="email"
                   placeholder="Enter Email"
                   id="email"
-                  value={this.state.password}
+                  value={this.state.email}
                   onChange={this.saveToState}
                 />
               </FormGroup>
@@ -92,7 +93,7 @@ class Settings extends Component {
                   name="oldPassword"
                   placeholder="Enter Old Password"
                   id="oldPassword"
-                  value={this.state.password}
+                  value={this.state.oldPassword}
                   onChange={e => {
                     this.saveToState(e);
                   }}
@@ -107,7 +108,7 @@ class Settings extends Component {
                   name="newPassword"
                   placeholder="Enter New Password"
                   id="newPassword"
-                  value={this.state.password}
+                  value={this.state.newPassword}
                   onChange={e => {
                     this.saveToState(e);
                   }}
