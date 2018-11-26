@@ -51,6 +51,7 @@ class Settings extends Component {
     passwordMatch: true,
   };
   saveToState = e => {
+    //The passwordMatch function runs when setState is finished. It is like async await.
     this.setState({ [e.target.name]: e.target.value }, () => this.passwordMatch());
   };
   passwordMatch = () => {
