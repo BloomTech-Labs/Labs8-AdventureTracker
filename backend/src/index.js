@@ -1,8 +1,15 @@
+const express = require('express');
 const cookieParser = require('cookie-parser');
 const jwt = require('jsonwebtoken');
+require('./services/passport');
 require('dotenv').config({ path: 'variables.env' });
 const createServer = require('./createServer');
+
 const db = require('./db');
+
+const app = express();
+
+require('./routes/authRoutes')(app);
 
 const server = createServer();
 

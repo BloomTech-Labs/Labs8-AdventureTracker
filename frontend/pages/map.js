@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Link from 'next/link';
 
 const mapStyles = {
   map: {
+    padding: '10px',
+    margin: '10px',
     position: 'absolute',
-    width: '100%',
-    height: '100%'
+    width: '50%',
+    height: '50%'
   }
 };
+
 export class CurrentLocation extends React.Component {
   constructor(props) {
     super(props);
@@ -100,15 +104,27 @@ export class CurrentLocation extends React.Component {
     });
   }
 
+  renderMarkers(map, maps) {
+    let marker = new maps.Marker({
+      position: myLang,
+      map,
+      title: 'Hello World!'
+    });
+  }
+
   render() {
     const style = Object.assign({}, mapStyles.map);
 
     return (
-      <div>
-        <div style={style} ref="map">
-          Loading map...
-        </div>
-        {this.renderChildren()}
+      <div style={{ width: 800, height: 800 }}>
+        <GoogleMap
+          defaultZoom={13}
+          defaultCenter={{
+            lat: this.props.user.profile.location.coordinates[1],
+            lng: this.props.user.profile.location.coordinates[0]
+          }}
+          onGoogleApiLoaded={({ map, maps }) => this.renderMarkers(map, maps)}
+        />
       </div>
     );
   }
