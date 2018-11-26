@@ -1,13 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Link from 'next/link';
 
 const mapStyles = {
   map: {
+    padding: '10px',
+    margin: '10px',
     position: 'absolute',
-    width: '100%',
-    height: '100%'
+    width: '50%',
+    height: '50%'
   }
 };
+
 export class CurrentLocation extends React.Component {
   constructor(props) {
     super(props);
@@ -104,7 +108,7 @@ export class CurrentLocation extends React.Component {
     const style = Object.assign({}, mapStyles.map);
 
     return (
-      <div>
+      <div style={{ width: 800, height: 800 }}>
         <div style={style} ref="map">
           Loading map...
         </div>
