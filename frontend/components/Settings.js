@@ -55,7 +55,7 @@ class Settings extends Component {
   };
   passwordMatch = () => {
     const { oldPassword, newPassword } = this.state;
-    console.log(oldPassword === newPassword)
+    // console.log(oldPassword === newPassword)
     //Checks if they both have text and if they match or not
     if(oldPassword && newPassword && oldPassword !== newPassword) {
       this.setState({ passwordMatch: false });
