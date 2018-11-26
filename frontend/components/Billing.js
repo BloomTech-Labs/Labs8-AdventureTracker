@@ -20,14 +20,13 @@ class Payment extends Component {
             <StripeCheckout
             stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
             currrency="USD"
-            name="Adventure Tracker"
             amount="999.99"
             email={me.email}
+            name="Adventure Tracker"
             token={res => this.onToken(res)}
             >
             {this.props.children}
             </StripeCheckout>
-            
             )}
             </User>
         );
