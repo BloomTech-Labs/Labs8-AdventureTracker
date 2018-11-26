@@ -14,15 +14,19 @@ const loading = keyframes`
 
 const Form = styled.form`
   display: flex;
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
   flex-flow: column;
   justify-content: space-around;
   align-items: center;
   width: 100%;
   max-width: 50rem;
   color: ${props => props.theme.white};
-  background: #474747;
+  background: ${props => props.theme.opacitygrey};
+  max-height: 90rem;
   height: 100%;
-
   input,
   textarea,
   select {
@@ -56,6 +60,7 @@ const FormHeader = styled.div`
   width: ${props => (props.width ? props.width : '100%')};
   font-size: 4rem;
   font-weight: 600;
+  min-height: 10rem;
 `;
 const FormTitle = styled.h2`
   font-size: 5rem;

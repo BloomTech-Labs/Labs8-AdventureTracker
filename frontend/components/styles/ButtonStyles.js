@@ -14,4 +14,9 @@ const PrimaryBtn = styled.button`
   font-size: 3rem;
 `;
 
-export { PrimaryBtn };
+const FacebookBtn = styled(PrimaryBtn)`
+  width: 100%;
+  background: ${props => props.theme.blue};
+`;
+
+export { PrimaryBtn, FacebookBtn };

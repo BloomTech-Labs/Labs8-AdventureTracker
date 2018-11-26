@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import PrimaryLinkBtn from '../styles/PrimaryLinkBtn';
+import { PrimaryLinkBtn } from '../styles/PrimaryLinkBtn';
 const Logo = styled.h1`
   color: ${props => props.theme.white};
   font-size: 5rem;
