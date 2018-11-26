@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { GoogleApiWrapper, InfoWindow, Marker } from 'google-maps-react';
+import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
 
 import CurrentLocation from './map';
 
@@ -26,20 +26,32 @@ export class MapContainer extends Component {
     }
   };
 
+  // Shows local areas of interest based on current location
+  fetchPlaces(mapProps, map) {
+    const { google } = mapProps;
+    const services = new google.maps.places.PlacesService(map);
+  }
+
+  renderMarkers(map, maps) {
+    let marker = new maps.Marker({
+      position: myLang,
+      map,
+      title: 'Hello World!'
+    });
+  }
+
   render() {
     return (
-      <CurrentLocation centerAroundCurrentLocation google={this.props.google}>
-        <Marker onClick={this.onMarkerClick} name={'current location'} />
-        <InfoWindow
-          marker={this.state.activeMarker}
-          visible={this.state.showingInfoWindow}
-          onClose={this.onClose}
-        >
+      <Map google={this.props.google} zoom={14} onReady={this.fetchPlaces} visible={false}>
+        <Listing places={this.state.places} />
+        <Marker onClick={this.onMarkerClick} name={'Current location'} />
+
+        <InfoWindow onClose={this.onInfoWindowClose}>
           <div>
-            <h4>{this.state.selectedPlace.name}</h4>
+            <h1>{this.state.selectedPlace.name}</h1>
           </div>
         </InfoWindow>
-      </CurrentLocation>
+      </Map>
     );
   }
 }

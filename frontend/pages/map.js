@@ -104,27 +104,15 @@ export class CurrentLocation extends React.Component {
     });
   }
 
-  renderMarkers(map, maps) {
-    let marker = new maps.Marker({
-      position: myLang,
-      map,
-      title: 'Hello World!'
-    });
-  }
-
   render() {
     const style = Object.assign({}, mapStyles.map);
 
     return (
       <div style={{ width: 800, height: 800 }}>
-        <GoogleMap
-          defaultZoom={13}
-          defaultCenter={{
-            lat: this.props.user.profile.location.coordinates[1],
-            lng: this.props.user.profile.location.coordinates[0]
-          }}
-          onGoogleApiLoaded={({ map, maps }) => this.renderMarkers(map, maps)}
-        />
+        <div style={style} ref="map">
+          Loading map...
+        </div>
+        {this.renderChildren()}
       </div>
     );
   }
