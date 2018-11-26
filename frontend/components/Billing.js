@@ -15,18 +15,19 @@ class Payment extends Component {
     render() {
         return (
         
-            // <User>
-            // {({ data: { me }}) => (
+            <User>
+            {({ data: { me }}) => (
             <StripeCheckout
             stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
             currrency="USD"
+            name="Adventure Tracker"
             token={res => this.onToken(res)}
             >
             {this.props.children}
             </StripeCheckout>
             
-            // )}
-            // </User>
+            )}
+            </User>
         );
 
     }
