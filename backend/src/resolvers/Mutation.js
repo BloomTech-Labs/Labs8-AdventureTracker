@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const stripe = require('../stripe');
+const { hashPassword } = require('../utils');
 
 const Mutations = {
   // async createTrip(parent, args, ctx, info) {
@@ -46,7 +47,7 @@ const Mutations = {
   async signup(parent, args, ctx, info) {
     args.email = args.email.toLowerCase();
     // hash their password
-    const password = await bcrypt.hash(args.password, 10);
+    const password = await hashPassword(args.password);
     // create the user in the database
     const user = await ctx.db.mutation.createUser({
       data: {
