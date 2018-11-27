@@ -49,11 +49,11 @@ const TripNote = props => {
       <AdventureTitle>Mountain Adventure</AdventureTitle>
       <MapImage src="http://placekitten.com/400/300" />
       <BadgeGroup>
-        <BadgeText>Start: </BadgeText>
+        <BadgeText>Start:</BadgeText>
         <DateBadge background={'green'}>3-12-2018</DateBadge>
       </BadgeGroup>
       <BadgeGroup>
-        <BadgeText>End: </BadgeText>
+        <BadgeText>End:</BadgeText>
         <DateBadge>4-08-2018</DateBadge>
       </BadgeGroup>
       <ArchiveBtn>Archive?</ArchiveBtn>
