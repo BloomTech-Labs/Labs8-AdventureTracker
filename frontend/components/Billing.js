@@ -16,7 +16,7 @@ class Payment extends Component {
         return (
         
             <User>
-            {({ data: { me }}) => (
+            // {({ data: { me }}) => (
             <StripeCheckout
             stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
             currrency="USD"
