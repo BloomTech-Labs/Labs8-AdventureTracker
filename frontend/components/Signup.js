@@ -35,8 +35,13 @@ const SignUpBtn = styled(PrimaryBtn)`
 `;
 
 const SIGNUP_MUTATION = gql`
-  mutation SIGNUP_MUTATION($email: String!, $name: String!, $password: String!) {
-    signup(email: $email, name: $name, password: $password) {
+  mutation SIGNUP_MUTATION(
+    $email: String!
+    $name: String!
+    $password: String!
+    $password2: String!
+  ) {
+    signup(email: $email, name: $name, password: $password, password2: $password2) {
       # returned values
       id
       email
@@ -67,15 +72,13 @@ class Signup extends Component {
   };
   passwordMatch = () => {
     const { password, password2 } = this.state;
-    // console.log(oldPassword === newPassword)
     //Checks if they both have text and if they match or not
-    if(password && password2 && password !== password2) {
+    if (password && password2 && password !== password2) {
       this.setState({ passwordMatch: false });
-    }
-    else if(oldPassword === newPassword) {
+    } else if (password === password2) {
       this.setState({ passwordMatch: true });
     }
-  }
+  };
   render() {
     const { step } = this.state;
     return (

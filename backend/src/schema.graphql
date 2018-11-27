@@ -5,7 +5,7 @@ type SuccessMessage {
 
 type Mutation {
   # createTrip(title: String, description: String): Trip!
-  signup(name: String!, email: String!, password: String!): User!
+  signup(name: String!, email: String!, password: String!, password2: String!): User!
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
   # updateTrip(id: ID!, title: String, description: String): Trip!
