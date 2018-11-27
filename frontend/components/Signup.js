@@ -36,7 +36,7 @@ const LoginInsteadBtn = styled(PrimaryLinkBtn)`
 const SignUpBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
 `;
-const PasswordGroup = styled.div`
+const PasswordErrorGroup = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -68,10 +68,10 @@ class Signup extends Component {
   state = {
     name: '',
     email: '',
-    password: 'ab',
-    password2: 'cd',
-    passwordMatch: false,
-    step: 2
+    password: '',
+    password2: '',
+    passwordMatch: true,
+    step: 1
   };
 
   updateState = e => {
@@ -170,14 +170,14 @@ class Signup extends Component {
                             />
                           </FormGroup>
                           <FormGroup>
-                            <PasswordGroup>
+                            <PasswordErrorGroup>
                               <FormLabel htmlFor="password2" width={'15rem'}>
                                 Password Again
                               </FormLabel>
                               <PasswordError passwordMatch={passwordMatch}>
                                 Passwords don't match
                               </PasswordError>
-                            </PasswordGroup>
+                            </PasswordErrorGroup>
                             <PasswordBox
                               type="password"
                               name="password2"
