@@ -63,7 +63,7 @@ const FormHeader = styled.div`
   min-height: 10rem;
 `;
 const FormTitle = styled.h2`
-  font-size: 5rem;
+  font-size: 4rem;
   font-weight: 400;
   margin-bottom: 3rem;
   padding: 0;
@@ -93,7 +93,7 @@ const FormLabel = styled.label`
 
 const FormBox = styled.input`
   display: block;
-  height: ${props => (props.height ? props.height : '6rem')};
+  height: ${props => (props.height ? props.height : '5rem')};
   width: ${props => (props.width ? props.width : '100%')};
   font-size: 3.2rem;
   padding: 0 1.6rem;

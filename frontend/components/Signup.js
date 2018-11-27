@@ -51,6 +51,7 @@ class Signup extends Component {
     email: '',
     password: '',
     password2: '',
+    passwordMatch: true,
     step: 1
   };
 
@@ -64,7 +65,17 @@ class Signup extends Component {
   nextStep = () => {
     this.setState({ step: ++this.state.step });
   };
-
+  passwordMatch = () => {
+    const { password, password2 } = this.state;
+    // console.log(oldPassword === newPassword)
+    //Checks if they both have text and if they match or not
+    if(password && password2 && password !== password2) {
+      this.setState({ passwordMatch: false });
+    }
+    else if(oldPassword === newPassword) {
+      this.setState({ passwordMatch: true });
+    }
+  }
   render() {
     const { step } = this.state;
     return (
