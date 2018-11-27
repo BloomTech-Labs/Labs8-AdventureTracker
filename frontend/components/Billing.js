@@ -21,7 +21,7 @@ class Payment extends Component {
             stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
             currrency="USD"
             amount="999.99"
-            email={me.email}
+            // email={me.email}
             name="Adventure Tracker"
             token={res => this.onToken(res)}
             >
