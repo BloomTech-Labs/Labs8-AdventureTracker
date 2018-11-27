@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import User from '../components/User';
 import PleaseLogin from '../components/PleaseLogin';
+import TripNote from '../components/TripNote';
 
 const TripList = () => (
   <div>
@@ -25,6 +26,7 @@ const TripList = () => (
       <Link href="/settings">
         <button>Settings</button>
       </Link>
+      <TripNote />
     </PleaseLogin>
   </div>
 );
