@@ -11,6 +11,7 @@ type Mutation {
   # updateTrip(id: ID!, title: String, description: String): Trip!
   # deleteTrip(id: ID!): Trip
   deleteUser(id: ID!): User!
+  createOrder(token: String!): Order!
 }
 
 # type Query {

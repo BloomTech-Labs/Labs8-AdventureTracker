@@ -107,6 +107,13 @@ const Mutations = {
     ctx.response.clearCookie('token');
     return { message: 'Goodbye' };
   }
+  // async createOrder(parent, args, ctx, info) {
+  //   // 1. Query the current user and make sure they are signed in
+  //   // 2. Calculate total price
+  //   // 3. Create the stripe charge
+  //   // 4. Create the order
+  //   // 5. Return the Order to the client
+  // }
 };
 
 // **** CODE THAT DEALS WITH STRIPE *****

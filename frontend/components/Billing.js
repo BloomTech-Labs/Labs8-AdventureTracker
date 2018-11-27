@@ -7,12 +7,12 @@ import Error from './ErrorMessage';
 import User, { CURRENT_USER_QUERY } from './User';
 
 class Payment extends Component {
-
     onToken = res => {
         console.log('On Token Called!');
         console.log(res.id);
     };
     render() {
+        const charge = 999;
         return (
         
             <User>
@@ -20,7 +20,7 @@ class Payment extends Component {
             <StripeCheckout
             stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
             currrency="USD"
-            amount="999.99"
+            amount={charge}
             // email={me.email}
             name="Adventure Tracker"
             token={res => this.onToken(res)}

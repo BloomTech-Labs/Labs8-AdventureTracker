@@ -6,4 +6,4 @@ node_modules/
 layout.md
 variables.env
 keys.js
-
+prisma.graphql
