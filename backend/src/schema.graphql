@@ -11,6 +11,12 @@ type Mutation {
   # updateTrip(id: ID!, title: String, description: String): Trip!
   # deleteTrip(id: ID!): Trip
   deleteUser(id: ID!): User!
+  changePassword(
+    email: String!
+    myEmail: String!
+    oldPassword: String!
+    newPassword: String!
+  ): User!
 }
 
 # type Query {

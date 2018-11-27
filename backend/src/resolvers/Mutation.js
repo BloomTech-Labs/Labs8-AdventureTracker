@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const stripe = require('../stripe');
+const { hashPassword } = require('../utils');
 
 const Mutations = {
   // async createTrip(parent, args, ctx, info) {
@@ -46,7 +47,7 @@ const Mutations = {
   async signup(parent, args, ctx, info) {
     args.email = args.email.toLowerCase();
     // hash their password
-    const password = await bcrypt.hash(args.password, 10);
+    const password = await hashPassword(args.password);
     // create the user in the database
     const user = await ctx.db.mutation.createUser({
       data: {
@@ -106,6 +107,39 @@ const Mutations = {
   signout(parent, args, ctx, info) {
     ctx.response.clearCookie('token');
     return { message: 'Goodbye' };
+  },
+  async changePassword(parent, { email, myEmail, oldPassword, newPassword }, ctx, info) {
+    // Gets user by email
+    if (myEmail !== email) {
+      throw new Error("The current email input does not match the current user's email");
+    }
+    const user = await ctx.db.query.user({ where: { email } });
+    if (!user) {
+      throw new Error('User not found');
+    }
+
+    //Checks if the user added the correct, current password
+    const valid = await bcrypt.compare(oldPassword, user.password);
+    if (!valid) {
+      throw new Error('Old Password is incorrect');
+    }
+
+    //No point in modifying the database if the user put in the same password in both input boxes
+    if (oldPassword === newPassword) {
+      throw new Error('Both old password and new password are the same.');
+    }
+    //hashing the newPassword and updates the user afterwards
+    const hashedPassword = await hashPassword(newPassword);
+    const updatedUser = await ctx.db.mutation.updateUser({
+      where: {
+        email: user.email
+      },
+      data: {
+        password: hashedPassword
+      }
+    });
+
+    return updatedUser;
   }
 };
 
