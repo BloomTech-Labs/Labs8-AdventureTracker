@@ -25,6 +25,7 @@
     "downshift": "^2.2.3",
     "enzyme": "^3.6.0",
     "enzyme-adapter-react-16": "^1.5.0",
+    "gmap-dragdrop-react": "^1.0.12",
     "google-maps-react": "^2.0.2",
     "graphql": "^14.0.2",
     "graphql-tag": "^2.9.2",
