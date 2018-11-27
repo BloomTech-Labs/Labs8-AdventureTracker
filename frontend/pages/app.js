@@ -7,20 +7,32 @@ export class MapContainer extends Component {
   state = {
     showingInfoWindow: false,
     activeMarker: {},
-    selectedPlace: {}
+    selectedPlace: {},
+    markers: []
   };
 
   mapClicked = (mapProps, map, clickEvent) => {
-    console.log('You clicked the map!');
+    console.log(clickEvent.xa);
+    const myLatLng = {
+      lat: clickEvent.latLng.lat(),
+      lng: clickEvent.latLng.lng()
+    };
+    const { markers } = this.state;
+    const labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const amountOfMarkers = markers.length;
+    const marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      id: amountOfMarkers,
+      title: amountOfMarkers,
+      label: labels[amountOfMarkers % labels.length]
+    });
+    markers.push(marker);
+    console.log(markers);
   };
 
   render() {
-    const triangleCoords = [
-      { lat: 25.774, lng: -80.19 },
-      { lat: 18.466, lng: -66.118 },
-      { lat: 32.321, lng: -64.757 },
-      { lat: 25.774, lng: -80.19 }
-    ];
+    const { markers } = this.state;
     return (
       <Map
         google={this.props.google}
@@ -29,7 +41,17 @@ export class MapContainer extends Component {
         className={'map'}
         zoom={4}
       >
-        <Marker
+        {markers.map(mark => {
+          return (
+            <Marker
+              title={mark.title}
+              id={mark.id}
+              position={{ lat: mark.position.lat, lng: mark.position.lng }}
+            />
+          );
+        })}
+
+        {/* <Marker
           title={'The marker`s title will appear as a tooltip.'}
           name={'SOMA'}
           position={{ lat: 37.778519, lng: -122.40564 }}
@@ -44,15 +66,7 @@ export class MapContainer extends Component {
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(64, 64)
           }}
-        />
-        <Polygon
-          paths={triangleCoords}
-          strokeColor="#0000FF"
-          strokeOpacity={0.8}
-          strokeWeight={2}
-          fillColor="#0000FF"
-          fillOpacity={0.35}
-        />
+        /> */}
       </Map>
     );
   }
