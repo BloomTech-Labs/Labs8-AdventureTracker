@@ -8,6 +8,14 @@ type Mutation {
   signup(name: String!, email: String!, password: String!): User!
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
+  facebooksignup(
+    name: String!
+    email: String!
+    password: String!
+    facebookID: String
+    facebookUser: Boolean!
+  ): User!
+  facebooksignin(facebookID: String): User!
   # updateTrip(id: ID!, title: String, description: String): Trip!
   # deleteTrip(id: ID!): Trip
   deleteUser(id: ID!): User!
