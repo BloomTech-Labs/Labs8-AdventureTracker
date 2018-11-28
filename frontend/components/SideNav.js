@@ -18,6 +18,9 @@ class SideNav extends Component {
   render() {
     return (
       <SidebarWrapper>
+        {/* keys - are the button names and values will be the link to the page */}
+        {/* example: link = { trip: "/triplist"} This creates a button with the text "Trip" and it goes to /triplist when clicked*/}
+        {/* setting the active prop to true will change the color from blue to orange */}
         {Object.keys(this.props.links).map(link => {
           if (link !== this.props.active) {
             return (
