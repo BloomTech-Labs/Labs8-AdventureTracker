@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
+import { Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline } from 'google-maps-react';
 
 import CurrentLocation from './map';
 
@@ -7,40 +7,51 @@ export class MapContainer extends Component {
   state = {
     showingInfoWindow: false,
     activeMarker: {},
-    selectedPlace: {}
+    selectedPlace: {},
+    markers: []
   };
 
-  onMarkerClick = (props, marker, e) =>
-    this.setState({
-      selectedPlace: props,
-      activeMarker: marker,
-      showingInfoWindow: true
+  mapClicked = (mapProps, map, clickEvent) => {
+    console.log(clickEvent.xa);
+    const myLatLng = {
+      lat: clickEvent.latLng.lat(),
+      lng: clickEvent.latLng.lng()
+    };
+    const { markers } = this.state;
+    const labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const amountOfMarkers = markers.length;
+    const marker = new google.maps.Marker({
+      position: myLatLng,
+      map: map,
+      id: amountOfMarkers,
+      title: amountOfMarkers,
+      label: labels[amountOfMarkers % labels.length]
     });
-
-  onMapClicked = props => {
-    if (this.state.showingInfoWindow) {
-      this.setState({
-        showingInfoWindow: false,
-        activeMarker: null
-      });
-    }
+    markers.push(marker);
+    console.log(markers);
   };
 
   render() {
-    const triangleCoords = [
-      { lat: 25.774, lng: -80.19 },
-      { lat: 18.466, lng: -66.118 },
-      { lat: 32.321, lng: -64.757 },
-      { lat: 25.774, lng: -80.19 }
-    ];
+    const { markers } = this.state;
     return (
       <Map
         google={this.props.google}
+        onClick={this.mapClicked}
         style={{ width: '100%', height: '100%', position: 'relative' }}
         className={'map'}
-        zoom={14}
+        zoom={4}
       >
-        <Marker
+        {markers.map(mark => {
+          return (
+            <Marker
+              title={mark.title}
+              id={mark.id}
+              position={{ lat: mark.position.lat, lng: mark.position.lng }}
+            />
+          );
+        })}
+
+        {/* <Marker
           title={'The marker`s title will appear as a tooltip.'}
           name={'SOMA'}
           position={{ lat: 37.778519, lng: -122.40564 }}
@@ -55,7 +66,7 @@ export class MapContainer extends Component {
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(64, 64)
           }}
-        />
+        /> */}
       </Map>
     );
   }
