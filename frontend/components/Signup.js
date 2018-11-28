@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
+import { FacebookProvider, LoginButton } from 'react-facebook';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
+import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
 import {
   Form,
@@ -70,6 +72,7 @@ class Signup extends Component {
     email: '',
     password: '',
     password2: '',
+    facebookUser: false,
     passwordMatch: true,
     step: 1
   };
@@ -93,6 +96,22 @@ class Signup extends Component {
       this.setState({ passwordMatch: true });
     }
   };
+
+  // facebook handlers
+  handleResponse = data => {
+    console.log(data.profile);
+    localStorage.setItem('id', data.profile.id);
+    localStorage.setItem('name', data.profile.first_name);
+    localStorage.setItem('email', data.profile.email);
+    localStorage.setItem('signup', true);
+    Router.push({
+      pathname: '/facebooklogin'
+    });
+  };
+  handleError = error => {
+    this.setState({ error });
+  };
+
   render() {
     const { step, passwordMatch } = this.state;
     return (
@@ -206,8 +225,16 @@ class Signup extends Component {
                       );
                   }
                 })()}
-                <FacebookBtn href="https://adventuretracker.now.sh/auth/facebook">
-                  Sign-Up with Facebook
+                <FacebookBtn>
+                  <FacebookProvider appId="2047335438690331">
+                    <LoginButton
+                      scope="email"
+                      onCompleted={this.handleResponse}
+                      onError={this.handleError}
+                    >
+                      Signup via Facebook
+                    </LoginButton>
+                  </FacebookProvider>
                 </FacebookBtn>
                 <LoginInsteadBtn href="/login">Login instead?</LoginInsteadBtn>
               </FormFieldset>
