@@ -1,7 +1,7 @@
-[headers]
+[[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options: allow-from https://www.facebook.com/
+    X-Frame-Options = "allow-from https://www.facebook.com/"
 
 [build]
 NODE_ENV = "prod"
