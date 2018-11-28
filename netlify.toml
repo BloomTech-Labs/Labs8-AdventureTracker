@@ -3,3 +3,7 @@ NODE_ENV = "prod"
 base="frontend/"
 publish="frontend/out/"
 command="npm run export"
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options: allow-from https://www.facebook.com/
