@@ -43,7 +43,7 @@ const ArchiveBtn = styled.button`
   border-top-left-radius: 8px;
   cursor: pointer;
 `;
-const TripNote = props => {
+const TripNote = ({ title }) => {
   return (
     <NoteWrapper length={'30rem'}>
       <AdventureTitle>Mountain Adventure</AdventureTitle>
