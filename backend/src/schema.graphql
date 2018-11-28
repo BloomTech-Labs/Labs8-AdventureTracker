@@ -5,18 +5,21 @@ type SuccessMessage {
 
 type Mutation {
   # createTrip(title: String, description: String): Trip!
-  signup(name: String!, email: String!, password: String!): User!
+  signup(name: String!, email: String!, password: String!, password2: String!): User!
   signin(email: String!, password: String!): User!
   signout: SuccessMessage
+  facebooksignup(
+    name: String!
+    email: String!
+    password: String!
+    facebookID: String
+    facebookUser: Boolean!
+  ): User!
+  facebooksignin(facebookID: String): User!
   # updateTrip(id: ID!, title: String, description: String): Trip!
   # deleteTrip(id: ID!): Trip
   deleteUser(id: ID!): User!
-  changePassword(
-    email: String!
-    myEmail: String!
-    oldPassword: String!
-    newPassword: String!
-  ): User!
+  changePassword(email: String!, oldPassword: String!, newPassword: String!): User!
 }
 
 # type Query {

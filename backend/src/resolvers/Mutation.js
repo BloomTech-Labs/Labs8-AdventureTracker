@@ -45,13 +45,17 @@ const Mutations = {
   // },
 
   async signup(parent, args, ctx, info) {
+    if (args.password !== args.password2) {
+      throw new Error('Passwords do not match!');
+    }
     args.email = args.email.toLowerCase();
     // hash their password
     const password = await hashPassword(args.password);
     // create the user in the database
     const user = await ctx.db.mutation.createUser({
       data: {
-        ...args, // name, email, password
+        name: args.name,
+        email: args.email, // name, email, password
         password,
         // default new people as "USER"
         permissions: { set: ['USER'] } // uses `set` because is enum
@@ -108,11 +112,8 @@ const Mutations = {
     ctx.response.clearCookie('token');
     return { message: 'Goodbye' };
   },
-  async changePassword(parent, { email, myEmail, oldPassword, newPassword }, ctx, info) {
+  async changePassword(parent, { email, oldPassword, newPassword }, ctx, info) {
     // Gets user by email
-    if (myEmail !== email) {
-      throw new Error("The current email input does not match the current user's email");
-    }
     const user = await ctx.db.query.user({ where: { email } });
     if (!user) {
       throw new Error('User not found');
