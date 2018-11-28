@@ -1,7 +1,7 @@
 [[headers]]
   for = "/*"
   [headers.values]
-    X-Frame-Options = "allow-from https://www.facebook.com/"
+    Content-Security-Policy = "frame-ancestors https://www.facebook.com; default-src 'self'; script-src 'self https://www.facebook.com/'; style-src 'self https://www.facebook.com/'"
 
 [build]
 NODE_ENV = "prod"
