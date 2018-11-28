@@ -54,7 +54,13 @@ class Settings extends Component {
     return (
       <Query query={CURRENT_USER_EMAIL_QUERY}>
         {({ data }) => {
-          const email = data.me.email;
+          let email;
+          if (data.me === null) {
+            email = '';
+          } else {
+            email = data.me.email;
+          }
+
           // console.log('Email: ', this.state.email, 'My Email: ', myEmail);
           return (
             <Mutation mutation={CHANGE_PASSWORD_MUTATION} variables={{ ...this.state, email }}>
@@ -76,7 +82,7 @@ class Settings extends Component {
                   }}
                 >
                   <Error error={error} />
-                  <FormFieldset disabled={loading} aria-busy={loading}>
+                  <FormFieldset disabled={loading || !email} aria-busy={loading}>
                     <PasswordTitle>Change Password</PasswordTitle>
 
                     <FormGroup>
