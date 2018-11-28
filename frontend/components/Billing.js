@@ -31,11 +31,7 @@ class Payment extends Component {
   };
   render() {
     const charge = 999;
-    if (me.email) {
-      let currentEmail = me.email;
-    } else {
-      let currentEmail = '';
-    }
+
     return (
       <User>
         {({ data: { me } }) => (
@@ -49,7 +45,7 @@ class Payment extends Component {
                 stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
                 currrency="USD"
                 amount={charge}
-                email={currentEmail}
+                //email={currentEmail}
                 name="Adventure Tracker"
                 token={res => this.onToken(res, createOrder)}
               >
