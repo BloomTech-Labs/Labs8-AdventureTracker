@@ -32,18 +32,8 @@ const CURRENT_USER_EMAIL_QUERY = gql`
   }
 `;
 const CHANGE_PASSWORD_MUTATION = gql`
-  mutation CHANGE_PASSWORD_MUTATION(
-    $email: String!
-    $myEmail: String!
-    $oldPassword: String!
-    $newPassword: String!
-  ) {
-    changePassword(
-      email: $email
-      myEmail: $myEmail
-      oldPassword: $oldPassword
-      newPassword: $newPassword
-    ) {
+  mutation CHANGE_PASSWORD_MUTATION($email: String!, $oldPassword: String!, $newPassword: String!) {
+    changePassword(email: $email, oldPassword: $oldPassword, newPassword: $newPassword) {
       id
       email
       name
@@ -54,8 +44,7 @@ const CHANGE_PASSWORD_MUTATION = gql`
 class Settings extends Component {
   state = {
     oldPassword: '',
-    newPassword: '',
-    email: ''
+    newPassword: ''
   };
   saveToState = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -65,10 +54,16 @@ class Settings extends Component {
     return (
       <Query query={CURRENT_USER_EMAIL_QUERY}>
         {({ data }) => {
-          const myEmail = data.me.email;
+          let email;
+          if (data.me === null) {
+            email = '';
+          } else {
+            email = data.me.email;
+          }
+
           // console.log('Email: ', this.state.email, 'My Email: ', myEmail);
           return (
-            <Mutation mutation={CHANGE_PASSWORD_MUTATION} variables={{ ...this.state, myEmail }}>
+            <Mutation mutation={CHANGE_PASSWORD_MUTATION} variables={{ ...this.state, email }}>
               {(changePassword, { error, loading }) => (
                 <PasswordForm
                   method="post"
@@ -78,8 +73,7 @@ class Settings extends Component {
                     this.setState(
                       {
                         oldPassword: '',
-                        newPassword: '',
-                        email: ''
+                        newPassword: ''
                       },
                       () => {
                         console.log('success!');
@@ -88,21 +82,9 @@ class Settings extends Component {
                   }}
                 >
                   <Error error={error} />
-                  <FormFieldset disabled={loading} aria-busy={loading}>
+                  <FormFieldset disabled={loading || !email} aria-busy={loading}>
                     <PasswordTitle>Change Password</PasswordTitle>
-                    <FormGroup>
-                      <FormLabel htmlFor="email" width={'10rem'}>
-                        Email
-                      </FormLabel>
-                      <FormBox
-                        type="email"
-                        name="email"
-                        placeholder="Enter Email"
-                        id="email"
-                        value={this.state.email}
-                        onChange={this.saveToState}
-                      />
-                    </FormGroup>
+
                     <FormGroup>
                       <FormLabel htmlFor="oldPassword" width={'13rem'}>
                         Old Password
