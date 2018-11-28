@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from 'google-maps-react';
+import { Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline } from 'google-maps-react';
 
 import CurrentLocation from './map';
 
@@ -10,20 +10,8 @@ export class MapContainer extends Component {
     selectedPlace: {}
   };
 
-  onMarkerClick = (props, marker, e) =>
-    this.setState({
-      selectedPlace: props,
-      activeMarker: marker,
-      showingInfoWindow: true
-    });
-
-  onMapClicked = props => {
-    if (this.state.showingInfoWindow) {
-      this.setState({
-        showingInfoWindow: false,
-        activeMarker: null
-      });
-    }
+  mapClicked = (mapProps, map, clickEvent) => {
+    console.log('You clicked the map!');
   };
 
   render() {
@@ -36,9 +24,10 @@ export class MapContainer extends Component {
     return (
       <Map
         google={this.props.google}
+        onClick={this.mapClicked}
         style={{ width: '100%', height: '100%', position: 'relative' }}
         className={'map'}
-        zoom={14}
+        zoom={4}
       >
         <Marker
           title={'The marker`s title will appear as a tooltip.'}
@@ -55,6 +44,14 @@ export class MapContainer extends Component {
             anchor: new google.maps.Point(32, 32),
             scaledSize: new google.maps.Size(64, 64)
           }}
+        />
+        <Polygon
+          paths={triangleCoords}
+          strokeColor="#0000FF"
+          strokeOpacity={0.8}
+          strokeWeight={2}
+          fillColor="#0000FF"
+          fillOpacity={0.35}
         />
       </Map>
     );
