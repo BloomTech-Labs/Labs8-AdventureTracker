@@ -29,6 +29,13 @@ export class MapContainer extends Component {
     });
     markers.push(marker);
     console.log(markers);
+
+    const InfoWindow = new google.maps.InfoWindow({
+      content: myLatLng
+    });
+    marker.addListener('click', function() {
+      InfoWindow.open(map, marker);
+    });
   };
 
   render() {
