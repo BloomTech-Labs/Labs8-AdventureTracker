@@ -1,77 +1,66 @@
 import React from 'react';
-import Link from 'next/link';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
 import styled from 'styled-components';
-import { CURRENT_USER_QUERY } from './User';
+import Error from './ErrorMessage';
 
-// const FACEBOOKSIGNIN_MUTATION = gql`
-//   mutation FACEBOOKSIGNIN_MUTATION($facebookID: String!) {
-//     facebooksignin(facebookID: $facebookID) {
-//       id
-//       email
-//       name
-//       facebookUser
-//     }
-//   }
-// `;
+import { PrimaryBtn } from './styles/ButtonStyles';
+import { NavbarContainer } from './styles/NavbarContainer';
 
-// const SIGNUP_MUTATION = gql`
-//   mutation FACEBOOKSIGNUP_MUTATION(
-//     $email: String!
-//     $name: String!
-//     $facebookID: String
-//     $facebookUser: Boolean!
-//   ) {
-//     facebooksignup(email: $email, name: $name, facebookID: $facebookID, facebookUser: true, password: uuidv4()) {
-//       # returned values
-//       id
-//       email
-//       name
-//       facebookUser
-//     }
-//   }
-// `;
+const Login = styled(PrimaryBtn)``;
+const NavbarWrapper = styled(NavbarContainer)`
+  height: 8rem;
+`;
+
+const FACEBOOKSIGNIN_MUTATION = gql`
+  mutation FACEBOOKSIGNIN_MUTATION($facebookID: String!) {
+    facebooksignin(facebookID: $facebookID) {
+      id
+      email
+      name
+      facebookUser
+    }
+  }
+`;
 
 class FacebookLogin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fbID: '',
-      email: '',
-      password: '',
-      name: '',
-      facebookUser: true
+      facebookID: ''
     };
   }
 
   componentDidMount() {
     const id = localStorage.getItem('id');
-    const name = localStorage.getItem('name');
-    const email = localStorage.getItem('email');
-    const password = uuidv4();
     this.setState({
-      fbID: id,
-      email,
-      name,
-      password
+      facebookID: id
     });
   }
 
   render() {
     return (
-      // <Mutation
-      //   mutation={FACEBOOKSIGNIN_MUTATION}
-      //   variables={this.state}
-      //   refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-      // >
-      <div>
-        {console.log('hiya')}
-        Hi There {this.state.name}
-      </div>
-      // </Mutation>
+      <Mutation mutation={FACEBOOKSIGNIN_MUTATION} variables={this.state}>
+        {(facebooksignin, { error, loading }) => {
+          return (
+            <NavbarWrapper>
+              <Login
+                onClick={async e => {
+                  e.preventDefault();
+                  await facebooksignin();
+                  Router.push({
+                    pathname: '/triplist'
+                  });
+                }}
+              >
+                Login
+              </Login>
+              <Error error={error} />
+            </NavbarWrapper>
+          );
+        }}
+      </Mutation>
     );
   }
 }
