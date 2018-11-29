@@ -5,13 +5,15 @@ import gql from 'graphql-tag';
 import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
 import styled from 'styled-components';
+import { CURRENT_USER_QUERY } from './User';
 
-// const SIGNIN_MUTATION = gql`
+// const FACEBOOKSIGNIN_MUTATION = gql`
 //   mutation FACEBOOKSIGNIN_MUTATION($facebookID: String!) {
 //     facebooksignin(facebookID: $facebookID) {
 //       id
 //       email
 //       name
+//       facebookUser
 //     }
 //   }
 // `;
@@ -28,6 +30,7 @@ import styled from 'styled-components';
 //       id
 //       email
 //       name
+//       facebookUser
 //     }
 //   }
 // `;
@@ -59,10 +62,16 @@ class FacebookLogin extends React.Component {
 
   render() {
     return (
+      // <Mutation
+      //   mutation={FACEBOOKSIGNIN_MUTATION}
+      //   variables={this.state}
+      //   refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+      // >
       <div>
         {console.log('hiya')}
         Hi There {this.state.name}
       </div>
+      // </Mutation>
     );
   }
 }

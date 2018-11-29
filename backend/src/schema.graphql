@@ -5,7 +5,13 @@ type SuccessMessage {
 
 type Mutation {
   # createTrip(title: String, description: String): Trip!
-  signup(name: String!, email: String!, password: String!, password2: String!): User!
+  signup(
+    name: String!
+    email: String!
+    facebookUser: Boolean!
+    password: String!
+    password2: String!
+  ): User!
   signin(email: String!, password: String!): User!
   signout(message: String): SuccessMessage
   facebooksignup(

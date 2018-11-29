@@ -54,14 +54,22 @@ const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
     $email: String!
     $name: String!
+    $facebookUser: Boolean!
     $password: String!
     $password2: String!
   ) {
-    signup(email: $email, name: $name, password: $password, password2: $password2) {
+    signup(
+      email: $email
+      name: $name
+      facebookUser: $facebookUser
+      password: $password
+      password2: $password2
+    ) {
       # returned values
       id
       email
       name
+      facebookUser
     }
   }
 `;
@@ -105,7 +113,7 @@ class Signup extends Component {
     localStorage.setItem('email', data.profile.email);
     localStorage.setItem('signup', true);
     Router.push({
-      pathname: '/facebooklogin'
+      pathname: '/facebooksignup'
     });
   };
   handleError = error => {
