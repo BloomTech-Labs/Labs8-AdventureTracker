@@ -69,6 +69,7 @@ const SIGNUP_MUTATION = gql`
       id
       email
       name
+      facebookUser
     }
   }
 `;
