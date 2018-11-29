@@ -88,7 +88,7 @@ const Mutations = {
         name: args.name,
         email: args.email, // name, email, password
         password,
-        facebookID,
+        facebookID: args.facebookID,
         facebookUser: true,
         // default new people as "USER"
         permissions: { set: ['USER'] } // uses `set` because is enum
