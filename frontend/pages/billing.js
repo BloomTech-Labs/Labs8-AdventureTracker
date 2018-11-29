@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Payment from '../components/Billing';
-
+import MobileNavContainer from '../components/MobileNavContainer';
 
 const Billing = () => (
   <div>
@@ -15,6 +15,7 @@ const Billing = () => (
     <Link href="/invoice">
       <button>Invoices</button>
     </Link>
+    <MobileNavContainer />
   </div>
 );
 

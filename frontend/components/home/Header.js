@@ -1,8 +1,14 @@
 import styled from 'styled-components';
 import { PrimaryLinkBtn } from '../styles/PrimaryLinkBtn';
+import { device } from '../../lib/device';
+
 const Logo = styled.h1`
   color: ${props => props.theme.white};
   font-size: 5rem;
+  @media ${device.tablet} {
+    font-size: 3rem;
+    margin-bottom: 0;
+  }
 `;
 
 const ButtonGroup = styled.div`
@@ -37,6 +43,10 @@ const HeaderWrapper = styled.nav`
   color: ${props => props.theme.white};
   background: ${props => props.theme.brown};
   border-bottom: 6px solid ${props => props.theme.black};
+  @media ${device.tablet} {
+    flex-flow: column;
+    height: 15rem;
+  }
 `;
 const Header = () => (
   <HeaderWrapper>
