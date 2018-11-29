@@ -1,15 +1,28 @@
 import React from 'react';
-import Link from 'next/link';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
 import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
 import styled from 'styled-components';
-import { CURRENT_USER_QUERY } from './User';
+import Error from './ErrorMessage';
+
+import { PrimaryBtn } from './styles/ButtonStyles';
+import { NavbarContainer } from './styles/NavbarContainer';
+
+const Login = styled(PrimaryBtn)``;
+const NavbarWrapper = styled(NavbarContainer)`
+  height: 8rem;
+`;
 
 const FACEBOOKSIGNUP_MUTATION = gql`
-  mutation FACEBOOKSIGNUP_MUTATION($facebookID: String!) {
-    facebooksignup(facebookID: $facebookID) {
+  mutation FACEBOOKSIGNUP_MUTATION($email: String!, $name: String!, $facebookID: String!) {
+    facebooksignup(
+      email: $email
+      name: $name
+      password: ""
+      facebookUser: true
+      facebookID: $facebookID
+    ) {
       id
       email
       name
@@ -22,7 +35,7 @@ class FacebookSignup extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      fbID: '',
+      facebookID: '',
       email: '',
       password: '',
       name: '',
@@ -36,7 +49,7 @@ class FacebookSignup extends React.Component {
     const email = localStorage.getItem('email');
     const password = uuidv4();
     this.setState({
-      fbID: id,
+      facebookID: id,
       email,
       name,
       password
@@ -48,16 +61,20 @@ class FacebookSignup extends React.Component {
       <Mutation mutation={FACEBOOKSIGNUP_MUTATION} variables={this.state}>
         {(facebooksignup, { error, loading }) => {
           return (
-            <div>
-              Loading
-              {/* {(async () => {
-                await facebooksignup();
-                this.setState({ name: '', email: '', password: '', password2: '', step: 1 });
-                Router.push({
-                  pathname: '/triplist'
-                });
-              })()} */}
-            </div>
+            <NavbarWrapper>
+              <Login
+                onClick={async e => {
+                  e.preventDefault();
+                  await facebooksignup();
+                  Router.push({
+                    pathname: '/triplist'
+                  });
+                }}
+              >
+                Login
+              </Login>
+              <Error error={error} />
+            </NavbarWrapper>
           );
         }}
       </Mutation>
