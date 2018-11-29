@@ -7,8 +7,28 @@ export {
   HamburgerIcon,
   RedExclamationIcon,
   GreenCheckIcon,
-  YellowExclamationIcon
+  YellowExclamationIcon,
+  ExitIcon
 };
+
+const ExitIcon = () => (
+  <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path
+      d="M45 15L15 45"
+      stroke="#F5FAFF"
+      stroke-width="6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M15 15L45 45"
+      stroke="#F5FAFF"
+      stroke-width="6"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    />
+  </svg>
+);
 
 const GlobeIcon = props => {
   return (
