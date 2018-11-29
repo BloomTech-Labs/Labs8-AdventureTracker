@@ -1,9 +1,12 @@
 import Link from 'next/link';
 import User from '../components/User';
 import PleaseLogin from '../components/PleaseLogin';
+import TripNote from '../components/TripNote';
+import CommonTopNavbar from '../components/CommonTopNavbar';
 
 const TripList = () => (
   <div>
+    <CommonTopNavbar />
     <PleaseLogin>
       <User>
         {/* destructure the payload & `me` query */}
@@ -25,6 +28,7 @@ const TripList = () => (
       <Link href="/settings">
         <button>Settings</button>
       </Link>
+      <TripNote />
     </PleaseLogin>
   </div>
 );

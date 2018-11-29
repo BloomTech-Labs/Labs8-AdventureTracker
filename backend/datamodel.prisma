@@ -23,3 +23,10 @@ type User {
 #   description: String!
 #   user: User!
 # }
+
+type Order {
+  id: ID! @unique
+  price: Int!
+  user: User!
+  charge: String!
+}

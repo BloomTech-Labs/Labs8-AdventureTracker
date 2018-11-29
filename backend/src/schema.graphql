@@ -7,11 +7,20 @@ type Mutation {
   # createTrip(title: String, description: String): Trip!
   signup(name: String!, email: String!, password: String!, password2: String!): User!
   signin(email: String!, password: String!): User!
-  signout: SuccessMessage
+  signout(message: String): SuccessMessage
+  facebooksignup(
+    name: String!
+    email: String!
+    password: String!
+    facebookID: String
+    facebookUser: Boolean!
+  ): User!
+  facebooksignin(facebookID: String): User!
   # updateTrip(id: ID!, title: String, description: String): Trip!
   # deleteTrip(id: ID!): Trip
   deleteUser(id: ID!): User!
   changePassword(email: String!, oldPassword: String!, newPassword: String!): User!
+  createOrder(token: String!): Order!
 }
 
 # type Query {
