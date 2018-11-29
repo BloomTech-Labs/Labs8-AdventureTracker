@@ -33,9 +33,11 @@ const Info = styled.p`
   }
 `;
 const BoldWord = styled.strong`
-  display: block;
-  text-align: center;
   font-weight: 600;
+  @media ${device.tablet} {
+    display: block;
+    text-align: center;
+  }
 `;
 const BuyBtn = styled(PrimaryLinkBtn)`
   display: flex;
