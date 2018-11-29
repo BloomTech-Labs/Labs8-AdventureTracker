@@ -133,11 +133,10 @@ const Mutations = {
     return user;
   },
   async facebooksignin(parent, { facebookID }, ctx, info) {
-    console.log('IN FACEBOOKSIGNIN');
     // check if there is a user with that facebook ID
     const user = await ctx.db.query.user({ where: { facebookID } });
     if (!user) {
-      throw new Error(`No user found.`);
+      throw new Error(`No user found for this Facebook account.`);
     }
     // generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
