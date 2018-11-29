@@ -24,6 +24,7 @@ const Info = styled.p`
   font-size: 3.2rem;
   margin-bottom: 3.2rem;
   line-height: 4rem;
+  text-align: center;
   &:first-child {
     margin-top: 13rem;
   }
@@ -32,6 +33,8 @@ const Info = styled.p`
   }
 `;
 const BoldWord = styled.strong`
+  display: block;
+  text-align: center;
   font-weight: 600;
 `;
 const BuyBtn = styled(PrimaryLinkBtn)`
@@ -43,6 +46,9 @@ const BuyBtn = styled(PrimaryLinkBtn)`
   text-transform: capitalize;
   font-size: 5rem;
   max-width: 30rem;
+  @media ${device.tablet} {
+    height: 10rem;
+  }
 `;
 const InfoPanel = () => (
   <InfoPanelWrapper>
