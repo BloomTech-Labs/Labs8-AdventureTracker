@@ -141,15 +141,21 @@ const Mutations = {
     });
 
     return updatedUser;
+  },
+
+  async createOrder(parent, args, ctx, info) {
+    //   // 1. Query the current user and make sure they are signed in
+    const { userID } = ctx.request;
+    if (!userID) throw new Error('You must be signed in to complete this order.');
+    const user = await ctx.db.query.user({ where: { id: userId } }, `{ id name email }`);
+    //   // 2. Calculate total price
+    const amount = 999;
+    console.log(`Going to charge for a total of ${amount}`);
   }
 };
-
-// **** CODE THAT DEALS WITH STRIPE *****
-// TURNS TOKEN INTO A CHARGE THAT SHOWS IN STRIPE ACCOUNT
-// const charge = await stripe.charges.create({
-//   amount,
-//   currency: 'USD',
-//   source: args.token,
-// });
+//   // 3. Create the stripe charge
+//   // 4. Create the order
+//   // 5. Return the Order to the client
+// }
 
 module.exports = Mutations;
