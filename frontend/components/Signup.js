@@ -54,10 +54,17 @@ const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
     $email: String!
     $name: String!
+    $facebookUser: Boolean!
     $password: String!
     $password2: String!
   ) {
-    signup(email: $email, name: $name, password: $password, password2: $password2) {
+    signup(
+      email: $email
+      name: $name
+      facebookUser: $facebookUser
+      password: $password
+      password2: $password2
+    ) {
       # returned values
       id
       email
