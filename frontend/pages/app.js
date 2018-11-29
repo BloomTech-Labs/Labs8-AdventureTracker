@@ -4,8 +4,8 @@ import { Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline } from 'go
 import CurrentLocation from './map';
 
 export class MapContainer extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       showingInfoWindow: false,
       activeMarker: {},
@@ -18,7 +18,7 @@ export class MapContainer extends Component {
     this.COMPLETED = 'COMPLETED';
   }
   componentDidMount() {
-    // this.setState({ markers:  });
+    this.setState({}, () => this.addLines(this.state.markers));
   }
   //distance in miles
   //distance matrix
@@ -48,7 +48,7 @@ export class MapContainer extends Component {
     };
     // solid black line means the path was traversed
     const solidBlackLine = {
-      strokeWeight: 7,
+      strokeWeight: 20,
       strokeColor: '#000000'
     };
     const lines = [];
@@ -56,73 +56,79 @@ export class MapContainer extends Component {
     for (let i = 0; i < markers.length; i++) {
       let lineOptions = {};
       //Depending on marker's status, this will choose what type of line to use
-      if (marker[i].status === this.NOT_STARTED) {
+      if (markers[i].status === this.NOT_STARTED) {
         lineOptions = {
           ...greyLine
         };
-      } else if (marker[i].status === this.IN_PROGRESS) {
+      } else if (markers[i].status === this.IN_PROGRESS) {
         lineOptions = {
           ...dashedLine
         };
-      } else if (marker[i].status === this.COMPLETED) {
+      } else if (markers[i].status === this.COMPLETED) {
         lineOptions = {
           ...solidBlackLine
         };
       }
       //set the lat and lng dot
-      line.push([markers[i].lat, markers[i].lng]);
+      line.push({ lat: markers[i].position.lat(), lng: markers[i].position.lng() });
 
       //Every two markers set consecutively, add a new polyline
       if (i > 0) {
-        lineOptions['path'] = line;
+        lineOptions['path'] = line.slice();
         lines.push(lineOptions);
         //Reset for new line
-        line = [[markers[i].lat, markers[i].lng]];
+        line = [[markers[i].position.lat(), markers[i].position.lng()]];
       }
     }
-
     this.setState({ polylines: lines });
   };
   mapClicked = (mapProps, map, clickEvent) => {
-    console.log(clickEvent.xa);
     const myLatLng = {
       lat: clickEvent.latLng.lat(),
       lng: clickEvent.latLng.lng()
     };
-    const { markers } = this.state;
+    const { markers, polylines } = this.state;
+    console.log('POLYLINES: ', polylines);
     const labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const amountOfMarkers = markers.length;
-    const marker = new google.maps.Marker({
+
+    const marker = {
       position: myLatLng,
       map: map,
       id: amountOfMarkers,
       title: String(amountOfMarkers),
       label: labels[amountOfMarkers % labels.length],
       //NOT_STARTED, IN_PROGRESS, COMPLETED - NOT_STARTED is default
-      status: this.NOT_STARTED
-    });
-    console.log(marker.position);
+      status: this.COMPLETED
+    };
+
     this.setState({ markers: [...markers, marker] });
+
     // Line coords takes an array of arrays which specifies where the dots are
     // Need to use the marker coordinates in order to make those lines
     // Somehow specify what type of line it is
 
-    const InfoWindow = new google.maps.InfoWindow({
-      content:
-        '<b>Marker Coordinates : </b> <br><b>Latitude : </b>' +
-        marker.position.lat() +
-        '<br><b>Longitude: </b>' +
-        marker.position.lng(),
-      position: marker.position
-    });
-    marker.addListener('click', function() {
-      InfoWindow.open(map, marker);
-    });
+    // const InfoWindow = new google.maps.InfoWindow({
+    //   content:
+    //     '<b>Marker Coordinates : </b> <br><b>Latitude : </b>' +
+    //     marker.position.lat() +
+    //     '<br><b>Longitude: </b>' +
+    //     marker.position.lng(),
+    //   position: marker.position
+    // });
+    // marker.addListener('click', function() {
+    //   InfoWindow.open(map, marker);
+    // });
   };
 
   render() {
     const { markers, polylines } = this.state;
-
+    const triangleCoords = [
+      { lat: 25.774, lng: -80.19 },
+      { lat: 18.466, lng: -66.118 },
+      { lat: 32.321, lng: -64.757 },
+      { lat: 25.774, lng: -80.19 }
+    ];
     return (
       <Map
         google={this.props.google}
@@ -136,22 +142,30 @@ export class MapContainer extends Component {
             <Marker
               title={mark.title}
               id={mark.id}
-              key={mark.key}
-              position={{ lat: mark.position.lat, lng: mark.position.lng }}
+              key={mark.id}
+              label={mark.label}
+              position={mark.position}
             />
           );
         })}
-        {polylines.map((line, i) => {
+        {/* {polylines.map((line, i) => {
+          console.log('PATH', line);
           return (
             <Polyline
               key={i}
-              path={line.path}
-              strokeColor={line.strokeColor}
+              paths={line.path}
+              strokeColor="#0000FF"
               strokeWeight={line.strokeWeight}
+              strokeOpacity={line.strokeOpacity}
             />
           );
-        })}
-        }
+        })} */}
+        <Polyline
+          paths={triangleCoords}
+          strokeColor="#FF0000"
+          strokeOpacity={0.8}
+          strokeWeight={2}
+        />
         {/* <Marker
           title={'The marker`s title will appear as a tooltip.'}
           name={'SOMA'}
