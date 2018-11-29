@@ -113,7 +113,7 @@ class Signup extends Component {
     localStorage.setItem('email', data.profile.email);
     localStorage.setItem('signup', true);
     Router.push({
-      pathname: '/facebooklogin'
+      pathname: '/facebooksignup'
     });
   };
   handleError = error => {

@@ -78,6 +78,38 @@ const Mutations = {
     // Return the user to the browser
     return user;
   },
+  async facebooksignup(parent, args, ctx, info) {
+    args.email = args.email.toLowerCase();
+    // hash their password
+    const password = await hashPassword(args.password);
+    // create the user in the database
+    const user = await ctx.db.mutation.createUser({
+      data: {
+        name: args.name,
+        email: args.email, // name, email, password
+        password,
+        facebookID,
+        facebookUser: true,
+        // default new people as "USER"
+        permissions: { set: ['USER'] } // uses `set` because is enum
+      },
+      // info is what is returned to the client
+      info
+    });
+
+    // We just signed up - so go ahead and log the new user in!
+    // create the JWT
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+
+    // we set the jwt as a cookie on the response
+    ctx.response.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
+    });
+
+    // Return the user to the browser
+    return user;
+  },
   // {email, password} is destructuring args
   async signin(parent, { email, password }, ctx, info) {
     // check if there is a user with that email
@@ -89,6 +121,23 @@ const Mutations = {
     const valid = await bcrypt.compare(password, user.password);
     if (!valid) {
       throw new Error('Invalid Password');
+    }
+    // generate the JWT Token
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+    // set the cookie with the token
+    ctx.response.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 365
+    });
+    // return the user
+    return user;
+  },
+  async facebooksignin(parent, { facebookID }, ctx, info) {
+    console.log('IN FACEBOOKSIGNIN');
+    // check if there is a user with that facebook ID
+    const user = await ctx.db.query.user({ where: { facebookID } });
+    if (!user) {
+      throw new Error(`No user found.`);
     }
     // generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
