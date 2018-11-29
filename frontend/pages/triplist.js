@@ -4,6 +4,7 @@ import PleaseLogin from '../components/PleaseLogin';
 import TripNote from '../components/TripNote';
 import CommonTopNavbar from '../components/CommonTopNavbar';
 import MobileNav from '../components/MobileNav';
+import MobileNavContainer from '../components/MobileNavContainer';
 
 const TripList = () => (
   <div>
@@ -31,7 +32,6 @@ const TripList = () => (
       </Link>
       <TripNote />
     </PleaseLogin>
-    <MobileNav />
   </div>
 );
 
