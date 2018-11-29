@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import gql from 'graphql-tag';
 import styled from 'styled-components';
-
+import TripNote from './TripNote';
 const ALL_TRIPS_QUERY = gql`
   query ALL_TRIPS_QUERY {
     trips {
@@ -36,7 +36,7 @@ class Trips extends Component {
             return (
               <TripsList>
                 {data.trips.map(item => (
-                  <p>{trip.title}</p>
+                  <TripNote title={trip.title} />
                 ))}
               </TripsList>
             );
