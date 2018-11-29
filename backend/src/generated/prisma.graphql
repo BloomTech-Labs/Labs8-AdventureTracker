@@ -188,6 +188,7 @@ type User {
   email: String!
   password: String!
   resetToken: String
+  facebookUser: Boolean!
   resetTokenExpiry: Float
   permissions: [Permission!]!
 }
@@ -203,6 +204,7 @@ input UserCreateInput {
   email: String!
   password: String!
   resetToken: String
+  facebookUser: Boolean!
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
 }
@@ -232,6 +234,8 @@ enum UserOrderByInput {
   password_DESC
   resetToken_ASC
   resetToken_DESC
+  facebookUser_ASC
+  facebookUser_DESC
   resetTokenExpiry_ASC
   resetTokenExpiry_DESC
   createdAt_ASC
@@ -246,6 +250,7 @@ type UserPreviousValues {
   email: String!
   password: String!
   resetToken: String
+  facebookUser: Boolean!
   resetTokenExpiry: Float
   permissions: [Permission!]!
 }
@@ -273,6 +278,7 @@ input UserUpdateDataInput {
   email: String
   password: String
   resetToken: String
+  facebookUser: Boolean
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
 }
@@ -282,6 +288,7 @@ input UserUpdateInput {
   email: String
   password: String
   resetToken: String
+  facebookUser: Boolean
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
 }
@@ -373,6 +380,8 @@ input UserWhereInput {
   resetToken_not_starts_with: String
   resetToken_ends_with: String
   resetToken_not_ends_with: String
+  facebookUser: Boolean
+  facebookUser_not: Boolean
   resetTokenExpiry: Float
   resetTokenExpiry_not: Float
   resetTokenExpiry_in: [Float!]
