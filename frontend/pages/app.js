@@ -122,6 +122,7 @@ export class MapContainer extends Component {
   checkInAtMarker = () => {
     console.log('Completed!');
   };
+
   deleteMarker = () => {
     const { markers, activeMarker } = this.state;
 
@@ -140,7 +141,11 @@ export class MapContainer extends Component {
       newMarkerSet[i].label = this.labels[i % this.labels.length];
     }
     // this.addLines here, updates the current lines
-    this.setState({ markers: newMarkerSet }, () => this.updateLines());
+    this.setState({ markers: [] }, () => {
+      this.setState({ markers: newMarkerSet }, () => {
+        this.updateLines();
+      });
+    });
   };
 
   onInfoWindowOpen = e => {
@@ -190,7 +195,7 @@ export class MapContainer extends Component {
           </div>
         </InfoWindow>
         {markers.map(mark => {
-          console.log(mark);
+          // console.log(mark.label);
           return (
             <Marker
               onClick={this.onMarkerClick}
