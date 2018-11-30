@@ -17,17 +17,18 @@ const CREATE_ORDER_MUTATION = gql`
 `;
 
 class Payment extends Component {
-  onToken = (res, createOrder) => {
+  onToken = async (res, createOrder) => {
     console.log('On Token Called!');
     console.log(res.id);
     // manually call the mutation once we have the stripe token
-    createOrder({
+    const order = await createOrder({
       variables: {
         token: res.id
       }
     }).catch(err => {
       alert(err.message);
     });
+    console.log(order);
   };
   render() {
     const charge = 999;
@@ -37,15 +38,14 @@ class Payment extends Component {
         {({ data: { me } }) => (
           <Mutation
             mutation={CREATE_ORDER_MUTATION}
-            // refetchQueries={[{ query: CURRENT_USER_QUERY }
-            // ]}
+            refetchQueries={[{ query: CURRENT_USER_QUERY }]}
           >
             {createOrder => (
               <StripeCheckout
                 stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
                 currrency="USD"
                 amount={charge}
-                //email={currentEmail}
+                //email={me.email}
                 name="Adventure Tracker"
                 token={res => this.onToken(res, createOrder)}
               >
