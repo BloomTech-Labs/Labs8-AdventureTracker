@@ -27,6 +27,7 @@ type Order {
 }
 
 type Trip {
+  id: ID! @unique
   name: String!
   description: String!
   markers: [Marker!]!
