@@ -36,14 +36,8 @@ export class MapContainer extends Component {
       scale: 4
     };
     const dashedLine = {
-      strokeOpacity: 0,
-      icons: [
-        {
-          icon: lineSymbol,
-          offset: '0',
-          repeat: '20px'
-        }
-      ]
+      strokeWeight: 5,
+      strokeColor: 'green'
     };
     // solid black line means the path was traversed
     const solidBlackLine = {
@@ -108,7 +102,7 @@ export class MapContainer extends Component {
       title: String(amountOfMarkers),
       label: labels[amountOfMarkers % labels.length],
       //NOT_STARTED, IN_PROGRESS, COMPLETED - NOT_STARTED is default
-      status: this.COMPLETED
+      status: this.IN_PROGRESS
     };
 
     this.setState({ markers: [...markers, marker] }, () => this.addLines());
