@@ -102,7 +102,7 @@ export class MapContainer extends Component {
       title: String(amountOfMarkers),
       label: labels[amountOfMarkers % labels.length],
       //NOT_STARTED, IN_PROGRESS, COMPLETED - NOT_STARTED is default
-      status: this.IN_PROGRESS
+      status: this.NOT_STARTED
     };
 
     this.setState({ markers: [...markers, marker] }, () => this.addLines());
