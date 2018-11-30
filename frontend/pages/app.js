@@ -17,12 +17,13 @@ export class MapContainer extends Component {
     this.NOT_STARTED = 'NOT_STARTED';
     this.IN_PROGRESS = 'IN_PROGRESS';
     this.COMPLETED = 'COMPLETED';
+    this.labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   }
 
   //distance in miles
   //distance matrix
   //create the ETA
-  addLines = () => {
+  updateLines = () => {
     // thin grey is not reached yet and the person has not started that path
     const greyLine = {
       strokeWeight: 5,
@@ -92,7 +93,6 @@ export class MapContainer extends Component {
     };
     const { markers, polylines } = this.state;
     console.log('POLYLINES: ', polylines);
-    const labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const amountOfMarkers = markers.length;
 
     const marker = {
@@ -100,12 +100,12 @@ export class MapContainer extends Component {
       map: map,
       id: uuidv1(),
       title: String(amountOfMarkers),
-      label: labels[amountOfMarkers % labels.length],
+      label: this.labels[amountOfMarkers % this.labels.length],
       //NOT_STARTED, IN_PROGRESS, COMPLETED - NOT_STARTED is default
       status: this.NOT_STARTED
     };
     console.log(marker.id);
-    this.setState({ markers: [...markers, marker] }, () => this.addLines());
+    this.setState({ markers: [...markers, marker] }, () => this.updateLines());
 
     // Line coords takes an array of arrays which specifies where the dots are
     // Need to use the marker coordinates in order to make those lines
@@ -120,15 +120,7 @@ export class MapContainer extends Component {
     });
   };
   checkInAtMarker = () => {
-    // const { activeMarker, markers } = this.state;
-    // for (let i = 0; i < markers.length; i++) {
-    //   if (markers[i].id === activeMarker.id) {
-    //     const updateMarker = { ...markers[i], status: this.COMPLETED };
-    //     console.log(updateMarker);
-    //     const newMarkers = [...markers.slice(0, i), updateMarker, ...markers.slice(i + 1)];
-    //     this.setState({ markers: newMarkers }, () => this.addLines());
-    //   }
-    // }
+    console.log('Completed!');
   };
   deleteMarker = () => {
     const { markers, activeMarker } = this.state;
@@ -144,8 +136,11 @@ export class MapContainer extends Component {
       }
     }
     const newMarkerSet = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
+    for (let i = 0; i < newMarkerSet.length; i++) {
+      newMarkerSet[i].label = this.labels[i % this.labels.length];
+    }
     // this.addLines here, updates the current lines
-    this.setState({ markers: newMarkerSet }, () => this.addLines());
+    this.setState({ markers: newMarkerSet }, () => this.updateLines());
   };
 
   onInfoWindowOpen = e => {
@@ -195,6 +190,7 @@ export class MapContainer extends Component {
           </div>
         </InfoWindow>
         {markers.map(mark => {
+          console.log(mark);
           return (
             <Marker
               onClick={this.onMarkerClick}
