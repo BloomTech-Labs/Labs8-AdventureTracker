@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline } from 'google-maps-react';
-
+import ReactDOM from 'react-dom';
 import CurrentLocation from './map';
 
 export class MapContainer extends Component {
@@ -119,6 +119,47 @@ export class MapContainer extends Component {
       clickedMarker: { lat: props.position.lat, lng: props.position.lng }
     });
   };
+  checkInAtMarker = () => {
+    console.log('Completed!');
+  };
+  deleteMarker = () => {
+    const { markers, activeMarker } = this.state;
+    if (markers.length === 1) {
+      this.setState({ markers: [] });
+      return;
+    }
+    const newMarkerSet = [
+      ...markers.slice(0, activeMarker.id),
+      ...markers.slice(activeMarker.id + 1)
+    ];
+    // this.addLines here, updates the current lines
+    this.setState({ markers: newMarkerSet }, () => this.addLines());
+  };
+
+  onInfoWindowOpen = e => {
+    console.log('delete');
+
+    const infoWindowComponents = (
+      <div>
+        <label id="reached-checkpoint">Reached Checkpoint?</label>
+        <input
+          type="checkbox"
+          id="reached-checkpoint"
+          onClick={e => {
+            this.checkInAtMarker();
+          }}
+        />
+        <input
+          type="button"
+          onClick={e => {
+            this.deleteMarker();
+          }}
+          value="Delete Checkpoint?"
+        />
+      </div>
+    );
+    ReactDOM.render(React.Children.only(infoWindowComponents), document.getElementById('iwc'));
+  };
 
   render() {
     const { markers, polylines, clickedMarker } = this.state;
@@ -130,10 +171,17 @@ export class MapContainer extends Component {
         className={'map'}
         zoom={4}
       >
-        <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
+        <InfoWindow
+          marker={this.state.activeMarker}
+          visible={this.state.showingInfoWindow}
+          onOpen={e => {
+            this.onInfoWindowOpen(e);
+          }}
+        >
           <div>
-            <div>Latitude: {clickedMarker.lat}</div>
-            <div>Longitude: {clickedMarker.lng}</div>
+            {/* <div>Latitude: {clickedMarker.lat}</div> */}
+            <div id="iwc" />
+            {/* <div>Longitude: {clickedMarker.lng}</div> */}
           </div>
         </InfoWindow>
         {markers.map(mark => {
