@@ -19,16 +19,29 @@ type User {
   permissions: [Permission]
 }
 
-# type Trip {
-#   id: ID! @unique
-#   title: String!
-#   description: String!
-#   user: User!
-# }
-
 type Order {
   id: ID! @unique
   price: Int!
   user: User!
   charge: String!
+}
+
+type Trip {
+  name: String!
+  description: String!
+  markers: [Marker!]!
+}
+
+enum Progress {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+type Marker {
+  id: ID! @unique
+  title: String!
+  lat: Float!
+  lng: Float!
+  status: Progress!
 }

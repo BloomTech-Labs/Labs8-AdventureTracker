@@ -18,22 +18,6 @@ const Mutations = {
   //   );
   //   return trip;
   // },
-  // updateTrip(parent, args, ctx, info) {
-  //   // first take a copy of the updates
-  //   const updates = { ...args };
-  //   // remove the ID from the updates
-  //   delete updates.id;
-  //   // run the update method
-  //   return ctx.db.mutation.updateTrip(
-  //     {
-  //       data: updates,
-  //       where: {
-  //         id: args.id
-  //       }
-  //     },
-  //     info
-  //   );
-  // },
   // async deleteTrip(parent, args, ctx, info) {
   //   const where = { id: args.id };
   //   // find the item
