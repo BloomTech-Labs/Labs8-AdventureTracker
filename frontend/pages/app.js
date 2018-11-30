@@ -54,6 +54,8 @@ export class MapContainer extends Component {
     let line = [];
     for (let i = 0; i < markers.length; i++) {
       let lineOptions = {};
+      let markerLat = markers[i].position.lat;
+      let markerLng = markers[i].position.lng;
       //Depending on marker's status, this will choose what type of line to use
       if (markers[i].status === this.NOT_STARTED) {
         lineOptions = {
@@ -69,14 +71,14 @@ export class MapContainer extends Component {
         };
       }
       //set the lat and lng dot
-      line.push({ lat: markers[i].position.lat(), lng: markers[i].position.lng() });
+      line.push({ lat: markerLat, lng: markerLng });
 
       //Every two markers set consecutively, add a new polyline
       if (i > 0) {
         lineOptions['path'] = line.slice();
         lines.push(lineOptions);
         //Reset for new line
-        line = [[markers[i].position.lat(), markers[i].position.lng()]];
+        line = [{ lat: markerLat, lng: markerLng }];
       }
     }
     console.log(lines);
@@ -108,8 +110,7 @@ export class MapContainer extends Component {
       status: this.COMPLETED
     };
 
-    this.setState({ markers: [...markers, marker] });
-    // this.addLines(markers);
+    this.setState({ markers: [...markers, marker] }, () => this.addLines(markers));
 
     // Line coords takes an array of arrays which specifies where the dots are
     // Need to use the marker coordinates in order to make those lines
@@ -126,12 +127,7 @@ export class MapContainer extends Component {
   onMapClicked = props => {};
   render() {
     const { markers, polylines, clickedMarker } = this.state;
-    const triangleCoords = [
-      { lat: 25.774, lng: -80.19 },
-      { lat: 18.466, lng: -66.118 },
-      { lat: 32.321, lng: -64.757 },
-      { lat: 25.774, lng: -80.19 }
-    ];
+    const triangleCoords = [{ lat: 25.774, lng: -80.19 }, { lat: 18.466, lng: -66.118 }];
     return (
       <Map
         google={this.props.google}
@@ -159,9 +155,9 @@ export class MapContainer extends Component {
           );
         })}
 
-        {/* {polylines.map((line, i) => {
+        {polylines.map((line, i) => {
           return (
-            <Polyline
+            <Polygon
               key={i}
               paths={line.path}
               strokeColor="#0000FF"
@@ -169,7 +165,7 @@ export class MapContainer extends Component {
               strokeOpacity={line.strokeOpacity}
             />
           );
-        })} */}
+        })}
         {/* <Marker
           title={'The marker`s title will appear as a tooltip.'}
           name={'SOMA'}
