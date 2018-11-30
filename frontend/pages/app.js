@@ -140,7 +140,6 @@ export class MapContainer extends Component {
     for (let i = 0; i < newMarkerSet.length; i++) {
       newMarkerSet[i].label = this.labels[i % this.labels.length];
     }
-    // this.addLines here, updates the current lines
     this.setState({ markers: [] }, () => {
       this.setState({ markers: newMarkerSet }, () => {
         this.updateLines();
