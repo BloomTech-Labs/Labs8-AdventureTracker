@@ -9,6 +9,7 @@ export class MapContainer extends Component {
     this.state = {
       showingInfoWindow: false,
       activeMarker: {},
+      clickedMarker: {},
       selectedPlace: {},
       markers: [],
       polylines: []
@@ -72,7 +73,7 @@ export class MapContainer extends Component {
       }
       //set the lat and lng dot
       line.push([markers[i].position.lat(), markers[i].position.lng()]);
-
+      // add another line for each layer
       //Every two markers set consecutively, add a new polyline
       if (i > 0) {
         lineOptions['path'] = line.slice();
@@ -85,6 +86,12 @@ export class MapContainer extends Component {
     this.setState({ polylines: lines });
   };
   mapClicked = (mapProps, map, clickEvent) => {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null
+      });
+    }
     const myLatLng = {
       lat: clickEvent.latLng.lat(),
       lng: clickEvent.latLng.lng()
@@ -93,7 +100,7 @@ export class MapContainer extends Component {
     console.log('POLYLINES: ', polylines);
     const labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const amountOfMarkers = markers.length;
-
+    // Start, Checkpoint 1, Checkpoint 2
     const marker = new google.maps.Marker({
       position: myLatLng,
       map: map,
@@ -109,22 +116,18 @@ export class MapContainer extends Component {
     // Line coords takes an array of arrays which specifies where the dots are
     // Need to use the marker coordinates in order to make those lines
     // Somehow specify what type of line it is
-
-    const InfoWindow = new google.maps.InfoWindow({
-      content:
-        '<b>Marker Coordinates : </b> <br><b>Latitude : </b>' +
-        marker.position.lat() +
-        '<br><b>Longitude: </b>' +
-        marker.position.lng(),
-      position: marker.position
-    });
-    marker.addListener('click', function() {
-      InfoWindow.open(map, marker);
+  };
+  onMarkerClick = (props, marker, e) => {
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true,
+      clickedMarker: { lat: props.position.lat(), lng: props.position.lng() }
     });
   };
-
+  onMapClicked = props => {};
   render() {
-    const { markers, polylines } = this.state;
+    const { markers, polylines, clickedMarker } = this.state;
 
     return (
       <Map
@@ -134,10 +137,23 @@ export class MapContainer extends Component {
         className={'map'}
         zoom={4}
       >
+        <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
+          <div>Latitude: {clickedMarker.lat}</div>
+          <div>Longitude: {clickedMarker.lng}</div>
+        </InfoWindow>
         {markers.map(mark => {
-          return <Marker title={mark.title} id={mark.id} key={mark.id} position={mark.position} />;
+          return (
+            <Marker
+              onClick={this.onMarkerClick}
+              title={mark.title}
+              id={mark.id}
+              key={mark.id}
+              position={mark.position}
+            />
+          );
         })}
-        {polylines.map((line, i) => {
+
+        {/* {polylines.map((line, i) => {
           return (
             <Polyline
               key={i}
@@ -146,7 +162,7 @@ export class MapContainer extends Component {
               strokeWeight={line.strokeWeight}
             />
           );
-        })}
+        })} */}
 
         {/* <Marker
           title={'The marker`s title will appear as a tooltip.'}
