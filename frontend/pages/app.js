@@ -109,7 +109,7 @@ export class MapContainer extends Component {
     };
 
     this.setState({ markers: [...markers, marker] });
-    this.addLines(markers);
+    // this.addLines(markers);
 
     // Line coords takes an array of arrays which specifies where the dots are
     // Need to use the marker coordinates in order to make those lines
