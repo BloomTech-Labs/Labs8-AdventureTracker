@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline } from 'google-maps-react';
 import ReactDOM from 'react-dom';
 import CurrentLocation from './map';
-
+import uuidv1 from 'uuid/v1';
 export class MapContainer extends Component {
   constructor(props) {
     super(props);
@@ -98,13 +98,13 @@ export class MapContainer extends Component {
     const marker = {
       position: myLatLng,
       map: map,
-      id: amountOfMarkers,
+      id: uuidv1(),
       title: String(amountOfMarkers),
       label: labels[amountOfMarkers % labels.length],
       //NOT_STARTED, IN_PROGRESS, COMPLETED - NOT_STARTED is default
       status: this.NOT_STARTED
     };
-
+    console.log(marker.id);
     this.setState({ markers: [...markers, marker] }, () => this.addLines());
 
     // Line coords takes an array of arrays which specifies where the dots are
@@ -120,25 +120,35 @@ export class MapContainer extends Component {
     });
   };
   checkInAtMarker = () => {
-    console.log('Completed!');
+    // const { activeMarker, markers } = this.state;
+    // for (let i = 0; i < markers.length; i++) {
+    //   if (markers[i].id === activeMarker.id) {
+    //     const updateMarker = { ...markers[i], status: this.COMPLETED };
+    //     console.log(updateMarker);
+    //     const newMarkers = [...markers.slice(0, i), updateMarker, ...markers.slice(i + 1)];
+    //     this.setState({ markers: newMarkers }, () => this.addLines());
+    //   }
+    // }
   };
   deleteMarker = () => {
     const { markers, activeMarker } = this.state;
-    if (markers.length === 1) {
+
+    if (markers.length <= 1) {
       this.setState({ markers: [] });
       return;
     }
-    const newMarkerSet = [
-      ...markers.slice(0, activeMarker.id),
-      ...markers.slice(activeMarker.id + 1)
-    ];
+    let deleteIndex;
+    for (let i = 0; i < markers.length; i++) {
+      if (activeMarker.id === markers[i].id) {
+        deleteIndex = i;
+      }
+    }
+    const newMarkerSet = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
     // this.addLines here, updates the current lines
     this.setState({ markers: newMarkerSet }, () => this.addLines());
   };
 
   onInfoWindowOpen = e => {
-    console.log('delete');
-
     const infoWindowComponents = (
       <div>
         <label id="reached-checkpoint">Reached Checkpoint?</label>
@@ -158,7 +168,7 @@ export class MapContainer extends Component {
         />
       </div>
     );
-    ReactDOM.render(React.Children.only(infoWindowComponents), document.getElementById('iwc'));
+    ReactDOM.render(infoWindowComponents, document.getElementById('iwc'));
   };
 
   render() {
@@ -192,6 +202,7 @@ export class MapContainer extends Component {
               id={mark.id}
               key={mark.id}
               label={mark.label}
+              status={mark.status}
               position={mark.position}
             />
           );
