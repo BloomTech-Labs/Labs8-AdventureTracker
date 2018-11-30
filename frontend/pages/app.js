@@ -22,7 +22,7 @@ export class MapContainer extends Component {
   //distance in miles
   //distance matrix
   //create the ETA
-  addLines = markers => {
+  addLines = () => {
     // thin grey is not reached yet and the person has not started that path
     const greyLine = {
       strokeWeight: 5,
@@ -47,11 +47,12 @@ export class MapContainer extends Component {
     };
     // solid black line means the path was traversed
     const solidBlackLine = {
-      strokeWeight: 20,
+      strokeWeight: 8,
       strokeColor: '#000000'
     };
     const lines = [];
     let line = [];
+    const { markers } = this.state;
     for (let i = 0; i < markers.length; i++) {
       let lineOptions = {};
       let markerLat = markers[i].position.lat;
@@ -110,7 +111,7 @@ export class MapContainer extends Component {
       status: this.COMPLETED
     };
 
-    this.setState({ markers: [...markers, marker] }, () => this.addLines(markers));
+    this.setState({ markers: [...markers, marker] }, () => this.addLines());
 
     // Line coords takes an array of arrays which specifies where the dots are
     // Need to use the marker coordinates in order to make those lines
@@ -127,7 +128,6 @@ export class MapContainer extends Component {
   onMapClicked = props => {};
   render() {
     const { markers, polylines, clickedMarker } = this.state;
-    const triangleCoords = [{ lat: 25.774, lng: -80.19 }, { lat: 18.466, lng: -66.118 }];
     return (
       <Map
         google={this.props.google}
@@ -160,7 +160,7 @@ export class MapContainer extends Component {
             <Polygon
               key={i}
               paths={line.path}
-              strokeColor="#0000FF"
+              strokeColor={line.strokeColor}
               strokeWeight={line.strokeWeight}
               strokeOpacity={line.strokeOpacity}
             />
