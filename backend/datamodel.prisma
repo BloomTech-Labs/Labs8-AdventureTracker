@@ -14,7 +14,7 @@ type User {
   password: String!
   resetToken: String
   facebookUser: Boolean!
-  facebookID: String
+  facebookID: String @unique
   resetTokenExpiry: Float
   permissions: [Permission]
 }

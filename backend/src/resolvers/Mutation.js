@@ -72,7 +72,7 @@ const Mutations = {
         name: args.name,
         email: args.email, // name, email, password
         password,
-        facebookID,
+        facebookID: args.facebookID,
         facebookUser: true,
         // default new people as "USER"
         permissions: { set: ['USER'] } // uses `set` because is enum
@@ -117,11 +117,10 @@ const Mutations = {
     return user;
   },
   async facebooksignin(parent, { facebookID }, ctx, info) {
-    console.log('IN FACEBOOKSIGNIN');
     // check if there is a user with that facebook ID
     const user = await ctx.db.query.user({ where: { facebookID } });
     if (!user) {
-      throw new Error(`No user found.`);
+      throw new Error(`No user found for this Facebook account.`);
     }
     // generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
@@ -178,18 +177,43 @@ const Mutations = {
   },
 
   async createOrder(parent, args, ctx, info) {
-    //   // 1. Query the current user and make sure they are signed in
-    const { userID } = ctx.request;
-    if (!userID) throw new Error('You must be signed in to complete this order.');
-    const user = await ctx.db.query.user({ where: { id: userId } }, `{ id name email }`);
-    //   // 2. Calculate total price
+    // 1. Query the current user and make sure they are signed in
+    const { userId } = ctx.request;
+    if (!userId) throw new Error('You must be signed in to complete this order.');
+
+    // Query current user
+    const user = await ctx.db.query.user(
+      { where: { id: userId } },
+      `
+    { 
+      id 
+      name 
+      email 
+    }`
+    );
+
+    // 2. Calculate total price
     const amount = 999;
-    console.log(`Going to charge for a total of ${amount}`);
+
+    // 3. Create the stripe charge (turn token into money)
+    const charge = await stripe.charges.create({
+      amount,
+      currency: 'USD',
+      source: args.token
+    });
+
+    // 4. Create the order
+    const order = await ctx.db.mutation.createOrder({
+      data: {
+        price: charge.amount, // comes back from Stripe
+        charge: charge.id, // given by Stripe
+        user: { connect: { id: userId } }
+      }
+    });
+
+    // 5. Return the Order to the client
+    return order;
   }
 };
-//   // 3. Create the stripe charge
-//   // 4. Create the order
-//   // 5. Return the Order to the client
-// }
 
 module.exports = Mutations;
