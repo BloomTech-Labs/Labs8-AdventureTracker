@@ -18,10 +18,7 @@ export class MapContainer extends Component {
     this.IN_PROGRESS = 'IN_PROGRESS';
     this.COMPLETED = 'COMPLETED';
   }
-  componentDidMount() {
-    console.log(this.dummyMarkers);
-    this.setState({}, () => this.addLines(this.state.markers));
-  }
+
   //distance in miles
   //distance matrix
   //create the ETA
@@ -72,8 +69,8 @@ export class MapContainer extends Component {
         };
       }
       //set the lat and lng dot
-      line.push([markers[i].position.lat(), markers[i].position.lng()]);
-      // add another line for each layer
+      line.push({ lat: markers[i].position.lat(), lng: markers[i].position.lng() });
+
       //Every two markers set consecutively, add a new polyline
       if (i > 0) {
         lineOptions['path'] = line.slice();
@@ -100,8 +97,8 @@ export class MapContainer extends Component {
     console.log('POLYLINES: ', polylines);
     const labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const amountOfMarkers = markers.length;
-    // Start, Checkpoint 1, Checkpoint 2
-    const marker = new google.maps.Marker({
+
+    const marker = {
       position: myLatLng,
       map: map,
       id: amountOfMarkers,
@@ -109,10 +106,11 @@ export class MapContainer extends Component {
       label: labels[amountOfMarkers % labels.length],
       //NOT_STARTED, IN_PROGRESS, COMPLETED - NOT_STARTED is default
       status: this.COMPLETED
-    });
+    };
 
     this.setState({ markers: [...markers, marker] });
     this.addLines(markers);
+
     // Line coords takes an array of arrays which specifies where the dots are
     // Need to use the marker coordinates in order to make those lines
     // Somehow specify what type of line it is
@@ -122,13 +120,18 @@ export class MapContainer extends Component {
       selectedPlace: props,
       activeMarker: marker,
       showingInfoWindow: true,
-      clickedMarker: { lat: props.position.lat(), lng: props.position.lng() }
+      clickedMarker: { lat: props.position.lat, lng: props.position.lng }
     });
   };
   onMapClicked = props => {};
   render() {
     const { markers, polylines, clickedMarker } = this.state;
-
+    const triangleCoords = [
+      { lat: 25.774, lng: -80.19 },
+      { lat: 18.466, lng: -66.118 },
+      { lat: 32.321, lng: -64.757 },
+      { lat: 25.774, lng: -80.19 }
+    ];
     return (
       <Map
         google={this.props.google}
@@ -138,8 +141,10 @@ export class MapContainer extends Component {
         zoom={4}
       >
         <InfoWindow marker={this.state.activeMarker} visible={this.state.showingInfoWindow}>
-          <div>Latitude: {clickedMarker.lat}</div>
-          <div>Longitude: {clickedMarker.lng}</div>
+          <div>
+            <div>Latitude: {clickedMarker.lat}</div>
+            <div>Longitude: {clickedMarker.lng}</div>
+          </div>
         </InfoWindow>
         {markers.map(mark => {
           return (
@@ -148,6 +153,7 @@ export class MapContainer extends Component {
               title={mark.title}
               id={mark.id}
               key={mark.id}
+              label={mark.label}
               position={mark.position}
             />
           );
@@ -157,13 +163,13 @@ export class MapContainer extends Component {
           return (
             <Polyline
               key={i}
-              path={line.path}
-              strokeColor={line.strokeColor}
+              paths={line.path}
+              strokeColor="#0000FF"
               strokeWeight={line.strokeWeight}
+              strokeOpacity={line.strokeOpacity}
             />
           );
         })} */}
-
         {/* <Marker
           title={'The marker`s title will appear as a tooltip.'}
           name={'SOMA'}
