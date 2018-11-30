@@ -119,7 +119,7 @@ export class MapContainer extends Component {
       clickedMarker: { lat: props.position.lat, lng: props.position.lng }
     });
   };
-  onMapClicked = props => {};
+
   render() {
     const { markers, polylines, clickedMarker } = this.state;
     return (
