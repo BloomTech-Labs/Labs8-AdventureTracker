@@ -119,53 +119,8 @@ export class MapContainer extends Component {
       clickedMarker: { lat: props.position.lat, lng: props.position.lng }
     });
   };
-  updateSingleLine = markerIndex => {
-    const { markers, polylines } = this.state;
-    const i = markerIndex;
-    let line = {
-      lat: markers[i].lat,
-      lng: markers[i].lng
-    };
-    const dashedLine = {
-      strokeWeight: 5,
-      strokeColor: 'green'
-    };
-    // solid black line means the path was traversed
-    const solidBlackLine = {
-      strokeWeight: 8,
-      strokeColor: '#000000'
-    };
-    if (markers[i] === this.COMPLETED && markers[i + 1] === this.COMPELTED) {
-      //create a solid line between them
-      line = {
-        ...line,
-        ...dashedLine
-      };
-    }
-    if (markers[i] === this.COMPLETED && markers[i + 1] === this.NOT_STARTED) {
-      //create a green in-progress line
-      line = {
-        ...line,
-        ...solidBlackLine
-      };
-    }
-    const newLines = [...polylines];
-    newLines[i] = line;
-    console.log(newLines);
-    //not pushed to the map
-    this.setState({ polylines: newLines });
-  };
   checkInAtMarker = () => {
-    console.log('checked-in');
-    const { markers, activeMarker, polylines } = this.state;
-    let updatedMarkerIndex;
-    for (let i = 0; i < markers.length; i++) {
-      if (activeMarker.id === markers[i].id) {
-        markers[i].status = this.COMPLETED;
-        updatedMarkerIndex = i;
-      }
-    }
-    this.updateSingleLine(updatedMarkerIndex);
+    console.log('Completed!');
   };
 
   deleteMarker = () => {
@@ -233,9 +188,9 @@ export class MapContainer extends Component {
           }}
         >
           <div>
+            {/* <div>Latitude: {clickedMarker.lat}</div> */}
             <div id="iwc" />
-            <div>Latitude: {clickedMarker.lat}</div>
-            <div>Longitude: {clickedMarker.lng}</div>
+            {/* <div>Longitude: {clickedMarker.lng}</div> */}
           </div>
         </InfoWindow>
         {markers.map(mark => {
