@@ -4,7 +4,7 @@ type SuccessMessage {
 }
 
 type Mutation {
-  # createTrip(title: String, description: String): Trip!
+  createTrip(title: String!, description: String): Trip!
   signup(
     name: String!
     email: String!
@@ -22,21 +22,15 @@ type Mutation {
     facebookUser: Boolean!
   ): User!
   facebooksignin(facebookID: String): User!
-  # updateTrip(id: ID!, title: String, description: String): Trip!
   # deleteTrip(id: ID!): Trip
   deleteUser(id: ID!): User!
   changePassword(email: String!, oldPassword: String!, newPassword: String!): User!
   createOrder(token: String!): Order!
 }
 
-# type Query {
-#   trips(where: TripWhereInput, orderBy: TripOrderByInput, skip: Int, first: Int): [Trip]!
-#   trip(where: TripWhereUniqueInput!): Trip
-#   tripsConnection(where: ItemWhereInput): TripConnection!
-# }
-
 type Query {
-  # trips: [Trip]!
+  trips: [Trip]!
+  # trip: (where: TripWhereUniqueInput!): Trip
   users: [User]!
   me: User
 }

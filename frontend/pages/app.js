@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { Map, InfoWindow, Marker, GoogleApiWrapper, Polygon, Polyline } from 'google-maps-react';
-
+import ReactDOM from 'react-dom';
 import CurrentLocation from './map';
-
+import uuidv1 from 'uuid/v1';
 export class MapContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showingInfoWindow: false,
       activeMarker: {},
+      clickedMarker: {},
       selectedPlace: {},
       markers: [],
       polylines: []
@@ -16,14 +17,13 @@ export class MapContainer extends Component {
     this.NOT_STARTED = 'NOT_STARTED';
     this.IN_PROGRESS = 'IN_PROGRESS';
     this.COMPLETED = 'COMPLETED';
+    this.labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   }
-  componentDidMount() {
-    this.setState({}, () => this.addLines(this.state.markers));
-  }
+
   //distance in miles
   //distance matrix
   //create the ETA
-  addLines = markers => {
+  updateLines = () => {
     // thin grey is not reached yet and the person has not started that path
     const greyLine = {
       strokeWeight: 5,
@@ -37,24 +37,21 @@ export class MapContainer extends Component {
       scale: 4
     };
     const dashedLine = {
-      strokeOpacity: 0,
-      icons: [
-        {
-          icon: lineSymbol,
-          offset: '0',
-          repeat: '20px'
-        }
-      ]
+      strokeWeight: 5,
+      strokeColor: 'green'
     };
     // solid black line means the path was traversed
     const solidBlackLine = {
-      strokeWeight: 20,
+      strokeWeight: 8,
       strokeColor: '#000000'
     };
     const lines = [];
     let line = [];
+    const { markers } = this.state;
     for (let i = 0; i < markers.length; i++) {
       let lineOptions = {};
+      let markerLat = markers[i].position.lat;
+      let markerLng = markers[i].position.lng;
       //Depending on marker's status, this will choose what type of line to use
       if (markers[i].status === this.NOT_STARTED) {
         lineOptions = {
@@ -70,102 +67,158 @@ export class MapContainer extends Component {
         };
       }
       //set the lat and lng dot
-      line.push({ lat: markers[i].position.lat(), lng: markers[i].position.lng() });
+      line.push({ lat: markerLat, lng: markerLng });
 
       //Every two markers set consecutively, add a new polyline
       if (i > 0) {
         lineOptions['path'] = line.slice();
         lines.push(lineOptions);
         //Reset for new line
-        line = [[markers[i].position.lat(), markers[i].position.lng()]];
+        line = [{ lat: markerLat, lng: markerLng }];
       }
     }
+    console.log(lines);
     this.setState({ polylines: lines });
   };
   mapClicked = (mapProps, map, clickEvent) => {
+    if (this.state.showingInfoWindow) {
+      this.setState({
+        showingInfoWindow: false,
+        activeMarker: null
+      });
+    }
     const myLatLng = {
       lat: clickEvent.latLng.lat(),
       lng: clickEvent.latLng.lng()
     };
     const { markers, polylines } = this.state;
     console.log('POLYLINES: ', polylines);
-    const labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     const amountOfMarkers = markers.length;
 
     const marker = {
       position: myLatLng,
       map: map,
-      id: amountOfMarkers,
+      id: uuidv1(),
       title: String(amountOfMarkers),
-      label: labels[amountOfMarkers % labels.length],
+      label: this.labels[amountOfMarkers % this.labels.length],
       //NOT_STARTED, IN_PROGRESS, COMPLETED - NOT_STARTED is default
-      status: this.COMPLETED
+      status: this.NOT_STARTED
     };
-
-    this.setState({ markers: [...markers, marker] });
+    console.log(marker.id);
+    this.setState({ markers: [...markers, marker] }, () => this.updateLines());
 
     // Line coords takes an array of arrays which specifies where the dots are
     // Need to use the marker coordinates in order to make those lines
     // Somehow specify what type of line it is
+  };
+  onMarkerClick = (props, marker, e) => {
+    this.setState({
+      selectedPlace: props,
+      activeMarker: marker,
+      showingInfoWindow: true,
+      clickedMarker: { lat: props.position.lat, lng: props.position.lng }
+    });
+  };
+  checkInAtMarker = () => {
+    console.log('Completed!');
+  };
 
-    // const InfoWindow = new google.maps.InfoWindow({
-    //   content:
-    //     '<b>Marker Coordinates : </b> <br><b>Latitude : </b>' +
-    //     marker.position.lat() +
-    //     '<br><b>Longitude: </b>' +
-    //     marker.position.lng(),
-    //   position: marker.position
-    // });
-    // marker.addListener('click', function() {
-    //   InfoWindow.open(map, marker);
-    // });
+  deleteMarker = () => {
+    const { markers, activeMarker } = this.state;
+
+    if (markers.length <= 1) {
+      this.setState({ markers: [] });
+      return;
+    }
+    let deleteIndex;
+    for (let i = 0; i < markers.length; i++) {
+      if (activeMarker.id === markers[i].id) {
+        deleteIndex = i;
+      }
+    }
+    const newMarkerSet = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
+    for (let i = 0; i < newMarkerSet.length; i++) {
+      newMarkerSet[i].label = this.labels[i % this.labels.length];
+    }
+    this.setState({ markers: [] }, () => {
+      this.setState({ markers: newMarkerSet }, () => {
+        this.updateLines();
+      });
+    });
+  };
+
+  onInfoWindowOpen = e => {
+    const infoWindowComponents = (
+      <div>
+        <label id="reached-checkpoint">Reached Checkpoint?</label>
+        <input
+          type="checkbox"
+          id="reached-checkpoint"
+          onClick={e => {
+            this.checkInAtMarker();
+          }}
+        />
+        <input
+          type="button"
+          onClick={e => {
+            this.deleteMarker();
+          }}
+          value="Delete Checkpoint?"
+        />
+      </div>
+    );
+    ReactDOM.render(infoWindowComponents, document.getElementById('iwc'));
   };
 
   render() {
-    const { markers, polylines } = this.state;
-    const triangleCoords = [
-      { lat: 25.774, lng: -80.19 },
-      { lat: 18.466, lng: -66.118 },
-      { lat: 32.321, lng: -64.757 },
-      { lat: 25.774, lng: -80.19 }
-    ];
+    const { markers, polylines, clickedMarker } = this.state;
     return (
       <Map
         google={this.props.google}
         onClick={this.mapClicked}
-        style={{ width: '100%', height: '100%', position: 'relative' }}
+        style={{ width: '800px', height: '500px', position: 'relative' }}
         className={'map'}
         zoom={4}
       >
+        <InfoWindow
+          marker={this.state.activeMarker}
+          visible={this.state.showingInfoWindow}
+          onOpen={e => {
+            this.onInfoWindowOpen(e);
+          }}
+        >
+          <div>
+            {/* <div>Latitude: {clickedMarker.lat}</div> */}
+            <div id="iwc" />
+            {/* <div>Longitude: {clickedMarker.lng}</div> */}
+          </div>
+        </InfoWindow>
         {markers.map(mark => {
+          // console.log(mark.label);
           return (
             <Marker
+              onClick={this.onMarkerClick}
               title={mark.title}
               id={mark.id}
               key={mark.id}
               label={mark.label}
+              status={mark.status}
               position={mark.position}
             />
           );
         })}
-        {/* {polylines.map((line, i) => {
-          console.log('PATH', line);
+
+        {polylines.map((line, i) => {
           return (
-            <Polyline
+            <Polygon
               key={i}
               paths={line.path}
-              strokeColor="#0000FF"
+              strokeColor={line.strokeColor}
               strokeWeight={line.strokeWeight}
               strokeOpacity={line.strokeOpacity}
             />
           );
-        })} */}
-        <Polyline
-          paths={triangleCoords}
-          strokeColor="#FF0000"
-          strokeOpacity={0.8}
-          strokeWeight={2}
-        />
+        })}
         {/* <Marker
           title={'The marker`s title will appear as a tooltip.'}
           name={'SOMA'}

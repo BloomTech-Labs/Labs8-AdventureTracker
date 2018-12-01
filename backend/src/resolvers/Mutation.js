@@ -4,36 +4,21 @@ const stripe = require('../stripe');
 const { hashPassword } = require('../utils');
 
 const Mutations = {
-  // async createTrip(parent, args, ctx, info) {
-  //   // TODO: Check if they are logged in
+  async createTrip(parent, args, ctx, info) {
+    // TODO: Check if they are logged in
 
-  //   const trip = await ctx.db.mutation.createTrip(
-  //     {
-  //       data: {
-  //         // Below is the same as manually adding in each field
-  //         ...args
-  //       }
-  //     },
-  //     info
-  //   );
-  //   return trip;
-  // },
-  // updateTrip(parent, args, ctx, info) {
-  //   // first take a copy of the updates
-  //   const updates = { ...args };
-  //   // remove the ID from the updates
-  //   delete updates.id;
-  //   // run the update method
-  //   return ctx.db.mutation.updateTrip(
-  //     {
-  //       data: updates,
-  //       where: {
-  //         id: args.id
-  //       }
-  //     },
-  //     info
-  //   );
-  // },
+    const trip = await ctx.db.mutation.createTrip(
+      {
+        data: {
+          name: args.name,
+          description: args.description,
+          markers: args.markers
+        }
+      },
+      info
+    );
+    return trip;
+  },
   // async deleteTrip(parent, args, ctx, info) {
   //   const where = { id: args.id };
   //   // find the item
