@@ -19,7 +19,7 @@ const TripList = () => (
       </User>
       <p>This is the Trip List page</p>
       <Link href="/">
-        <button>Landing Page</button>
+        <button>Home</button>
       </Link>
       <Link href="/app">
         <button>Sample Trip</button>
@@ -30,9 +30,16 @@ const TripList = () => (
       <Link href="/settings">
         <button>Settings</button>
       </Link>
-      <TripNote />
+      <Link href="/new-trip">
+        <button>Create New Trip</button>
+      </Link>
+      <Link href="/trip-open">
+      <button><TripNote /></button>
+      </Link>
     </PleaseLogin>
   </div>
 );
 
 export default TripList;
+
+
