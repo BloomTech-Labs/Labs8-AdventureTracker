@@ -216,9 +216,7 @@ class Map extends React.PureComponent {
     let line = [];
     const { markers } = this.state;
     for (let i = 0; i < markers.length; i++) {
-      let lineOptions = {
-        id: uuidv4()
-      };
+      let lineOptions = {};
       let markerLat = markers[i].position.lat;
       let markerLng = markers[i].position.lng;
 
@@ -256,7 +254,8 @@ class Map extends React.PureComponent {
       //We connect our lines
       if (i > 0) {
         lineOptions['path'] = line.slice();
-        lines.push(lineOptions);
+        lines.push({ ...lineOptions, id: uuidv4() });
+        console.log(lines);
         //We start at the end of the new polyline and store that vertex
         line = [{ lat: markerLat, lng: markerLng }];
       }
