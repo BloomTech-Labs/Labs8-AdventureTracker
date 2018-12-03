@@ -18,5 +18,10 @@ const FacebookBtn = styled(PrimaryBtn)`
   width: 100%;
   background: ${props => props.theme.blue};
 `;
-
-export { PrimaryBtn, FacebookBtn };
+const SideNavBtn = styled.button`
+  width: 100%;
+  height: 5rem;
+  color: ${props => props.theme.white};
+  background: ${props => (props.active ? props.theme.orange : props.theme.white)};
+`;
+export { PrimaryBtn, FacebookBtn, SideNavBtn };
