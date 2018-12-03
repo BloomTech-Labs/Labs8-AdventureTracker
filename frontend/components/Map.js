@@ -53,6 +53,7 @@ const MyMapComponent = compose(
             onClick={props.changeMarkerStatus}
             id="reached-checkbox"
             type="checkbox"
+            checked={props.activeMarker.status === 'COMPLETED' ? true : false}
           />
           <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
             Delete Marker?
