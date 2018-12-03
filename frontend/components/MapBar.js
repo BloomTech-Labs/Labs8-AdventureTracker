@@ -1,13 +1,23 @@
 import styled from 'styled-components';
 const ProgressWrapper = styled.div`
+  display: flex;
+  position: relative;
   height: 3rem;
   width: 40%;
   background: ${props => props.theme.white};
 `;
 const ProgressBar = styled.div`
+  display: flex;
   height: 100%;
   width: ${props => props.width};
   background: green;
+`;
+const ProgressStats = styled.div`
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  color: ${props => props.theme.black};
+  font-weight: bold;
 `;
 const MapBarWrapper = styled.div`
   display: flex;
@@ -51,27 +61,25 @@ const CalendarWrapper = styled.div`
   align-items: flex-end;
 `;
 const MapBar = props => {
-  console.log((props.completedChecks / props.markerAmount) * 100);
+  const progressFormula = (props.completedChecks / props.markerAmount) * 100;
   return (
     <MapBarWrapper>
       <AdventureTitle>{props.title ? props.title : 'Placeholder Text'}</AdventureTitle>
       <ProgressWrapper>
-        <ProgressBar
-          width={
-            props.completedChecks === 0
-              ? '0%'
-              : `${(props.completedChecks / props.markerAmount) * 100}%`
-          }
-        />
+        <ProgressBar width={props.completedChecks === 0 ? '0%' : `${progressFormula}%`}>
+          <ProgressStats>
+            {props.completedChecks} of {props.markerAmount} Completed
+          </ProgressStats>
+        </ProgressBar>
       </ProgressWrapper>
       <CalendarWrapper>
         <CalendarGroup>
-          <CalendarLabel htmlFor="start">Start Time:</CalendarLabel>
+          <CalendarLabel htmlFor="start">Start Date:</CalendarLabel>
           {/* example: <input id="date" type="date" value="2017-06-01"> */}
           <CalendarInput id="start" type="date" />
         </CalendarGroup>
         <CalendarGroup>
-          <CalendarLabel htmlFor="end">End Time:</CalendarLabel>
+          <CalendarLabel htmlFor="end">End Date:</CalendarLabel>
           <CalendarInput id="end" type="date" />
         </CalendarGroup>
       </CalendarWrapper>
