@@ -10,7 +10,7 @@ const Mutations = {
     const trip = await ctx.db.mutation.createTrip(
       {
         data: {
-          name: args.name,
+          title: args.title,
           description: args.description,
           markers: args.markers
         }
@@ -19,14 +19,30 @@ const Mutations = {
     );
     return trip;
   },
+
+  async createMarker(parent, args, ctx, info) {
+    const marker = await ctx.db.mutation.createMarker(
+      {
+        data: {
+          title: args.title,
+          lat: args.lat,
+          lng: args.lng,
+          status: args.status
+        }
+      },
+      info
+    );
+    return marker;
+  },
+
   // async deleteTrip(parent, args, ctx, info) {
   //   const where = { id: args.id };
   //   // find the item
-  //   const item = await ctx.db.query.item({ where }, `{ id title}`);
+  //   const trip = await ctx.db.query.trip({ where }, `{ id title}`);
   //   // check if they own that item, or have the permissions
   //   // TODO
   //   // Delete it
-  //   return ctx.db.mutation.deleteItem({ where }, info);
+  //   return ctx.db.mutation.deleteTrip({ where }, info);
   // },
 
   async signup(parent, args, ctx, info) {

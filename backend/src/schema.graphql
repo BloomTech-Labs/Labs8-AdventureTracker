@@ -5,6 +5,7 @@ type SuccessMessage {
 
 type Mutation {
   createTrip(title: String!, description: String): Trip!
+  createMarker(title: String!, lat: Float!, lng: Float!, status: Progress!): Marker!
   signup(
     name: String!
     email: String!
