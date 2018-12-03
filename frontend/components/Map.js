@@ -14,12 +14,14 @@ import {
 import styled from 'styled-components';
 import { runInThisContext } from 'vm';
 import uuidv4 from 'uuid/v4';
+import MapBar from './MapBar';
 const Label = styled.label``;
 const ReachedCheckBox = styled.input``;
 const DeleteBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
 `;
+
 const InfoWrapper = styled.div`
   display: flex;
   flex-flow: column;
@@ -33,7 +35,7 @@ const MyMapComponent = compose(
     googleMapURL:
       'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places',
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `800px` }} />,
+    containerElement: <div style={{ height: `800px`, width: '50%', position: 'relative' }} />,
     mapElement: <div style={{ height: `100%` }} />
   }),
   withScriptjs,
@@ -45,6 +47,7 @@ const MyMapComponent = compose(
     defaultCenter={{ lat: -34.397, lng: 150.644 }}
     // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
   >
+    <MapBar />
     {props.showingInfoWindow && (
       <InfoWindow position={props.activeMarker.position}>
         <InfoWrapper>
