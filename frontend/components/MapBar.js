@@ -103,4 +103,4 @@ const MapBar = props => {
   );
 };
 
-export default MapBar;
+export { MapBar, CalendarGroup, CalendarInput, CalendarLabel, CalendarWrapper };

@@ -14,19 +14,25 @@ import {
 import styled from 'styled-components';
 import { runInThisContext } from 'vm';
 import uuidv4 from 'uuid/v4';
-import MapBar from './MapBar';
+import { MapBar, CalendarGroup, CalendarInput, CalendarLabel, CalendarWrapper } from './MapBar';
 const Label = styled.label``;
 const ReachedCheckBox = styled.input``;
 const DeleteBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
 `;
-
+const MarkerNameLabel = styled.label``;
+const MarkerNameBox = styled.input`
+  height: 3rem;
+  width: 100%;
+`;
 const InfoWrapper = styled.div`
   display: flex;
   flex-flow: column;
 `;
 
+const ETA = styled.h2``;
+const CheckedIn = styled.h2``;
 const MyMapComponent = compose(
   withProps({
     // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
@@ -64,6 +70,17 @@ const MyMapComponent = compose(
             type="checkbox"
             checked={props.activeMarker.status === 'COMPLETED' ? true : false}
           />
+          <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
+          <MarkerNameBox id="location" type="text" />
+          <CheckedIn>Checked-in: </CheckedIn>
+          <ETA>ETA: </ETA>
+          <CalendarInput
+            type="date"
+            onKeyDown={e => {
+              e.preventDefault();
+            }}
+          />
+          <input type="time" value="12:00" />
           <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
             Delete Marker?
           </DeleteBtn>
@@ -114,6 +131,7 @@ class Map extends React.PureComponent {
       activeMarker: {},
       selectedPlace: {},
       markers: [],
+      markerName: '',
       polylines: [],
       completedCheckboxes: 0
     };
