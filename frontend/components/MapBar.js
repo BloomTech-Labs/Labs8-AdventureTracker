@@ -76,11 +76,23 @@ const MapBar = props => {
         <CalendarGroup>
           <CalendarLabel htmlFor="start">Start Date:</CalendarLabel>
           {/* example: <input id="date" type="date" value="2017-06-01"> */}
-          <CalendarInput id="start" type="date" />
+          <CalendarInput
+            id="start"
+            type="date"
+            onKeyDown={e => {
+              e.preventDefault();
+            }}
+          />
         </CalendarGroup>
         <CalendarGroup>
           <CalendarLabel htmlFor="end">End Date:</CalendarLabel>
-          <CalendarInput id="end" type="date" />
+          <CalendarInput
+            id="end"
+            type="date"
+            onKeyDown={e => {
+              e.preventDefault();
+            }}
+          />
         </CalendarGroup>
       </CalendarWrapper>
       <MapBtn>
