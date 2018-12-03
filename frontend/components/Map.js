@@ -47,7 +47,11 @@ const MyMapComponent = compose(
     defaultCenter={{ lat: -34.397, lng: 150.644 }}
     // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
   >
-    <MapBar completedChecks={props.completedCheckboxes} markerAmount={props.markers.length} />
+    <MapBar
+      title={props.tripTitle}
+      completedChecks={props.completedCheckboxes}
+      markerAmount={props.markers.length}
+    />
     {props.showingInfoWindow && (
       <InfoWindow position={props.activeMarker.position}>
         <InfoWrapper>
@@ -103,6 +107,7 @@ class Map extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      tripTitle: '',
       showingInfoWindow: false,
       activeMarker: {},
       selectedPlace: {},
@@ -302,7 +307,14 @@ class Map extends React.PureComponent {
     this.setState({ markers: newMarkers }, () => this.updateLines());
   };
   render() {
-    const { markers, polylines, showingInfoWindow, activeMarker, completedCheckboxes } = this.state;
+    const {
+      markers,
+      polylines,
+      showingInfoWindow,
+      activeMarker,
+      completedCheckboxes,
+      tripTitle
+    } = this.state;
     return (
       <MyMapComponent
         //state object props
@@ -311,6 +323,7 @@ class Map extends React.PureComponent {
         showingInfoWindow={showingInfoWindow}
         completedCheckboxes={completedCheckboxes}
         checkBoxHandler={this.checkBoxHandler}
+        tripTitle={this.tripTitle}
         //methods
         onMapClicked={this.onMapClicked}
         activeMarker={activeMarker}
