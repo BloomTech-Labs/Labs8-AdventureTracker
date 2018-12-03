@@ -28,7 +28,10 @@ type Order {
 
 type Trip {
   id: ID! @unique
+  user: User!
   title: String!
+  startDate: String!
+  endDate: String!
   description: String!
   markers: [Marker!]!
 }
@@ -41,7 +44,7 @@ enum Progress {
 type Marker {
   id: ID! @unique
   title: String!
-  lat: Float! @unique
-  lng: Float! @unique
+  lat: Float!
+  lng: Float!
   status: Progress!
 }

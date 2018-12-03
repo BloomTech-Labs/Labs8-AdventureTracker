@@ -5,14 +5,20 @@ const { hashPassword } = require('../utils');
 
 const Mutations = {
   async createTrip(parent, args, ctx, info) {
-    // TODO: Check if they are logged in
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!');
+    }
 
     const trip = await ctx.db.mutation.createTrip(
       {
         data: {
-          title: args.title,
-          description: args.description,
-          markers: args.markers
+          // This is how to create a relationship between the Trip and the User
+          user: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
+          ...args
         }
       },
       info
