@@ -68,7 +68,10 @@ const MapBar = props => {
           <CalendarInput id="end" type="date" />
         </CalendarGroup>
       </CalendarWrapper>
-      <MapBtn>Edit Trip</MapBtn>
+      <MapBtn>
+        Save
+        <br /> Trip
+      </MapBtn>
     </MapBarWrapper>
   );
 };
