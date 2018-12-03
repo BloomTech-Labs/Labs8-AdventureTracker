@@ -2,6 +2,8 @@ import React from 'react';
 import getConfig from 'next/config';
 const { publicRuntimeConfig } = getConfig();
 import { compose, withProps } from 'recompose';
+import Mutation from 'react-apollo';
+import gql from 'graphql-tag';
 import {
   withScriptjs,
   withGoogleMap,
@@ -27,6 +29,13 @@ const InfoWrapper = styled.div`
   flex-flow: column;
 `;
 
+const CREATE_TRIP_MUTATION = gql`
+  mutation CREATE_TRIP_MUTATION($title: String!, startDate: String!, endDate: String!, $description: String, $markers: [Marker!]!) {
+    createTrip(title: $title, startDate: $startDate, endDate: $endDate, description: $description, markers: $markers) {
+      id
+    }
+  }
+`;
 const MyMapComponent = compose(
   withProps({
     // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
