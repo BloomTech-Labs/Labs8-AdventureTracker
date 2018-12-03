@@ -28,21 +28,20 @@ type Order {
 
 type Trip {
   id: ID! @unique
-  name: String!
+  title: String!
   description: String!
   markers: [Marker!]!
 }
 
 enum Progress {
   NOT_STARTED
-  IN_PROGRESS
   COMPLETED
 }
 
 type Marker {
   id: ID! @unique
   title: String!
-  lat: Float!
-  lng: Float!
+  lat: Float! @unique
+  lng: Float! @unique
   status: Progress!
 }

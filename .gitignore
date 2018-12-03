@@ -6,4 +6,4 @@ node_modules/
 layout.md
 variables.env
 keys.js
-
+/frontend/next.config.js
