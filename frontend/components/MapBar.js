@@ -51,11 +51,18 @@ const CalendarWrapper = styled.div`
   align-items: flex-end;
 `;
 const MapBar = props => {
+  console.log((props.completedChecks / props.markerAmount) * 100);
   return (
     <MapBarWrapper>
       <AdventureTitle>{props.title ? props.title : 'Placeholder Text'}</AdventureTitle>
       <ProgressWrapper>
-        <ProgressBar width={'20%'} />
+        <ProgressBar
+          width={
+            props.completedChecks === 0
+              ? '0%'
+              : `${(props.completedChecks / props.markerAmount) * 100}%`
+          }
+        />
       </ProgressWrapper>
       <CalendarWrapper>
         <CalendarGroup>

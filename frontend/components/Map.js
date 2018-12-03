@@ -47,13 +47,13 @@ const MyMapComponent = compose(
     defaultCenter={{ lat: -34.397, lng: 150.644 }}
     // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
   >
-    <MapBar />
+    <MapBar completedChecks={props.completedCheckboxes} markerAmount={props.markers.length} />
     {props.showingInfoWindow && (
       <InfoWindow position={props.activeMarker.position}>
         <InfoWrapper>
           <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
           <ReachedCheckBox
-            onClick={props.changeMarkerStatus}
+            onChange={props.changeMarkerStatus}
             id="reached-checkbox"
             type="checkbox"
             checked={props.activeMarker.status === 'COMPLETED' ? true : false}
@@ -107,7 +107,8 @@ class Map extends React.PureComponent {
       activeMarker: {},
       selectedPlace: {},
       markers: [],
-      polylines: []
+      polylines: [],
+      completedCheckboxes: 0
     };
     this.NOT_STARTED = 'NOT_STARTED';
     this.IN_PROGRESS = 'IN_PROGRESS';
@@ -125,6 +126,14 @@ class Map extends React.PureComponent {
   //     }, 3000);
   //   };
   convertLabelToIndex = markerLabel => {};
+  checkBoxHandler = () => {
+    const { activeMarker } = this.state;
+    if (activeMarker.status === this.COMPLETED) {
+      this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes + 1 }));
+    } else {
+      this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes - 1 }));
+    }
+  };
   changeMarkerStatus = () => {
     const newMarkers = [...this.state.markers];
     const { activeMarker } = this.state;
@@ -134,14 +143,16 @@ class Map extends React.PureComponent {
           activeMarker.status === this.NOT_STARTED ? this.COMPLETED : this.NOT_STARTED;
         break;
       }
-
       // Before it reaches to the marker that we set to complete,
       // we check if the prior markers are completed
       if (newMarkers[i].status !== this.COMPLETED) {
         return;
       }
     }
-    this.setState({ markers: newMarkers }, this.updateLines);
+    this.setState({ markers: newMarkers }, () => {
+      this.updateLines();
+      this.checkBoxHandler();
+    });
   };
   //Calculates the label for the marker
   calculateLabel = letterIndex => {
@@ -160,6 +171,10 @@ class Map extends React.PureComponent {
     // Update marker labels
     for (let i = 0; i < newMarkers.length; i++) {
       newMarkers[i].label = this.calculateLabel(i);
+    }
+
+    if (activeMarker.status === this.COMPLETED) {
+      this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes - 1 }));
     }
 
     this.setState({ markers: newMarkers, showingInfoWindow: false }, this.updateLines);
@@ -287,13 +302,15 @@ class Map extends React.PureComponent {
     this.setState({ markers: newMarkers }, () => this.updateLines());
   };
   render() {
-    const { markers, polylines, showingInfoWindow, activeMarker } = this.state;
+    const { markers, polylines, showingInfoWindow, activeMarker, completedCheckboxes } = this.state;
     return (
       <MyMapComponent
         //state object props
         markers={markers}
         polylines={polylines}
         showingInfoWindow={showingInfoWindow}
+        completedCheckboxes={completedCheckboxes}
+        checkBoxHandler={this.checkBoxHandler}
         //methods
         onMapClicked={this.onMapClicked}
         activeMarker={activeMarker}
