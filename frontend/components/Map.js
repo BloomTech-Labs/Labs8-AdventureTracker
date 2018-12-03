@@ -53,7 +53,9 @@ const MyMapComponent = compose(
       markerAmount={props.markers.length}
     />
     {props.showingInfoWindow && (
-      <InfoWindow position={props.activeMarker.position}>
+      <InfoWindow
+        position={{ ...props.activeMarker.position, lat: props.activeMarker.position.lat + 0.13 }}
+      >
         <InfoWrapper>
           <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
           <ReachedCheckBox
