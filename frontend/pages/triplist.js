@@ -20,18 +20,7 @@ const TripList = () => (
         }}
       </User>
       <p>This is the Trip List page</p>
-      <Link href="/">
-        <button>Home</button>
-      </Link>
-      <Link href="/app">
-        <button>Sample Trip</button>
-      </Link>
-      <Link href="/billing">
-        <button>Billing</button>
-      </Link>
-      <Link href="/settings">
-        <button>Settings</button>
-      </Link>
+
       <Link href="/trip-open">
         <button>
           <TripNote />

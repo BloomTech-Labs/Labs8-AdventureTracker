@@ -1,36 +1,71 @@
 import Link from 'next/link';
 import { Component } from 'react';
 import styled from 'styled-components';
-import { SideNavBtn } from './styles/ButtonStyles';
 import { GlobeIcon } from './styles/SVGs';
-import { Router } from 'next/router';
-import { fromPromise } from 'apollo-link';
+import { withRouter } from 'next/router';
+
 const SidebarWrapper = styled.aside`
   display: flex;
   flex-flow: column;
   width: 20rem;
-  height: 50rem;
+  margin: 2rem 0 0 2rem;
+  top: 0;
+  bottom: 0;
   & > * {
     margin-bottom: 1.3rem;
   }
-  position: fixed;
+`;
+const SideNavBtn = styled.button`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 2rem;
+  font-weight: 400;
+  color: ${props => props.theme.white};
+  background: ${props => (props.active ? props.theme.orange : props.theme.blue)};
+  border: none;
+  cursor: pointer;
+`;
+const SideNavText = styled.h3`
+  margin-left: 1em;
 `;
 
 class SideNav extends Component {
-  state = {
-    active: ''
-  };
-  checkActiveLink = () => {};
-
   render() {
+    const TRIPLIST = '/triplist';
+    const BILLING = '/billing';
+    const SETTINGS = '/settings';
+    const { route } = this.props.router;
+    console.log(this.props);
     return (
       <SidebarWrapper>
-        <Link href="/triplist">
-          <SideNavBtn svgIcon={<GlobeIcon length={'40'} />} text={'Trips'} />
+        <Link href={TRIPLIST}>
+          <SideNavBtn active={TRIPLIST.match(route) ? true : false}>
+            <GlobeIcon length={30} />
+            <SideNavText>Trips</SideNavText>
+          </SideNavBtn>
+        </Link>
+        <Link href={SETTINGS}>
+          <SideNavBtn active={SETTINGS.match(route) ? true : false}>
+            <GlobeIcon length={30} />
+            <SideNavText>Settings</SideNavText>
+          </SideNavBtn>
+        </Link>
+        <Link href={BILLING}>
+          <SideNavBtn active={BILLING.match(route) ? true : false}>
+            <GlobeIcon length={30} />
+            <SideNavText>Billing</SideNavText>
+          </SideNavBtn>
+        </Link>
+        <Link href="/app">
+          <SideNavBtn>
+            <GlobeIcon length={30} />
+            <SideNavText>Map</SideNavText>
+          </SideNavBtn>
         </Link>
       </SidebarWrapper>
     );
   }
 }
 
-export default SideNav;
+export default withRouter(SideNav);
