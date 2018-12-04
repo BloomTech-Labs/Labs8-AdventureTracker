@@ -26,11 +26,7 @@ class SideNav extends Component {
     return (
       <SidebarWrapper>
         <Link href="/triplist">
-          <SideNavBtn
-            // active={Router.route.match(/triplist/) ? true : false}
-            svgIcon={<GlobeIcon length={'40'} />}
-            text={'Trips'}
-          />
+          <SideNavBtn svgIcon={<GlobeIcon length={'40'} />} text={'Trips'} />
         </Link>
       </SidebarWrapper>
     );
