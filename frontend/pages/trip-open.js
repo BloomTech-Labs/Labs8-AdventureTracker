@@ -19,6 +19,7 @@ const TripOpen = () => (
         }}
       </User>
       <p>This is the Trip Open page</p>
+      <Clipboard />
       <Link href="/">
         <button>Home</button>
       </Link>
