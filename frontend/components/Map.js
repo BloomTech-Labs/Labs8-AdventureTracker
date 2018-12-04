@@ -47,7 +47,6 @@ const MyMapComponent = compose(
   withGoogleMap
 )(props => (
   <GoogleMap
-    className="google-maps"
     onClick={props.onMapClicked}
     defaultZoom={8}
     defaultCenter={{ lat: -34.397, lng: 150.644 }}
