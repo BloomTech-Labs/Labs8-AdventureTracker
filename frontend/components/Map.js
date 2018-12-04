@@ -1,6 +1,6 @@
 import React from 'react';
 import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
+// const { publicRuntimeConfig } = getConfig();
 import { compose, withProps } from 'recompose';
 import {
   withScriptjs,
@@ -12,9 +12,8 @@ import {
 } from 'react-google-maps';
 //react-google-maps docs: https://tomchentw.github.io/react-google-maps/
 import styled from 'styled-components';
-import { runInThisContext } from 'vm';
 import uuidv4 from 'uuid/v4';
-import { MapBar, CalendarGroup, CalendarInput, CalendarLabel, CalendarWrapper } from './MapBar';
+import { MapBar, CalendarInput } from './MapBar';
 const Label = styled.label``;
 const ReachedCheckBox = styled.input``;
 const DeleteBtn = styled.button`
@@ -48,6 +47,7 @@ const MyMapComponent = compose(
   withGoogleMap
 )(props => (
   <GoogleMap
+    className="google-maps"
     onClick={props.onMapClicked}
     defaultZoom={8}
     defaultCenter={{ lat: -34.397, lng: 150.644 }}
@@ -372,4 +372,4 @@ class Map extends React.PureComponent {
   }
 }
 
-export default Map;
+export { Map, MyMapComponent };
