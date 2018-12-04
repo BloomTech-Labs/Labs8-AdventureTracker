@@ -25,9 +25,10 @@ const SideNavBtn = styled.button`
   background: ${props => (props.active ? props.theme.orange : props.theme.blue)};
   border: none;
   cursor: pointer;
+  padding: 0 0 0 0.8em;
 `;
 const SideNavText = styled.h3`
-  margin-left: 1em;
+  margin-left: 0.8em;
 `;
 
 class SideNav extends Component {
