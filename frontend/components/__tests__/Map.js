@@ -34,10 +34,10 @@ describe('<Map />', () => {
     expect(state.startDate).toBe('');
     expect(state.endDate).toBe('');
   });
-  it('adds a marker when map is clicked on', () => {
-    const wrapper = mount(<Map />);
-    // const GoogleMaps = wrapper.find('<GoogleMaps');
-    // GoogleMaps.simulate('click');
-    console.log(wrapper.state());
-  });
+  // it('adds a marker when map is clicked on', () => {
+  // const wrapper = mount(<Map />);
+  // const GoogleMaps = wrapper.find('<GoogleMaps');
+  // GoogleMaps.simulate('click');
+  // console.log(wrapper.state());
+  // });
 });
