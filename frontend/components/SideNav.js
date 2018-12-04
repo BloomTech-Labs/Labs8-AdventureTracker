@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { Component } from 'react';
 import styled from 'styled-components';
-import { GlobeIcon } from './styles/SVGs';
+import { GlobeIcon, BillingIcon, SettingsIcon } from './styles/SVGs';
 import { withRouter } from 'next/router';
 
 const SidebarWrapper = styled.aside`
@@ -35,31 +35,32 @@ class SideNav extends Component {
     const TRIPLIST = '/triplist';
     const BILLING = '/billing';
     const SETTINGS = '/settings';
+    const LENGTH = 40;
     const { route } = this.props.router;
     console.log(this.props);
     return (
       <SidebarWrapper>
         <Link href={TRIPLIST}>
           <SideNavBtn active={TRIPLIST.match(route) ? true : false}>
-            <GlobeIcon length={30} />
+            <GlobeIcon length={LENGTH} />
             <SideNavText>Trips</SideNavText>
           </SideNavBtn>
         </Link>
         <Link href={SETTINGS}>
           <SideNavBtn active={SETTINGS.match(route) ? true : false}>
-            <GlobeIcon length={30} />
+            <SettingsIcon length={LENGTH} />
             <SideNavText>Settings</SideNavText>
           </SideNavBtn>
         </Link>
         <Link href={BILLING}>
           <SideNavBtn active={BILLING.match(route) ? true : false}>
-            <GlobeIcon length={30} />
+            <BillingIcon length={LENGTH} />
             <SideNavText>Billing</SideNavText>
           </SideNavBtn>
         </Link>
         <Link href="/app">
           <SideNavBtn>
-            <GlobeIcon length={30} />
+            <GlobeIcon length={LENGTH} />
             <SideNavText>Map</SideNavText>
           </SideNavBtn>
         </Link>
