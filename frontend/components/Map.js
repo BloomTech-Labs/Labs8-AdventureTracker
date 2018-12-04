@@ -320,17 +320,3 @@ class Map extends React.PureComponent {
         showingInfoWindow={showingInfoWindow}
         completedCheckboxes={completedCheckboxes}
         checkBoxHandler={this.checkBoxHandler}
-        //methods
-        onMapClicked={this.onMapClicked}
-        activeMarker={activeMarker}
-        onMarkerClicked={this.onMarkerClicked}
-        onMarkerDragged={this.onMarkerDragged}
-        deleteMarker={this.deleteMarker}
-        updateLines={this.updateLines}
-        changeMarkerStatus={this.changeMarkerStatus}
-      />
-    );
-  }
-}
-
-export default Map;

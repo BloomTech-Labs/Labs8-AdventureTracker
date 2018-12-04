@@ -1,81 +1,129 @@
-// import React, { Component } from 'react';
-// import Mutation from 'react-apollo';
-// import gql from 'graphql-tag';
-// import Router from 'next/router';
+import React, { Component, Fragment } from 'react';
+import { FacebookProvider, LoginButton } from 'react-facebook';
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
+import uuidv4 from 'uuid/v4';
+import Router from 'next/router';
+import {
+  Form,
+  FormLabel,
+  FormHeader,
+  FormBox,
+  FormGroup,
+  FormFieldset,
+  FormTitle
+} from './styles/FormStyles';
+import styled from 'styled-components';
+import { PrimaryBtn } from './styles/ButtonStyles';
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
-// const CREATE_TRIP_MUTATION = gql`
-//   mutation CREATE_TRIP_MUTATION($title: String!, $description: String, $markers: [Marker!]!) {
-//     createTrip(title: $title, description: $description, markers: $markers) {
-//       id
-//     }
-//   }
-// `;
+const CreateTripBtn = styled(PrimaryBtn)`
+  margin: 0 0 3rem auto;
+`;
+const CREATE_TRIP_MUTATION = gql`
+  mutation SIGNUP_MUTATION(
+    $email: String!
+    $name: String!
+    $facebookUser: Boolean!
+    $password: String!
+    $password2: String!
+  ) {
+    signup(
+      email: $email
+      name: $name
+      facebookUser: $facebookUser
+      password: $password
+      password2: $password2
+    ) {
+      # returned values
+      id
+      email
+      name
+      facebookUser
+    }
+  }
+`;
 
-// class CreateTrip extends Component {
-//   state = {
-//     title: '',
-//     description: '',
-//     markers: []
-//   };
+class CreateTrip extends Component {
+  state = {
+    name: '',
+    email: '',
+    password: '',
+    password2: '',
+    facebookUser: false,
+    passwordMatch: true,
+    step: 1
+  };
 
-//   handleChange = e => {
-//     const { name, type, value } = e.target;
-//     const val = type === 'number' ? parseFloat(value) : value;
-//     this.setState({ [name]: value });
-//   };
-//   render() {
-//     return (
-//       <div>Testing</div>
-//         <Mutation
-//           mutation={CREATE_TRIP_MUTATION}
-//           variables={this.state}
-//           {...(createTrip, { loading, error, called, data }) => (
-//             <Form
-//               onSubmit={async e => {
-//                 // Stop the form from submitting
-//                 e.preventDefault();
-//                 // call the mutation
-//                 const res = await createTrip();
-//                 // change them to the single trip page
-//                 console.log(res);
-//                 Router.push({
-//                   pathname: '/triplist',
-//                   query: { id: res.data.createTrip.id }
-//                 });
-//               }}
-//             >
-//               <fieldset>
-//                 <label htmlfor="title">
-//                   Title
-//                   <input
-//                     type="text"
-//                     id="title"
-//                     name="title"
-//                     placeholder="Title"
-//                     required
-//                     value={this.state.title}
-//                     onChange={this.handleChange}
-//                   />
-//                 </label>
-//                 <label htmlfor="description">
-//                   Description
-//                   <textarea
-//                     id="description"
-//                     name="description"
-//                     placeholder="Enter A Description"
-//                     required
-//                     value={this.state.description}
-//                     onChange={this.handleChange}
-//                   />
-//                 </label>
-//                 <button type="submit">Submit</button>
-//               </fieldset>
-//             </Form>
-//           )}
-//         />
-//     );
-//   }
-// }
+  updateState = e => {
+    this.setState({ [e.target.name]: e.target.value }, this.passwordMatch);
+  };
 
-// export default CreateTrip;
-// // export { CREATE_TRIP_MUTATION };
+  prevStep = () => {
+    this.setState({ step: --this.state.step });
+  };
+  nextStep = () => {
+    this.setState({ step: ++this.state.step });
+  };
+  passwordMatch = () => {
+    const { password, password2 } = this.state;
+    //Checks if they both have text and if they match or not
+    if (password && password2 && password !== password2) {
+      this.setState({ passwordMatch: false });
+    } else if (password === password2) {
+      this.setState({ passwordMatch: true });
+    }
+  };
+
+  // facebook handlers
+  handleResponse = data => {
+    console.log(data.profile);
+    localStorage.setItem('id', data.profile.id);
+    localStorage.setItem('name', data.profile.first_name);
+    localStorage.setItem('email', data.profile.email);
+    localStorage.setItem('signup', true);
+    Router.push({
+      pathname: '/facebooksignup'
+    });
+  };
+  handleError = error => {
+    this.setState({ error });
+  };
+
+  render() {
+    const { step, passwordMatch } = this.state;
+    return (
+      // using the SIGNUP_MUTATION sending the state
+      <Mutation mutation={CREATE_TRIP_MUTATION} variables={this.state}>
+        {/* desctucturing error and loading so we can use them if needed */}
+        {(signup, { error, loading }) => {
+          return (
+            <Form
+              method="post"
+              onSubmit={async e => {
+                e.preventDefault();
+                await signup();
+                this.setState({ name: '', email: '', password: '', password2: '', step: 1 });
+                Router.push({
+                  pathname: '/triplist'
+                });
+              }}
+            >
+              <FormHeader>Adventure Tracker</FormHeader>
+              {/* updates the bar with loading status */}
+              <FormFieldset disabled={loading} aria-busy={loading}>
+                <FormTitle>Create Trip</FormTitle>
+                <CreateTripBtn>Save Trip</CreateTripBtn>
+              </FormFieldset>
+            </Form>
+          );
+        }}
+      </Mutation>
+    );
+  }
+}
+
+export default CreateTrip;
