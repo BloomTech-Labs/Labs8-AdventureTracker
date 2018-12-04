@@ -62,7 +62,7 @@ const MyMapComponent = compose(
       inputHandler={props.inputHandler}
     />
     {props.showingInfoWindow && (
-      <InfoWindow position={props.activeMarker.position}>
+      <InfoWindow position={props.activeMarker.position} onCloseClick={props.toggleInfoWindow}>
         <InfoWrapper>
           <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
           <ReachedCheckBox
@@ -233,7 +233,9 @@ class Map extends React.PureComponent {
     }
     this.createMarker(e);
   };
-
+  toggleInfoWindow = () => {
+    this.setState(prevState => ({ showingInfoWindow: !prevState.showingInfoWindow }));
+  };
   updateLines = () => {
     // thin grey is not reached yet and the person has not started that path
     const greyLine = {
@@ -364,6 +366,7 @@ class Map extends React.PureComponent {
         deleteMarker={this.deleteMarker}
         updateLines={this.updateLines}
         changeMarkerStatus={this.changeMarkerStatus}
+        toggleInfoWindow={this.toggleInfoWindow}
       />
     );
   }
