@@ -57,6 +57,9 @@ const MyMapComponent = compose(
       title={props.tripTitle}
       completedChecks={props.completedCheckboxes}
       markerAmount={props.markers.length}
+      startDate={props.startDate}
+      endDate={props.endDate}
+      inputHandler={props.inputHandler}
     />
     {props.showingInfoWindow && (
       <InfoWindow position={props.activeMarker.position}>
@@ -125,6 +128,8 @@ class Map extends React.PureComponent {
     super(props);
     this.state = {
       tripTitle: '',
+      startDate: '',
+      endDate: '',
       showingInfoWindow: false,
       activeMarker: {},
       selectedPlace: {},
@@ -149,6 +154,10 @@ class Map extends React.PureComponent {
   //     }, 3000);
   //   };
   convertLabelToIndex = markerLabel => {};
+
+  inputHandler = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
   checkBoxHandler = () => {
     const { activeMarker } = this.state;
     if (activeMarker.status === this.COMPLETED) {
@@ -331,7 +340,9 @@ class Map extends React.PureComponent {
       showingInfoWindow,
       activeMarker,
       completedCheckboxes,
-      tripTitle
+      tripTitle,
+      startDate,
+      endDate
     } = this.state;
     return (
       <MyMapComponent
@@ -341,8 +352,11 @@ class Map extends React.PureComponent {
         showingInfoWindow={showingInfoWindow}
         completedCheckboxes={completedCheckboxes}
         checkBoxHandler={this.checkBoxHandler}
-        tripTitle={this.tripTitle}
+        tripTitle={tripTitle}
+        startDate={startDate}
+        endDate={endDate}
         //methods
+        inputHandler={this.inputHandler}
         onMapClicked={this.onMapClicked}
         activeMarker={activeMarker}
         onMarkerClicked={this.onMarkerClicked}

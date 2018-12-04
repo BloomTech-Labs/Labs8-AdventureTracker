@@ -79,6 +79,8 @@ const MapBar = props => {
           <CalendarInput
             id="start"
             type="date"
+            onChange={props.inputHandler}
+            name="startDate"
             onKeyDown={e => {
               e.preventDefault();
             }}
@@ -89,6 +91,8 @@ const MapBar = props => {
           <CalendarInput
             id="end"
             type="date"
+            name="endDate"
+            onChange={props.inputHandler}
             onKeyDown={e => {
               e.preventDefault();
             }}
