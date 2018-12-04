@@ -30,8 +30,20 @@ const InfoWrapper = styled.div`
 `;
 
 const CREATE_TRIP_MUTATION = gql`
-  mutation CREATE_TRIP_MUTATION($title: String!, startDate: String!, endDate: String!, $description: String, $markers: [Marker!]!) {
-    createTrip(title: $title, startDate: $startDate, endDate: $endDate, description: $description, markers: $markers) {
+  mutation CREATE_TRIP_MUTATION(
+    $title: String!
+    $startDate: String!
+    $endDate: String!
+    $description: String
+    $markers: [Marker!]!
+  ) {
+    createTrip(
+      title: $title
+      startDate: $startDate
+      endDate: $endDate
+      description: $description
+      markers: $markers
+    ) {
       id
     }
   }
@@ -320,3 +332,7 @@ class Map extends React.PureComponent {
         showingInfoWindow={showingInfoWindow}
         completedCheckboxes={completedCheckboxes}
         checkBoxHandler={this.checkBoxHandler}
+      />
+    );
+  }
+}

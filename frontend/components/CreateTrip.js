@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { FacebookProvider, LoginButton } from 'react-facebook';
 import { Mutation } from 'react-apollo';
 import gql from 'graphql-tag';
-import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
 import {
   Form,
@@ -15,6 +13,7 @@ import {
 } from './styles/FormStyles';
 import styled from 'styled-components';
 import { PrimaryBtn } from './styles/ButtonStyles';
+
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
@@ -24,25 +23,19 @@ const CreateTripBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
 `;
 const CREATE_TRIP_MUTATION = gql`
-  mutation SIGNUP_MUTATION(
-    $email: String!
-    $name: String!
-    $facebookUser: Boolean!
-    $password: String!
-    $password2: String!
+  mutation CREATE_TRIP_MUTATION(
+    $title: String!
+    $startDate: String!
+    $endDate: String!
+    $description: String!
   ) {
-    signup(
-      email: $email
-      name: $name
-      facebookUser: $facebookUser
-      password: $password
-      password2: $password2
-    ) {
+    createTrip(title: $title, startDate: $startDate, endDate: $endDate, description: $description) {
       # returned values
       id
-      email
-      name
-      facebookUser
+      title
+      startDate
+      endDate
+      description
     }
   }
 `;
@@ -99,14 +92,14 @@ class CreateTrip extends Component {
       // using the SIGNUP_MUTATION sending the state
       <Mutation mutation={CREATE_TRIP_MUTATION} variables={this.state}>
         {/* desctucturing error and loading so we can use them if needed */}
-        {(signup, { error, loading }) => {
+        {(createTrip, { error, loading }) => {
           return (
             <Form
               method="post"
               onSubmit={async e => {
                 e.preventDefault();
-                await signup();
-                this.setState({ name: '', email: '', password: '', password2: '', step: 1 });
+                await createTrip();
+                this.setState({ title: '', startDate: '', endDate: '', description: '' });
                 Router.push({
                   pathname: '/triplist'
                 });
