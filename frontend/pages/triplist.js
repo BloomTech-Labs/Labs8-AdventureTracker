@@ -32,9 +32,6 @@ const TripList = () => (
       <Link href="/settings">
         <button>Settings</button>
       </Link>
-      <Link href="/new-trip">
-        <button>Create New Trip</button>
-      </Link>
       <Link href="/trip-open">
         <button>
           <TripNote />
