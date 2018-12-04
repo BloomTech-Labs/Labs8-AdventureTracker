@@ -5,10 +5,12 @@ import TripNote from '../components/TripNote';
 import CommonTopNavbar from '../components/CommonTopNavbar';
 import MobileNav from '../components/MobileNav';
 import MobileNavContainer from '../components/MobileNavContainer';
+import SideNav from '../components/SideNav';
 
 const TripList = () => (
   <div>
     <CommonTopNavbar />
+    <SideNav />
     <PleaseLogin>
       <User>
         {/* destructure the payload & `me` query */}
@@ -34,12 +36,12 @@ const TripList = () => (
         <button>Create New Trip</button>
       </Link>
       <Link href="/trip-open">
-      <button><TripNote /></button>
+        <button>
+          <TripNote />
+        </button>
       </Link>
     </PleaseLogin>
   </div>
 );
 
 export default TripList;
-
-
