@@ -8,6 +8,8 @@ import styled from 'styled-components';
 import gql from 'graphql-tag';
 import { CURRENT_USER_QUERY } from './User';
 import User from './User';
+import Breadcrumbs from './Breadcrumbs';
+import { withRouter } from 'next/router';
 
 const NavbarWrapper = styled(NavbarContainer)`
   height: 8rem;
@@ -43,6 +45,7 @@ class CommonTopNavbar extends Component {
                   {(signout, { error, loading }) => {
                     return (
                       <NavbarWrapper>
+                        <Breadcrumbs startCrumb={'/'} router={this.props.router} />
                         <Logout
                           onClick={async e => {
                             e.preventDefault();
@@ -64,4 +67,4 @@ class CommonTopNavbar extends Component {
     );
   }
 }
-export default CommonTopNavbar;
+export default withRouter(CommonTopNavbar);
