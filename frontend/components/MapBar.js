@@ -1,4 +1,7 @@
 import styled from 'styled-components';
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
+
 const ProgressWrapper = styled.div`
   display: flex;
   position: relative;
@@ -60,6 +63,20 @@ const CalendarWrapper = styled.div`
   flex-flow: column;
   align-items: flex-end;
 `;
+
+const CREATE_TRIP_MUTATION = gql`
+  mutation CREATE_TRIP_MUTATION(
+    $title: String!
+    $startDate: String!
+    $endDate: String!
+    $markers: [Marker!]!
+  ) {
+    createTrip(title: $title, startDate: $startDate, endDate: $endDate, markers: $markers) {
+      id
+    }
+  }
+`;
+
 const MapBar = props => {
   const progressFormula = (props.completedChecks / props.markerAmount) * 100;
   return (
@@ -99,10 +116,30 @@ const MapBar = props => {
           />
         </CalendarGroup>
       </CalendarWrapper>
-      <MapBtn>
-        Save
-        <br /> Trip
-      </MapBtn>
+      <Mutation
+        mutation={CREATE_TRIP_MUTATION}
+        variables={{
+          title: props.title,
+          startDate: props.startDate,
+          endDate: props.endDate,
+          //TODO - add description
+          markers: props.markers
+        }}
+      >
+        {(createTrip, { error, loading }) => {
+          return (
+            <MapBtn
+              onClick={async () => {
+                await createTrip();
+                Router.push({ pathname: '/triplist' });
+              }}
+            >
+              Save
+              <br /> Trip
+            </MapBtn>
+          );
+        }}
+      </Mutation>
     </MapBarWrapper>
   );
 };

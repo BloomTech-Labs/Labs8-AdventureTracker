@@ -184,8 +184,6 @@ input MarkerWhereInput {
 
 input MarkerWhereUniqueInput {
   id: ID
-  lat: Float
-  lng: Float
 }
 
 type Mutation {
@@ -385,7 +383,10 @@ type Subscription {
 
 type Trip {
   id: ID!
+  user: User!
   title: String!
+  startDate: String!
+  endDate: String!
   description: String!
   markers(where: MarkerWhereInput, orderBy: MarkerOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Marker!]
 }
@@ -397,7 +398,10 @@ type TripConnection {
 }
 
 input TripCreateInput {
+  user: UserCreateOneInput!
   title: String!
+  startDate: String!
+  endDate: String!
   description: String!
   markers: MarkerCreateManyInput
 }
@@ -412,6 +416,10 @@ enum TripOrderByInput {
   id_DESC
   title_ASC
   title_DESC
+  startDate_ASC
+  startDate_DESC
+  endDate_ASC
+  endDate_DESC
   description_ASC
   description_DESC
   createdAt_ASC
@@ -423,6 +431,8 @@ enum TripOrderByInput {
 type TripPreviousValues {
   id: ID!
   title: String!
+  startDate: String!
+  endDate: String!
   description: String!
 }
 
@@ -445,7 +455,10 @@ input TripSubscriptionWhereInput {
 }
 
 input TripUpdateInput {
+  user: UserUpdateOneRequiredInput
   title: String
+  startDate: String
+  endDate: String
   description: String
   markers: MarkerUpdateManyInput
 }
@@ -465,6 +478,7 @@ input TripWhereInput {
   id_not_starts_with: ID
   id_ends_with: ID
   id_not_ends_with: ID
+  user: UserWhereInput
   title: String
   title_not: String
   title_in: [String!]
@@ -479,6 +493,34 @@ input TripWhereInput {
   title_not_starts_with: String
   title_ends_with: String
   title_not_ends_with: String
+  startDate: String
+  startDate_not: String
+  startDate_in: [String!]
+  startDate_not_in: [String!]
+  startDate_lt: String
+  startDate_lte: String
+  startDate_gt: String
+  startDate_gte: String
+  startDate_contains: String
+  startDate_not_contains: String
+  startDate_starts_with: String
+  startDate_not_starts_with: String
+  startDate_ends_with: String
+  startDate_not_ends_with: String
+  endDate: String
+  endDate_not: String
+  endDate_in: [String!]
+  endDate_not_in: [String!]
+  endDate_lt: String
+  endDate_lte: String
+  endDate_gt: String
+  endDate_gte: String
+  endDate_contains: String
+  endDate_not_contains: String
+  endDate_starts_with: String
+  endDate_not_starts_with: String
+  endDate_ends_with: String
+  endDate_not_ends_with: String
   description: String
   description_not: String
   description_in: [String!]
