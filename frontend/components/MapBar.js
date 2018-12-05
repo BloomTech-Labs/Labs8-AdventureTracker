@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { Mutation } from 'react-apollo';
+import Router from 'next/router';
 import gql from 'graphql-tag';
 
 const ProgressWrapper = styled.div`
@@ -69,9 +70,16 @@ const CREATE_TRIP_MUTATION = gql`
     $title: String!
     $startDate: String!
     $endDate: String!
-    $markers: [Marker!]!
+    $user: UserWhereUniqueInput!
+    $description: String! # $markers: [Marker!]!
   ) {
-    createTrip(title: $title, startDate: $startDate, endDate: $endDate, markers: $markers) {
+    createTrip(
+      title: $title
+      user: $user
+      startDate: $startDate
+      endDate: $endDate
+      description: $description
+    ) {
       id
     }
   }
@@ -123,7 +131,9 @@ const MapBar = props => {
           startDate: props.startDate,
           endDate: props.endDate,
           //TODO - add description
-          markers: props.markers
+          description: 'awesome trip!',
+          // markers: props.markers
+          user: { id: '', email: '', facebookID: '' }
         }}
       >
         {(createTrip, { error, loading }) => {
