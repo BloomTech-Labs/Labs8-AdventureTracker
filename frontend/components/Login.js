@@ -24,6 +24,22 @@ import { CURRENT_USER_QUERY } from './User';
 
 library.add(faFacebookSquare);
 
+const Facebook = styled(LoginButton)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: ${props => (props.height ? props.height : '6rem')};
+  width: ${props => (props.width ? props.width : '18rem')};
+  border: none;
+  border-radius: 10px;
+  color: ${props => props.theme.white};
+  background: ${props => props.theme.orange};
+  cursor: pointer;
+  font-size: 3rem;
+  width: 100%;
+  background-color: ${props => props.theme.blue};
+`;
+
 const LoginBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
 `;
@@ -140,14 +156,14 @@ class Signin extends Component {
                     data-use-continue-as="false"
                   >
                     <div id="fb-root" />
-                    <LoginButton
+                    <Facebook
                       scope="email"
                       onCompleted={this.handleResponse}
                       onError={this.handleError}
                     >
-                      Login to Facebook
-                      <FontAwesomeIcon icon={faFacebookSquare} size="4x" />
-                    </LoginButton>
+                      <FontAwesomeIcon icon={faFacebookSquare} />
+                      Facebook Login
+                    </Facebook>
                   </div>
                 </FacebookProvider>
               </FacebookBtn>

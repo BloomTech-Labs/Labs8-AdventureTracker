@@ -16,8 +16,9 @@ const PrimaryBtn = styled.button`
 
 const FacebookBtn = styled(PrimaryBtn)`
   width: 100%;
-  background: ${props => props.theme.blue};
+  background-color: ${props => props.theme.blue};
 `;
+
 const SideNavText = styled.h2`
   margin-left: 0.6em;
 `;
