@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { FacebookProvider, LoginButton } from 'react-facebook';
 import { Mutation } from 'react-apollo';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { fab, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
 import gql from 'graphql-tag';
 import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
@@ -18,6 +21,9 @@ import { PrimaryBtn } from './styles/ButtonStyles';
 import { FacebookBtn } from './styles/LinkBtnStyles';
 import { PrimaryLinkBtn } from './styles/PrimaryLinkBtn';
 import Error from './ErrorMessage';
+
+library.add(faFacebookSquare);
+
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
@@ -240,7 +246,8 @@ class Signup extends Component {
                       onCompleted={this.handleResponse}
                       onError={this.handleError}
                     >
-                      Signup via Facebook
+                      Sign in with <br />
+                      <FontAwesomeIcon icon={faFacebookSquare} size="4x" />
                     </LoginButton>
                   </FacebookProvider>
                 </FacebookBtn>
