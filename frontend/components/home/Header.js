@@ -34,6 +34,8 @@ const Login = styled(PrimaryLinkBtn)`
 const SignUp = styled(PrimaryLinkBtn)``;
 const HeaderWrapper = styled.nav`
   display: flex;
+  position: absolute;
+  z-index: 1;
   justify-content: space-between;
   align-items: center;
   height: 10rem;

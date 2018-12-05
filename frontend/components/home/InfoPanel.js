@@ -5,7 +5,7 @@ import { device } from '../../lib/device';
 const InfoPanelWrapper = styled.aside`
   display: flex;
   flex-flow: column;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   bottom: 0;
@@ -13,7 +13,7 @@ const InfoPanelWrapper = styled.aside`
   padding: 0 5rem;
   background: ${props => props.theme.opacityblack};
   text-transform: capitalize;
-  z-index: -10;
+  z-index: 0;
   color: ${props => props.theme.white};
   @media ${device.tablet} {
     width: 100%;
