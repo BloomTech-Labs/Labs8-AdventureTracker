@@ -13,6 +13,7 @@ const PasswordForm = styled(Form)`
   height: 60rem;
   background: ${props => props.theme.grey};
   border-radius: 8px;
+  margin: 4rem auto;
 `;
 const PasswordTitle = styled(FormTitle)`
   color: ${props => props.theme.black};

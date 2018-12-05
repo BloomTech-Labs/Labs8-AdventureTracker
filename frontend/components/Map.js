@@ -2,8 +2,6 @@ import React from 'react';
 import getConfig from 'next/config';
 // const { publicRuntimeConfig } = getConfig();
 import { compose, withProps } from 'recompose';
-import Mutation from 'react-apollo';
-import gql from 'graphql-tag';
 import {
   withScriptjs,
   withGoogleMap,
@@ -22,12 +20,18 @@ const DeleteBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
 `;
-
+const MarkerNameLabel = styled.label``;
+const MarkerNameBox = styled.input`
+  height: 3rem;
+  width: 100%;
+`;
 const InfoWrapper = styled.div`
   display: flex;
   flex-flow: column;
 `;
 
+const ETA = styled.h2``;
+const CheckedIn = styled.h2``;
 const MyMapComponent = compose(
   withProps({
     // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
@@ -55,7 +59,6 @@ const MyMapComponent = compose(
       startDate={props.startDate}
       endDate={props.endDate}
       inputHandler={props.inputHandler}
-      markers={props.markers}
     />
     {props.showingInfoWindow && (
       <InfoWindow position={props.activeMarker.position} onCloseClick={props.toggleInfoWindow}>
@@ -67,6 +70,17 @@ const MyMapComponent = compose(
             type="checkbox"
             checked={props.activeMarker.status === 'COMPLETED' ? true : false}
           />
+          <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
+          <MarkerNameBox id="location" type="text" />
+          <CheckedIn>Checked-in: </CheckedIn>
+          <ETA>ETA: </ETA>
+          <CalendarInput
+            type="date"
+            onKeyDown={e => {
+              e.preventDefault();
+            }}
+          />
+          <input type="time" value="12:00" />
           <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
             Delete Marker?
           </DeleteBtn>
@@ -119,6 +133,7 @@ class Map extends React.PureComponent {
       activeMarker: {},
       selectedPlace: {},
       markers: [],
+      markerName: '',
       polylines: [],
       completedCheckboxes: 0
     };
@@ -203,8 +218,12 @@ class Map extends React.PureComponent {
       id: uuidv4(),
       draggable: true,
       label: this.calculateLabel(markers.length),
-      // status can be NOT_STARTED, IN_PROGRESS, or COMPLETED but NOT_STARTED is default for creation of marker
-      status: this.NOT_STARTED
+      // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
+      status: this.NOT_STARTED,
+      estTime: '',
+      estDate: '',
+      checkpointName: '',
+      checkedIn: ''
     };
     const newMarkers = [...this.state.markers, marker];
     this.setState({ markers: newMarkers }, this.updateLines);
