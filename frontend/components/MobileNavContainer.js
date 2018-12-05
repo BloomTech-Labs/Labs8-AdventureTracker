@@ -7,7 +7,7 @@ const MobileWrapper = styled.div`
   height: 100vh;
   width: 100vw;
   display: none;
-  @media ${device.mobileL} {
+  @media ${device.mobile} {
     display: flex;
     justify-content: center;
   }
@@ -21,6 +21,7 @@ const NavOverlay = styled.div`
   left: 0;
   right: 0;
   height: 100%;
+
   background: ${props => props.theme.opacityblack};
 `;
 

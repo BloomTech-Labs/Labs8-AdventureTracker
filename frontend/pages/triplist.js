@@ -6,9 +6,11 @@ import CommonTopNavbar from '../components/CommonTopNavbar';
 import MobileNav from '../components/MobileNav';
 import MobileNavContainer from '../components/MobileNavContainer';
 import SideNav from '../components/SideNav';
+import { LgWidthContainer } from '../components/styles/WidthContainers';
+import { MainContainer } from '../components/styles/MainContainer';
 
 const TripList = () => (
-  <div>
+  <LgWidthContainer>
     <CommonTopNavbar />
     <SideNav />
     <PleaseLogin>
@@ -38,6 +40,23 @@ const TripList = () => (
       </div>
     </PleaseLogin>
   </div>
+    <MainContainer>
+      <PleaseLogin>
+        <User>
+          {/* destructure the payload & `me` query */}
+          {({ data: { me } }) => {
+            if (me) return <p>Welcome {me.name}!</p>;
+            return null;
+          }}
+        </User>
+        <Link href="/trip-open">
+          <button>
+            <TripNote />
+          </button>
+        </Link>
+      </PleaseLogin>
+    </MainContainer>
+  </LgWidthContainer>
 );
 
 export default TripList;
