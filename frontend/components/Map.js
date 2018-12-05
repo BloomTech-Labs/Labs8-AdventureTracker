@@ -218,8 +218,12 @@ class Map extends React.PureComponent {
       id: uuidv4(),
       draggable: true,
       label: this.calculateLabel(markers.length),
-      // status can be NOT_STARTED, IN_PROGRESS, or COMPLETED but NOT_STARTED is default for creation of marker
-      status: this.NOT_STARTED
+      // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
+      status: this.NOT_STARTED,
+      estTime: '',
+      estDate: '',
+      checkpointName: '',
+      checkedIn: ''
     };
     const newMarkers = [...this.state.markers, marker];
     this.setState({ markers: newMarkers }, this.updateLines);
