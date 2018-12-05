@@ -1,6 +1,6 @@
 import React from 'react';
 import getConfig from 'next/config';
-const { publicRuntimeConfig } = getConfig();
+// const { publicRuntimeConfig } = getConfig();
 import { compose, withProps } from 'recompose';
 import {
   withScriptjs,
@@ -12,21 +12,26 @@ import {
 } from 'react-google-maps';
 //react-google-maps docs: https://tomchentw.github.io/react-google-maps/
 import styled from 'styled-components';
-import { runInThisContext } from 'vm';
 import uuidv4 from 'uuid/v4';
-import MapBar from './MapBar';
+import { MapBar, CalendarInput } from './MapBar';
 const Label = styled.label``;
 const ReachedCheckBox = styled.input``;
 const DeleteBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
 `;
-
+const MarkerNameLabel = styled.label``;
+const MarkerNameBox = styled.input`
+  height: 3rem;
+  width: 100%;
+`;
 const InfoWrapper = styled.div`
   display: flex;
   flex-flow: column;
 `;
 
+const ETA = styled.h2``;
+const CheckedIn = styled.h2``;
 const MyMapComponent = compose(
   withProps({
     // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
@@ -47,9 +52,16 @@ const MyMapComponent = compose(
     defaultCenter={{ lat: -34.397, lng: 150.644 }}
     // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
   >
-    <MapBar completedChecks={props.completedCheckboxes} markerAmount={props.markers.length} />
+    <MapBar
+      title={props.tripTitle}
+      completedChecks={props.completedCheckboxes}
+      markerAmount={props.markers.length}
+      startDate={props.startDate}
+      endDate={props.endDate}
+      inputHandler={props.inputHandler}
+    />
     {props.showingInfoWindow && (
-      <InfoWindow position={props.activeMarker.position}>
+      <InfoWindow position={props.activeMarker.position} onCloseClick={props.toggleInfoWindow}>
         <InfoWrapper>
           <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
           <ReachedCheckBox
@@ -58,6 +70,17 @@ const MyMapComponent = compose(
             type="checkbox"
             checked={props.activeMarker.status === 'COMPLETED' ? true : false}
           />
+          <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
+          <MarkerNameBox id="location" type="text" />
+          <CheckedIn>Checked-in: </CheckedIn>
+          <ETA>ETA: </ETA>
+          <CalendarInput
+            type="date"
+            onKeyDown={e => {
+              e.preventDefault();
+            }}
+          />
+          <input type="time" value="12:00" />
           <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
             Delete Marker?
           </DeleteBtn>
@@ -103,10 +126,14 @@ class Map extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
+      tripTitle: '',
+      startDate: '',
+      endDate: '',
       showingInfoWindow: false,
       activeMarker: {},
       selectedPlace: {},
       markers: [],
+      markerName: '',
       polylines: [],
       completedCheckboxes: 0
     };
@@ -126,6 +153,10 @@ class Map extends React.PureComponent {
   //     }, 3000);
   //   };
   convertLabelToIndex = markerLabel => {};
+
+  inputHandler = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
   checkBoxHandler = () => {
     const { activeMarker } = this.state;
     if (activeMarker.status === this.COMPLETED) {
@@ -201,7 +232,9 @@ class Map extends React.PureComponent {
     }
     this.createMarker(e);
   };
-
+  toggleInfoWindow = () => {
+    this.setState(prevState => ({ showingInfoWindow: !prevState.showingInfoWindow }));
+  };
   updateLines = () => {
     // thin grey is not reached yet and the person has not started that path
     const greyLine = {
@@ -302,7 +335,16 @@ class Map extends React.PureComponent {
     this.setState({ markers: newMarkers }, () => this.updateLines());
   };
   render() {
-    const { markers, polylines, showingInfoWindow, activeMarker, completedCheckboxes } = this.state;
+    const {
+      markers,
+      polylines,
+      showingInfoWindow,
+      activeMarker,
+      completedCheckboxes,
+      tripTitle,
+      startDate,
+      endDate
+    } = this.state;
     return (
       <MyMapComponent
         //state object props
@@ -311,7 +353,11 @@ class Map extends React.PureComponent {
         showingInfoWindow={showingInfoWindow}
         completedCheckboxes={completedCheckboxes}
         checkBoxHandler={this.checkBoxHandler}
+        tripTitle={tripTitle}
+        startDate={startDate}
+        endDate={endDate}
         //methods
+        inputHandler={this.inputHandler}
         onMapClicked={this.onMapClicked}
         activeMarker={activeMarker}
         onMarkerClicked={this.onMarkerClicked}
@@ -319,9 +365,10 @@ class Map extends React.PureComponent {
         deleteMarker={this.deleteMarker}
         updateLines={this.updateLines}
         changeMarkerStatus={this.changeMarkerStatus}
+        toggleInfoWindow={this.toggleInfoWindow}
       />
     );
   }
 }
 
-export default Map;
+export { Map, MyMapComponent };

@@ -1,44 +1,73 @@
 import Link from 'next/link';
 import { Component } from 'react';
 import styled from 'styled-components';
-import { SideNavBtn } from './styles/ButtonStyles';
+import { GlobeIcon, BillingIcon, SettingsIcon } from './styles/SVGs';
+import { withRouter } from 'next/router';
 
 const SidebarWrapper = styled.aside`
   display: flex;
   flex-flow: column;
   width: 20rem;
-  height: 50rem;
+  margin: 2rem 0 0 2rem;
+  top: 0;
+  bottom: 0;
   & > * {
     margin-bottom: 1.3rem;
   }
-  position: fixed;
+`;
+const SideNavBtn = styled.button`
+  display: flex;
+  align-items: center;
+  width: 100%;
+  font-size: 2rem;
+  font-weight: 400;
+  color: ${props => props.theme.white};
+  background: ${props => (props.active ? props.theme.orange : props.theme.blue)};
+  border: none;
+  cursor: pointer;
+  padding: 0 0 0 0.8em;
+`;
+const SideNavText = styled.h3`
+  margin-left: 0.8em;
 `;
 
 class SideNav extends Component {
   render() {
+    const TRIPLIST = '/triplist';
+    const BILLING = '/billing';
+    const SETTINGS = '/settings';
+    const LENGTH = 40;
+    const { route } = this.props.router;
+    console.log(this.props);
     return (
       <SidebarWrapper>
-        {/* keys - are the button names and values will be the link to the page */}
-        {/* example: links = { trip: "/triplist"} This creates a button with the text "Trip" and it goes to /triplist when clicked*/}
-        {/* setting the active prop to true will change the color from blue to orange */}
-        {Object.keys(this.props.links).map(link => {
-          if (link !== this.props.active) {
-            return (
-              <Link key={link} href={`${this.props.links[link]}`}>
-                <SideNavBtn>{link[0].toUpperCase() + link.slice(1)}</SideNavBtn>
-              </Link>
-            );
-          } else {
-            return (
-              <Link key={link} href={`${this.props.links[link]}`}>
-                <SideNavBtn active={true}>{link[0].toUpperCase() + link.slice(1)}</SideNavBtn>
-              </Link>
-            );
-          }
-        })}
+        <Link href={TRIPLIST}>
+          <SideNavBtn active={TRIPLIST.match(route) ? true : false}>
+            <GlobeIcon length={LENGTH} />
+            <SideNavText>Trips</SideNavText>
+          </SideNavBtn>
+        </Link>
+        <Link href={SETTINGS}>
+          <SideNavBtn active={SETTINGS.match(route) ? true : false}>
+            <SettingsIcon length={LENGTH} />
+            <SideNavText>Settings</SideNavText>
+          </SideNavBtn>
+        </Link>
+        <Link href={BILLING}>
+          <SideNavBtn active={BILLING.match(route) ? true : false}>
+            <BillingIcon length={LENGTH} />
+            <SideNavText>Billing</SideNavText>
+          </SideNavBtn>
+        </Link>
+        <Link href="/app">
+          <SideNavBtn>
+            <GlobeIcon length={LENGTH} />
+            <SideNavText>Map</SideNavText>
+          </SideNavBtn>
+        </Link>
       </SidebarWrapper>
     );
   }
 }
 
-export default SideNav;
+export default withRouter(SideNav);

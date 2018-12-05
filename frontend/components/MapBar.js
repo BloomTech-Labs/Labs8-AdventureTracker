@@ -64,7 +64,7 @@ const MapBar = props => {
   const progressFormula = (props.completedChecks / props.markerAmount) * 100;
   return (
     <MapBarWrapper>
-      <AdventureTitle>{props.title ? props.title : 'Placeholder Text'}</AdventureTitle>
+      <AdventureTitle>{props.title ? props.title : 'Placeholder Title'}</AdventureTitle>
       <ProgressWrapper>
         <ProgressBar width={props.completedChecks === 0 ? '0%' : `${progressFormula}%`}>
           <ProgressStats>
@@ -79,6 +79,8 @@ const MapBar = props => {
           <CalendarInput
             id="start"
             type="date"
+            onChange={props.inputHandler}
+            name="startDate"
             onKeyDown={e => {
               e.preventDefault();
             }}
@@ -89,6 +91,8 @@ const MapBar = props => {
           <CalendarInput
             id="end"
             type="date"
+            name="endDate"
+            onChange={props.inputHandler}
             onKeyDown={e => {
               e.preventDefault();
             }}
@@ -103,4 +107,4 @@ const MapBar = props => {
   );
 };
 
-export default MapBar;
+export { MapBar, CalendarGroup, CalendarInput, CalendarLabel, CalendarWrapper };
