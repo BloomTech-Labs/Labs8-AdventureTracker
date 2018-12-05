@@ -2,7 +2,11 @@
 type SuccessMessage {
   message: String
 }
-
+# input UserWhereUniqueInput {
+#   id: ID
+#   email: String
+#   facebookID: String
+# }
 type Mutation {
   createTrip(
     title: String!

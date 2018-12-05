@@ -398,6 +398,7 @@ type TripConnection {
 }
 
 input TripCreateInput {
+<<<<<<< HEAD
   user: UserCreateOneWithoutTripInput!
   title: String!
   startDate: String!
@@ -415,6 +416,12 @@ input TripCreateWithoutUserInput {
   title: String!
   startDate: String!
   endDate: String!
+=======
+  user: UserCreateOneInput!
+  title: String!
+  startDate: String!
+  endDate: String!
+>>>>>>> 28d34b646955b1025f2b6cece11943c5679d5c84
   description: String!
   markers: MarkerCreateManyInput
 }
@@ -468,7 +475,11 @@ input TripSubscriptionWhereInput {
 }
 
 input TripUpdateInput {
+<<<<<<< HEAD
   user: UserUpdateOneRequiredWithoutTripInput
+=======
+  user: UserUpdateOneRequiredInput
+>>>>>>> 28d34b646955b1025f2b6cece11943c5679d5c84
   title: String
   startDate: String
   endDate: String
