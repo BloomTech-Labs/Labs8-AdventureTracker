@@ -398,10 +398,30 @@ type TripConnection {
 }
 
 input TripCreateInput {
+<<<<<<< HEAD
+  user: UserCreateOneWithoutTripInput!
+  title: String!
+  startDate: String!
+  endDate: String!
+  description: String!
+  markers: MarkerCreateManyInput
+}
+
+input TripCreateManyWithoutUserInput {
+  create: [TripCreateWithoutUserInput!]
+  connect: [TripWhereUniqueInput!]
+}
+
+input TripCreateWithoutUserInput {
+  title: String!
+  startDate: String!
+  endDate: String!
+=======
   user: UserCreateOneInput!
   title: String!
   startDate: String!
   endDate: String!
+>>>>>>> 28d34b646955b1025f2b6cece11943c5679d5c84
   description: String!
   markers: MarkerCreateManyInput
 }
@@ -455,12 +475,44 @@ input TripSubscriptionWhereInput {
 }
 
 input TripUpdateInput {
+<<<<<<< HEAD
+  user: UserUpdateOneRequiredWithoutTripInput
+=======
   user: UserUpdateOneRequiredInput
+>>>>>>> 28d34b646955b1025f2b6cece11943c5679d5c84
   title: String
   startDate: String
   endDate: String
   description: String
   markers: MarkerUpdateManyInput
+}
+
+input TripUpdateManyWithoutUserInput {
+  create: [TripCreateWithoutUserInput!]
+  delete: [TripWhereUniqueInput!]
+  connect: [TripWhereUniqueInput!]
+  disconnect: [TripWhereUniqueInput!]
+  update: [TripUpdateWithWhereUniqueWithoutUserInput!]
+  upsert: [TripUpsertWithWhereUniqueWithoutUserInput!]
+}
+
+input TripUpdateWithoutUserDataInput {
+  title: String
+  startDate: String
+  endDate: String
+  description: String
+  markers: MarkerUpdateManyInput
+}
+
+input TripUpdateWithWhereUniqueWithoutUserInput {
+  where: TripWhereUniqueInput!
+  data: TripUpdateWithoutUserDataInput!
+}
+
+input TripUpsertWithWhereUniqueWithoutUserInput {
+  where: TripWhereUniqueInput!
+  update: TripUpdateWithoutUserDataInput!
+  create: TripCreateWithoutUserInput!
 }
 
 input TripWhereInput {
@@ -557,6 +609,7 @@ type User {
   facebookID: String
   resetTokenExpiry: Float
   permissions: [Permission!]!
+  trip(where: TripWhereInput, orderBy: TripOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Trip!]
 }
 
 type UserConnection {
@@ -574,6 +627,7 @@ input UserCreateInput {
   facebookID: String
   resetTokenExpiry: Float
   permissions: UserCreatepermissionsInput
+  trip: TripCreateManyWithoutUserInput
 }
 
 input UserCreateOneInput {
@@ -581,8 +635,24 @@ input UserCreateOneInput {
   connect: UserWhereUniqueInput
 }
 
+input UserCreateOneWithoutTripInput {
+  create: UserCreateWithoutTripInput
+  connect: UserWhereUniqueInput
+}
+
 input UserCreatepermissionsInput {
   set: [Permission!]
+}
+
+input UserCreateWithoutTripInput {
+  name: String!
+  email: String!
+  password: String!
+  resetToken: String
+  facebookUser: Boolean!
+  facebookID: String
+  resetTokenExpiry: Float
+  permissions: UserCreatepermissionsInput
 }
 
 type UserEdge {
@@ -652,6 +722,7 @@ input UserUpdateDataInput {
   facebookID: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
+  trip: TripUpdateManyWithoutUserInput
 }
 
 input UserUpdateInput {
@@ -663,6 +734,7 @@ input UserUpdateInput {
   facebookID: String
   resetTokenExpiry: Float
   permissions: UserUpdatepermissionsInput
+  trip: TripUpdateManyWithoutUserInput
 }
 
 input UserUpdateOneRequiredInput {
@@ -672,13 +744,36 @@ input UserUpdateOneRequiredInput {
   connect: UserWhereUniqueInput
 }
 
+input UserUpdateOneRequiredWithoutTripInput {
+  create: UserCreateWithoutTripInput
+  update: UserUpdateWithoutTripDataInput
+  upsert: UserUpsertWithoutTripInput
+  connect: UserWhereUniqueInput
+}
+
 input UserUpdatepermissionsInput {
   set: [Permission!]
+}
+
+input UserUpdateWithoutTripDataInput {
+  name: String
+  email: String
+  password: String
+  resetToken: String
+  facebookUser: Boolean
+  facebookID: String
+  resetTokenExpiry: Float
+  permissions: UserUpdatepermissionsInput
 }
 
 input UserUpsertNestedInput {
   update: UserUpdateDataInput!
   create: UserCreateInput!
+}
+
+input UserUpsertWithoutTripInput {
+  update: UserUpdateWithoutTripDataInput!
+  create: UserCreateWithoutTripInput!
 }
 
 input UserWhereInput {
@@ -776,6 +871,9 @@ input UserWhereInput {
   resetTokenExpiry_lte: Float
   resetTokenExpiry_gt: Float
   resetTokenExpiry_gte: Float
+  trip_every: TripWhereInput
+  trip_some: TripWhereInput
+  trip_none: TripWhereInput
   AND: [UserWhereInput!]
   OR: [UserWhereInput!]
   NOT: [UserWhereInput!]

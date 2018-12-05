@@ -7,3 +7,4 @@ layout.md
 variables.env
 keys.js
 /frontend/next.config.js
+/backend/src/generated/prisma.graphql

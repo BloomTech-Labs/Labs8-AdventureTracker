@@ -17,6 +17,7 @@ type User {
   facebookID: String @unique
   resetTokenExpiry: Float
   permissions: [Permission]
+  trip: [Trip!]!
 }
 
 type Order {
@@ -24,6 +25,16 @@ type Order {
   price: Int!
   user: User!
   charge: String!
+}
+
+type Trip {
+  id: ID! @unique
+  user: User!
+  title: String!
+  startDate: String!
+  endDate: String!
+  description: String!
+  markers: [Marker!]!
 }
 
 enum Progress {

@@ -4,25 +4,8 @@ const stripe = require('../stripe');
 const { hashPassword } = require('../utils');
 
 const Mutations = {
-  async createTrip(parent, { email, password }, ctx, info) {
-    // check if there is a user with that email
-    const user = await ctx.db.query.user({ where: { email } });
-    if (!user) {
-      throw new Error(`No such user found for email ${email}`);
-    }
-    // check if their password is correct
-    const valid = await bcrypt.compare(password, user.password);
-    if (!valid) {
-      throw new Error('Invalid Password');
-    }
-    // generate the JWT Token
-    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
-    // set the cookie with the token
-    ctx.response.cookie('token', token, {
-      httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 365
-    });
-
+  async createTrip(parent, args, ctx, info) {
+    // comment out to test locally
     if (!ctx.request.userId) {
       throw new Error('You must be logged in to do that!');
     }
@@ -33,17 +16,23 @@ const Mutations = {
           // This is how to create a relationship between the Trip and the User
           user: {
             connect: {
+              // commment out to test locally
               id: ctx.request.userId
+              // uncomment to test locally
+              // id: 'cjp8taz6je1ti0a62gfi12dw0'
             }
           },
-          ...args
+          title: args.title,
+          startDate: args.startDate,
+          endDate: args.endDate,
+          description: args.description,
+          markers: args.markers
         }
       },
       info
     );
     return trip;
   },
-
   async createMarker(parent, args, ctx, info) {
     const marker = await ctx.db.mutation.createMarker(
       {
@@ -58,7 +47,6 @@ const Mutations = {
     );
     return marker;
   },
-
   // async deleteTrip(parent, args, ctx, info) {
   //   const where = { id: args.id };
   //   // find the item
@@ -68,7 +56,6 @@ const Mutations = {
   //   // Delete it
   //   return ctx.db.mutation.deleteTrip({ where }, info);
   // },
-
   async signup(parent, args, ctx, info) {
     if (args.password !== args.password2) {
       throw new Error('Passwords do not match!');
@@ -226,11 +213,12 @@ const Mutations = {
     const user = await ctx.db.query.user(
       { where: { id: userId } },
       `
-    { 
-      id 
-      name 
-      email 
-    }`
+        { 
+          id 
+          name 
+          email 
+        }
+      `
     );
 
     // 2. Calculate total price
