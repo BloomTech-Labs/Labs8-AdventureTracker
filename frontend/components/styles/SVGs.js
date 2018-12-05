@@ -4,6 +4,7 @@ export {
   GlobeIcon,
   BillingIcon,
   SettingsIcon,
+  HomeIcon,
   ShareIcon,
   ArchiveIcon,
   HamburgerIcon,
@@ -12,6 +13,30 @@ export {
   YellowExclamationIcon,
   ExitIcon
 };
+const HomeIcon = props => (
+  <svg
+    width={props.length}
+    height={props.length}
+    viewBox="0 0 45 45"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M5.3999 16.725L22.2749 3.60001L39.1499 16.725V37.35C39.1499 38.3446 38.7548 39.2984 38.0516 40.0017C37.3483 40.7049 36.3945 41.1 35.3999 41.1H9.1499C8.15534 41.1 7.20151 40.7049 6.49825 40.0017C5.79499 39.2984 5.3999 38.3446 5.3999 37.35V16.725Z"
+      stroke="#EBEBEB"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+    <path
+      d="M16.875 41.25V22.5H28.125V41.25"
+      stroke="#EBEBEB"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    />
+  </svg>
+);
 const BillingIcon = props => (
   <svg
     width={props.length}

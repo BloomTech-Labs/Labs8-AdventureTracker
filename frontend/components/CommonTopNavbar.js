@@ -10,9 +10,17 @@ import { CURRENT_USER_QUERY } from './User';
 import User from './User';
 import Breadcrumbs from './Breadcrumbs';
 import { withRouter } from 'next/router';
+import { LgWidthContainer } from '../components/styles/WidthContainers';
 
 const NavbarWrapper = styled(NavbarContainer)`
-  height: 8rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 11rem;
+  max-width: 1400px;
+  top: 0;
+  position: fixed;
+  z-index: 1;
   @media ${device.mobile} {
     display: none;
   }
