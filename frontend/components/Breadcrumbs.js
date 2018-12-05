@@ -37,7 +37,7 @@ const Breadcrumbs = props => {
       })()}
       {(() => {
         if (props.endCrumbLink && props.endCrumbName) {
-          <Link href={props.endCrumbLink}>{props.endCrumbName}</Link>;
+          return <Link href={props.endCrumbLink}>{props.endCrumbName}</Link>;
         }
       })()}
     </BreadcrumbsWrapper>
