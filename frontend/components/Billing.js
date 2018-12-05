@@ -5,7 +5,21 @@ import PropTypes from 'prop-types';
 import gql from 'graphql-tag';
 import Error from './ErrorMessage';
 import User, { CURRENT_USER_QUERY } from './User';
-
+import { Form, FormTitle } from './styles/FormStyles';
+import styled from 'styled-components';
+import { MainContainer } from './styles/MainContainer';
+const BillingForm = styled(Form)`
+  max-width: 56rem;
+  height: 30rem;
+  background: ${props => props.theme.grey};
+  border-radius: 8px;
+  margin: 18rem 0;
+`;
+const BillingTitle = styled(FormTitle)`
+  color: ${props => props.theme.black};
+  line-height: 1;
+  font-weight: 700;
+`;
 //Mutation Query
 const CREATE_ORDER_MUTATION = gql`
   mutation createOrder($token: String!) {
@@ -41,16 +55,21 @@ class Payment extends Component {
             refetchQueries={[{ query: CURRENT_USER_QUERY }]}
           >
             {createOrder => (
-              <StripeCheckout
-                stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
-                currrency="USD"
-                amount={charge}
-                //email={me.email}
-                name="Adventure Tracker"
-                token={res => this.onToken(res, createOrder)}
-              >
-                {this.props.children}
-              </StripeCheckout>
+              <MainContainer>
+                <BillingForm>
+                  <BillingTitle>Pay With Card</BillingTitle>
+                  <StripeCheckout
+                    stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
+                    currrency="USD"
+                    amount={charge}
+                    //email={me.email}
+                    name="Adventure Tracker"
+                    token={res => this.onToken(res, createOrder)}
+                  >
+                    {this.props.children}
+                  </StripeCheckout>
+                </BillingForm>
+              </MainContainer>
             )}
           </Mutation>
         )}

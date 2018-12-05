@@ -7,13 +7,19 @@ import { withRouter } from 'next/router';
 const SidebarWrapper = styled.aside`
   display: flex;
   flex-flow: column;
-  width: 20rem;
-  margin: 2rem 0 0 2rem;
+  width: 100%;
+  max-width: 35rem;
+  background: ${props => props.theme.opacityblack};
+  position: fixed;
   top: 0;
   bottom: 0;
+  text-transform: capitalize;
+  padding: 5em 2em;
+  color: ${props => props.theme.white};
   & > * {
-    margin-bottom: 1.3rem;
+    margin-bottom: 2rem;
   }
+  margin: 6rem 0 0 0;
 `;
 const SideNavBtn = styled.button`
   display: flex;

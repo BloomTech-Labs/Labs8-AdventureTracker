@@ -3,16 +3,16 @@ import Payment from '../components/Billing';
 import MobileNavContainer from '../components/MobileNavContainer';
 import SideNav from '../components/SideNav';
 import CommonTopNavbar from '../components/CommonTopNavbar';
+import { LgWidthContainer } from '../components/styles/WidthContainers';
 
 const Billing = () => (
-  <div>
+  <LgWidthContainer>
     <CommonTopNavbar />
-    <p>This is the Billing page</p>
-    <Payment />
 
     <SideNav />
+    <Payment />
     <MobileNavContainer />
-  </div>
+  </LgWidthContainer>
 );
 
 export default Billing;

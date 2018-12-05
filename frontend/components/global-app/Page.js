@@ -18,12 +18,16 @@ const theme = {
   lightblue: '#039ADA',
   lightgreen: '#9DFF8D',
   opacityblack: 'rgba(29,27,27,51%)',
-  opacitygrey: 'rgba(71,71,71,86%)'
+  opacitygrey: 'rgba(71,71,71,86%)',
+  navbarHeight: '11rem',
+  sidebarWidth: '35rem'
 };
 
 const StyledPage = styled.div`
-  background: white;
   color: ${props => props.theme.black};
+  height: 100vh;
+  width: 100vw;
+  max-width: 100%;
 `;
 
 injectGlobal`
