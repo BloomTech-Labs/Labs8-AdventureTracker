@@ -49,7 +49,11 @@ const MyMapComponent = compose(
   <GoogleMap
     onClick={props.onMapClicked}
     defaultZoom={8}
-    defaultCenter={{ lat: -34.397, lng: 150.644 }}
+    center={
+      props.activeMarker.position === undefined
+        ? { lat: 38.9260256843898, lng: -104.755169921875 }
+        : { lat: props.activeMarker.position.lat, lng: props.activeMarker.position.lng }
+    }
     // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
   >
     <MapBar
@@ -319,7 +323,7 @@ class Map extends React.PureComponent {
     this.setState({ polylines: lines });
   };
   onMarkerClicked = (e, marker) => {
-    // console.log(marker, this.state.showingInfoWindow);
+    console.log(marker, this.state.showingInfoWindow);
     this.setState({ activeMarker: marker, showingInfoWindow: true });
   };
   shallowObjEquals = (obj1, obj2) => {
