@@ -12,20 +12,30 @@ const TripList = () => (
     <CommonTopNavbar />
     <SideNav />
     <PleaseLogin>
-      <User>
-        {/* destructure the payload & `me` query */}
-        {({ data: { me } }) => {
-          if (me) return <p>Welcome {me.name}!</p>;
-          return null;
-        }}
-      </User>
-      <p>This is the Trip List page</p>
-
+      <div style={{ display: 'flex', flexDirection: 'column', marginLeft: '25rem' }} >
       <Link href="/trip-open">
         <button>
+          <div style={{display: 'flex', flexWrap: 'wrap' }} >
+          <div style={{ height: '20rem', width: '20rem', border: 'solid', margin: '4rem' }}>
+            <h3>Add First Trip</h3>
+            <button>+</button>
+          </div>
+          <div style={{ margin: '4rem' }} >
           <TripNote />
+          </div>
+          <div style={{ margin: '4rem' }}>
+          <TripNote />
+          </div>
+          <div style={{ margin: '4rem' }}>
+          <TripNote />
+          </div>
+          <div style={{ margin: '4rem' }}>
+          <TripNote />
+          </div>
+          </div>
         </button>
       </Link>
+      </div>
     </PleaseLogin>
   </div>
 );
