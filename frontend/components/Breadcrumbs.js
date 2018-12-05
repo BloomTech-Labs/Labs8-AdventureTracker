@@ -54,6 +54,8 @@ const BreadText = styled.div`
   display: flex;
   color: white;
   margin: 0;
+  position: absolute;
+  bottom: -65%;
 `;
 const Breadcrumbs = props => {
   const { route } = props.router;
@@ -62,14 +64,15 @@ const Breadcrumbs = props => {
   const BILLING = '/billing';
   const SETTINGS = '/settings';
   const ICON_LENGTH = '70%';
+  const CIRCLE_DIAMETER = '5rem';
   return (
     <BreadcrumbsWrapper>
       <Link href={props.startCrumb}>
         <Breadcrumb>
-          <CircleWrapper length={'5rem'}>
+          <CircleWrapper length={CIRCLE_DIAMETER}>
             <HomeIcon length={ICON_LENGTH} />
+            <BreadText>Home</BreadText>
           </CircleWrapper>
-          <BreadText>Home</BreadText>
         </Breadcrumb>
       </Link>
       {(() => {
@@ -77,10 +80,10 @@ const Breadcrumbs = props => {
           return (
             <Link href={TRIPLIST}>
               <Breadcrumb>
-                <CircleWrapper length={'5rem'}>
+                <CircleWrapper length={CIRCLE_DIAMETER}>
                   <GlobeIcon length={ICON_LENGTH} />
+                  <BreadText>Trips</BreadText>
                 </CircleWrapper>
-                <BreadText>Trips</BreadText>
               </Breadcrumb>
             </Link>
           );
@@ -89,10 +92,10 @@ const Breadcrumbs = props => {
           return (
             <Link href={BILLING}>
               <Breadcrumb>
-                <CircleWrapper length={'5rem'}>
+                <CircleWrapper length={CIRCLE_DIAMETER}>
                   <BillingIcon length={ICON_LENGTH} />
+                  <BreadText>Billing</BreadText>
                 </CircleWrapper>
-                <BreadText>Billing</BreadText>
               </Breadcrumb>
             </Link>
           );
@@ -101,10 +104,10 @@ const Breadcrumbs = props => {
           return (
             <Link href={SETTINGS}>
               <Breadcrumb>
-                <CircleWrapper length={'5rem'}>
+                <CircleWrapper length={CIRCLE_DIAMETER}>
                   <SettingsIcon length={ICON_LENGTH} />
+                  <BreadText>Settings</BreadText>
                 </CircleWrapper>
-                <BreadText>Settings</BreadText>
               </Breadcrumb>
             </Link>
           );
@@ -115,7 +118,7 @@ const Breadcrumbs = props => {
           return (
             <Link href={TRIPLIST}>
               <Breadcrumb>
-                <CircleWrapper length={'5rem'}>
+                <CircleWrapper length={CIRCLE_DIAMETER}>
                   <GlobeIcon length={ICON_LENGTH} />
                 </CircleWrapper>
                 <BreadText>{props.endCrumbName}</BreadText>

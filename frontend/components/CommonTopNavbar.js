@@ -12,7 +12,10 @@ import Breadcrumbs from './Breadcrumbs';
 import { withRouter } from 'next/router';
 
 const NavbarWrapper = styled(NavbarContainer)`
-  height: 10rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 11rem;
   @media ${device.mobile} {
     display: none;
   }
