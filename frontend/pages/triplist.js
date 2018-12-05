@@ -16,7 +16,7 @@ const TripList = () => (
       <Link href="/trip-open">
         <button>
           <div style={{display: 'flex', flexWrap: 'wrap' }} >
-          <div style={{ height: '20rem', width: '20rem', border: 'solid', margin: '4rem' }}>
+          <div style={{ height: '30rem', width: '30rem', border: 'solid', margin: '4rem' }}>
             <h3>Add First Trip</h3>
             <button>+</button>
           </div>
