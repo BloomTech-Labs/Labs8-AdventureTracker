@@ -4,7 +4,25 @@ const stripe = require('../stripe');
 const { hashPassword } = require('../utils');
 
 const Mutations = {
-  async createTrip(parent, args, ctx, info) {
+  async createTrip(parent, { email, password }, ctx, info) {
+    // check if there is a user with that email
+    const user = await ctx.db.query.user({ where: { email } });
+    if (!user) {
+      throw new Error(`No such user found for email ${email}`);
+    }
+    // check if their password is correct
+    const valid = await bcrypt.compare(password, user.password);
+    if (!valid) {
+      throw new Error('Invalid Password');
+    }
+    // generate the JWT Token
+    const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
+    // set the cookie with the token
+    ctx.response.cookie('token', token, {
+      httpOnly: true,
+      maxAge: 1000 * 60 * 60 * 24 * 365
+    });
+
     if (!ctx.request.userId) {
       throw new Error('You must be logged in to do that!');
     }

@@ -28,25 +28,6 @@ const InfoWrapper = styled.div`
   flex-flow: column;
 `;
 
-const CREATE_TRIP_MUTATION = gql`
-  mutation CREATE_TRIP_MUTATION(
-    $title: String!
-    $startDate: String!
-    $endDate: String!
-    $description: String
-    $markers: [Marker!]!
-  ) {
-    createTrip(
-      title: $title
-      startDate: $startDate
-      endDate: $endDate
-      description: $description
-      markers: $markers
-    ) {
-      id
-    }
-  }
-`;
 const MyMapComponent = compose(
   withProps({
     // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
@@ -74,6 +55,7 @@ const MyMapComponent = compose(
       startDate={props.startDate}
       endDate={props.endDate}
       inputHandler={props.inputHandler}
+      markers={props.markers}
     />
     {props.showingInfoWindow && (
       <InfoWindow position={props.activeMarker.position} onCloseClick={props.toggleInfoWindow}>

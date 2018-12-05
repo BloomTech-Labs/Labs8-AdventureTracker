@@ -26,16 +26,6 @@ type Order {
   charge: String!
 }
 
-type Trip {
-  id: ID! @unique
-  user: User!
-  title: String!
-  startDate: String!
-  endDate: String!
-  description: String!
-  markers: [Marker!]!
-}
-
 enum Progress {
   NOT_STARTED
   COMPLETED
@@ -47,4 +37,14 @@ type Marker {
   lat: Float!
   lng: Float!
   status: Progress!
+}
+
+type Trip {
+  id: ID! @unique
+  user: User!
+  title: String!
+  startDate: String!
+  endDate: String!
+  description: String!
+  markers: Marker!
 }
