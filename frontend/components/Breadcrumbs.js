@@ -6,14 +6,54 @@
 import Link from 'next/link';
 import { Fragment } from 'react';
 import styled from 'styled-components';
+import { HomeIcon, GlobeIcon, SettingsIcon, BillingIcon } from './styles/SVGs';
 
 const BreadcrumbsWrapper = styled.nav`
   display: flex;
+  justify-content: space-evenly;
   color: ${props => props.theme.white};
-  & > *::after {
-    content: '/';
-    margin-left: 0.5rem;
+
+  /* background: black; */
+`;
+const Breadcrumb = styled.div`
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  margin: 0 5rem 0 0;
+  height: 100%;
+  &:last-child .circle-crumb {
+    background: ${props => props.theme.lightorange};
+    &::after {
+      content: '';
+      border: none;
+    }
   }
+`;
+const CircleWrapper = styled.div.attrs({
+  className: 'circle-crumb'
+})`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: ${props => props.length};
+  width: ${props => props.length};
+  background: ${props => props.theme.orange};
+  color: ${props => props.theme.white};
+  position: relative;
+  cursor: pointer;
+  &::after {
+    content: '';
+    position: absolute;
+    border-top: 6px solid ${props => props.theme.orange};
+    width: 5.5rem;
+    left: 100%;
+  }
+`;
+const BreadText = styled.div`
+  display: flex;
+  color: white;
+  margin: 0;
 `;
 const Breadcrumbs = props => {
   const { route } = props.router;
@@ -21,23 +61,68 @@ const Breadcrumbs = props => {
   const TRIPLIST = '/triplist';
   const BILLING = '/billing';
   const SETTINGS = '/settings';
+  const ICON_LENGTH = '70%';
   return (
     <BreadcrumbsWrapper>
-      <Link href={props.startCrumb}>Home</Link>
+      <Link href={props.startCrumb}>
+        <Breadcrumb>
+          <CircleWrapper length={'5rem'}>
+            <HomeIcon length={ICON_LENGTH} />
+          </CircleWrapper>
+          <BreadText>Home</BreadText>
+        </Breadcrumb>
+      </Link>
       {(() => {
         if (route.match(TRIPLIST)) {
-          return <Link href={TRIPLIST}>Trips</Link>;
+          return (
+            <Link href={TRIPLIST}>
+              <Breadcrumb>
+                <CircleWrapper length={'5rem'}>
+                  <GlobeIcon length={ICON_LENGTH} />
+                </CircleWrapper>
+                <BreadText>Trips</BreadText>
+              </Breadcrumb>
+            </Link>
+          );
         }
         if (route.match(BILLING)) {
-          return <Link href={BILLING}>Billing</Link>;
+          return (
+            <Link href={BILLING}>
+              <Breadcrumb>
+                <CircleWrapper length={'5rem'}>
+                  <BillingIcon length={ICON_LENGTH} />
+                </CircleWrapper>
+                <BreadText>Billing</BreadText>
+              </Breadcrumb>
+            </Link>
+          );
         }
         if (route.match(SETTINGS)) {
-          return <Link href={SETTINGS}>Settings</Link>;
+          return (
+            <Link href={SETTINGS}>
+              <Breadcrumb>
+                <CircleWrapper length={'5rem'}>
+                  <SettingsIcon length={ICON_LENGTH} />
+                </CircleWrapper>
+                <BreadText>Settings</BreadText>
+              </Breadcrumb>
+            </Link>
+          );
         }
       })()}
       {(() => {
         if (props.endCrumbLink && props.endCrumbName) {
-          return <Link href={props.endCrumbLink}>{props.endCrumbName}</Link>;
+          return (
+            <Link href={TRIPLIST}>
+              <Breadcrumb>
+                <CircleWrapper length={'5rem'}>
+                  <GlobeIcon length={ICON_LENGTH} />
+                </CircleWrapper>
+                <BreadText>{props.endCrumbName}</BreadText>
+              </Breadcrumb>
+            </Link>
+          );
+          return <Link href={props.endCrumbLink} />;
         }
       })()}
     </BreadcrumbsWrapper>

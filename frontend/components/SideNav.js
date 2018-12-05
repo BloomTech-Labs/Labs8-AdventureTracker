@@ -38,7 +38,6 @@ class SideNav extends Component {
     const SETTINGS = '/settings';
     const LENGTH = 40;
     const { route } = this.props.router;
-    console.log(this.props);
     return (
       <SidebarWrapper>
         <Link href={TRIPLIST}>
