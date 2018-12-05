@@ -27,7 +27,6 @@ type Order {
   charge: String!
 }
 
-<<<<<<< HEAD
 type Trip {
   id: ID! @unique
   user: User!
@@ -38,8 +37,6 @@ type Trip {
   markers: [Marker!]!
 }
 
-=======
->>>>>>> 28d34b646955b1025f2b6cece11943c5679d5c84
 enum Progress {
   NOT_STARTED
   COMPLETED
