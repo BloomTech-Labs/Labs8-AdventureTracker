@@ -48,6 +48,7 @@ const CheckedInGroup = styled.div`
 `;
 const CheckedIn = styled.h2`
   font-size: 1.4rem;
+  margin: 0.4em;
 `;
 
 const CheckInBox = styled(ReachedCheckBox)`
