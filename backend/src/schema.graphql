@@ -13,6 +13,7 @@ type Mutation {
     user: UserWhereUniqueInput!
     startDate: String!
     endDate: String!
+    archived: Boolean!
     description: String
   ): Trip!
   createMarker(title: String!, lat: Float!, lng: Float!, status: Progress!): Marker!
