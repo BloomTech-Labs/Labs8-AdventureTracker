@@ -122,6 +122,7 @@ const MyMapComponent = compose(
               id="reached-checkbox"
               type="checkbox"
               checked={props.activeMarker.status === 'COMPLETED' ? true : false}
+              value={props.checkedInTime}
             />
           </CheckboxGroup>
           <CheckedInGroup>
@@ -246,10 +247,19 @@ class Map extends React.PureComponent {
   changeMarkerStatus = () => {
     const newMarkers = [...this.state.markers];
     const { activeMarker } = this.state;
+    let markerIndex;
     for (let i = 0; i < newMarkers.length; i++) {
       if (activeMarker.id === newMarkers[i].id) {
-        newMarkers[i].status =
-          activeMarker.status === this.NOT_STARTED ? this.COMPLETED : this.NOT_STARTED;
+        if (activeMarker.status === this.NOT_STARTED) {
+          const date = new Date();
+          newMarkers[i].status = this.COMPLETED;
+          newMarkers[i].checkedInTime = `${date.getHours()}:${date.getMinutes()}`;
+        } else {
+          newMarkers[i].status = this.NOT_STARTED;
+          newMarkers[i].checkedInTime = '';
+        }
+        // console.log(newMarkers[i].checkedInTime);
+        markerIndex = i;
         break;
       }
       // Before it reaches to the marker that we set to complete,
@@ -257,11 +267,15 @@ class Map extends React.PureComponent {
       if (newMarkers[i].status !== this.COMPLETED) {
         return;
       }
-    }
-    this.setState({ markers: newMarkers }, () => {
-      this.updateLines();
-      this.checkBoxHandler();
-    });
+    } // for loop ends
+    console.log(this.state);
+    this.setState(
+      { markers: newMarkers, checkedInTime: newMarkers[markerIndex].checkedInTime },
+      () => {
+        this.updateLines();
+        this.checkBoxHandler();
+      }
+    );
   };
   //Calculates the label for the marker
   calculateLabel = letterIndex => {
@@ -298,6 +312,7 @@ class Map extends React.PureComponent {
       label: {
         color: 'white',
         fontWeight: 'bold',
+        backgroundColor: 'black',
         text: this.calculateLabel(markers.length)
       },
       // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
@@ -408,7 +423,7 @@ class Map extends React.PureComponent {
       if (i > 0) {
         lineOptions['path'] = line.slice();
         lines.push({ ...lineOptions, id: uuidv4() });
-        console.log(lines);
+        // console.log(lines);
         //We start at the end of the new polyline and store that vertex
         line = [{ lat: markerLat, lng: markerLng }];
       }
@@ -421,10 +436,7 @@ class Map extends React.PureComponent {
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
-      location: marker.position,
-      etaDate: marker.etaDate,
-      etaTime: marker.etaTime,
-      checkpointName: marker.checkpointName
+      ...marker
     });
   };
   shallowObjEquals = (obj1, obj2) => {
@@ -447,7 +459,7 @@ class Map extends React.PureComponent {
     this.setState({ markers: newMarkers }, () => this.updateLines());
   };
   saveMarkerInfo = () => {
-    const { activeMarker, markers, checkpointName, etaTime, etaDate } = this.state;
+    const { activeMarker, markers, checkpointName, etaTime, etaDate, checkedInTime } = this.state;
     let markerIndex;
     for (let i = 0; i < markers.length; i++) {
       if (activeMarker.id === markers[i].id) {
@@ -463,6 +475,7 @@ class Map extends React.PureComponent {
         text: checkpointName
       },
       checkpointName,
+      checkedInTime,
       etaTime,
       etaDate
     };
