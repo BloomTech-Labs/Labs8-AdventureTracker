@@ -11,5 +11,18 @@ const MainContainer = styled.div`
     background: pink;
   }
 `;
+const MainContainerTwo = styled.div`
+  /* display: flex; */
+  /* position: relative;  */ 
+  /* margin-top: ${props => props.theme.navbarHeight};
+  margin-left: ${props => props.theme.sidebarWidth};  */
+  height: 25rem;
+  margin-left: 70rem;
+  margin-top: 50rem;
+  @media ${device.tablet} {
+    margin: 0 0 0 auto;
+    background: pink;
+  }
+`;
 
-export { MainContainer };
+export { MainContainer, MainContainerTwo };
