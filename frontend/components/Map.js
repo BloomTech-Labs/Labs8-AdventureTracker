@@ -279,7 +279,7 @@ class Map extends React.PureComponent {
     const newMarkers = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
     // Update marker labels
     for (let i = 0; i < newMarkers.length; i++) {
-      newMarkers[i].label = this.calculateLabel(i);
+      newMarkers[i].label.text = this.calculateLabel(i);
     }
 
     if (activeMarker.status === this.COMPLETED) {
@@ -295,7 +295,11 @@ class Map extends React.PureComponent {
       position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
       id: uuidv4(),
       draggable: true,
-      label: this.calculateLabel(markers.length),
+      label: {
+        color: 'white',
+        fontWeight: 'bold',
+        text: this.calculateLabel(markers.length)
+      },
       // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
       status: this.NOT_STARTED,
       etaTime: '',
@@ -451,8 +455,13 @@ class Map extends React.PureComponent {
         break;
       }
     }
+
     const editedMarker = {
       ...markers[markerIndex],
+      label: {
+        ...markers[markerIndex].label,
+        text: checkpointName
+      },
       checkpointName,
       etaTime,
       etaDate
