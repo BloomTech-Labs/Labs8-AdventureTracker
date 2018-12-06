@@ -436,7 +436,8 @@ class Map extends React.PureComponent {
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
-      ...marker
+      ...marker,
+      location: marker.position
     });
   };
   shallowObjEquals = (obj1, obj2) => {
@@ -467,12 +468,12 @@ class Map extends React.PureComponent {
         break;
       }
     }
-
+    const newText = checkpointName !== '' ? checkpointName : this.calculateLabel(markerIndex);
     const editedMarker = {
       ...markers[markerIndex],
       label: {
         ...markers[markerIndex].label,
-        text: checkpointName
+        text: newText
       },
       checkpointName,
       checkedInTime,
