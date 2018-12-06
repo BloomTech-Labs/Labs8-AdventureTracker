@@ -29,7 +29,7 @@ class Trips extends Component {
             return (
               <TripsList>
                 <TripNote key="1" title="North Pole" start="12/24/18" end="12/25/18" />
-                {data.me.trip
+                {data.me !== null
                   ? data.me.trip.map(trip => (
                       <TripNote
                         key={trip.id}
