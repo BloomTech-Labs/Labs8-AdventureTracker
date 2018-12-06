@@ -42,7 +42,7 @@ const BoldWord = styled.strong`
 const BuyBtn = styled(PrimaryLinkBtn)`
   display: flex;
   align-self: center;
-  background: ${props => props.theme.red};
+  background: ${props => props.theme.orange};
   height: 12rem;
   width: 100%;
   text-transform: capitalize;
