@@ -147,7 +147,7 @@ class Signin extends Component {
               <FacebookBtn>
                 <FacebookProvider appId="2047335438690331">
                   <div
-                    class="fb-login-button"
+                    className="fb-login-button"
                     data-max-rows="1"
                     data-size="large"
                     data-button-type="continue_with"

@@ -25,6 +25,11 @@ const NavbarWrapper = styled(NavbarContainer)`
     display: none;
   }
 `;
+const ArchiveBtn = styled(PrimaryBtn)`
+  color: ${props => props.theme.black};
+  background: ${props => props.theme.lightorange};
+`;
+const CreateTripBtn = styled(ArchiveBtn)``;
 const Logout = styled(PrimaryBtn)``;
 
 const LOGOUT_MUTATION = gql`
@@ -54,6 +59,8 @@ class CommonTopNavbar extends Component {
                     return (
                       <NavbarWrapper>
                         <Breadcrumbs startCrumb={'/'} router={this.props.router} />
+                        <CreateTripBtn>Create Trip</CreateTripBtn>
+                        <ArchiveBtn>Go to archived trips</ArchiveBtn>
                         <Logout
                           onClick={async e => {
                             e.preventDefault();

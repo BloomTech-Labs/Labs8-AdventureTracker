@@ -49,7 +49,7 @@ const TripNote = ({ title, start, end }) => {
   return (
     <NoteWrapper length={'30rem'}>
       <AdventureTitle>{title}</AdventureTitle>
-      <MapImage src="http://placekitten.com/400/300" />
+      <MapImage src="../static/hiking-girl.jpg" />
       <BadgeGroup>
         <BadgeText>Start:</BadgeText>
         <DateBadge background={'green'}>{start}</DateBadge>

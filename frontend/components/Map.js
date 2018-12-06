@@ -15,23 +15,58 @@ import styled from 'styled-components';
 import uuidv4 from 'uuid/v4';
 import { MapBar, CalendarInput } from './MapBar';
 const Label = styled.label``;
-const ReachedCheckBox = styled.input``;
+const ReachedCheckBox = styled.input`
+  margin-left: 0.4em;
+`;
+const CheckboxGroup = styled.div`
+  display: flex;
+  margin: 0.4em 0;
+`;
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 const DeleteBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
 `;
-const MarkerNameLabel = styled.label``;
+const SaveBtn = styled.button`
+  font-size: 1rem;
+  padding: 0.5em 0.5em;
+`;
+const MarkerNameLabel = styled.label`
+  margin-bottom: 0.4em;
+`;
 const MarkerNameBox = styled.input`
   height: 3rem;
   width: 100%;
+  margin-bottom: 0.6em;
 `;
+const MarkerNameGroup = styled.div``;
 const InfoWrapper = styled.div`
   display: flex;
   flex-flow: column;
 `;
 
-const ETA = styled.h2``;
-const CheckedIn = styled.h2``;
+const CheckedInGroup = styled.div`
+  display: flex;
+  flex-flow: column;
+  align-items: flex-start;
+  width: 100%;
+`;
+const CheckedIn = styled.h2`
+  font-size: 1.4rem;
+  margin: 0.4em;
+`;
+
+const CheckInBox = styled(ReachedCheckBox)`
+  width: 60%;
+`;
+const ETAGroup = styled(CheckedInGroup)`
+  margin-bottom: 2em;
+`;
+const ETA = styled(CheckedIn)``;
+
 const MyMapComponent = compose(
   withProps({
     // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
@@ -49,7 +84,7 @@ const MyMapComponent = compose(
   <GoogleMap
     onClick={props.onMapClicked}
     defaultZoom={8}
-    defaultCenter={{ lat: -34.397, lng: 150.644 }}
+    center={props.location}
     // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
   >
     <MapBar
@@ -61,29 +96,63 @@ const MyMapComponent = compose(
       inputHandler={props.inputHandler}
     />
     {props.showingInfoWindow && (
-      <InfoWindow position={props.activeMarker.position} onCloseClick={props.toggleInfoWindow}>
+      <InfoWindow
+        position={props.activeMarker.position}
+        onCloseClick={() => {
+          props.toggleInfoWindow();
+          props.clearActiveMarker();
+          props.clearMarkerInfo();
+        }}
+      >
         <InfoWrapper>
-          <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
-          <ReachedCheckBox
-            onChange={props.changeMarkerStatus}
-            id="reached-checkbox"
-            type="checkbox"
-            checked={props.activeMarker.status === 'COMPLETED' ? true : false}
-          />
-          <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
-          <MarkerNameBox id="location" type="text" />
-          <CheckedIn>Checked-in: </CheckedIn>
-          <ETA>ETA: </ETA>
-          <CalendarInput
-            type="date"
-            onKeyDown={e => {
-              e.preventDefault();
-            }}
-          />
-          <input type="time" value="12:00" />
-          <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
-            Delete Marker?
-          </DeleteBtn>
+          <MarkerNameGroup>
+            <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
+            <MarkerNameBox
+              name="checkpointName"
+              onChange={props.inputHandler}
+              value={props.checkpointName}
+              id="location"
+              type="text"
+            />
+          </MarkerNameGroup>
+          <CheckboxGroup>
+            <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
+            <ReachedCheckBox
+              onChange={props.changeMarkerStatus}
+              id="reached-checkbox"
+              type="checkbox"
+              checked={props.activeMarker.status === 'COMPLETED' ? true : false}
+            />
+          </CheckboxGroup>
+          <CheckedInGroup>
+            <CheckedIn>Checked-in: </CheckedIn>
+            <CheckInBox value={props.checkedInTime} name="checkedInTime" type="time" disabled />
+          </CheckedInGroup>
+          <ETAGroup>
+            <ETA>ETA: </ETA>
+            <CalendarInput
+              type="date"
+              name="etaDate"
+              onChange={props.inputHandler}
+              value={props.etaDate}
+              onKeyDown={e => {
+                e.preventDefault();
+              }}
+            />
+            <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} />
+          </ETAGroup>
+          <ButtonGroup>
+            <SaveBtn
+              onClick={() => {
+                props.saveMarkerInfo();
+              }}
+            >
+              Save Marker Info
+            </SaveBtn>
+            <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
+              Delete Marker?
+            </DeleteBtn>
+          </ButtonGroup>
         </InfoWrapper>
       </InfoWindow>
     )}
@@ -99,6 +168,7 @@ const MyMapComponent = compose(
           onClick={e => props.onMarkerClicked(e, mark)}
           key={mark.id}
           draggable={true}
+          onDragStart={props.onMarkerDragStart}
           label={mark.label}
           onDrag={e => props.onMarkerDragged(e, i)}
         />
@@ -130,10 +200,15 @@ class Map extends React.PureComponent {
       startDate: '',
       endDate: '',
       showingInfoWindow: false,
+      // Storing location state for centering the map based on the marker
+      location: { lat: 38.9260256843898, lng: -104.755169921875 },
       activeMarker: {},
       selectedPlace: {},
       markers: [],
-      markerName: '',
+      checkpointName: '',
+      etaTime: '',
+      etaDate: '',
+      checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0
     };
@@ -143,6 +218,9 @@ class Map extends React.PureComponent {
     this.labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
   }
 
+  clearActiveMarker = () => {
+    this.setState({ activeMarker: {} });
+  };
   //   componentDidMount() {
   //     this.delayedShowMarker();
   //   }
@@ -201,7 +279,7 @@ class Map extends React.PureComponent {
     const newMarkers = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
     // Update marker labels
     for (let i = 0; i < newMarkers.length; i++) {
-      newMarkers[i].label = this.calculateLabel(i);
+      newMarkers[i].label.text = this.calculateLabel(i);
     }
 
     if (activeMarker.status === this.COMPLETED) {
@@ -217,14 +295,30 @@ class Map extends React.PureComponent {
       position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
       id: uuidv4(),
       draggable: true,
-      label: this.calculateLabel(markers.length),
+      label: {
+        color: 'white',
+        fontWeight: 'bold',
+        text: this.calculateLabel(markers.length)
+      },
       // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
       status: this.NOT_STARTED,
-      estTime: '',
-      estDate: '',
+      etaTime: '',
+      etaDate: '',
       checkpointName: '',
-      checkedIn: ''
+      checkedInTime: ''
     };
+    //What a marker looks like
+    // {position: {…}, id: "27ab66d8-8ec3-46d8-9637-35ef52eebeab", draggable: true, label: "A", status: "NOT_STARTED", …}
+    //   checkedIn: ""
+    //   checkpointName: ""
+    //   draggable: true
+    //   etaDate: "2018-12-06"
+    //   etaTime: "02:32"
+    //   id: "27ab66d8-8ec3-46d8-9637-35ef52eebeab"
+    //   label: "A"
+    //   checkpointName: "abcdef"
+    //   position: {lat: 39.1819690168072, lng: -105.23444848632812}
+    //   status: "NOT_STARTED"}
     const newMarkers = [...this.state.markers, marker];
     this.setState({ markers: newMarkers }, this.updateLines);
   };
@@ -237,8 +331,11 @@ class Map extends React.PureComponent {
     this.createMarker(e);
   };
   toggleInfoWindow = () => {
-    this.setState(prevState => ({ showingInfoWindow: !prevState.showingInfoWindow }));
+    this.setState(prevState => ({
+      showingInfoWindow: !prevState.showingInfoWindow
+    }));
   };
+
   updateLines = () => {
     // thin grey is not reached yet and the person has not started that path
     const greyLine = {
@@ -319,8 +416,16 @@ class Map extends React.PureComponent {
     this.setState({ polylines: lines });
   };
   onMarkerClicked = (e, marker) => {
-    // console.log(marker, this.state.showingInfoWindow);
-    this.setState({ activeMarker: marker, showingInfoWindow: true });
+    this.clearMarkerInfo();
+    console.log(marker);
+    this.setState({
+      activeMarker: marker,
+      showingInfoWindow: true,
+      location: marker.position,
+      etaDate: marker.etaDate,
+      etaTime: marker.etaTime,
+      checkpointName: marker.checkpointName
+    });
   };
   shallowObjEquals = (obj1, obj2) => {
     //helper function, not used for making the app work
@@ -328,15 +433,51 @@ class Map extends React.PureComponent {
       return obj1[key] === obj2[key];
     });
   };
-
+  onMarkerDragStart = () => {
+    this.setState({ activeMarker: {} });
+  };
   onMarkerDragged = (e, activeIndex) => {
     //activeIndex comes from the dragged <Marker> component
+    console.log(this.state.activeMarker);
     const newMarkers = [...this.state.markers];
     const i = activeIndex;
     let newPosition = { lat: e.latLng.lat(), lng: e.latLng.lng() };
     newMarkers[i].position = { ...newPosition };
 
     this.setState({ markers: newMarkers }, () => this.updateLines());
+  };
+  saveMarkerInfo = () => {
+    const { activeMarker, markers, checkpointName, etaTime, etaDate } = this.state;
+    let markerIndex;
+    for (let i = 0; i < markers.length; i++) {
+      if (activeMarker.id === markers[i].id) {
+        markerIndex = i;
+        break;
+      }
+    }
+
+    const editedMarker = {
+      ...markers[markerIndex],
+      label: {
+        ...markers[markerIndex].label,
+        text: checkpointName
+      },
+      checkpointName,
+      etaTime,
+      etaDate
+    };
+
+    this.setState({
+      markers: [...markers.slice(0, markerIndex), editedMarker, ...markers.slice(markerIndex + 1)],
+      showingInfoWindow: false
+    });
+  };
+  clearMarkerInfo = () => {
+    this.setState({
+      checkpointName: '',
+      etaTime: '',
+      etaDate: ''
+    });
   };
   render() {
     const {
@@ -347,11 +488,17 @@ class Map extends React.PureComponent {
       completedCheckboxes,
       tripTitle,
       startDate,
-      endDate
+      endDate,
+      location,
+      etaDate,
+      etaTime,
+      checkpointName,
+      checkedInTime
     } = this.state;
     return (
       <MyMapComponent
         //state object props
+        location={location}
         markers={markers}
         polylines={polylines}
         showingInfoWindow={showingInfoWindow}
@@ -360,10 +507,19 @@ class Map extends React.PureComponent {
         tripTitle={tripTitle}
         startDate={startDate}
         endDate={endDate}
+        etaTime={etaTime}
+        etaDate={etaDate}
+        checkedInTime={checkedInTime}
+        checkpointName={checkpointName}
         //methods
+        clearMarkerInfo={this.clearMarkerInfo}
+        clearActiveMarker={this.clearActiveMarker}
+        saveMarkerInfo={this.saveMarkerInfo}
+        activeMarker={this.activeMarker}
         inputHandler={this.inputHandler}
         onMapClicked={this.onMapClicked}
         activeMarker={activeMarker}
+        onMarkerDragStart={this.onMarkerDragStart}
         onMarkerClicked={this.onMarkerClicked}
         onMarkerDragged={this.onMarkerDragged}
         deleteMarker={this.deleteMarker}

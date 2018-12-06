@@ -4,8 +4,8 @@ const PrimaryBtn = styled.button`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${props => (props.height ? props.height : '6rem')};
-  width: ${props => (props.width ? props.width : '18rem')};
+
+  padding: 0.5em 1em;
   border: none;
   border-radius: 10px;
   color: ${props => props.theme.white};
