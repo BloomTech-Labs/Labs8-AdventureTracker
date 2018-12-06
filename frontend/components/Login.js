@@ -4,6 +4,7 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fab, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
 import { FacebookProvider, LoginButton } from 'react-facebook';
+import { FacebookIcon } from './styles/SVGs';
 import gql from 'graphql-tag';
 import Error from './ErrorMessage';
 import Router from 'next/router';
@@ -161,8 +162,8 @@ class Signin extends Component {
                       onCompleted={this.handleResponse}
                       onError={this.handleError}
                     >
-                      <FontAwesomeIcon icon={faFacebookSquare} />
-                      Facebook Login
+                      <FacebookIcon length={40} />
+                      &nbsp; Facebook Login
                     </Facebook>
                   </div>
                 </FacebookProvider>
