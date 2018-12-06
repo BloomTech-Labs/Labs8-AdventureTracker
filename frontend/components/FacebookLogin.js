@@ -63,7 +63,7 @@ class FacebookLogin extends React.Component {
                 }}
               >
                 <FacebookIcon length={40} />
-                &nbsp; Account verified by Facebook, click to login
+                &nbsp; Account verified by Facebook, click to continue
               </Login>
               <Error error={error} />
             </NavbarWrapper>
