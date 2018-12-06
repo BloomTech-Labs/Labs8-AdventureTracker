@@ -21,7 +21,8 @@ class Trips extends Component {
     return (
       <Center>
         {/* added refetchQueries to see if shows new trip when pushed to /triplist */}
-        <Query query={CURRENT_USER_QUERY} refetchQueries={[{ query: CURRENT_USER_QUERY }]}>
+        {/* <Query query={CURRENT_USER_QUERY} refetchQueries={[{ query: CURRENT_USER_QUERY }]}> */}
+        <Query query={CURRENT_USER_QUERY}>
           {({ data, error, loading }) => {
             if (loading) return <p>Loading...</p>;
             if (error) return <p>Error: {error.message}</p>;
