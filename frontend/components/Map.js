@@ -468,12 +468,12 @@ class Map extends React.PureComponent {
         break;
       }
     }
-
+    const newText = checkpointName !== '' ? checkpointName : this.calculateLabel(markerIndex);
     const editedMarker = {
       ...markers[markerIndex],
       label: {
         ...markers[markerIndex].label,
-        text: checkpointName
+        text: newText
       },
       checkpointName,
       checkedInTime,
