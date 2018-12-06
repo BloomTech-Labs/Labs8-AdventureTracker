@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import { Mutation } from 'react-apollo';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { fab, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
 import { FacebookProvider, LoginButton } from 'react-facebook';
 import gql from 'graphql-tag';
 import Error from './ErrorMessage';
@@ -18,6 +21,24 @@ import { FacebookBtn } from './styles/LinkBtnStyles';
 import { PrimaryLinkBtn } from './styles/PrimaryLinkBtn';
 import styled from 'styled-components';
 import { CURRENT_USER_QUERY } from './User';
+
+library.add(faFacebookSquare);
+
+const Facebook = styled(LoginButton)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: ${props => (props.height ? props.height : '6rem')};
+  width: ${props => (props.width ? props.width : '18rem')};
+  border: none;
+  border-radius: 10px;
+  color: ${props => props.theme.white};
+  background: ${props => props.theme.orange};
+  cursor: pointer;
+  font-size: 3rem;
+  width: 100%;
+  background-color: ${props => props.theme.blue};
+`;
 
 const LoginBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
@@ -41,6 +62,18 @@ class Signin extends Component {
     password: '',
     email: ''
   };
+
+  componentDidMount() {
+    (function(d, s, id) {
+      var js,
+        fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) return;
+      js = d.createElement(s);
+      js.id = id;
+      js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v3.2';
+      fjs.parentNode.insertBefore(js, fjs);
+    })(document, 'script', 'facebook-jssdk');
+  }
 
   handleResponse = data => {
     console.log(data.profile);
@@ -113,13 +146,25 @@ class Signin extends Component {
               <LoginBtn type="submit">Login</LoginBtn>
               <FacebookBtn>
                 <FacebookProvider appId="2047335438690331">
-                  <LoginButton
-                    scope="email"
-                    onCompleted={this.handleResponse}
-                    onError={this.handleError}
+                  <div
+                    class="fb-login-button"
+                    data-max-rows="1"
+                    data-size="large"
+                    data-button-type="continue_with"
+                    data-show-faces="false"
+                    data-auto-logout-link="true"
+                    data-use-continue-as="false"
                   >
-                    Login via Facebook
-                  </LoginButton>
+                    <div id="fb-root" />
+                    <Facebook
+                      scope="email"
+                      onCompleted={this.handleResponse}
+                      onError={this.handleError}
+                    >
+                      <FontAwesomeIcon icon={faFacebookSquare} />
+                      Facebook Login
+                    </Facebook>
+                  </div>
                 </FacebookProvider>
               </FacebookBtn>
               <SignupInsteadBtn href="/sign-up">Sign-Up instead?</SignupInsteadBtn>
