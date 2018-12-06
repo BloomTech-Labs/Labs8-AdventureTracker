@@ -13,6 +13,9 @@
     "alias": "adventuretracker.now.sh"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.8",
+    "@fortawesome/free-brands-svg-icons": "^5.5.0",
+    "@fortawesome/react-fontawesome": "^0.1.3",
     "@google/maps": "^0.5.5",
     "apollo-link-error": "^1.1.2",
     "babel-preset-env": "^1.7.0",
