@@ -7,7 +7,7 @@ import Error from './ErrorMessage';
 import User, { CURRENT_USER_QUERY } from './User';
 import { Form, FormTitle } from './styles/FormStyles';
 import styled from 'styled-components';
-import { MainContainer } from './styles/MainContainer';
+import { MainContainerTwo } from './styles/MainContainer';
 const BillingForm = styled(Form)`
   max-width: 56rem;
   height: 30rem;
@@ -55,9 +55,8 @@ class Payment extends Component {
             refetchQueries={[{ query: CURRENT_USER_QUERY }]}
           >
             {createOrder => (
-              <MainContainer>
-                <BillingForm>
-                  <BillingTitle>Pay With Card</BillingTitle>
+              <MainContainerTwo>
+                
                   <StripeCheckout
                     stripeKey="pk_test_gdkcAGf0cgA2G1afawEyNJeg"
                     currrency="USD"
@@ -68,8 +67,8 @@ class Payment extends Component {
                   >
                     {this.props.children}
                   </StripeCheckout>
-                </BillingForm>
-              </MainContainer>
+                
+              </MainContainerTwo>
             )}
           </Mutation>
         )}
