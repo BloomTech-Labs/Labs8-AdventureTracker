@@ -172,6 +172,7 @@ const MyMapComponent = compose(
           onDragStart={props.onMarkerDragStart}
           label={mark.label}
           onDrag={e => props.onMarkerDragged(e, i)}
+          icon={mark.icon}
         />
       );
     })}
@@ -217,20 +218,92 @@ class Map extends React.PureComponent {
     this.IN_PROGRESS = 'IN_PROGRESS';
     this.COMPLETED = 'COMPLETED';
     this.labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    this.GREEN = 'green';
+    this.RED = 'red';
+    this.GREY = 'grey';
+    this.YELLOW = 'yellow';
   }
 
   clearActiveMarker = () => {
     this.setState({ activeMarker: {} });
   };
-  //   componentDidMount() {
-  //     this.delayedShowMarker();
-  //   }
+  componentDidMount() {
+    const minute = 1000 * 60;
+    setInterval(() => {
+      const { markers } = this.state;
+      if (markers.length > 0) {
+        this.setMarkerColorsByDate();
+      }
+    }, minute);
+  }
+  componentWillUnmount() {
+    clearInterval();
+  }
+  calculateDate = (plusDay = 0, plusMonth = 0, plusYear = 0) => {
+    const date = new Date();
+    return `${date.getFullYear() + plusYear}-${date.getMonth() + plusMonth}-${date.getDay() +
+      plusDay}`;
+  };
+  calculateTime = (plusMinute = 0, plusHour = 0) => {
+    const date = new Date();
+    return `${date.getHours() + plusHour}:${date.getMinutes() + plusMinute}`;
+  };
+  setMarkerColorsByDate = () => {
+    const { markers } = this.state;
 
-  //   delayedShowMarker = () => {
-  //     setTimeout(() => {
-  //       this.setState({ isMarkerShown: true });
-  //     }, 3000);
-  //   };
+    const newMarkers = [...markers];
+    const date = new Date();
+    const year = date.getFullYear();
+    // added 1 because month range is from 0 to 11
+    const month = date.getMonth() + 1;
+    const day = date.getDay();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    // Example marker properties
+    //   etaDate: "2018-12-06"
+    //   etaTime: "02:32"
+    for (let i = 0; i < newMarkers.length; i++) {
+      let marker = newMarkers[i];
+      if (marker.etaDate === '' || marker.etaTime === '') {
+        break;
+      }
+      // If the marker status is completed, don't need to change it to red or yellow to signify tardiness
+      if (marker.status === this.COMPLETED) {
+        break;
+      }
+      let etaYear = marker.etaDate.match(/(\d{4})-/)[1];
+      let etaMonth = marker.etaDate.match(/-(\d{2})-/)[1];
+      let etaDay = marker.etaDate.match(/(-\d{2})/)[1];
+      let etaHour = marker.etaTime.match(/(\d{2}):/)[1];
+      let etaMinute = marker.etaTime.match(/:(\d{2})/)[1];
+      // // turns red because the person did not check in and they are an hour late
+      if (year >= etaYear && month >= etaMonth && day >= etaDay && hour > etaHour) {
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.RED
+        };
+        break;
+      }
+
+      // turns yellow because the person did not check in and they are a minute late
+      if (
+        year >= etaYear &&
+        month >= etaMonth &&
+        day >= etaDay &&
+        hour >= etaHour &&
+        minute > etaMinute
+      ) {
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.YELLOW,
+          color: 'black'
+        };
+        break;
+      }
+    }
+
+    this.setState({ markers: newMarkers });
+  };
   convertLabelToIndex = markerLabel => {};
 
   inputHandler = e => {
@@ -251,12 +324,20 @@ class Map extends React.PureComponent {
     for (let i = 0; i < newMarkers.length; i++) {
       if (activeMarker.id === newMarkers[i].id) {
         if (activeMarker.status === this.NOT_STARTED) {
-          const date = new Date();
           newMarkers[i].status = this.COMPLETED;
-          newMarkers[i].checkedInTime = `${date.getHours()}:${date.getMinutes()}`;
+          newMarkers[i].checkedInTime = this.calculateTime();
+          console.log(newMarkers[i].icon);
+          newMarkers[i].icon = {
+            ...newMarkers[i].icon,
+            fillColor: this.GREEN
+          };
         } else {
           newMarkers[i].status = this.NOT_STARTED;
           newMarkers[i].checkedInTime = '';
+          newMarkers[i].icon = {
+            ...newMarkers[i].icon,
+            fillColor: this.GREY
+          };
         }
         // console.log(newMarkers[i].checkedInTime);
         markerIndex = i;
@@ -304,10 +385,18 @@ class Map extends React.PureComponent {
   };
   createMarker = e => {
     const { markers } = this.state;
-
+    const icon = {
+      path: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0',
+      fillColor: this.GREY,
+      fillOpacity: 0.9,
+      anchor: new google.maps.Point(0, 0),
+      strokeWeight: 0,
+      scale: 1
+    };
     const marker = {
       position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
       id: uuidv4(),
+      icon: icon,
       draggable: true,
       label: {
         color: 'white',
