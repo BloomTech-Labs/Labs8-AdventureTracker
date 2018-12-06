@@ -28,14 +28,17 @@ class Trips extends Component {
             if (error) return <p>Error: {error.message}</p>;
             return (
               <TripsList>
-                {data.me.trip.map(trip => (
-                  <TripNote
-                    key={trip.id}
-                    title={trip.title}
-                    start={trip.startDate}
-                    end={trip.endDate}
-                  />
-                ))}
+                <TripNote key="1" title="North Pole" start="12/24/18" end="12/25/18" />
+                {data.me.trip.length
+                  ? data.me.trip.map(trip => (
+                      <TripNote
+                        key={trip.id}
+                        title={trip.title}
+                        start={trip.startDate}
+                        end={trip.endDate}
+                      />
+                    ))
+                  : null}
               </TripsList>
             );
           }}
