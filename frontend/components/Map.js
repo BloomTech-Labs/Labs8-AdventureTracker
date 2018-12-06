@@ -269,7 +269,7 @@ class Map extends React.PureComponent {
       }
       // If the marker status is completed, don't need to change it to red or yellow to signify tardiness
       if (marker.status === this.COMPLETED) {
-        break;
+        continue;
       }
       let etaYear = marker.etaDate.match(/(\d{4})-/)[1];
       let etaMonth = marker.etaDate.match(/-(\d{2})-/)[1];
