@@ -98,7 +98,12 @@ const MyMapComponent = compose(
         <InfoWrapper>
           <MarkerNameGroup>
             <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
-            <MarkerNameBox id="location" type="text" />
+            <MarkerNameBox
+              name="markerName"
+              onChange={props.inputHandler}
+              id="location"
+              type="text"
+            />
           </MarkerNameGroup>
           <CheckboxGroup>
             <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
@@ -117,11 +122,14 @@ const MyMapComponent = compose(
             <ETA>ETA: </ETA>
             <CalendarInput
               type="date"
+              name="etaDate"
+              onChange={props.inputHandler}
+              value={props.etaDate}
               onKeyDown={e => {
                 e.preventDefault();
               }}
             />
-            <input type="time" value="12:00" />
+            <input type="time" name="etaTime" onChange={props.inputHandler} value={props.etaTime} />
           </ETAGroup>
           <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
             Delete Marker?
@@ -173,11 +181,14 @@ class Map extends React.PureComponent {
       startDate: '',
       endDate: '',
       showingInfoWindow: false,
+      // Storing location state for centering the map based on the marker
       location: { lat: 38.9260256843898, lng: -104.755169921875 },
       activeMarker: {},
       selectedPlace: {},
       markers: [],
       markerName: '',
+      etaTime: '',
+      etaDate: '',
       polylines: [],
       completedCheckboxes: 0
     };
@@ -267,8 +278,8 @@ class Map extends React.PureComponent {
       label: this.calculateLabel(markers.length),
       // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
       status: this.NOT_STARTED,
-      estTime: '',
-      estDate: '',
+      etaTime: '',
+      etaDate: '',
       checkpointName: '',
       checkedIn: ''
     };
@@ -399,7 +410,10 @@ class Map extends React.PureComponent {
       tripTitle,
       startDate,
       endDate,
-      location
+      location,
+      estTime,
+      estDate,
+      markerName
     } = this.state;
     return (
       <MyMapComponent
@@ -413,6 +427,9 @@ class Map extends React.PureComponent {
         tripTitle={tripTitle}
         startDate={startDate}
         endDate={endDate}
+        estTime={estTime}
+        estDate={estDate}
+        markerName={markerName}
         //methods
         clearActiveMarker={this.clearActiveMarker}
         activeMarker={this.activeMarker}
