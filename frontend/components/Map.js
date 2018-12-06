@@ -355,6 +355,7 @@ class Map extends React.PureComponent {
       () => {
         this.updateLines();
         this.checkBoxHandler();
+        this.setMarkerColorsByDate();
       }
     );
   };
@@ -570,10 +571,19 @@ class Map extends React.PureComponent {
       etaDate
     };
 
-    this.setState({
-      markers: [...markers.slice(0, markerIndex), editedMarker, ...markers.slice(markerIndex + 1)],
-      showingInfoWindow: false
-    });
+    this.setState(
+      {
+        markers: [
+          ...markers.slice(0, markerIndex),
+          editedMarker,
+          ...markers.slice(markerIndex + 1)
+        ],
+        showingInfoWindow: false
+      },
+      () => {
+        this.setMarkerColorsByDate();
+      }
+    );
   };
   clearMarkerInfo = () => {
     this.setState({
