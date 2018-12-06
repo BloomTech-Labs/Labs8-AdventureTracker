@@ -6,10 +6,26 @@ const CURRENT_USER_QUERY = gql`
   query {
     me {
       id
-      email
       name
+      email
+      password
       facebookUser
+      facebookID
       permissions
+      trip {
+        id
+        title
+        description
+        startDate
+        endDate
+        markers {
+          id
+          title
+          lat
+          lng
+          status
+        }
+      }
     }
   }
 `;
