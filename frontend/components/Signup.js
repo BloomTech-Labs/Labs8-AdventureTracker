@@ -4,6 +4,7 @@ import { Mutation } from 'react-apollo';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fab, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
+import { FacebookIcon } from './styles/SVGs';
 import gql from 'graphql-tag';
 import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
@@ -41,7 +42,7 @@ const NextBtn = styled(PrimaryBtn)`
 const LoginInsteadBtn = styled(PrimaryLinkBtn)`
   width: 100%;
 `;
-const SignUpBtn = styled(FacebookBtn)`
+const SignUpBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
 `;
 
@@ -262,8 +263,8 @@ class Signup extends Component {
                     onCompleted={this.handleResponse}
                     onError={this.handleError}
                   >
-                    <FontAwesomeIcon icon={faFacebookSquare} />
-                    Signup with Facebook
+                    <FacebookIcon length={40} />
+                    &nbsp; Signup with Facebook
                   </Facebook>
                 </FacebookProvider>
                 <LoginInsteadBtn href="/login">Login instead?</LoginInsteadBtn>
