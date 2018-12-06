@@ -1,6 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { FacebookProvider, LoginButton } from 'react-facebook';
 import { Mutation } from 'react-apollo';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { fab, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
 import gql from 'graphql-tag';
 import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
@@ -18,6 +21,9 @@ import { PrimaryBtn } from './styles/ButtonStyles';
 import { FacebookBtn } from './styles/LinkBtnStyles';
 import { PrimaryLinkBtn } from './styles/PrimaryLinkBtn';
 import Error from './ErrorMessage';
+
+library.add(faFacebookSquare);
+
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: space-between;
@@ -35,9 +41,26 @@ const NextBtn = styled(PrimaryBtn)`
 const LoginInsteadBtn = styled(PrimaryLinkBtn)`
   width: 100%;
 `;
-const SignUpBtn = styled(PrimaryBtn)`
+const SignUpBtn = styled(FacebookBtn)`
   margin: 0 0 3rem auto;
 `;
+
+const Facebook = styled(LoginButton)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: ${props => (props.height ? props.height : '6rem')};
+  width: ${props => (props.width ? props.width : '18rem')};
+  border: none;
+  border-radius: 10px;
+  color: ${props => props.theme.white};
+  background: ${props => props.theme.orange};
+  cursor: pointer;
+  font-size: 3rem;
+  width: 100%;
+  background-color: ${props => props.theme.blue};
+`;
+
 const PasswordErrorGroup = styled.div`
   display: flex;
   justify-content: space-between;
@@ -233,17 +256,16 @@ class Signup extends Component {
                       );
                   }
                 })()}
-                <FacebookBtn>
-                  <FacebookProvider appId="2047335438690331">
-                    <LoginButton
-                      scope="email"
-                      onCompleted={this.handleResponse}
-                      onError={this.handleError}
-                    >
-                      Signup via Facebook
-                    </LoginButton>
-                  </FacebookProvider>
-                </FacebookBtn>
+                <FacebookProvider appId="2047335438690331">
+                  <Facebook
+                    scope="email"
+                    onCompleted={this.handleResponse}
+                    onError={this.handleError}
+                  >
+                    <FontAwesomeIcon icon={faFacebookSquare} />
+                    Signup with Facebook
+                  </Facebook>
+                </FacebookProvider>
                 <LoginInsteadBtn href="/login">Login instead?</LoginInsteadBtn>
               </FormFieldset>
             </Form>
