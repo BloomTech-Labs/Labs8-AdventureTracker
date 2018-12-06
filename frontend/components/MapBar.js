@@ -6,7 +6,7 @@ const ProgressWrapper = styled.div`
   display: flex;
   position: relative;
   height: 3rem;
-  width: 40%;
+  width: 30%;
   background: ${props => props.theme.white};
 `;
 const ProgressBar = styled.div`
@@ -29,7 +29,7 @@ const MapBarWrapper = styled.div`
   position: absolute;
   top: 0;
   width: 100%;
-  height: 10rem;
+  height: 9rem;
   background: ${props => props.theme.blue};
   color: ${props => props.theme.white};
 `;

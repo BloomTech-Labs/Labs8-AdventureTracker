@@ -22,7 +22,15 @@ const CheckboxGroup = styled.div`
   display: flex;
   margin: 0.4em 0;
 `;
+const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 const DeleteBtn = styled.button`
+  font-size: 1rem;
+  padding: 0.5em 0.5em;
+`;
+const SaveBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
 `;
@@ -55,7 +63,7 @@ const CheckInBox = styled(ReachedCheckBox)`
   width: 60%;
 `;
 const ETAGroup = styled(CheckedInGroup)`
-  margin-bottom: 0.8em;
+  margin-bottom: 2em;
 `;
 const ETA = styled(CheckedIn)``;
 
@@ -93,14 +101,16 @@ const MyMapComponent = compose(
         onCloseClick={() => {
           props.toggleInfoWindow();
           props.clearActiveMarker();
+          props.clearMarkerInfo();
         }}
       >
         <InfoWrapper>
           <MarkerNameGroup>
             <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
             <MarkerNameBox
-              name="markerName"
+              name="checkpointName"
               onChange={props.inputHandler}
+              value={props.checkpointName}
               id="location"
               type="text"
             />
@@ -116,7 +126,7 @@ const MyMapComponent = compose(
           </CheckboxGroup>
           <CheckedInGroup>
             <CheckedIn>Checked-in: </CheckedIn>
-            <CheckInBox type="time" disabled />
+            <CheckInBox value={props.checkedInTime} name="checkedInTime" type="time" disabled />
           </CheckedInGroup>
           <ETAGroup>
             <ETA>ETA: </ETA>
@@ -129,11 +139,20 @@ const MyMapComponent = compose(
                 e.preventDefault();
               }}
             />
-            <input type="time" name="etaTime" onChange={props.inputHandler} value={props.etaTime} />
+            <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} />
           </ETAGroup>
-          <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
-            Delete Marker?
-          </DeleteBtn>
+          <ButtonGroup>
+            <SaveBtn
+              onClick={() => {
+                props.saveMarkerInfo();
+              }}
+            >
+              Save Marker Info
+            </SaveBtn>
+            <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
+              Delete Marker?
+            </DeleteBtn>
+          </ButtonGroup>
         </InfoWrapper>
       </InfoWindow>
     )}
@@ -186,9 +205,10 @@ class Map extends React.PureComponent {
       activeMarker: {},
       selectedPlace: {},
       markers: [],
-      markerName: '',
+      checkpointName: '',
       etaTime: '',
       etaDate: '',
+      checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0
     };
@@ -281,8 +301,20 @@ class Map extends React.PureComponent {
       etaTime: '',
       etaDate: '',
       checkpointName: '',
-      checkedIn: ''
+      checkedInTime: ''
     };
+    //What a marker looks like
+    // {position: {…}, id: "27ab66d8-8ec3-46d8-9637-35ef52eebeab", draggable: true, label: "A", status: "NOT_STARTED", …}
+    //   checkedIn: ""
+    //   checkpointName: ""
+    //   draggable: true
+    //   etaDate: "2018-12-06"
+    //   etaTime: "02:32"
+    //   id: "27ab66d8-8ec3-46d8-9637-35ef52eebeab"
+    //   label: "A"
+    //   checkpointName: "abcdef"
+    //   position: {lat: 39.1819690168072, lng: -105.23444848632812}
+    //   status: "NOT_STARTED"}
     const newMarkers = [...this.state.markers, marker];
     this.setState({ markers: newMarkers }, this.updateLines);
   };
@@ -299,6 +331,7 @@ class Map extends React.PureComponent {
       showingInfoWindow: !prevState.showingInfoWindow
     }));
   };
+
   updateLines = () => {
     // thin grey is not reached yet and the person has not started that path
     const greyLine = {
@@ -379,7 +412,16 @@ class Map extends React.PureComponent {
     this.setState({ polylines: lines });
   };
   onMarkerClicked = (e, marker) => {
-    this.setState({ activeMarker: marker, showingInfoWindow: true, location: marker.position });
+    this.clearMarkerInfo();
+    console.log(marker);
+    this.setState({
+      activeMarker: marker,
+      showingInfoWindow: true,
+      location: marker.position,
+      etaDate: marker.etaDate,
+      etaTime: marker.etaTime,
+      checkpointName: marker.checkpointName
+    });
   };
   shallowObjEquals = (obj1, obj2) => {
     //helper function, not used for making the app work
@@ -400,6 +442,34 @@ class Map extends React.PureComponent {
 
     this.setState({ markers: newMarkers }, () => this.updateLines());
   };
+  saveMarkerInfo = () => {
+    const { activeMarker, markers, checkpointName, etaTime, etaDate } = this.state;
+    let markerIndex;
+    for (let i = 0; i < markers.length; i++) {
+      if (activeMarker.id === markers[i].id) {
+        markerIndex = i;
+        break;
+      }
+    }
+    const editedMarker = {
+      ...markers[markerIndex],
+      checkpointName,
+      etaTime,
+      etaDate
+    };
+
+    this.setState({
+      markers: [...markers.slice(0, markerIndex), editedMarker, ...markers.slice(markerIndex + 1)],
+      showingInfoWindow: false
+    });
+  };
+  clearMarkerInfo = () => {
+    this.setState({
+      checkpointName: '',
+      etaTime: '',
+      etaDate: ''
+    });
+  };
   render() {
     const {
       markers,
@@ -411,9 +481,10 @@ class Map extends React.PureComponent {
       startDate,
       endDate,
       location,
-      estTime,
-      estDate,
-      markerName
+      etaDate,
+      etaTime,
+      checkpointName,
+      checkedInTime
     } = this.state;
     return (
       <MyMapComponent
@@ -427,11 +498,14 @@ class Map extends React.PureComponent {
         tripTitle={tripTitle}
         startDate={startDate}
         endDate={endDate}
-        estTime={estTime}
-        estDate={estDate}
-        markerName={markerName}
+        etaTime={etaTime}
+        etaDate={etaDate}
+        checkedInTime={checkedInTime}
+        checkpointName={checkpointName}
         //methods
+        clearMarkerInfo={this.clearMarkerInfo}
         clearActiveMarker={this.clearActiveMarker}
+        saveMarkerInfo={this.saveMarkerInfo}
         activeMarker={this.activeMarker}
         inputHandler={this.inputHandler}
         onMapClicked={this.onMapClicked}
