@@ -1,3 +1,6 @@
+import { Mutation } from 'react-apollo';
+import gql from 'graphql-tag';
+import Router from 'next/router';
 import styled from 'styled-components';
 import DateBadge from './styles/DateBadge';
 
@@ -45,7 +48,20 @@ const ArchiveBtn = styled.button`
   cursor: pointer;
 `;
 
-const TripNote = ({ title, start, end }) => {
+const UPDATE_TRIP_MUTATION = gql`
+  mutation UPDATE_TRIP_MUTATION($id: ID!, $archived: Boolean!) {
+    updateTrip(id: $id, archived: $archived) {
+      id
+      archived
+    }
+  }
+`;
+
+const handleArchive = id => {
+  console.log('ID:', id);
+};
+
+const TripNote = ({ id, title, start, end, archived }) => {
   return (
     <NoteWrapper length={'30rem'}>
       <AdventureTitle>{title}</AdventureTitle>
@@ -58,7 +74,26 @@ const TripNote = ({ title, start, end }) => {
         <BadgeText>End:</BadgeText>
         <DateBadge>{end}</DateBadge>
       </BadgeGroup>
-      <ArchiveBtn>Archive?</ArchiveBtn>
+      <Mutation
+        mutation={UPDATE_TRIP_MUTATION}
+        variables={{
+          id,
+          archived: true
+        }}
+      >
+        {(updateTrip, { error, loading }) => {
+          return (
+            <ArchiveBtn
+              onClick={async () => {
+                updateTrip();
+                Router.push({ pathname: '/triplist' });
+              }}
+            >
+              Archive?
+            </ArchiveBtn>
+          );
+        }}
+      </Mutation>
     </NoteWrapper>
   );
 };

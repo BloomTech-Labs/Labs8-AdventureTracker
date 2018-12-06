@@ -30,14 +30,22 @@ class Trips extends Component {
               <TripsList>
                 <TripNote key="1" title="North Pole" start="12/24/18" end="12/25/18" />
                 {data.me !== null
-                  ? data.me.trip.map(trip => (
-                      <TripNote
-                        key={trip.id}
-                        title={trip.title}
-                        start={trip.startDate}
-                        end={trip.endDate}
-                      />
-                    ))
+                  ? data.me.trip.map(trip => {
+                      if (!trip.archived) {
+                        return (
+                          <TripNote
+                            key={trip.id}
+                            id={trip.id}
+                            title={trip.title}
+                            start={trip.startDate}
+                            end={trip.endDate}
+                            archived={trip.archived}
+                          />
+                        );
+                      } else {
+                        return null;
+                      }
+                    })
                   : null}
               </TripsList>
             );

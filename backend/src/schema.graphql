@@ -16,6 +16,7 @@ type Mutation {
     archived: Boolean!
     description: String
   ): Trip!
+  updateTrip(id: ID!, archived: Boolean!): Trip!
   createMarker(title: String!, lat: Float!, lng: Float!, status: Progress!): Marker!
   signup(
     name: String!
@@ -42,7 +43,7 @@ type Mutation {
 
 type Query {
   trips: [Trip]!
-  # trip: (where: TripWhereUniqueInput!): Trip
+  trip(where: TripWhereUniqueInput!): Trip
   users: [User]!
   me: User
 }
