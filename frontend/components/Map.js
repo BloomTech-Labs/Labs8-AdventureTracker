@@ -16,11 +16,11 @@ import uuidv4 from 'uuid/v4';
 import { MapBar, CalendarInput } from './MapBar';
 const Label = styled.label``;
 const ReachedCheckBox = styled.input`
-  margin-left: 0.4em;
+  margin-bottom: 0.4em;
 `;
 const CheckboxGroup = styled.div`
   display: flex;
-  margin: 0.4em 0;
+  margin: 0.2em 0;
 `;
 const ButtonGroup = styled.div`
   display: flex;
@@ -53,17 +53,21 @@ const CheckedInGroup = styled.div`
   flex-flow: column;
   align-items: flex-start;
   width: 100%;
+  margin-bottom: 1em;
 `;
-const CheckedIn = styled.h2`
+const CheckedIn = styled.label`
   font-size: 1.4rem;
-  margin: 0.4em;
+  margin-bottom: 0.4em;
 `;
 
 const CheckInBox = styled(ReachedCheckBox)`
   width: 60%;
 `;
 const ETAGroup = styled(CheckedInGroup)`
-  margin-bottom: 2em;
+  & > * {
+    margin-bottom: 0.5em;
+  }
+  margin-bottom: 1em;
 `;
 const ETA = styled(CheckedIn)``;
 
@@ -115,20 +119,7 @@ const MyMapComponent = compose(
               type="text"
             />
           </MarkerNameGroup>
-          <CheckboxGroup>
-            <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
-            <ReachedCheckBox
-              onChange={props.changeMarkerStatus}
-              id="reached-checkbox"
-              type="checkbox"
-              checked={props.activeMarker.status === 'COMPLETED' ? true : false}
-              value={props.checkedInTime}
-            />
-          </CheckboxGroup>
-          <CheckedInGroup>
-            <CheckedIn>Checked-in: </CheckedIn>
-            <CheckInBox value={props.checkedInTime} name="checkedInTime" type="time" disabled />
-          </CheckedInGroup>
+
           <ETAGroup>
             <ETA>ETA: </ETA>
             <CalendarInput
@@ -141,8 +132,6 @@ const MyMapComponent = compose(
               }}
             />
             <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} />
-          </ETAGroup>
-          <ButtonGroup>
             <SaveBtn
               onClick={() => {
                 props.saveMarkerInfo();
@@ -150,6 +139,28 @@ const MyMapComponent = compose(
             >
               Save Marker Info
             </SaveBtn>
+          </ETAGroup>
+          <CheckboxGroup>
+            <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
+            <ReachedCheckBox
+              onChange={props.changeMarkerStatus}
+              id="reached-checkbox"
+              type="checkbox"
+              checked={props.activeMarker.status === 'COMPLETED' ? true : false}
+              value={props.checkedInTime}
+            />
+          </CheckboxGroup>
+          <CheckedInGroup>
+            <CheckedIn htmlFor="checked-in">Checked-in: </CheckedIn>
+            <CheckInBox
+              id="checked-in"
+              value={props.checkedInTime}
+              name="checkedInTime"
+              type="time"
+              disabled
+            />
+          </CheckedInGroup>
+          <ButtonGroup>
             <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
               Delete Marker?
             </DeleteBtn>
@@ -214,14 +225,19 @@ class Map extends React.PureComponent {
       polylines: [],
       completedCheckboxes: 0
     };
+    //Markers' Progress
     this.NOT_STARTED = 'NOT_STARTED';
     this.IN_PROGRESS = 'IN_PROGRESS';
     this.COMPLETED = 'COMPLETED';
+    //Labels
     this.labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    //Colors
     this.GREEN = 'green';
     this.RED = 'red';
     this.GREY = 'grey';
     this.YELLOW = 'yellow';
+    this.WHITE = 'white';
+    this.BLACK = 'black';
   }
 
   clearActiveMarker = () => {
@@ -246,7 +262,9 @@ class Map extends React.PureComponent {
   };
   calculateTime = (plusMinute = 0, plusHour = 0) => {
     const date = new Date();
-    return `${date.getHours() + plusHour}:${date.getMinutes() + plusMinute}`;
+    return `${date.getHours() + plusHour}:${
+      date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()
+    }`;
   };
   setMarkerColorsByDate = () => {
     const { markers } = this.state;
@@ -256,7 +274,8 @@ class Map extends React.PureComponent {
     const year = date.getFullYear();
     // added 1 because month range is from 0 to 11
     const month = date.getMonth() + 1;
-    const day = date.getDay();
+    //getDate() gives me the actual day number if I used getDay() it only gives me 0 to 6
+    const day = date.getDate();
     const hour = date.getHours();
     const minute = date.getMinutes();
     // Example marker properties
@@ -271,41 +290,72 @@ class Map extends React.PureComponent {
       if (marker.status === this.COMPLETED) {
         continue;
       }
-      let etaYear = marker.etaDate.match(/(\d{4})-/)[1];
-      let etaMonth = marker.etaDate.match(/-(\d{2})-/)[1];
-      let etaDay = marker.etaDate.match(/(-\d{2})/)[1];
-      let etaHour = marker.etaTime.match(/(\d{2}):/)[1];
-      let etaMinute = marker.etaTime.match(/:(\d{2})/)[1];
+      let eta = marker.etaDate.match(/(\d{4})-(\d{2})-(\d{2})/);
+      let etaYear = Number(eta[1]);
+      let etaMonth = Number(eta[2]);
+      let etaDay = Number(eta[3]);
+      // let etaYear = Number(marker.etaDate.match(/(\d{4})-/)[1]);
+      // let etaMonth = Number(marker.etaDate.match(/-(\d{2})-/)[1]);
+      // let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
+      let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
+      let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
+      // const formula = 60 - etaMinute + minute;
+      console.log('ETA Year: ', etaYear, 'Year: ', year);
+      console.log('ETA Month: ', etaMonth, 'Month: ', month);
+      console.log('ETA Day: ', etaDay, 'Day: ', day);
+      console.log('ETA Hour: ', etaHour, 'Hour: ', hour);
+      console.log('ETA Minute: ', etaMinute, 'Minute:', minute);
+      //Turns it back to grey
+      if (
+        (year === etaYear &&
+          month === etaMonth &&
+          day === etaDay &&
+          hour <= etaHour &&
+          minute <= etaMinute) ||
+        (year <= etaYear && month <= etaMonth && day < etaDay)
+      ) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          color: this.WHITE
+        };
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.GREY
+        };
+        break;
+      }
       // // turns red because the person did not check in and they are an hour late
-      if (year >= etaYear && month >= etaMonth && day >= etaDay && hour > etaHour) {
+      else if (
+        year > etaYear ||
+        (year === etaYear && month > etaMonth) ||
+        (year === etaYear && month === etaMonth && day > etaDay) ||
+        (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
+      ) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          color: this.WHITE
+        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
           fillColor: this.RED
         };
         break;
-      }
-
-      // turns yellow because the person did not check in and they are a minute late
-      if (
-        year >= etaYear &&
-        month >= etaMonth &&
-        day >= etaDay &&
-        hour >= etaHour &&
-        minute > etaMinute
-      ) {
+      } else {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          color: this.BLACK
+        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
-          fillColor: this.YELLOW,
-          color: 'black'
+          fillColor: this.YELLOW
         };
+        newMarkers[i].label.color = this.BLACK;
         break;
       }
     }
 
     this.setState({ markers: newMarkers });
   };
-  convertLabelToIndex = markerLabel => {};
-
   inputHandler = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -326,7 +376,7 @@ class Map extends React.PureComponent {
         if (activeMarker.status === this.NOT_STARTED) {
           newMarkers[i].status = this.COMPLETED;
           newMarkers[i].checkedInTime = this.calculateTime();
-          console.log(newMarkers[i].icon);
+          // console.log(newMarkers[i].icon);
           newMarkers[i].icon = {
             ...newMarkers[i].icon,
             fillColor: this.GREEN
@@ -366,6 +416,7 @@ class Map extends React.PureComponent {
   deleteMarker = activeMarker => {
     const { markers } = this.state;
     let deleteIndex;
+    // console.log('deleteMarker');
     for (let i = 0; i < markers.length; i++) {
       if (markers[i].id === activeMarker.id) {
         deleteIndex = i;
@@ -375,9 +426,13 @@ class Map extends React.PureComponent {
     const newMarkers = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
     // Update marker labels
     for (let i = 0; i < newMarkers.length; i++) {
-      newMarkers[i].label.text = this.calculateLabel(i);
+      if (newMarkers[i].label.text.match(/\b[A-Z]\b/)) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          text: this.calculateLabel(i)
+        };
+      }
     }
-
     if (activeMarker.status === this.COMPLETED) {
       this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes - 1 }));
     }
@@ -400,14 +455,14 @@ class Map extends React.PureComponent {
       icon: icon,
       draggable: true,
       label: {
-        color: 'white',
+        color: this.WHITE,
         fontWeight: 'bold',
-        backgroundColor: 'black',
+        backgroundColor: this.BLACK,
         text: this.calculateLabel(markers.length)
       },
       // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
       status: this.NOT_STARTED,
-      etaTime: '',
+      etaTime: this.calculateTime(),
       etaDate: '',
       checkpointName: '',
       checkedInTime: ''
