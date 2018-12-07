@@ -34,6 +34,7 @@ type Trip {
   startDate: String!
   endDate: String!
   description: String!
+  archived: Boolean!
   markers: [Marker!]!
 }
 

@@ -60,7 +60,13 @@ class CommonTopNavbar extends Component {
                       <NavbarWrapper>
                         <Breadcrumbs startCrumb={'/'} router={this.props.router} />
                         <CreateTripBtn>Create Trip</CreateTripBtn>
-                        <ArchiveBtn>Go to archived trips</ArchiveBtn>
+                        <ArchiveBtn
+                          onClick={async e => {
+                            Router.push({ pathname: '/archivelist' });
+                          }}
+                        >
+                          Go to archived trips
+                        </ArchiveBtn>
                         <Logout
                           onClick={async e => {
                             e.preventDefault();
