@@ -220,14 +220,19 @@ class Map extends React.PureComponent {
       polylines: [],
       completedCheckboxes: 0
     };
+    //Markers' Progress
     this.NOT_STARTED = 'NOT_STARTED';
     this.IN_PROGRESS = 'IN_PROGRESS';
     this.COMPLETED = 'COMPLETED';
+    //Labels
     this.labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    //Colors
     this.GREEN = 'green';
     this.RED = 'red';
     this.GREY = 'grey';
     this.YELLOW = 'yellow';
+    this.WHITE = 'white';
+    this.BLACK = 'black';
   }
 
   clearActiveMarker = () => {
@@ -301,7 +306,7 @@ class Map extends React.PureComponent {
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
           fillColor: this.GREY,
-          color: 'white'
+          color: this.WHITE
         };
         break;
       }
@@ -310,19 +315,20 @@ class Map extends React.PureComponent {
         year > etaYear ||
         (year === etaYear && month > etaMonth) ||
         (year === etaYear && month === etaMonth && day > etaDay) ||
+        // (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour && (etaMinute + minute) >= 60) ||
         (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
       ) {
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
           fillColor: this.RED,
-          color: 'white'
+          color: this.WHITE
         };
         break;
       } else {
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
           fillColor: this.YELLOW,
-          color: 'yellow'
+          color: this.BLACK
         };
         break;
       }
@@ -426,9 +432,9 @@ class Map extends React.PureComponent {
       icon: icon,
       draggable: true,
       label: {
-        color: 'white',
+        color: this.WHITE,
         fontWeight: 'bold',
-        backgroundColor: 'black',
+        backgroundColor: this.BLACK,
         text: this.calculateLabel(markers.length)
       },
       // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
