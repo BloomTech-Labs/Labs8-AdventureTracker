@@ -262,7 +262,9 @@ class Map extends React.PureComponent {
   };
   calculateTime = (plusMinute = 0, plusHour = 0) => {
     const date = new Date();
-    return `${date.getHours() + plusHour}:${date.getMinutes() + plusMinute}`;
+    return `${date.getHours() + plusHour}:${
+      date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()
+    }`;
   };
   setMarkerColorsByDate = () => {
     const { markers } = this.state;
@@ -374,7 +376,7 @@ class Map extends React.PureComponent {
         if (activeMarker.status === this.NOT_STARTED) {
           newMarkers[i].status = this.COMPLETED;
           newMarkers[i].checkedInTime = this.calculateTime();
-          console.log(newMarkers[i].icon);
+          // console.log(newMarkers[i].icon);
           newMarkers[i].icon = {
             ...newMarkers[i].icon,
             fillColor: this.GREEN
@@ -669,7 +671,6 @@ class Map extends React.PureComponent {
         polylines={polylines}
         showingInfoWindow={showingInfoWindow}
         completedCheckboxes={completedCheckboxes}
-        checkBoxHandler={this.checkBoxHandler}
         tripTitle={tripTitle}
         startDate={startDate}
         endDate={endDate}
@@ -678,6 +679,7 @@ class Map extends React.PureComponent {
         checkedInTime={checkedInTime}
         checkpointName={checkpointName}
         //methods
+        checkBoxHandler={this.checkBoxHandler}
         clearMarkerInfo={this.clearMarkerInfo}
         clearActiveMarker={this.clearActiveMarker}
         saveMarkerInfo={this.saveMarkerInfo}
