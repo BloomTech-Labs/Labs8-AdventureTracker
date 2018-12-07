@@ -283,12 +283,16 @@ class Map extends React.PureComponent {
       if (marker.status === this.COMPLETED) {
         continue;
       }
-      let etaYear = Number(marker.etaDate.match(/(\d{4})-/)[1]);
-      let etaMonth = Number(marker.etaDate.match(/-(\d{2})-/)[1]);
-      let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
+      let eta = marker.etaDate.match(/(\d{4})-(\d{2})-(\d{2})/);
+      let etaYear = Number(eta[1]);
+      let etaMonth = Number(eta[2]);
+      let etaDay = Number(eta[3]);
+      // let etaYear = Number(marker.etaDate.match(/(\d{4})-/)[1]);
+      // let etaMonth = Number(marker.etaDate.match(/-(\d{2})-/)[1]);
+      // let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
       let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
       let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
-
+      // const formula = 60 - etaMinute + minute;
       console.log('ETA Year: ', etaYear, 'Year: ', year);
       console.log('ETA Month: ', etaMonth, 'Month: ', month);
       console.log('ETA Day: ', etaDay, 'Day: ', day);
@@ -318,7 +322,6 @@ class Map extends React.PureComponent {
         year > etaYear ||
         (year === etaYear && month > etaMonth) ||
         (year === etaYear && month === etaMonth && day > etaDay) ||
-        // (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour && (etaMinute + minute) >= 60) ||
         (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
       ) {
         newMarkers[i].label = {
