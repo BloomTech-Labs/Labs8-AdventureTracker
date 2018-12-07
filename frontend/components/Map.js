@@ -54,7 +54,7 @@ const CheckedInGroup = styled.div`
   align-items: flex-start;
   width: 100%;
 `;
-const CheckedIn = styled.h2`
+const CheckedIn = styled.label`
   font-size: 1.4rem;
   margin: 0.4em;
 `;
@@ -126,8 +126,14 @@ const MyMapComponent = compose(
             />
           </CheckboxGroup>
           <CheckedInGroup>
-            <CheckedIn>Checked-in: </CheckedIn>
-            <CheckInBox value={props.checkedInTime} name="checkedInTime" type="time" disabled />
+            <CheckedIn htmlFor="checked-in">Checked-in: </CheckedIn>
+            <CheckInBox
+              id="checked-in"
+              value={props.checkedInTime}
+              name="checkedInTime"
+              type="time"
+              disabled
+            />
           </CheckedInGroup>
           <ETAGroup>
             <ETA>ETA: </ETA>
@@ -256,7 +262,8 @@ class Map extends React.PureComponent {
     const year = date.getFullYear();
     // added 1 because month range is from 0 to 11
     const month = date.getMonth() + 1;
-    const day = date.getDay();
+    //getDate() gives me the actual day number if I used getDay() it only gives me 0 to 6
+    const day = date.getDate();
     const hour = date.getHours();
     const minute = date.getMinutes();
     // Example marker properties
@@ -271,32 +278,51 @@ class Map extends React.PureComponent {
       if (marker.status === this.COMPLETED) {
         continue;
       }
-      let etaYear = marker.etaDate.match(/(\d{4})-/)[1];
-      let etaMonth = marker.etaDate.match(/-(\d{2})-/)[1];
-      let etaDay = marker.etaDate.match(/(-\d{2})/)[1];
-      let etaHour = marker.etaTime.match(/(\d{2}):/)[1];
-      let etaMinute = marker.etaTime.match(/:(\d{2})/)[1];
-      // // turns red because the person did not check in and they are an hour late
-      if (year >= etaYear && month >= etaMonth && day >= etaDay && hour > etaHour) {
-        newMarkers[i].icon = {
-          ...newMarkers[i].icon,
-          fillColor: this.RED
-        };
-        break;
-      }
+      let etaYear = Number(marker.etaDate.match(/(\d{4})-/)[1]);
+      let etaMonth = Number(marker.etaDate.match(/-(\d{2})-/)[1]);
+      let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
+      let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
+      let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
+      //Turns it back to grey
 
-      // turns yellow because the person did not check in and they are a minute late
+      console.log('ETA Year: ', etaYear, 'Year: ', year);
+      console.log('ETA Month: ', etaMonth, 'Month: ', month);
+      console.log('ETA Day: ', etaDay, 'Day: ', day);
+      console.log('ETA Hour: ', etaHour, 'Hour: ', hour);
+      console.log('ETA Minute: ', etaMinute, 'Minute:', minute);
       if (
-        year >= etaYear &&
-        month >= etaMonth &&
-        day >= etaDay &&
-        hour >= etaHour &&
-        minute > etaMinute
+        (year === etaYear &&
+          month === etaMonth &&
+          day === etaDay &&
+          hour <= etaHour &&
+          minute <= etaMinute) ||
+        (year <= etaYear && month <= etaMonth && day < etaDay)
       ) {
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
+          fillColor: this.GREY,
+          color: 'white'
+        };
+        break;
+      }
+      // // turns red because the person did not check in and they are an hour late
+      else if (
+        year > etaYear ||
+        (year === etaYear && month > etaMonth) ||
+        (year === etaYear && month === etaMonth && day > etaDay) ||
+        (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
+      ) {
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.RED,
+          color: 'white'
+        };
+        break;
+      } else {
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
           fillColor: this.YELLOW,
-          color: 'black'
+          color: 'yellow'
         };
         break;
       }
