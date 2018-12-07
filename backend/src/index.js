@@ -26,7 +26,7 @@ express.use((req, res, next) => {
     // add the userId to req for future requests
     req.userId = userId;
 
-    console.log('USERID', userId);
+    // console.log('USERID', userId);
   }
   next();
 });

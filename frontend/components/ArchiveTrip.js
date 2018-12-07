@@ -57,10 +57,6 @@ const UPDATE_TRIP_MUTATION = gql`
   }
 `;
 
-const handleArchive = id => {
-  console.log('ID:', id);
-};
-
 const ArchiveTrip = ({ id, title, start, end, archived }) => {
   return (
     <NoteWrapper length={'30rem'}>
