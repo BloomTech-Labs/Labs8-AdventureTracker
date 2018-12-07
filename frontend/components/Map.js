@@ -262,9 +262,7 @@ class Map extends React.PureComponent {
   };
   calculateTime = (plusMinute = 0, plusHour = 0) => {
     const date = new Date();
-    return `${date.getHours() + plusHour}:${
-      date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()
-    }`;
+    return `${date.getHours() + plusHour}:${date.getMinutes() + plusMinute}`;
   };
   setMarkerColorsByDate = () => {
     const { markers } = this.state;
@@ -299,6 +297,7 @@ class Map extends React.PureComponent {
       // let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
       let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
       let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
+      // const formula = 60 - etaMinute + minute;
       console.log('ETA Year: ', etaYear, 'Year: ', year);
       console.log('ETA Month: ', etaMonth, 'Month: ', month);
       console.log('ETA Day: ', etaDay, 'Day: ', day);
@@ -328,11 +327,7 @@ class Map extends React.PureComponent {
         year > etaYear ||
         (year === etaYear && month > etaMonth) ||
         (year === etaYear && month === etaMonth && day > etaDay) ||
-        (year === etaYear &&
-          month === etaMonth &&
-          day === etaDay &&
-          hour > etaHour &&
-          60 - etaMinute + minute > 59)
+        (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
       ) {
         newMarkers[i].label = {
           ...newMarkers[i].label,
@@ -379,7 +374,7 @@ class Map extends React.PureComponent {
         if (activeMarker.status === this.NOT_STARTED) {
           newMarkers[i].status = this.COMPLETED;
           newMarkers[i].checkedInTime = this.calculateTime();
-          // console.log(newMarkers[i].icon);
+          console.log(newMarkers[i].icon);
           newMarkers[i].icon = {
             ...newMarkers[i].icon,
             fillColor: this.GREEN
@@ -674,6 +669,7 @@ class Map extends React.PureComponent {
         polylines={polylines}
         showingInfoWindow={showingInfoWindow}
         completedCheckboxes={completedCheckboxes}
+        checkBoxHandler={this.checkBoxHandler}
         tripTitle={tripTitle}
         startDate={startDate}
         endDate={endDate}
@@ -682,7 +678,6 @@ class Map extends React.PureComponent {
         checkedInTime={checkedInTime}
         checkpointName={checkpointName}
         //methods
-        checkBoxHandler={this.checkBoxHandler}
         clearMarkerInfo={this.clearMarkerInfo}
         clearActiveMarker={this.clearActiveMarker}
         saveMarkerInfo={this.saveMarkerInfo}
