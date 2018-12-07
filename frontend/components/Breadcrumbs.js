@@ -63,6 +63,7 @@ const Breadcrumbs = props => {
   const TRIPLIST = '/triplist';
   const BILLING = '/billing';
   const SETTINGS = '/settings';
+  const ARCHIVES = '/archivelist';
   const ICON_LENGTH = '70%';
   const CIRCLE_DIAMETER = '5rem';
   return (
@@ -83,6 +84,18 @@ const Breadcrumbs = props => {
                 <CircleWrapper length={CIRCLE_DIAMETER}>
                   <GlobeIcon length={ICON_LENGTH} />
                   <BreadText>Trips</BreadText>
+                </CircleWrapper>
+              </Breadcrumb>
+            </Link>
+          );
+        }
+        if (route.match(ARCHIVES)) {
+          return (
+            <Link href={ARCHIVES}>
+              <Breadcrumb>
+                <CircleWrapper length={CIRCLE_DIAMETER}>
+                  <GlobeIcon length={ICON_LENGTH} />
+                  <BreadText>Archives</BreadText>
                 </CircleWrapper>
               </Breadcrumb>
             </Link>
