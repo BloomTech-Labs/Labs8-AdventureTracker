@@ -288,13 +288,13 @@ class Map extends React.PureComponent {
       let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
       let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
       let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
-      //Turns it back to grey
 
       console.log('ETA Year: ', etaYear, 'Year: ', year);
       console.log('ETA Month: ', etaMonth, 'Month: ', month);
       console.log('ETA Day: ', etaDay, 'Day: ', day);
       console.log('ETA Hour: ', etaHour, 'Hour: ', hour);
       console.log('ETA Minute: ', etaMinute, 'Minute:', minute);
+      //Turns it back to grey
       if (
         (year === etaYear &&
           month === etaMonth &&
@@ -303,10 +303,13 @@ class Map extends React.PureComponent {
           minute <= etaMinute) ||
         (year <= etaYear && month <= etaMonth && day < etaDay)
       ) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          color: this.WHITE
+        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
-          fillColor: this.GREY,
-          color: this.WHITE
+          fillColor: this.GREY
         };
         break;
       }
@@ -318,18 +321,25 @@ class Map extends React.PureComponent {
         // (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour && (etaMinute + minute) >= 60) ||
         (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
       ) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          color: this.WHITE
+        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
-          fillColor: this.RED,
-          color: this.WHITE
+          fillColor: this.RED
         };
         break;
       } else {
-        newMarkers[i].icon = {
-          ...newMarkers[i].icon,
-          fillColor: this.YELLOW,
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
           color: this.BLACK
         };
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.YELLOW
+        };
+        newMarkers[i].label.color = this.BLACK;
         break;
       }
     }
@@ -398,6 +408,7 @@ class Map extends React.PureComponent {
   deleteMarker = activeMarker => {
     const { markers } = this.state;
     let deleteIndex;
+    // console.log('deleteMarker');
     for (let i = 0; i < markers.length; i++) {
       if (markers[i].id === activeMarker.id) {
         deleteIndex = i;
@@ -407,9 +418,11 @@ class Map extends React.PureComponent {
     const newMarkers = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
     // Update marker labels
     for (let i = 0; i < newMarkers.length; i++) {
-      newMarkers[i].label.text = this.calculateLabel(i);
+      newMarkers[i].label = {
+        ...newMarkers[i].label,
+        text: this.calculateLabel(i)
+      };
     }
-
     if (activeMarker.status === this.COMPLETED) {
       this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes - 1 }));
     }
