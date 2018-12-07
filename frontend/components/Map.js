@@ -346,8 +346,6 @@ class Map extends React.PureComponent {
 
     this.setState({ markers: newMarkers });
   };
-  convertLabelToIndex = markerLabel => {};
-
   inputHandler = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
