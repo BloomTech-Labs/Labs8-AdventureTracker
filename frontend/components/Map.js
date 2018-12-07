@@ -299,7 +299,6 @@ class Map extends React.PureComponent {
       // let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
       let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
       let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
-      // const formula = 60 - etaMinute + minute;
       console.log('ETA Year: ', etaYear, 'Year: ', year);
       console.log('ETA Month: ', etaMonth, 'Month: ', month);
       console.log('ETA Day: ', etaDay, 'Day: ', day);
@@ -329,7 +328,11 @@ class Map extends React.PureComponent {
         year > etaYear ||
         (year === etaYear && month > etaMonth) ||
         (year === etaYear && month === etaMonth && day > etaDay) ||
-        (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
+        (year === etaYear &&
+          month === etaMonth &&
+          day === etaDay &&
+          hour > etaHour &&
+          60 - etaMinute + minute > 59)
       ) {
         newMarkers[i].label = {
           ...newMarkers[i].label,
