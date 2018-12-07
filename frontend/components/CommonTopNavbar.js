@@ -53,7 +53,7 @@ class CommonTopNavbar extends Component {
                 <Mutation
                   mutation={LOGOUT_MUTATION}
                   variables={this.state}
-                  // refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+                  refetchQueries={[{ query: CURRENT_USER_QUERY }]}
                 >
                   {(signout, { error, loading }) => {
                     return (
