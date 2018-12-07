@@ -57,7 +57,7 @@ const UPDATE_TRIP_MUTATION = gql`
   }
 `;
 
-const TripNote = ({ id, title, start, end, archived }) => {
+const ArchiveTrip = ({ id, title, start, end, archived }) => {
   return (
     <NoteWrapper length={'30rem'}>
       <AdventureTitle>{title}</AdventureTitle>
@@ -74,7 +74,7 @@ const TripNote = ({ id, title, start, end, archived }) => {
         mutation={UPDATE_TRIP_MUTATION}
         variables={{
           id,
-          archived: true
+          archived: false
         }}
       >
         {(updateTrip, { error, loading }) => {
@@ -82,10 +82,10 @@ const TripNote = ({ id, title, start, end, archived }) => {
             <ArchiveBtn
               onClick={async () => {
                 updateTrip();
-                Router.push({ pathname: '/triplist' });
+                Router.push({ pathname: '/archivelist' });
               }}
             >
-              Archive?
+              Unarchive?
             </ArchiveBtn>
           );
         }}
@@ -94,4 +94,4 @@ const TripNote = ({ id, title, start, end, archived }) => {
   );
 };
 
-export default TripNote;
+export default ArchiveTrip;

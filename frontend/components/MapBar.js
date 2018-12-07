@@ -71,7 +71,8 @@ const CREATE_TRIP_MUTATION = gql`
     $startDate: String!
     $endDate: String!
     $user: UserWhereUniqueInput!
-    $description: String! # $markers: [Marker!]!
+    $description: String!
+    $archived: Boolean! # $markers: [Marker!]!
   ) {
     createTrip(
       title: $title
@@ -79,6 +80,7 @@ const CREATE_TRIP_MUTATION = gql`
       startDate: $startDate
       endDate: $endDate
       description: $description
+      archived: $archived
     ) {
       id
     }
@@ -132,6 +134,7 @@ const MapBar = props => {
           endDate: props.endDate,
           //TODO - add description
           description: 'awesome trip!',
+          archived: false,
           // markers: props.markers
           user: { id: '', email: '', facebookID: '' }
         }}
