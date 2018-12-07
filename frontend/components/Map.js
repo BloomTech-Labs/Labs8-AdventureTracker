@@ -122,6 +122,7 @@ const MyMapComponent = compose(
               id="reached-checkbox"
               type="checkbox"
               checked={props.activeMarker.status === 'COMPLETED' ? true : false}
+              value={props.checkedInTime}
             />
           </CheckboxGroup>
           <CheckedInGroup>
@@ -171,6 +172,7 @@ const MyMapComponent = compose(
           onDragStart={props.onMarkerDragStart}
           label={mark.label}
           onDrag={e => props.onMarkerDragged(e, i)}
+          icon={mark.icon}
         />
       );
     })}
@@ -216,20 +218,92 @@ class Map extends React.PureComponent {
     this.IN_PROGRESS = 'IN_PROGRESS';
     this.COMPLETED = 'COMPLETED';
     this.labels = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    this.GREEN = 'green';
+    this.RED = 'red';
+    this.GREY = 'grey';
+    this.YELLOW = 'yellow';
   }
 
   clearActiveMarker = () => {
     this.setState({ activeMarker: {} });
   };
-  //   componentDidMount() {
-  //     this.delayedShowMarker();
-  //   }
+  componentDidMount() {
+    const minute = 1000 * 60;
+    setInterval(() => {
+      const { markers } = this.state;
+      if (markers.length > 0) {
+        this.setMarkerColorsByDate();
+      }
+    }, minute);
+  }
+  componentWillUnmount() {
+    clearInterval();
+  }
+  calculateDate = (plusDay = 0, plusMonth = 0, plusYear = 0) => {
+    const date = new Date();
+    return `${date.getFullYear() + plusYear}-${date.getMonth() + plusMonth}-${date.getDay() +
+      plusDay}`;
+  };
+  calculateTime = (plusMinute = 0, plusHour = 0) => {
+    const date = new Date();
+    return `${date.getHours() + plusHour}:${date.getMinutes() + plusMinute}`;
+  };
+  setMarkerColorsByDate = () => {
+    const { markers } = this.state;
 
-  //   delayedShowMarker = () => {
-  //     setTimeout(() => {
-  //       this.setState({ isMarkerShown: true });
-  //     }, 3000);
-  //   };
+    const newMarkers = [...markers];
+    const date = new Date();
+    const year = date.getFullYear();
+    // added 1 because month range is from 0 to 11
+    const month = date.getMonth() + 1;
+    const day = date.getDay();
+    const hour = date.getHours();
+    const minute = date.getMinutes();
+    // Example marker properties
+    //   etaDate: "2018-12-06"
+    //   etaTime: "02:32"
+    for (let i = 0; i < newMarkers.length; i++) {
+      let marker = newMarkers[i];
+      if (marker.etaDate === '' || marker.etaTime === '') {
+        break;
+      }
+      // If the marker status is completed, don't need to change it to red or yellow to signify tardiness
+      if (marker.status === this.COMPLETED) {
+        continue;
+      }
+      let etaYear = marker.etaDate.match(/(\d{4})-/)[1];
+      let etaMonth = marker.etaDate.match(/-(\d{2})-/)[1];
+      let etaDay = marker.etaDate.match(/(-\d{2})/)[1];
+      let etaHour = marker.etaTime.match(/(\d{2}):/)[1];
+      let etaMinute = marker.etaTime.match(/:(\d{2})/)[1];
+      // // turns red because the person did not check in and they are an hour late
+      if (year >= etaYear && month >= etaMonth && day >= etaDay && hour > etaHour) {
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.RED
+        };
+        break;
+      }
+
+      // turns yellow because the person did not check in and they are a minute late
+      if (
+        year >= etaYear &&
+        month >= etaMonth &&
+        day >= etaDay &&
+        hour >= etaHour &&
+        minute > etaMinute
+      ) {
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.YELLOW,
+          color: 'black'
+        };
+        break;
+      }
+    }
+
+    this.setState({ markers: newMarkers });
+  };
   convertLabelToIndex = markerLabel => {};
 
   inputHandler = e => {
@@ -246,10 +320,27 @@ class Map extends React.PureComponent {
   changeMarkerStatus = () => {
     const newMarkers = [...this.state.markers];
     const { activeMarker } = this.state;
+    let markerIndex;
     for (let i = 0; i < newMarkers.length; i++) {
       if (activeMarker.id === newMarkers[i].id) {
-        newMarkers[i].status =
-          activeMarker.status === this.NOT_STARTED ? this.COMPLETED : this.NOT_STARTED;
+        if (activeMarker.status === this.NOT_STARTED) {
+          newMarkers[i].status = this.COMPLETED;
+          newMarkers[i].checkedInTime = this.calculateTime();
+          console.log(newMarkers[i].icon);
+          newMarkers[i].icon = {
+            ...newMarkers[i].icon,
+            fillColor: this.GREEN
+          };
+        } else {
+          newMarkers[i].status = this.NOT_STARTED;
+          newMarkers[i].checkedInTime = '';
+          newMarkers[i].icon = {
+            ...newMarkers[i].icon,
+            fillColor: this.GREY
+          };
+        }
+        // console.log(newMarkers[i].checkedInTime);
+        markerIndex = i;
         break;
       }
       // Before it reaches to the marker that we set to complete,
@@ -257,11 +348,16 @@ class Map extends React.PureComponent {
       if (newMarkers[i].status !== this.COMPLETED) {
         return;
       }
-    }
-    this.setState({ markers: newMarkers }, () => {
-      this.updateLines();
-      this.checkBoxHandler();
-    });
+    } // for loop ends
+    console.log(this.state);
+    this.setState(
+      { markers: newMarkers, checkedInTime: newMarkers[markerIndex].checkedInTime },
+      () => {
+        this.updateLines();
+        this.checkBoxHandler();
+        this.setMarkerColorsByDate();
+      }
+    );
   };
   //Calculates the label for the marker
   calculateLabel = letterIndex => {
@@ -290,14 +386,23 @@ class Map extends React.PureComponent {
   };
   createMarker = e => {
     const { markers } = this.state;
-
+    const icon = {
+      path: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0',
+      fillColor: this.GREY,
+      fillOpacity: 0.9,
+      anchor: new google.maps.Point(0, 0),
+      strokeWeight: 0,
+      scale: 1
+    };
     const marker = {
       position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
       id: uuidv4(),
+      icon: icon,
       draggable: true,
       label: {
         color: 'white',
         fontWeight: 'bold',
+        backgroundColor: 'black',
         text: this.calculateLabel(markers.length)
       },
       // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
@@ -408,7 +513,7 @@ class Map extends React.PureComponent {
       if (i > 0) {
         lineOptions['path'] = line.slice();
         lines.push({ ...lineOptions, id: uuidv4() });
-        console.log(lines);
+        // console.log(lines);
         //We start at the end of the new polyline and store that vertex
         line = [{ lat: markerLat, lng: markerLng }];
       }
@@ -421,10 +526,8 @@ class Map extends React.PureComponent {
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
-      location: marker.position,
-      etaDate: marker.etaDate,
-      etaTime: marker.etaTime,
-      checkpointName: marker.checkpointName
+      ...marker,
+      location: marker.position
     });
   };
   shallowObjEquals = (obj1, obj2) => {
@@ -447,7 +550,7 @@ class Map extends React.PureComponent {
     this.setState({ markers: newMarkers }, () => this.updateLines());
   };
   saveMarkerInfo = () => {
-    const { activeMarker, markers, checkpointName, etaTime, etaDate } = this.state;
+    const { activeMarker, markers, checkpointName, etaTime, etaDate, checkedInTime } = this.state;
     let markerIndex;
     for (let i = 0; i < markers.length; i++) {
       if (activeMarker.id === markers[i].id) {
@@ -455,22 +558,32 @@ class Map extends React.PureComponent {
         break;
       }
     }
-
+    const newText = checkpointName !== '' ? checkpointName : this.calculateLabel(markerIndex);
     const editedMarker = {
       ...markers[markerIndex],
       label: {
         ...markers[markerIndex].label,
-        text: checkpointName
+        text: newText
       },
       checkpointName,
+      checkedInTime,
       etaTime,
       etaDate
     };
 
-    this.setState({
-      markers: [...markers.slice(0, markerIndex), editedMarker, ...markers.slice(markerIndex + 1)],
-      showingInfoWindow: false
-    });
+    this.setState(
+      {
+        markers: [
+          ...markers.slice(0, markerIndex),
+          editedMarker,
+          ...markers.slice(markerIndex + 1)
+        ],
+        showingInfoWindow: false
+      },
+      () => {
+        this.setMarkerColorsByDate();
+      }
+    );
   };
   clearMarkerInfo = () => {
     this.setState({
