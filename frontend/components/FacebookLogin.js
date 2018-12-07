@@ -7,10 +7,18 @@ import Error from './ErrorMessage';
 
 import { PrimaryBtn } from './styles/ButtonStyles';
 import { NavbarContainer } from './styles/NavbarContainer';
+import { FacebookIcon } from './styles/SVGs';
+import { FacebookBtn } from './styles/LinkBtnStyles';
 
-const Login = styled(PrimaryBtn)``;
+const Login = styled(PrimaryBtn)`
+  margin: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+`;
 const NavbarWrapper = styled(NavbarContainer)`
   height: 8rem;
+  justify-content: center;
 `;
 
 const FACEBOOKSIGNIN_MUTATION = gql`
@@ -54,7 +62,8 @@ class FacebookLogin extends React.Component {
                   });
                 }}
               >
-                Login
+                <FacebookIcon length={40} />
+                &nbsp; Account verified by Facebook, click to continue
               </Login>
               <Error error={error} />
             </NavbarWrapper>

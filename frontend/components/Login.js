@@ -77,7 +77,7 @@ class Signin extends Component {
   }
 
   handleResponse = data => {
-    console.log(data.profile);
+    // console.log(data.profile);
     localStorage.setItem('id', data.profile.id);
     localStorage.setItem('name', data.profile.first_name);
     localStorage.setItem('email', data.profile.email);

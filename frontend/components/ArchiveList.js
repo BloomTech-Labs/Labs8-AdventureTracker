@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Query } from 'react-apollo';
 import styled from 'styled-components';
-import TripNote from './TripNote';
+import ArchiveTrip from './ArchiveTrip';
 import { CURRENT_USER_QUERY } from './User';
 
 const Center = styled.div`
@@ -16,7 +16,7 @@ const TripsList = styled.div`
   margin: 0 auto;
 `;
 
-class Trips extends Component {
+class ArchiveTrips extends Component {
   render() {
     return (
       <Center>
@@ -28,12 +28,11 @@ class Trips extends Component {
             if (error) return <p>Error: {error.message}</p>;
             return (
               <TripsList>
-                <TripNote key="1" title="North Pole" start="12/24/18" end="12/25/18" />
                 {data.me !== null
                   ? data.me.trip.map(trip => {
-                      if (!trip.archived) {
+                      if (trip.archived) {
                         return (
-                          <TripNote
+                          <ArchiveTrip
                             key={trip.id}
                             id={trip.id}
                             title={trip.title}
@@ -56,4 +55,4 @@ class Trips extends Component {
   }
 }
 
-export default Trips;
+export default ArchiveTrips;
