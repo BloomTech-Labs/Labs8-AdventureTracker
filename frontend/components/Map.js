@@ -16,11 +16,11 @@ import uuidv4 from 'uuid/v4';
 import { MapBar, CalendarInput } from './MapBar';
 const Label = styled.label``;
 const ReachedCheckBox = styled.input`
-  margin-left: 0.4em;
+  margin-bottom: 0.4em;
 `;
 const CheckboxGroup = styled.div`
   display: flex;
-  margin: 0.4em 0;
+  margin: 0.2em 0;
 `;
 const ButtonGroup = styled.div`
   display: flex;
@@ -53,17 +53,21 @@ const CheckedInGroup = styled.div`
   flex-flow: column;
   align-items: flex-start;
   width: 100%;
+  margin-bottom: 1em;
 `;
 const CheckedIn = styled.label`
   font-size: 1.4rem;
-  margin: 0.4em;
+  margin-bottom: 0.4em;
 `;
 
 const CheckInBox = styled(ReachedCheckBox)`
   width: 60%;
 `;
 const ETAGroup = styled(CheckedInGroup)`
-  margin-bottom: 2em;
+  & > * {
+    margin-bottom: 0.5em;
+  }
+  margin-bottom: 1em;
 `;
 const ETA = styled(CheckedIn)``;
 
@@ -115,6 +119,27 @@ const MyMapComponent = compose(
               type="text"
             />
           </MarkerNameGroup>
+
+          <ETAGroup>
+            <ETA>ETA: </ETA>
+            <CalendarInput
+              type="date"
+              name="etaDate"
+              onChange={props.inputHandler}
+              value={props.etaDate}
+              onKeyDown={e => {
+                e.preventDefault();
+              }}
+            />
+            <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} />
+            <SaveBtn
+              onClick={() => {
+                props.saveMarkerInfo();
+              }}
+            >
+              Save Marker Info
+            </SaveBtn>
+          </ETAGroup>
           <CheckboxGroup>
             <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
             <ReachedCheckBox
@@ -135,27 +160,7 @@ const MyMapComponent = compose(
               disabled
             />
           </CheckedInGroup>
-          <ETAGroup>
-            <ETA>ETA: </ETA>
-            <CalendarInput
-              type="date"
-              name="etaDate"
-              onChange={props.inputHandler}
-              value={props.etaDate}
-              onKeyDown={e => {
-                e.preventDefault();
-              }}
-            />
-            <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} />
-          </ETAGroup>
           <ButtonGroup>
-            <SaveBtn
-              onClick={() => {
-                props.saveMarkerInfo();
-              }}
-            >
-              Save Marker Info
-            </SaveBtn>
             <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
               Delete Marker?
             </DeleteBtn>
@@ -419,10 +424,12 @@ class Map extends React.PureComponent {
     const newMarkers = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
     // Update marker labels
     for (let i = 0; i < newMarkers.length; i++) {
-      newMarkers[i].label = {
-        ...newMarkers[i].label,
-        text: this.calculateLabel(i)
-      };
+      if (newMarkers[i].label.text.match(/\b[A-Z]\b/)) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          text: this.calculateLabel(i)
+        };
+      }
     }
     if (activeMarker.status === this.COMPLETED) {
       this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes - 1 }));
