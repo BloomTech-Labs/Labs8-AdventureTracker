@@ -238,6 +238,21 @@ class Map extends React.PureComponent {
     this.YELLOW = 'yellow';
     this.WHITE = 'white';
     this.BLACK = 'black';
+    this.path = 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0';
+    this.CHECKMARK_ICON =
+      'data:image/svg+xml;utf-8, \
+    <svg width="40" height="40" viewBox="0 0 71 70" fill="none" xmlns="http://www.w3.org/2000/svg">\
+    <rect x="2.5" y="2.5" width="65" height="65" rx="32.5" fill="#EAEAEA" stroke="#9DFF8D" stroke-width="5"/>\
+    <rect x="7" y="42.507" width="6.37388" height="27.6167" transform="rotate(-45 7 42.507)" fill="#52FF00"/>\
+    <rect x="65.1602" y="12.543" width="7.37885" height="62.17" transform="rotate(44.5729 65.1602 12.543)" fill="#52FF00"/>\
+    </svg>';
+    this.RED_EXCLAMATION =
+      'data:image/svg+xml;utf-8, \
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">\
+      <rect x="25" y="7" width="10" height="33" fill="#D10000"/>\
+      <rect x="25" y="42" width="10" height="10" rx="5" fill="#D10000"/>\
+      <rect x="1.5" y="1.5" width="57" height="57" rx="28.5" stroke="#D10000" stroke-width="3"/>\
+      </svg>';
   }
 
   clearActiveMarker = () => {
