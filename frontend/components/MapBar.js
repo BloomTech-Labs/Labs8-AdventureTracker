@@ -2,7 +2,9 @@ import styled from 'styled-components';
 import { Mutation } from 'react-apollo';
 import Router from 'next/router';
 import gql from 'graphql-tag';
+import DatePicker from 'react-datepicker';
 
+import 'react-datepicker/dist/react-datepicker.css';
 const ProgressWrapper = styled.div`
   display: flex;
   position: relative;
