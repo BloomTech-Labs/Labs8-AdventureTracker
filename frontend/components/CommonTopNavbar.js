@@ -41,49 +41,65 @@ const LOGOUT_MUTATION = gql`
 `;
 
 class CommonTopNavbar extends Component {
-  state = { message: 'bye' };
+  constructor() {
+    super();
+    this.state = { message: 'bye', btnText: 'Go to archived trips', btnGoUrl: '/archivelist' };
+  }
+
+  NavButton = LOC => {
+    if (LOC.pathname === '/archivelist') {
+      this.setState({ btnText: 'Go to Trips', btnGoUrl: '/triplist' });
+    } else {
+      this.setState({ btnText: 'Go to archived Trips', btnGoUrl: '/archivelist' });
+    }
+  };
+
+  componentDidMount() {
+    this.NavButton(this.props.router);
+  }
+
   render() {
     return (
       <div>
-        <User>
-          {/* destructure the payload & `me` query */}
-          {({ data: { me } }) => {
-            if (me) {
-              return (
-                <Mutation
-                  mutation={LOGOUT_MUTATION}
-                  variables={this.state}
-                  refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-                >
-                  {(signout, { error, loading }) => {
-                    return (
-                      <NavbarWrapper>
-                        <Breadcrumbs startCrumb={'/'} router={this.props.router} />
-                        <CreateTripBtn>Create Trip</CreateTripBtn>
-                        <ArchiveBtn
-                          onClick={async e => {
-                            Router.push({ pathname: '/archivelist' });
-                          }}
-                        >
-                          Go to archived trips
-                        </ArchiveBtn>
-                        <Logout
-                          onClick={async e => {
-                            e.preventDefault();
-                            await signout();
-                            Router.push({ pathname: '/' });
-                          }}
-                        >
-                          Logout
-                        </Logout>
-                      </NavbarWrapper>
-                    );
+        <Mutation
+          mutation={LOGOUT_MUTATION}
+          variables={this.state}
+          refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+        >
+          {(signout, { error, loading }) => {
+            let LOC = this.props.router;
+            console.log('LOC1', LOC);
+            return (
+              <NavbarWrapper>
+                <Breadcrumbs startCrumb={'/'} router={this.props.router} />
+                <CreateTripBtn
+                  onClick={() => {
+                    Router.push({ pathname: '/app' });
                   }}
-                </Mutation>
-              );
-            } else return null;
+                >
+                  Create Trip
+                </CreateTripBtn>
+                <ArchiveBtn
+                  onClick={() => {
+                    this.NavButton(this.props.router);
+                    Router.push({ pathname: this.state.btnGoUrl });
+                  }}
+                >
+                  {this.state.btnText}
+                </ArchiveBtn>
+                <Logout
+                  onClick={async e => {
+                    e.preventDefault();
+                    await signout();
+                    Router.push({ pathname: '/' });
+                  }}
+                >
+                  Logout
+                </Logout>
+              </NavbarWrapper>
+            );
           }}
-        </User>
+        </Mutation>
       </div>
     );
   }
