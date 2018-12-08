@@ -67,8 +67,6 @@ class CommonTopNavbar extends Component {
           refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         >
           {(signout, { error, loading }) => {
-            let LOC = this.props.router;
-            console.log('LOC1', LOC);
             return (
               <NavbarWrapper>
                 <Breadcrumbs startCrumb={'/'} router={this.props.router} />
