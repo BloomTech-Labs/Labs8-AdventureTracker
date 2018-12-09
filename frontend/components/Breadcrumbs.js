@@ -129,7 +129,7 @@ const Breadcrumbs = props => {
       {(() => {
         if (props.endCrumbLink && props.endCrumbName) {
           return (
-            <Link href={TRIPLIST}>
+            <Link href={props.endCrumbLink}>
               <Breadcrumb>
                 <CircleWrapper length={CIRCLE_DIAMETER}>
                   <GlobeIcon length={ICON_LENGTH} />
@@ -138,7 +138,6 @@ const Breadcrumbs = props => {
               </Breadcrumb>
             </Link>
           );
-          return <Link href={props.endCrumbLink} />;
         }
       })()}
     </BreadcrumbsWrapper>
