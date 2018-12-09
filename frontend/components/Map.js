@@ -13,7 +13,10 @@ import {
 //react-google-maps docs: https://tomchentw.github.io/react-google-maps/
 import styled from 'styled-components';
 import uuidv4 from 'uuid/v4';
-import { MapBar, CalendarInput } from './MapBar';
+import { MapBar } from './MapBar';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
 const Label = styled.label``;
 const ReachedCheckBox = styled.input`
   margin-bottom: 0.4em;
@@ -29,10 +32,17 @@ const ButtonGroup = styled.div`
 const DeleteBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
+  border: 0;
+  color: ${props => props.theme.black};
+  background: #ff6262;
 `;
 const SaveBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
+  font-size: 1.3rem;
+  border: 0;
+  background: ${props => props.theme.blue};
+  color: ${props => props.theme.white};
 `;
 const MarkerNameLabel = styled.label`
   margin-bottom: 0.4em;
@@ -67,7 +77,7 @@ const ETAGroup = styled(CheckedInGroup)`
   & > * {
     margin-bottom: 0.5em;
   }
-  margin-bottom: 1em;
+  margin-bottom: 1.5em;
 `;
 const ETA = styled(CheckedIn)``;
 
@@ -97,6 +107,8 @@ const MyMapComponent = compose(
       markerAmount={props.markers.length}
       startDate={props.startDate}
       endDate={props.endDate}
+      setStartDate={props.setStartDate}
+      setEndDate={props.setEndDate}
       inputHandler={props.inputHandler}
     />
     {props.showingInfoWindow && (
@@ -108,7 +120,13 @@ const MyMapComponent = compose(
           props.clearMarkerInfo();
         }}
       >
-        <InfoWrapper>
+        <InfoWrapper
+          onKeyDown={e => {
+            if (e.keyCode === 13) {
+              props.saveMarkerInfo();
+            }
+          }}
+        >
           <MarkerNameGroup>
             <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
             <MarkerNameBox
@@ -119,19 +137,20 @@ const MyMapComponent = compose(
               type="text"
             />
           </MarkerNameGroup>
-
           <ETAGroup>
             <ETA>ETA: </ETA>
-            <CalendarInput
-              type="date"
-              name="etaDate"
-              onChange={props.inputHandler}
-              value={props.etaDate}
+            <DatePicker
+              selected={props.etaTime}
+              onChange={props.setEtaTime}
+              showTimeSelect
+              timeIntervals={15}
+              dateFormat="MM/dd/YYYY, h:mm aa"
+              timeCaption="Time"
               onKeyDown={e => {
                 e.preventDefault();
               }}
             />
-            <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} />
+            {/* <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} /> */}
             <SaveBtn
               onClick={() => {
                 props.saveMarkerInfo();
@@ -210,8 +229,8 @@ class Map extends React.PureComponent {
     super(props);
     this.state = {
       tripTitle: '',
-      startDate: '',
-      endDate: '',
+      startDate: new Date(),
+      endDate: new Date(),
       showingInfoWindow: false,
       // Storing location state for centering the map based on the marker
       location: { lat: 38.9260256843898, lng: -104.755169921875 },
@@ -219,8 +238,7 @@ class Map extends React.PureComponent {
       selectedPlace: {},
       markers: [],
       checkpointName: '',
-      etaTime: '',
-      etaDate: '',
+      etaTime: new Date(),
       checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0
@@ -238,8 +256,37 @@ class Map extends React.PureComponent {
     this.YELLOW = 'yellow';
     this.WHITE = 'white';
     this.BLACK = 'black';
+    this.path = 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0';
+    this.CHECKMARK_ICON =
+      'data:image/svg+xml;utf-8, \
+    <svg width="40" height="40" viewBox="0 0 71 70" fill="none" xmlns="http://www.w3.org/2000/svg">\
+    <rect x="2.5" y="2.5" width="65" height="65" rx="32.5" fill="#EAEAEA" stroke="#9DFF8D" stroke-width="5"/>\
+    <rect x="7" y="42.507" width="6.37388" height="27.6167" transform="rotate(-45 7 42.507)" fill="#52FF00"/>\
+    <rect x="65.1602" y="12.543" width="7.37885" height="62.17" transform="rotate(44.5729 65.1602 12.543)" fill="#52FF00"/>\
+    </svg>';
+    this.RED_EXCLAMATION =
+      'data:image/svg+xml;utf-8, \
+      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">\
+      <rect x="25" y="7" width="10" height="33" fill="#D10000"/>\
+      <rect x="25" y="42" width="10" height="10" rx="5" fill="#D10000"/>\
+      <rect x="1.5" y="1.5" width="57" height="57" rx="28.5" stroke="#D10000" stroke-width="3"/>\
+      </svg>';
   }
-
+  setEndDate = date => {
+    this.setState({
+      endDate: date
+    });
+  };
+  setStartDate = date => {
+    this.setState({
+      startDate: date
+    });
+  };
+  setEtaTime = date => {
+    this.setState({
+      etaTime: date
+    });
+  };
   clearActiveMarker = () => {
     this.setState({ activeMarker: {} });
   };
@@ -267,53 +314,21 @@ class Map extends React.PureComponent {
     }`;
   };
   setMarkerColorsByDate = () => {
-    const { markers } = this.state;
+    const { etaTime, markers } = this.state;
+
+    const now = moment();
+    const eta = moment(etaTime);
+
+    const minutesDiff = eta.diff(now, 'minutes');
+    // console.log(minutesDiff);
 
     const newMarkers = [...markers];
-    const date = new Date();
-    const year = date.getFullYear();
-    // added 1 because month range is from 0 to 11
-    const month = date.getMonth() + 1;
-    //getDate() gives me the actual day number if I used getDay() it only gives me 0 to 6
-    const day = date.getDate();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    // Example marker properties
-    //   etaDate: "2018-12-06"
-    //   etaTime: "02:32"
     for (let i = 0; i < newMarkers.length; i++) {
-      let marker = newMarkers[i];
-      if (marker.etaDate === '' || marker.etaTime === '') {
-        break;
-      }
-      // If the marker status is completed, don't need to change it to red or yellow to signify tardiness
-      if (marker.status === this.COMPLETED) {
+      if (newMarkers[i].status === this.COMPLETED) {
         continue;
       }
-      let eta = marker.etaDate.match(/(\d{4})-(\d{2})-(\d{2})/);
-      let etaYear = Number(eta[1]);
-      let etaMonth = Number(eta[2]);
-      let etaDay = Number(eta[3]);
-      // let etaYear = Number(marker.etaDate.match(/(\d{4})-/)[1]);
-      // let etaMonth = Number(marker.etaDate.match(/-(\d{2})-/)[1]);
-      // let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
-      let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
-      let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
-      // const formula = 60 - etaMinute + minute;
-      console.log('ETA Year: ', etaYear, 'Year: ', year);
-      console.log('ETA Month: ', etaMonth, 'Month: ', month);
-      console.log('ETA Day: ', etaDay, 'Day: ', day);
-      console.log('ETA Hour: ', etaHour, 'Hour: ', hour);
-      console.log('ETA Minute: ', etaMinute, 'Minute:', minute);
-      //Turns it back to grey
-      if (
-        (year === etaYear &&
-          month === etaMonth &&
-          day === etaDay &&
-          hour <= etaHour &&
-          minute <= etaMinute) ||
-        (year <= etaYear && month <= etaMonth && day < etaDay)
-      ) {
+      // turn marker to not tardy state
+      if (minutesDiff >= 0) {
         newMarkers[i].label = {
           ...newMarkers[i].label,
           color: this.WHITE
@@ -324,23 +339,8 @@ class Map extends React.PureComponent {
         };
         break;
       }
-      // // turns red because the person did not check in and they are an hour late
-      else if (
-        year > etaYear ||
-        (year === etaYear && month > etaMonth) ||
-        (year === etaYear && month === etaMonth && day > etaDay) ||
-        (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
-      ) {
-        newMarkers[i].label = {
-          ...newMarkers[i].label,
-          color: this.WHITE
-        };
-        newMarkers[i].icon = {
-          ...newMarkers[i].icon,
-          fillColor: this.RED
-        };
-        break;
-      } else {
+      //turn marker to low alert tardy state
+      if (minutesDiff > -59 && minutesDiff < 0) {
         newMarkers[i].label = {
           ...newMarkers[i].label,
           color: this.BLACK
@@ -352,10 +352,23 @@ class Map extends React.PureComponent {
         newMarkers[i].label.color = this.BLACK;
         break;
       }
-    }
+      //turn marker to high alert tardy state
+      if (minutesDiff < -59) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          color: this.WHITE
+        };
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.RED
+        };
+        break;
+      }
+    } // for ends
 
     this.setState({ markers: newMarkers });
   };
+
   inputHandler = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
@@ -462,8 +475,7 @@ class Map extends React.PureComponent {
       },
       // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
       status: this.NOT_STARTED,
-      etaTime: this.calculateTime(),
-      etaDate: '',
+      etaTime: new Date(),
       checkpointName: '',
       checkedInTime: ''
     };
@@ -577,7 +589,7 @@ class Map extends React.PureComponent {
   };
   onMarkerClicked = (e, marker) => {
     this.clearMarkerInfo();
-    console.log(marker);
+    // console.log(marker);
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
@@ -596,7 +608,7 @@ class Map extends React.PureComponent {
   };
   onMarkerDragged = (e, activeIndex) => {
     //activeIndex comes from the dragged <Marker> component
-    console.log(this.state.activeMarker);
+    // console.log(this.state.activeMarker);
     const newMarkers = [...this.state.markers];
     const i = activeIndex;
     let newPosition = { lat: e.latLng.lat(), lng: e.latLng.lng() };
@@ -605,7 +617,7 @@ class Map extends React.PureComponent {
     this.setState({ markers: newMarkers }, () => this.updateLines());
   };
   saveMarkerInfo = () => {
-    const { activeMarker, markers, checkpointName, etaTime, etaDate, checkedInTime } = this.state;
+    const { activeMarker, markers, checkpointName, etaTime, checkedInTime } = this.state;
     let markerIndex;
     for (let i = 0; i < markers.length; i++) {
       if (activeMarker.id === markers[i].id) {
@@ -622,8 +634,7 @@ class Map extends React.PureComponent {
       },
       checkpointName,
       checkedInTime,
-      etaTime,
-      etaDate
+      etaTime
     };
 
     this.setState(
@@ -643,8 +654,7 @@ class Map extends React.PureComponent {
   clearMarkerInfo = () => {
     this.setState({
       checkpointName: '',
-      etaTime: '',
-      etaDate: ''
+      etaTime: ''
     });
   };
   render() {
@@ -658,7 +668,6 @@ class Map extends React.PureComponent {
       startDate,
       endDate,
       location,
-      etaDate,
       etaTime,
       checkpointName,
       checkedInTime
@@ -676,10 +685,12 @@ class Map extends React.PureComponent {
         startDate={startDate}
         endDate={endDate}
         etaTime={etaTime}
-        etaDate={etaDate}
         checkedInTime={checkedInTime}
         checkpointName={checkpointName}
         //methods
+        setEtaTime={this.setEtaTime}
+        setEndDate={this.setEndDate}
+        setStartDate={this.setStartDate}
         clearMarkerInfo={this.clearMarkerInfo}
         clearActiveMarker={this.clearActiveMarker}
         saveMarkerInfo={this.saveMarkerInfo}
