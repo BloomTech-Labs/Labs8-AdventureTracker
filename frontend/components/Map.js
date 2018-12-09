@@ -77,7 +77,7 @@ const ETAGroup = styled(CheckedInGroup)`
   & > * {
     margin-bottom: 0.5em;
   }
-  margin-bottom: 1em;
+  margin-bottom: 1.5em;
 `;
 const ETA = styled(CheckedIn)``;
 
