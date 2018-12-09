@@ -229,8 +229,8 @@ class Map extends React.PureComponent {
     super(props);
     this.state = {
       tripTitle: '',
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: '',
+      endDate: '',
       showingInfoWindow: false,
       // Storing location state for centering the map based on the marker
       location: { lat: 38.9260256843898, lng: -104.755169921875 },
@@ -320,7 +320,7 @@ class Map extends React.PureComponent {
     const eta = moment(etaTime);
 
     const minutesDiff = eta.diff(now, 'minutes');
-    console.log(minutesDiff);
+    // console.log(minutesDiff);
 
     const newMarkers = [...markers];
     for (let i = 0; i < newMarkers.length; i++) {
@@ -589,7 +589,7 @@ class Map extends React.PureComponent {
   };
   onMarkerClicked = (e, marker) => {
     this.clearMarkerInfo();
-    console.log(marker);
+    // console.log(marker);
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
@@ -608,7 +608,7 @@ class Map extends React.PureComponent {
   };
   onMarkerDragged = (e, activeIndex) => {
     //activeIndex comes from the dragged <Marker> component
-    console.log(this.state.activeMarker);
+    // console.log(this.state.activeMarker);
     const newMarkers = [...this.state.markers];
     const i = activeIndex;
     let newPosition = { lat: e.latLng.lat(), lng: e.latLng.lng() };
