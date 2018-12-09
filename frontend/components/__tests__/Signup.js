@@ -1,6 +1,5 @@
 import Signup from '../Signup';
 import { shallow } from 'enzyme';
-import Link from 'next/link';
 
 describe('<Signup />', () => {
   it('renders and displays properly', () => {
