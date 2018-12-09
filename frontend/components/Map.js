@@ -16,6 +16,7 @@ import uuidv4 from 'uuid/v4';
 import { MapBar } from './MapBar';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import moment from 'moment';
 const Label = styled.label``;
 const ReachedCheckBox = styled.input`
   margin-bottom: 0.4em;
@@ -313,95 +314,147 @@ class Map extends React.PureComponent {
     }`;
   };
   setMarkerColorsByDate = () => {
-    const { etaTime } = this.state;
-    console.log(etaTime);
-    //   const { markers } = this.state;
-    //   const newMarkers = [...markers];
-    //   const date = new Date();
-    //   const year = date.getFullYear();
-    //   // added 1 because month range is from 0 to 11
-    //   const month = date.getMonth() + 1;
-    //   //getDate() gives me the actual day number if I used getDay() it only gives me 0 to 6
-    //   const day = date.getDate();
-    //   const hour = date.getHours();
-    //   const minute = date.getMinutes();
-    //   // Example marker properties
-    //   //   etaDate: "2018-12-06"
-    //   //   etaTime: "02:32"
-    //   for (let i = 0; i < newMarkers.length; i++) {
-    //     let marker = newMarkers[i];
-    //     if (marker.etaDate === '' || marker.etaTime === '') {
-    //       break;
-    //     }
-    //     // If the marker status is completed, don't need to change it to red or yellow to signify tardiness
-    //     if (marker.status === this.COMPLETED) {
-    //       continue;
-    //     }
-    //     let eta = marker.etaDate.match(/(\d{4})-(\d{2})-(\d{2})/);
-    //     let etaYear = Number(eta[1]);
-    //     let etaMonth = Number(eta[2]);
-    //     let etaDay = Number(eta[3]);
-    //     // let etaYear = Number(marker.etaDate.match(/(\d{4})-/)[1]);
-    //     // let etaMonth = Number(marker.etaDate.match(/-(\d{2})-/)[1]);
-    //     // let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
-    //     let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
-    //     let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
-    //     // const formula = 60 - etaMinute + minute;
-    //     console.log('ETA Year: ', etaYear, 'Year: ', year);
-    //     console.log('ETA Month: ', etaMonth, 'Month: ', month);
-    //     console.log('ETA Day: ', etaDay, 'Day: ', day);
-    //     console.log('ETA Hour: ', etaHour, 'Hour: ', hour);
-    //     console.log('ETA Minute: ', etaMinute, 'Minute:', minute);
-    //     //Turns it back to grey
-    //     if (
-    //       (year === etaYear &&
-    //         month === etaMonth &&
-    //         day === etaDay &&
-    //         hour <= etaHour &&
-    //         minute <= etaMinute) ||
-    //       (year <= etaYear && month <= etaMonth && day < etaDay)
-    //     ) {
-    //       newMarkers[i].label = {
-    //         ...newMarkers[i].label,
-    //         color: this.WHITE
-    //       };
-    //       newMarkers[i].icon = {
-    //         ...newMarkers[i].icon,
-    //         fillColor: this.GREY
-    //       };
-    //       break;
-    //     }
-    //     // // turns red because the person did not check in and they are an hour late
-    //     else if (
-    //       year > etaYear ||
-    //       (year === etaYear && month > etaMonth) ||
-    //       (year === etaYear && month === etaMonth && day > etaDay) ||
-    //       (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
-    //     ) {
-    //       newMarkers[i].label = {
-    //         ...newMarkers[i].label,
-    //         color: this.WHITE
-    //       };
-    //       newMarkers[i].icon = {
-    //         ...newMarkers[i].icon,
-    //         fillColor: this.RED
-    //       };
-    //       break;
-    //     } else {
-    //       newMarkers[i].label = {
-    //         ...newMarkers[i].label,
-    //         color: this.BLACK
-    //       };
-    //       newMarkers[i].icon = {
-    //         ...newMarkers[i].icon,
-    //         fillColor: this.YELLOW
-    //       };
-    //       newMarkers[i].label.color = this.BLACK;
-    //       break;
-    //     }
-    //   }
-    //   this.setState({ markers: newMarkers });
+    const { etaTime, markers } = this.state;
+
+    const now = moment();
+    const eta = moment(etaTime);
+
+    const minutesDiff = eta.diff(now, 'minutes');
+    console.log(minutesDiff);
+
+    const newMarkers = [...markers];
+    for (let i = 0; i < newMarkers.length; i++) {
+      if (newMarkers[i].status === this.COMPLETED) {
+        continue;
+      }
+      // turn marker to not tardy state
+      if (minutesDiff >= 0) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          color: this.WHITE
+        };
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.GREY
+        };
+        break;
+      }
+      //turn marker to low alert tardy state
+      if (minutesDiff > -59 && minutesDiff < 0) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          color: this.BLACK
+        };
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.YELLOW
+        };
+        newMarkers[i].label.color = this.BLACK;
+        break;
+      }
+      //turn marker to high alert tardy state
+      if (minutesDiff < -59) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          color: this.WHITE
+        };
+        newMarkers[i].icon = {
+          ...newMarkers[i].icon,
+          fillColor: this.RED
+        };
+        break;
+      }
+    } // for ends
+
+    this.setState({ markers: newMarkers });
   };
+
+  //   const { markers } = this.state;
+  //   const newMarkers = [...markers];
+  //   const date = new Date();
+  //   const year = date.getFullYear();
+  //   // added 1 because month range is from 0 to 11
+  //   const month = date.getMonth() + 1;
+  //   //getDate() gives me the actual day number if I used getDay() it only gives me 0 to 6
+  //   const day = date.getDate();
+  //   const hour = date.getHours();
+  //   const minute = date.getMinutes();
+  //   // Example marker properties
+  //   //   etaDate: "2018-12-06"
+  //   //   etaTime: "02:32"
+  //   for (let i = 0; i < newMarkers.length; i++) {
+  //     let marker = newMarkers[i];
+  //     if (marker.etaDate === '' || marker.etaTime === '') {
+  //       break;
+  //     }
+  //     // If the marker status is completed, don't need to change it to red or yellow to signify tardiness
+  //     if (marker.status === this.COMPLETED) {
+  //       continue;
+  //     }
+  //     let eta = marker.etaDate.match(/(\d{4})-(\d{2})-(\d{2})/);
+  //     let etaYear = Number(eta[1]);
+  //     let etaMonth = Number(eta[2]);
+  //     let etaDay = Number(eta[3]);
+  //     // let etaYear = Number(marker.etaDate.match(/(\d{4})-/)[1]);
+  //     // let etaMonth = Number(marker.etaDate.match(/-(\d{2})-/)[1]);
+  //     // let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
+  //     let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
+  //     let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
+  //     // const formula = 60 - etaMinute + minute;
+  //     console.log('ETA Year: ', etaYear, 'Year: ', year);
+  //     console.log('ETA Month: ', etaMonth, 'Month: ', month);
+  //     console.log('ETA Day: ', etaDay, 'Day: ', day);
+  //     console.log('ETA Hour: ', etaHour, 'Hour: ', hour);
+  //     console.log('ETA Minute: ', etaMinute, 'Minute:', minute);
+  //     //Turns it back to grey
+  //     if (
+  //       (year === etaYear &&
+  //         month === etaMonth &&
+  //         day === etaDay &&
+  //         hour <= etaHour &&
+  //         minute <= etaMinute) ||
+  //       (year <= etaYear && month <= etaMonth && day < etaDay)
+  //     ) {
+  //       newMarkers[i].label = {
+  //         ...newMarkers[i].label,
+  //         color: this.WHITE
+  //       };
+  //       newMarkers[i].icon = {
+  //         ...newMarkers[i].icon,
+  //         fillColor: this.GREY
+  //       };
+  //       break;
+  //     }
+  //     // // turns red because the person did not check in and they are an hour late
+  //     else if (
+  //       year > etaYear ||
+  //       (year === etaYear && month > etaMonth) ||
+  //       (year === etaYear && month === etaMonth && day > etaDay) ||
+  //       (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
+  //     ) {
+  //       newMarkers[i].label = {
+  //         ...newMarkers[i].label,
+  //         color: this.WHITE
+  //       };
+  //       newMarkers[i].icon = {
+  //         ...newMarkers[i].icon,
+  //         fillColor: this.RED
+  //       };
+  //       break;
+  //     } else {
+  //       newMarkers[i].label = {
+  //         ...newMarkers[i].label,
+  //         color: this.BLACK
+  //       };
+  //       newMarkers[i].icon = {
+  //         ...newMarkers[i].icon,
+  //         fillColor: this.YELLOW
+  //       };
+  //       newMarkers[i].label.color = this.BLACK;
+  //       break;
+  //     }
+  //   }
+  //   this.setState({ markers: newMarkers });
   inputHandler = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
