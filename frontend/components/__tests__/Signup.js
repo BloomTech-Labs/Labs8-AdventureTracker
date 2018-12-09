@@ -16,6 +16,17 @@ describe('<Signup />', () => {
     expect(state.name).toBe('');
     expect(state.passwordMatch).toBeTruthy();
   });
+  it('can increment step by 1 and decrement step by 1', () => {
+    const wrapper = shallow(<Signup />);
+
+    expect(wrapper.state().step).toBe(1);
+
+    wrapper.instance().nextStep();
+    expect(wrapper.state().step).toBe(2);
+
+    wrapper.instance().prevStep();
+    expect(wrapper.state().step).toBe(1);
+  });
   it('passwordMatch should be be when both passwords are the same', () => {
     const wrapper = shallow(<Signup />);
     //test 1:
