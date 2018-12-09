@@ -41,10 +41,19 @@ describe('<Breadcrumbs />', () => {
     expect(Links.length).toBe(2);
   });
   it.skip('displays the home -> triplist -> map name breadcrumbs', () => {
-    const wrapper = shallow(<Breadcrumbs startCrumb={'/'} router={{ route: BILLING }} />);
+    const TRIP_LINK = '/mountain-adventure';
+    const wrapper = shallow(
+      <Breadcrumbs
+        startCrumb={'/'}
+        endCrumbName={'Mountain Adventure'}
+        endCrumbLink={TRIP_LINK}
+        router={{ route: TRIPLIST }}
+      />
+    );
     const Links = wrapper.children().find(Link);
     expect(Links.find({ href: INDEX }).length).toBe(1);
-    expect(Links.find({ href: BILLING }).length).toBe(1);
-    expect(Links.length).toBe(2);
+    expect(Links.find({ href: TRIPLIST }).length).toBe(1);
+    expect(Links.find({ href: TRIP_LINK })).toBe(1);
+    expect(Links.length).toBe(3);
   });
 });
