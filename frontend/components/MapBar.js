@@ -156,7 +156,6 @@ const MapBar = props => {
               onClick={async () => {
                 await createTrip();
                 Router.push({ pathname: '/triplist' });
-                location.reload();
               }}
             >
               Save
