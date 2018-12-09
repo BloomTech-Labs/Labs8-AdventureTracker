@@ -238,7 +238,7 @@ class Map extends React.PureComponent {
       selectedPlace: {},
       markers: [],
       checkpointName: '',
-      etaTime: '',
+      etaTime: new Date(),
       checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0
