@@ -13,7 +13,9 @@ import {
 //react-google-maps docs: https://tomchentw.github.io/react-google-maps/
 import styled from 'styled-components';
 import uuidv4 from 'uuid/v4';
-import { MapBar, CalendarInput } from './MapBar';
+import { MapBar } from './MapBar';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 const Label = styled.label``;
 const ReachedCheckBox = styled.input`
   margin-bottom: 0.4em;
@@ -29,10 +31,17 @@ const ButtonGroup = styled.div`
 const DeleteBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
+  border: 0;
+  color: ${props => props.theme.black};
+  background: #ff6262;
 `;
 const SaveBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
+  font-size: 1.3rem;
+  border: 0;
+  background: ${props => props.theme.blue};
+  color: ${props => props.theme.white};
 `;
 const MarkerNameLabel = styled.label`
   margin-bottom: 0.4em;
@@ -97,6 +106,8 @@ const MyMapComponent = compose(
       markerAmount={props.markers.length}
       startDate={props.startDate}
       endDate={props.endDate}
+      setStartDate={props.setStartDate}
+      setEndDate={props.setEndDate}
       inputHandler={props.inputHandler}
     />
     {props.showingInfoWindow && (
@@ -108,7 +119,13 @@ const MyMapComponent = compose(
           props.clearMarkerInfo();
         }}
       >
-        <InfoWrapper>
+        <InfoWrapper
+          onKeyDown={e => {
+            if (e.keyCode === 13) {
+              props.saveMarkerInfo();
+            }
+          }}
+        >
           <MarkerNameGroup>
             <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
             <MarkerNameBox
@@ -119,19 +136,20 @@ const MyMapComponent = compose(
               type="text"
             />
           </MarkerNameGroup>
-
           <ETAGroup>
             <ETA>ETA: </ETA>
-            <CalendarInput
-              type="date"
-              name="etaDate"
-              onChange={props.inputHandler}
-              value={props.etaDate}
+            <DatePicker
+              selected={props.etaTime}
+              onChange={props.setEtaTime}
+              showTimeSelect
+              timeIntervals={15}
+              dateFormat="MM/dd/YYYY, h:mm aa"
+              timeCaption="Time"
               onKeyDown={e => {
                 e.preventDefault();
               }}
             />
-            <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} />
+            {/* <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} /> */}
             <SaveBtn
               onClick={() => {
                 props.saveMarkerInfo();
@@ -220,7 +238,6 @@ class Map extends React.PureComponent {
       markers: [],
       checkpointName: '',
       etaTime: '',
-      etaDate: '',
       checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0
@@ -254,7 +271,21 @@ class Map extends React.PureComponent {
       <rect x="1.5" y="1.5" width="57" height="57" rx="28.5" stroke="#D10000" stroke-width="3"/>\
       </svg>';
   }
-
+  setEndDate = date => {
+    this.setState({
+      endDate: date
+    });
+  };
+  setStartDate = date => {
+    this.setState({
+      startDate: date
+    });
+  };
+  setEtaTime = date => {
+    this.setState({
+      etaTime: date
+    });
+  };
   clearActiveMarker = () => {
     this.setState({ activeMarker: {} });
   };
@@ -282,94 +313,94 @@ class Map extends React.PureComponent {
     }`;
   };
   setMarkerColorsByDate = () => {
-    const { markers } = this.state;
-
-    const newMarkers = [...markers];
-    const date = new Date();
-    const year = date.getFullYear();
-    // added 1 because month range is from 0 to 11
-    const month = date.getMonth() + 1;
-    //getDate() gives me the actual day number if I used getDay() it only gives me 0 to 6
-    const day = date.getDate();
-    const hour = date.getHours();
-    const minute = date.getMinutes();
-    // Example marker properties
-    //   etaDate: "2018-12-06"
-    //   etaTime: "02:32"
-    for (let i = 0; i < newMarkers.length; i++) {
-      let marker = newMarkers[i];
-      if (marker.etaDate === '' || marker.etaTime === '') {
-        break;
-      }
-      // If the marker status is completed, don't need to change it to red or yellow to signify tardiness
-      if (marker.status === this.COMPLETED) {
-        continue;
-      }
-      let eta = marker.etaDate.match(/(\d{4})-(\d{2})-(\d{2})/);
-      let etaYear = Number(eta[1]);
-      let etaMonth = Number(eta[2]);
-      let etaDay = Number(eta[3]);
-      // let etaYear = Number(marker.etaDate.match(/(\d{4})-/)[1]);
-      // let etaMonth = Number(marker.etaDate.match(/-(\d{2})-/)[1]);
-      // let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
-      let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
-      let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
-      // const formula = 60 - etaMinute + minute;
-      console.log('ETA Year: ', etaYear, 'Year: ', year);
-      console.log('ETA Month: ', etaMonth, 'Month: ', month);
-      console.log('ETA Day: ', etaDay, 'Day: ', day);
-      console.log('ETA Hour: ', etaHour, 'Hour: ', hour);
-      console.log('ETA Minute: ', etaMinute, 'Minute:', minute);
-      //Turns it back to grey
-      if (
-        (year === etaYear &&
-          month === etaMonth &&
-          day === etaDay &&
-          hour <= etaHour &&
-          minute <= etaMinute) ||
-        (year <= etaYear && month <= etaMonth && day < etaDay)
-      ) {
-        newMarkers[i].label = {
-          ...newMarkers[i].label,
-          color: this.WHITE
-        };
-        newMarkers[i].icon = {
-          ...newMarkers[i].icon,
-          fillColor: this.GREY
-        };
-        break;
-      }
-      // // turns red because the person did not check in and they are an hour late
-      else if (
-        year > etaYear ||
-        (year === etaYear && month > etaMonth) ||
-        (year === etaYear && month === etaMonth && day > etaDay) ||
-        (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
-      ) {
-        newMarkers[i].label = {
-          ...newMarkers[i].label,
-          color: this.WHITE
-        };
-        newMarkers[i].icon = {
-          ...newMarkers[i].icon,
-          fillColor: this.RED
-        };
-        break;
-      } else {
-        newMarkers[i].label = {
-          ...newMarkers[i].label,
-          color: this.BLACK
-        };
-        newMarkers[i].icon = {
-          ...newMarkers[i].icon,
-          fillColor: this.YELLOW
-        };
-        newMarkers[i].label.color = this.BLACK;
-        break;
-      }
-    }
-
-    this.setState({ markers: newMarkers });
+    const { etaTime } = this.state;
+    console.log(etaTime);
+    //   const { markers } = this.state;
+    //   const newMarkers = [...markers];
+    //   const date = new Date();
+    //   const year = date.getFullYear();
+    //   // added 1 because month range is from 0 to 11
+    //   const month = date.getMonth() + 1;
+    //   //getDate() gives me the actual day number if I used getDay() it only gives me 0 to 6
+    //   const day = date.getDate();
+    //   const hour = date.getHours();
+    //   const minute = date.getMinutes();
+    //   // Example marker properties
+    //   //   etaDate: "2018-12-06"
+    //   //   etaTime: "02:32"
+    //   for (let i = 0; i < newMarkers.length; i++) {
+    //     let marker = newMarkers[i];
+    //     if (marker.etaDate === '' || marker.etaTime === '') {
+    //       break;
+    //     }
+    //     // If the marker status is completed, don't need to change it to red or yellow to signify tardiness
+    //     if (marker.status === this.COMPLETED) {
+    //       continue;
+    //     }
+    //     let eta = marker.etaDate.match(/(\d{4})-(\d{2})-(\d{2})/);
+    //     let etaYear = Number(eta[1]);
+    //     let etaMonth = Number(eta[2]);
+    //     let etaDay = Number(eta[3]);
+    //     // let etaYear = Number(marker.etaDate.match(/(\d{4})-/)[1]);
+    //     // let etaMonth = Number(marker.etaDate.match(/-(\d{2})-/)[1]);
+    //     // let etaDay = Number(marker.etaDate.match(/-\d{2}-(\d{2})/)[1]);
+    //     let etaHour = Number(marker.etaTime.match(/(\d{2}):/)[1]);
+    //     let etaMinute = Number(marker.etaTime.match(/:(\d{2})/)[1]);
+    //     // const formula = 60 - etaMinute + minute;
+    //     console.log('ETA Year: ', etaYear, 'Year: ', year);
+    //     console.log('ETA Month: ', etaMonth, 'Month: ', month);
+    //     console.log('ETA Day: ', etaDay, 'Day: ', day);
+    //     console.log('ETA Hour: ', etaHour, 'Hour: ', hour);
+    //     console.log('ETA Minute: ', etaMinute, 'Minute:', minute);
+    //     //Turns it back to grey
+    //     if (
+    //       (year === etaYear &&
+    //         month === etaMonth &&
+    //         day === etaDay &&
+    //         hour <= etaHour &&
+    //         minute <= etaMinute) ||
+    //       (year <= etaYear && month <= etaMonth && day < etaDay)
+    //     ) {
+    //       newMarkers[i].label = {
+    //         ...newMarkers[i].label,
+    //         color: this.WHITE
+    //       };
+    //       newMarkers[i].icon = {
+    //         ...newMarkers[i].icon,
+    //         fillColor: this.GREY
+    //       };
+    //       break;
+    //     }
+    //     // // turns red because the person did not check in and they are an hour late
+    //     else if (
+    //       year > etaYear ||
+    //       (year === etaYear && month > etaMonth) ||
+    //       (year === etaYear && month === etaMonth && day > etaDay) ||
+    //       (year === etaYear && month === etaMonth && day === etaDay && hour > etaHour)
+    //     ) {
+    //       newMarkers[i].label = {
+    //         ...newMarkers[i].label,
+    //         color: this.WHITE
+    //       };
+    //       newMarkers[i].icon = {
+    //         ...newMarkers[i].icon,
+    //         fillColor: this.RED
+    //       };
+    //       break;
+    //     } else {
+    //       newMarkers[i].label = {
+    //         ...newMarkers[i].label,
+    //         color: this.BLACK
+    //       };
+    //       newMarkers[i].icon = {
+    //         ...newMarkers[i].icon,
+    //         fillColor: this.YELLOW
+    //       };
+    //       newMarkers[i].label.color = this.BLACK;
+    //       break;
+    //     }
+    //   }
+    //   this.setState({ markers: newMarkers });
   };
   inputHandler = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -477,8 +508,7 @@ class Map extends React.PureComponent {
       },
       // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
       status: this.NOT_STARTED,
-      etaTime: this.calculateTime(),
-      etaDate: '',
+      etaTime: new Date(),
       checkpointName: '',
       checkedInTime: ''
     };
@@ -620,7 +650,7 @@ class Map extends React.PureComponent {
     this.setState({ markers: newMarkers }, () => this.updateLines());
   };
   saveMarkerInfo = () => {
-    const { activeMarker, markers, checkpointName, etaTime, etaDate, checkedInTime } = this.state;
+    const { activeMarker, markers, checkpointName, etaTime, checkedInTime } = this.state;
     let markerIndex;
     for (let i = 0; i < markers.length; i++) {
       if (activeMarker.id === markers[i].id) {
@@ -637,8 +667,7 @@ class Map extends React.PureComponent {
       },
       checkpointName,
       checkedInTime,
-      etaTime,
-      etaDate
+      etaTime
     };
 
     this.setState(
@@ -658,8 +687,7 @@ class Map extends React.PureComponent {
   clearMarkerInfo = () => {
     this.setState({
       checkpointName: '',
-      etaTime: '',
-      etaDate: ''
+      etaTime: ''
     });
   };
   render() {
@@ -673,7 +701,6 @@ class Map extends React.PureComponent {
       startDate,
       endDate,
       location,
-      etaDate,
       etaTime,
       checkpointName,
       checkedInTime
@@ -691,10 +718,12 @@ class Map extends React.PureComponent {
         startDate={startDate}
         endDate={endDate}
         etaTime={etaTime}
-        etaDate={etaDate}
         checkedInTime={checkedInTime}
         checkpointName={checkpointName}
         //methods
+        setEtaTime={this.setEtaTime}
+        setEndDate={this.setEndDate}
+        setStartDate={this.setStartDate}
         clearMarkerInfo={this.clearMarkerInfo}
         clearActiveMarker={this.clearActiveMarker}
         saveMarkerInfo={this.saveMarkerInfo}

@@ -48,9 +48,13 @@ const CalendarGroup = styled.div`
 const CalendarLabel = styled.label`
   padding: 0 1em 0 0;
 `;
-const CalendarInput = styled.input`
+const CalendarInput = styled(DatePicker)`
+  display: flex;
+  justify-content: center;
   height: 2em;
-  width: 13rem;
+  text-align: center;
+  padding: 0 1rem;
+  max-width: 10rem;
 `;
 const MapBtn = styled.button`
   background: ${props => props.theme.lightorange};
@@ -108,7 +112,9 @@ const MapBar = props => {
           <CalendarInput
             id="start"
             type="date"
-            onChange={props.inputHandler}
+            placeholderText="Start Date"
+            onSelect={props.setStartDate}
+            selected={props.startDate}
             name="startDate"
             onKeyDown={e => {
               e.preventDefault();
@@ -118,13 +124,14 @@ const MapBar = props => {
         <CalendarGroup>
           <CalendarLabel htmlFor="end">End Date:</CalendarLabel>
           <CalendarInput
-            id="end"
-            type="date"
+            placeholderText="End Date"
             name="endDate"
-            onChange={props.inputHandler}
+            id="end"
+            onSelect={props.setEndDate}
             onKeyDown={e => {
               e.preventDefault();
             }}
+            selected={props.endDate}
           />
         </CalendarGroup>
       </CalendarWrapper>
