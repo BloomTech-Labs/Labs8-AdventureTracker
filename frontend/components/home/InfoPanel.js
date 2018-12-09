@@ -63,7 +63,7 @@ const InfoPanel = () => (
     <Info>
       <BoldWord>Find</BoldWord> the best routes for your journey
     </Info>
-    <BuyBtn href="/billing">Buy Now</BuyBtn>
+    {/* <BuyBtn href="/billing">Buy Now</BuyBtn> */}
   </InfoPanelWrapper>
 );
 
