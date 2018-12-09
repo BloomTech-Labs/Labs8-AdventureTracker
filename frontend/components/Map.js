@@ -229,8 +229,8 @@ class Map extends React.PureComponent {
     super(props);
     this.state = {
       tripTitle: '',
-      startDate: '',
-      endDate: '',
+      startDate: new Date(),
+      endDate: new Date(),
       showingInfoWindow: false,
       // Storing location state for centering the map based on the marker
       location: { lat: 38.9260256843898, lng: -104.755169921875 },
