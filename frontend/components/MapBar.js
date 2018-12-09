@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import DatePicker from 'react-datepicker';
+import { CURRENT_USER_QUERY } from './User';
 
 import 'react-datepicker/dist/react-datepicker.css';
 const ProgressWrapper = styled.div`
@@ -137,6 +138,7 @@ const MapBar = props => {
       </CalendarWrapper>
       <Mutation
         mutation={CREATE_TRIP_MUTATION}
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         variables={{
           title: props.title,
           startDate: props.startDate,
