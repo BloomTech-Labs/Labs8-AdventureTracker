@@ -2,6 +2,7 @@ import styled from 'styled-components';
 import { Mutation } from 'react-apollo';
 import Router from 'next/router';
 import gql from 'graphql-tag';
+import { CURRENT_USER_QUERY } from './User';
 
 const ProgressWrapper = styled.div`
   display: flex;
@@ -128,6 +129,7 @@ const MapBar = props => {
       </CalendarWrapper>
       <Mutation
         mutation={CREATE_TRIP_MUTATION}
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         variables={{
           title: props.title,
           startDate: props.startDate,
