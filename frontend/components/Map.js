@@ -14,6 +14,7 @@ import {
 import styled from 'styled-components';
 import uuidv4 from 'uuid/v4';
 import { MapBar } from './MapBar';
+import { GREY_PIN, CHECKMARK_ICON, ORANGE_EXCLAMATION, RED_EXCLAMATION } from './styles/MapIcons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
@@ -89,7 +90,7 @@ const MyMapComponent = compose(
     googleMapURL:
       'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places',
     loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `800px`, width: '50%', position: 'relative' }} />,
+    containerElement: <div style={{ height: `100%`, width: '100%', position: 'relative' }} />,
     mapElement: <div style={{ height: `100%` }} />
   }),
   withScriptjs,
@@ -257,20 +258,6 @@ class Map extends React.PureComponent {
     this.WHITE = 'white';
     this.BLACK = 'black';
     this.path = 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0';
-    this.CHECKMARK_ICON =
-      'data:image/svg+xml;utf-8, \
-    <svg width="40" height="40" viewBox="0 0 71 70" fill="none" xmlns="http://www.w3.org/2000/svg">\
-    <rect x="2.5" y="2.5" width="65" height="65" rx="32.5" fill="#EAEAEA" stroke="#9DFF8D" stroke-width="5"/>\
-    <rect x="7" y="42.507" width="6.37388" height="27.6167" transform="rotate(-45 7 42.507)" fill="#52FF00"/>\
-    <rect x="65.1602" y="12.543" width="7.37885" height="62.17" transform="rotate(44.5729 65.1602 12.543)" fill="#52FF00"/>\
-    </svg>';
-    this.RED_EXCLAMATION =
-      'data:image/svg+xml;utf-8, \
-      <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">\
-      <rect x="25" y="7" width="10" height="33" fill="#D10000"/>\
-      <rect x="25" y="42" width="10" height="10" rx="5" fill="#D10000"/>\
-      <rect x="1.5" y="1.5" width="57" height="57" rx="28.5" stroke="#D10000" stroke-width="3"/>\
-      </svg>';
   }
   setEndDate = date => {
     this.setState({
@@ -316,51 +303,38 @@ class Map extends React.PureComponent {
   setMarkerColorsByDate = () => {
     const { etaTime, markers } = this.state;
 
-    const now = moment();
-    const eta = moment(etaTime);
-
-    const minutesDiff = eta.diff(now, 'minutes');
     // console.log(minutesDiff);
-
     const newMarkers = [...markers];
+    const now = moment();
     for (let i = 0; i < newMarkers.length; i++) {
       if (newMarkers[i].status === this.COMPLETED) {
         continue;
       }
+      const eta = moment(newMarkers[i].etaTime);
+
+      const minutesDiff = eta.diff(now, 'minutes');
       // turn marker to not tardy state
       if (minutesDiff >= 0) {
-        newMarkers[i].label = {
-          ...newMarkers[i].label,
-          color: this.WHITE
-        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
-          fillColor: this.GREY
+          url: GREY_PIN
         };
+
         break;
       }
       //turn marker to low alert tardy state
       if (minutesDiff > -59 && minutesDiff < 0) {
-        newMarkers[i].label = {
-          ...newMarkers[i].label,
-          color: this.BLACK
-        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
-          fillColor: this.YELLOW
+          url: ORANGE_EXCLAMATION
         };
-        newMarkers[i].label.color = this.BLACK;
         break;
       }
       //turn marker to high alert tardy state
       if (minutesDiff < -59) {
-        newMarkers[i].label = {
-          ...newMarkers[i].label,
-          color: this.WHITE
-        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
-          fillColor: this.RED
+          url: RED_EXCLAMATION
         };
         break;
       }
@@ -392,15 +366,13 @@ class Map extends React.PureComponent {
           // console.log(newMarkers[i].icon);
           newMarkers[i].icon = {
             ...newMarkers[i].icon,
-            fillColor: this.GREEN
+            url: CHECKMARK_ICON
           };
         } else {
           newMarkers[i].status = this.NOT_STARTED;
           newMarkers[i].checkedInTime = '';
-          newMarkers[i].icon = {
-            ...newMarkers[i].icon,
-            fillColor: this.GREY
-          };
+
+          newMarkers[i].icon = null;
         }
         // console.log(newMarkers[i].checkedInTime);
         markerIndex = i;
@@ -455,12 +427,8 @@ class Map extends React.PureComponent {
   createMarker = e => {
     const { markers } = this.state;
     const icon = {
-      path: 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0',
-      fillColor: this.GREY,
-      fillOpacity: 0.9,
-      anchor: new google.maps.Point(0, 0),
-      strokeWeight: 0,
-      scale: 1
+      origin: new google.maps.Point(0, 0),
+      url: GREY_PIN
     };
     const marker = {
       position: { lat: e.latLng.lat(), lng: e.latLng.lng() },

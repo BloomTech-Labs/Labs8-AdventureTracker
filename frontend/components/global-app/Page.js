@@ -58,7 +58,10 @@ class Page extends Component {
   render() {
     return (
       <ThemeProvider theme={theme}>
-        <StyledPageWithTheme>{this.props.children}</StyledPageWithTheme>
+        <StyledPageWithTheme>
+          <Meta />
+          {this.props.children}
+        </StyledPageWithTheme>
       </ThemeProvider>
     );
   }
