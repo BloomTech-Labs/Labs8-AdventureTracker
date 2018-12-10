@@ -84,6 +84,8 @@ const SIGNUP_MUTATION = gql`
     $facebookUser: Boolean!
     $password: String!
     $password2: String!
+    $tripCount: Int!
+    $paid: Boolean!
   ) {
     signup(
       email: $email
@@ -91,6 +93,8 @@ const SIGNUP_MUTATION = gql`
       facebookUser: $facebookUser
       password: $password
       password2: $password2
+      tripCount: $tripCount
+      paid: $paid
     ) {
       # returned values
       id
@@ -131,6 +135,8 @@ class Signup extends Component {
     password2: '',
     facebookUser: false,
     passwordMatch: true,
+    tripCount: 0,
+    paid: false,
     step: 1
   };
 
