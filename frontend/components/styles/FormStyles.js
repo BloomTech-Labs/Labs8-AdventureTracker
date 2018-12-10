@@ -100,4 +100,13 @@ const FormBox = styled.input`
   margin-bottom: 3rem;
 `;
 
-export { Form, FormHeader, FormLabel, FormBox, FormGroup, FormFieldset, FormTitle };
+const FormArea = styled.textarea`
+  display: block;
+  height: ${props => (props.height ? props.height : '4rem')};
+  width: ${props => (props.width ? props.width : '100%')};
+  font-size: 3rem;
+  padding: 0 1.6rem;
+  margin-bottom: 0rem;
+`;
+
+export { Form, FormHeader, FormLabel, FormBox, FormArea, FormGroup, FormFieldset, FormTitle };
