@@ -11,8 +11,8 @@ type Mutation {
   createTrip(
     title: String!
     user: UserWhereUniqueInput!
-    startDate: String!
-    endDate: String!
+    startDate: Int!
+    endDate: Int!
     archived: Boolean!
     description: String
   ): Trip!

@@ -8,6 +8,7 @@ import { FacebookIcon } from './styles/SVGs';
 import gql from 'graphql-tag';
 import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
+import axios from 'axios';
 import {
   Form,
   FormLabel,
@@ -98,6 +99,28 @@ const SIGNUP_MUTATION = gql`
   }
 `;
 
+const CREATE_TRIP_MUTATION = gql`
+  mutation CREATE_TRIP_MUTATION(
+    $title: String!
+    $startDate: Int!
+    $endDate: Int!
+    $user: UserWhereUniqueInput!
+    $description: String!
+    $archived: Boolean! # $markers: [Marker!]!
+  ) {
+    createTrip(
+      title: $title
+      user: $user
+      startDate: $startDate
+      endDate: $endDate
+      description: $description
+      archived: $archived
+    ) {
+      id
+    }
+  }
+`;
+
 class Signup extends Component {
   state = {
     name: '',
@@ -158,6 +181,7 @@ class Signup extends Component {
                 e.preventDefault();
                 await signup();
                 this.setState({ name: '', email: '', password: '', password2: '', step: 1 });
+
                 Router.push({
                   pathname: '/triplist'
                 });
