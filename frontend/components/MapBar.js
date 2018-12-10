@@ -4,7 +4,6 @@ import Router from 'next/router';
 import gql from 'graphql-tag';
 import DatePicker from 'react-datepicker';
 import { CURRENT_USER_QUERY } from './User';
-import { withRouter } from 'next/router';
 import { Fragment } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 const ProgressWrapper = styled.div`
@@ -72,15 +71,6 @@ const CalendarWrapper = styled.div`
   flex-flow: column;
   align-items: flex-end;
 `;
-const TRIP_QUERY = gql`
-  query getTrip($id: ID!) {
-    trip(where: { id: $id }) {
-      startDate
-      endDate
-      title
-    }
-  }
-`;
 
 const CREATE_TRIP_MUTATION = gql`
   mutation CREATE_TRIP_MUTATION(
@@ -104,90 +94,78 @@ const CREATE_TRIP_MUTATION = gql`
   }
 `;
 
-const MapBar = withRouter(props => {
+const MapBar = props => {
   const progressFormula = (props.completedChecks / props.markerAmount) * 100;
-  const tripId = props.router.query.id;
   return (
     <MapBarWrapper>
-      <Query query={TRIP_QUERY} variables={{ id: tripId }}>
-        {({ data, loading, error }) => {
-          console.log(data);
-          const { trip } = data;
+      <AdventureTitle>{props.title ? props.title : 'Placeholder Title'}</AdventureTitle>
+      <ProgressWrapper>
+        <ProgressBar width={props.completedChecks === 0 ? '0%' : `${progressFormula}%`}>
+          <ProgressStats>
+            {props.completedChecks} of {props.markerAmount} Completed
+          </ProgressStats>
+        </ProgressBar>
+      </ProgressWrapper>
+      <CalendarWrapper>
+        <CalendarGroup>
+          <CalendarLabel htmlFor="start">Start Date:</CalendarLabel>
+          {/* example: <input id="date" type="date" value="2017-06-01"> */}
+          <CalendarInput
+            id="start"
+            type="date"
+            placeholderText="Start Date"
+            onSelect={props.setStartDate}
+            selected={props.startDate}
+            name="startDate"
+            onKeyDown={e => {
+              e.preventDefault();
+            }}
+          />
+        </CalendarGroup>
+        <CalendarGroup>
+          <CalendarLabel htmlFor="end">End Date:</CalendarLabel>
+          <CalendarInput
+            placeholderText="End Date"
+            name="endDate"
+            id="end"
+            onSelect={props.setEndDate}
+            onKeyDown={e => {
+              e.preventDefault();
+            }}
+            selected={props.endDate}
+          />
+        </CalendarGroup>
+      </CalendarWrapper>
+      <Mutation
+        mutation={CREATE_TRIP_MUTATION}
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
+        variables={{
+          title: props.title,
+          startDate: props.startDate,
+          endDate: props.endDate,
+          //TODO - add description
+          description: 'awesome trip!',
+          archived: false,
+          // markers: props.markers
+          user: { id: '', email: '', facebookID: '' }
+        }}
+      >
+        {(createTrip, { error, loading }) => {
           return (
-            <Fragment>
-              <AdventureTitle>{props.title ? props.title : 'Placeholder Title'}</AdventureTitle>
-              <ProgressWrapper>
-                <ProgressBar width={props.completedChecks === 0 ? '0%' : `${progressFormula}%`}>
-                  <ProgressStats>
-                    {props.completedChecks} of {props.markerAmount} Completed
-                  </ProgressStats>
-                </ProgressBar>
-              </ProgressWrapper>
-              <CalendarWrapper>
-                <CalendarGroup>
-                  <CalendarLabel htmlFor="start">Start Date:</CalendarLabel>
-                  {/* example: <input id="date" type="date" value="2017-06-01"> */}
-                  <CalendarInput
-                    id="start"
-                    type="date"
-                    placeholderText="Start Date"
-                    onSelect={props.setStartDate}
-                    selected={props.startDate}
-                    name="startDate"
-                    onKeyDown={e => {
-                      e.preventDefault();
-                    }}
-                  />
-                </CalendarGroup>
-                <CalendarGroup>
-                  <CalendarLabel htmlFor="end">End Date:</CalendarLabel>
-                  <CalendarInput
-                    placeholderText="End Date"
-                    name="endDate"
-                    id="end"
-                    onSelect={props.setEndDate}
-                    onKeyDown={e => {
-                      e.preventDefault();
-                    }}
-                    selected={props.endDate}
-                  />
-                </CalendarGroup>
-              </CalendarWrapper>
-
-              <Mutation
-                mutation={CREATE_TRIP_MUTATION}
-                refetchQueries={[{ query: CURRENT_USER_QUERY }]}
-                variables={{
-                  title: props.title,
-                  startDate: props.startDate,
-                  endDate: props.endDate,
-                  //TODO - add description
-                  description: 'awesome trip!',
-                  archived: false,
-                  // markers: props.markers
-                  user: { id: '', email: '', facebookID: '' }
-                }}
-              >
-                {(createTrip, { error, loading }) => {
-                  return (
-                    <MapBtn
-                      onClick={async () => {
-                        await createTrip();
-                        Router.push({ pathname: '/triplist' });
-                      }}
-                    >
-                      Save
-                      <br /> Trip
-                    </MapBtn>
-                  );
-                }}
-              </Mutation>
-            </Fragment>
+            <MapBtn
+              onClick={async () => {
+                await createTrip();
+                Router.push({ pathname: '/triplist' });
+              }}
+            >
+              Save
+              <br /> Trip
+            </MapBtn>
           );
         }}
-      </Query>
+      </Mutation>
     </MapBarWrapper>
   );
-});
+};
 
 export { MapBar, CalendarGroup, CalendarInput, CalendarLabel, CalendarWrapper };

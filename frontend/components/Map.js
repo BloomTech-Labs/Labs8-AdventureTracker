@@ -278,6 +278,9 @@ class Map extends React.PureComponent {
     this.setState({ activeMarker: {} });
   };
   componentDidMount() {
+    console.log(this.props.data);
+    const { startDate, endDate, title } = this.props.data.trip;
+    this.setState({ startDate, endDate, title });
     const minute = 1000 * 60;
     setInterval(() => {
       const { markers } = this.state;
