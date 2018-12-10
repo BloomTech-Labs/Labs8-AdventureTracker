@@ -28,7 +28,6 @@ class Trips extends Component {
             if (error) return <p>Error: {error.message}</p>;
             return (
               <TripsList>
-                <TripNote key="1" title="North Pole" start="12/24/18" end="12/25/18" />
                 {data.me !== null
                   ? data.me.trip.map(trip => {
                       if (!trip.archived) {

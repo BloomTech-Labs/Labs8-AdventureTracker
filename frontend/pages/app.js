@@ -16,13 +16,20 @@ const TRIP_QUERY = gql`
 const App = props => {
   const tripId = props.router.query.id;
   console.log(tripId);
-  return (
-    <Query query={TRIP_QUERY} variables={{ tripId }}>
-      {({ data, loading, error }) => {
-        return <Map data={data} />;
-      }}
-    </Query>
-  );
+  if (props.router.query.id) {
+    return (
+      <Query query={TRIP_QUERY} variables={{ tripId }} refetch>
+        {({ data, loading, error }) => {
+          if (loading) {
+            return <p>{loading}</p>;
+          }
+          return <Map data={data} />;
+        }}
+      </Query>
+    );
+  } else {
+    return <Map />;
+  }
 };
 
 export default withRouter(App);

@@ -33,8 +33,8 @@ type Trip {
   id: ID! @unique
   user: User!
   title: String!
-  startDate: String!
-  endDate: String!
+  startDate: Int!
+  endDate: Int!
   description: String!
   archived: Boolean!
   markers: [Marker!]!

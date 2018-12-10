@@ -8,6 +8,7 @@ import { FacebookIcon } from './styles/SVGs';
 import gql from 'graphql-tag';
 import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
+import axios from 'axios';
 import {
   Form,
   FormLabel,
@@ -51,7 +52,7 @@ const Facebook = styled(LoginButton)`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${props => (props.height ? props.height : '7rem')};
+  height: ${props => (props.height ? props.height : '6rem')};
   width: ${props => (props.width ? props.width : '18rem')};
   border: none;
   border-radius: 10px;
@@ -96,6 +97,28 @@ const SIGNUP_MUTATION = gql`
       email
       name
       facebookUser
+    }
+  }
+`;
+
+const CREATE_TRIP_MUTATION = gql`
+  mutation CREATE_TRIP_MUTATION(
+    $title: String!
+    $startDate: Int!
+    $endDate: Int!
+    $user: UserWhereUniqueInput!
+    $description: String!
+    $archived: Boolean! # $markers: [Marker!]!
+  ) {
+    createTrip(
+      title: $title
+      user: $user
+      startDate: $startDate
+      endDate: $endDate
+      description: $description
+      archived: $archived
+    ) {
+      id
     }
   }
 `;
@@ -160,6 +183,7 @@ class Signup extends Component {
                 e.preventDefault();
                 await signup();
                 this.setState({ name: '', email: '', password: '', password2: '', step: 1 });
+
                 Router.push({
                   pathname: '/triplist'
                 });
@@ -266,7 +290,7 @@ class Signup extends Component {
                     onError={this.handleError}
                   >
                     <FacebookIcon length={40} />
-                    &nbsp; Signup with Facebook
+                    &nbsp; Facebook Signup
                   </Facebook>
                 </FacebookProvider>
                 <LoginInsteadBtn href="/login">Login instead?</LoginInsteadBtn>
