@@ -3,8 +3,9 @@ import gql from 'graphql-tag';
 import Router from 'next/router';
 import styled from 'styled-components';
 import DateBadge from './styles/DateBadge';
+import Link from 'next/link';
 
-const NoteWrapper = styled.div`
+const NoteWrapper = styled.a`
   position: relative;
   height: ${props => props.length};
   width: ${props => props.length};
@@ -59,38 +60,40 @@ const UPDATE_TRIP_MUTATION = gql`
 
 const TripNote = ({ id, title, start, end, archived }) => {
   return (
-    <NoteWrapper length={'30rem'}>
-      <AdventureTitle>{title}</AdventureTitle>
-      <MapImage src="../static/hiking-girl.jpg" />
-      <BadgeGroup>
-        <BadgeText>Start:</BadgeText>
-        <DateBadge background={'green'}>{start}</DateBadge>
-      </BadgeGroup>
-      <BadgeGroup>
-        <BadgeText>End:</BadgeText>
-        <DateBadge>{end}</DateBadge>
-      </BadgeGroup>
-      <Mutation
-        mutation={UPDATE_TRIP_MUTATION}
-        variables={{
-          id,
-          archived: true
-        }}
-      >
-        {(updateTrip, { error, loading }) => {
-          return (
-            <ArchiveBtn
-              onClick={async () => {
-                updateTrip();
-                Router.push({ pathname: '/triplist' });
-              }}
-            >
-              Archive?
-            </ArchiveBtn>
-          );
-        }}
-      </Mutation>
-    </NoteWrapper>
+    <Link href={`/app?id=${id}`}>
+      <NoteWrapper length={'30rem'}>
+        <AdventureTitle>{title}</AdventureTitle>
+        <MapImage src="../static/hiking-girl.jpg" />
+        <BadgeGroup>
+          <BadgeText>Start:</BadgeText>
+          <DateBadge background={'green'}>{start}</DateBadge>
+        </BadgeGroup>
+        <BadgeGroup>
+          <BadgeText>End:</BadgeText>
+          <DateBadge>{end}</DateBadge>
+        </BadgeGroup>
+        <Mutation
+          mutation={UPDATE_TRIP_MUTATION}
+          variables={{
+            id,
+            archived: true
+          }}
+        >
+          {(updateTrip, { error, loading }) => {
+            return (
+              <ArchiveBtn
+                onClick={async () => {
+                  updateTrip();
+                  Router.push({ pathname: '/triplist' });
+                }}
+              >
+                Archive?
+              </ArchiveBtn>
+            );
+          }}
+        </Mutation>
+      </NoteWrapper>
+    </Link>
   );
 };
 

@@ -24,6 +24,8 @@ type Mutation {
     facebookUser: Boolean!
     password: String!
     password2: String!
+    tripcount: Int!
+    paid: Boolean!
   ): User!
   signin(email: String!, password: String!): User!
   signout(message: String): SuccessMessage
