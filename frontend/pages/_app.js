@@ -2,7 +2,7 @@ import App, { Container } from 'next/app';
 import Page from '../components/global-app/Page';
 import { ApolloProvider } from 'react-apollo';
 import withData from '../lib/withData';
-
+import '../lib/dummy.css';
 class MyApp extends App {
   static async getInitialProps({ Component, ctx }) {
     let pageProps = {};
