@@ -148,6 +148,8 @@ const MyMapComponent = compose(
           <li>Click on the location of the map where you want to place your starting marker.</li>
           <li>Continue placing markers on the map until you have all of your waypoints showing </li>
           <li>Click the Save Trip button to save your trip</li>
+          <h4>****Orange ! is late by 59 minutes or less****</h4>
+          <h4>****Red ! is late by 1 hour or greater****</h4>
         </ol>
       </Instructions>
     </SidebarWrapper>
