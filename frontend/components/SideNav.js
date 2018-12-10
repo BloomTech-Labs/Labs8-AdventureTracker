@@ -27,6 +27,7 @@ const SideNavBtn = styled.button`
   width: 100%;
   font-size: 2rem;
   font-weight: 400;
+  border-radius: 10px;
   color: ${props => props.theme.white};
   background: ${props => (props.active ? props.theme.orange : props.theme.blue)};
   border: none;
