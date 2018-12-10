@@ -34,8 +34,8 @@ const PasswordBox = styled(FormBox)`
 `;
 const BackBtn = styled(PrimaryBtn)`
   background: grey;
-  width: 12rem;
   height: 6.5rem;
+  width: 12rem;
 `;
 const NextBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
@@ -59,8 +59,8 @@ const Facebook = styled(LoginButton)`
   background: ${props => props.theme.orange};
   cursor: pointer;
   font-size: 3rem;
-  width: 100%;
   margin-bottom: 2rem;
+  width: 100%;
   background-color: ${props => props.theme.blue};
 `;
 
