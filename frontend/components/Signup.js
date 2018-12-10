@@ -52,7 +52,7 @@ const Facebook = styled(LoginButton)`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: ${props => (props.height ? props.height : '7rem')};
+  height: ${props => (props.height ? props.height : '6rem')};
   width: ${props => (props.width ? props.width : '18rem')};
   border: none;
   border-radius: 10px;
@@ -290,7 +290,7 @@ class Signup extends Component {
                     onError={this.handleError}
                   >
                     <FacebookIcon length={40} />
-                    &nbsp; Signup with Facebook
+                    &nbsp; Facebook Signup
                   </Facebook>
                 </FacebookProvider>
                 <LoginInsteadBtn href="/login">Login instead?</LoginInsteadBtn>
