@@ -303,33 +303,27 @@ class Map extends React.PureComponent {
   setMarkerColorsByDate = () => {
     const { etaTime, markers } = this.state;
 
-    const now = moment();
-    const eta = moment(etaTime);
-
-    const minutesDiff = eta.diff(now, 'minutes');
     // console.log(minutesDiff);
-
     const newMarkers = [...markers];
+    const now = moment();
     for (let i = 0; i < newMarkers.length; i++) {
       if (newMarkers[i].status === this.COMPLETED) {
         continue;
       }
+      const eta = moment(newMarkers[i].etaTime);
+
+      const minutesDiff = eta.diff(now, 'minutes');
       // turn marker to not tardy state
       if (minutesDiff >= 0) {
-        newMarkers[i].label = {
-          ...newMarkers[i].label
-        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
           url: GREY_PIN
         };
+
         break;
       }
       //turn marker to low alert tardy state
       if (minutesDiff > -59 && minutesDiff < 0) {
-        newMarkers[i].label = {
-          ...newMarkers[i].label
-        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
           url: ORANGE_EXCLAMATION
@@ -338,9 +332,6 @@ class Map extends React.PureComponent {
       }
       //turn marker to high alert tardy state
       if (minutesDiff < -59) {
-        newMarkers[i].label = {
-          ...newMarkers[i].label
-        };
         newMarkers[i].icon = {
           ...newMarkers[i].icon,
           url: RED_EXCLAMATION
