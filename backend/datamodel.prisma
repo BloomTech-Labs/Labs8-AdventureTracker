@@ -18,6 +18,8 @@ type User {
   resetTokenExpiry: Float
   permissions: [Permission]
   trip: [Trip!]!
+  tripcount: Int!
+  paid: Boolean!
 }
 
 type Order {
