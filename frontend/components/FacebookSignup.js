@@ -22,6 +22,8 @@ const FACEBOOKSIGNUP_MUTATION = gql`
       password: ""
       facebookUser: true
       facebookID: $facebookID
+      tripCount: 0
+      paid: false
     ) {
       id
       email
@@ -39,7 +41,9 @@ class FacebookSignup extends React.Component {
       email: '',
       password: '',
       name: '',
-      facebookUser: true
+      facebookUser: true,
+      tripCount: 0,
+      paid: false
     };
   }
 

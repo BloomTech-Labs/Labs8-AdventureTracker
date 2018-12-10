@@ -11,6 +11,8 @@ const CURRENT_USER_QUERY = gql`
       password
       facebookUser
       facebookID
+      tripCount
+      paid
       permissions
       trip {
         id
