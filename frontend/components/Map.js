@@ -230,8 +230,8 @@ class Map extends React.PureComponent {
     super(props);
     this.state = {
       tripTitle: '',
-      startDate: new Date(),
-      endDate: new Date(),
+      startDate: Number(new Date()),
+      endDate: Number(new Date()),
       showingInfoWindow: false,
       // Storing location state for centering the map based on the marker
       location: { lat: 38.9260256843898, lng: -104.755169921875 },
@@ -239,7 +239,7 @@ class Map extends React.PureComponent {
       selectedPlace: {},
       markers: [],
       checkpointName: '',
-      etaTime: new Date(),
+      etaTime: Number(new Date()),
       checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0
@@ -274,13 +274,15 @@ class Map extends React.PureComponent {
       etaTime: date
     });
   };
+
   clearActiveMarker = () => {
     this.setState({ activeMarker: {} });
   };
   componentDidMount() {
-    console.log(this.props.data);
-    const { startDate, endDate, title } = this.props.data.trip;
-    this.setState({ startDate, endDate, title });
+    if (this.props.data) {
+      const { startDate, endDate, title } = this.props.data.trip;
+      this.setState({ startDate, endDate, title });
+    }
     const minute = 1000 * 60;
     setInterval(() => {
       const { markers } = this.state;
