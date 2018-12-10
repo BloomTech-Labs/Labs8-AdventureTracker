@@ -103,7 +103,7 @@ const FacebookIcon = props => {
       aria-hidden="true"
       data-prefix="fab"
       data-icon="facebook"
-      class="svg-inline--fa fa-facebook fa-w-14"
+      className="svg-inline--fa fa-facebook fa-w-14"
       role="img"
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 448 512"
