@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import DateBadge from './styles/DateBadge';
 import Link from 'next/link';
 
-const NoteWrapper = styled.button`
+const NoteWrapper = styled.a`
   position: relative;
   height: ${props => props.length};
   width: ${props => props.length};
