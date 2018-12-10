@@ -149,7 +149,7 @@ const MapBar = withRouter(props => {
                     onKeyDown={e => {
                       e.preventDefault();
                     }}
-                    selected={endDate}
+                    selected={props.endDate}
                   />
                 </CalendarGroup>
               </CalendarWrapper>
