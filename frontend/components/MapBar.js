@@ -2,7 +2,10 @@ import styled from 'styled-components';
 import { Mutation } from 'react-apollo';
 import Router from 'next/router';
 import gql from 'graphql-tag';
+import DatePicker from 'react-datepicker';
+import { CURRENT_USER_QUERY } from './User';
 
+import 'react-datepicker/dist/react-datepicker.css';
 const ProgressWrapper = styled.div`
   display: flex;
   position: relative;
@@ -46,9 +49,13 @@ const CalendarGroup = styled.div`
 const CalendarLabel = styled.label`
   padding: 0 1em 0 0;
 `;
-const CalendarInput = styled.input`
+const CalendarInput = styled(DatePicker)`
+  display: flex;
+  justify-content: center;
   height: 2em;
-  width: 13rem;
+  text-align: center;
+  padding: 0 1rem;
+  max-width: 10rem;
 `;
 const MapBtn = styled.button`
   background: ${props => props.theme.lightorange};
@@ -106,7 +113,9 @@ const MapBar = props => {
           <CalendarInput
             id="start"
             type="date"
-            onChange={props.inputHandler}
+            placeholderText="Start Date"
+            onSelect={props.setStartDate}
+            selected={props.startDate}
             name="startDate"
             onKeyDown={e => {
               e.preventDefault();
@@ -116,18 +125,20 @@ const MapBar = props => {
         <CalendarGroup>
           <CalendarLabel htmlFor="end">End Date:</CalendarLabel>
           <CalendarInput
-            id="end"
-            type="date"
+            placeholderText="End Date"
             name="endDate"
-            onChange={props.inputHandler}
+            id="end"
+            onSelect={props.setEndDate}
             onKeyDown={e => {
               e.preventDefault();
             }}
+            selected={props.endDate}
           />
         </CalendarGroup>
       </CalendarWrapper>
       <Mutation
         mutation={CREATE_TRIP_MUTATION}
+        refetchQueries={[{ query: CURRENT_USER_QUERY }]}
         variables={{
           title: props.title,
           startDate: props.startDate,
@@ -145,7 +156,6 @@ const MapBar = props => {
               onClick={async () => {
                 await createTrip();
                 Router.push({ pathname: '/triplist' });
-                location.reload();
               }}
             >
               Save
