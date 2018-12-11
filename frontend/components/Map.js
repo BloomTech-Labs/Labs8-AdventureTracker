@@ -310,8 +310,8 @@ class Map extends React.PureComponent {
       const { startDate, endDate, title } = this.props.data.trip;
 
       this.setState({
-        startDate: new Date(startDate),
-        endDate: new Date(endDate),
+        startDate: startDate,
+        endDate: endDate,
         title,
         markers: []
       });

@@ -11,16 +11,16 @@ type Mutation {
   createTrip(
     title: String!
     user: UserWhereUniqueInput!
-    startDate: String!
-    endDate: String!
+    startDate: DateTime!
+    endDate: DateTime!
     archived: Boolean!
     markers: [MarkerCreateInput!]!
   ): Trip!
   archiveTrip(id: ID!, archived: Boolean!): Trip!
   updateTrip(
     title: String!
-    startDate: String!
-    endDate: String!
+    startDate: DateTime!
+    endDate: DateTime!
     markers: [MarkerCreateInput!]!
     tripId: ID!
   ): Trip!

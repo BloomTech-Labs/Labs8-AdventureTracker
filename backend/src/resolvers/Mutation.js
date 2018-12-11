@@ -6,9 +6,9 @@ const { hashPassword } = require('../utils');
 const Mutations = {
   async createTrip(parent, args, ctx, info) {
     // comment out to test locally
-    // if (!ctx.request.userId) {
-    //   throw new Error('You must be logged in to do that!');
-    // }
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!');
+    }
     const trip = await ctx.db.mutation.createTrip(
       {
         data: {

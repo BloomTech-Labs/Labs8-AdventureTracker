@@ -79,8 +79,8 @@ const CalendarWrapper = styled.div`
 const UPDATE_TRIP_MUTATION = gql`
   mutation UPDATE_TRIP_MUTATION(
     $title: String!
-    $startDate: String!
-    $endDate: String!
+    $startDate: DateTime!
+    $endDate: DateTime!
     $tripId: ID!
     # $user: UserWhereUniqueInput!
     $markers: [MarkerCreateInput!]!
