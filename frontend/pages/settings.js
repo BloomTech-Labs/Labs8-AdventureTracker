@@ -5,6 +5,7 @@ import CommonTopNavbar from '../components/CommonTopNavbar';
 import { LgWidthContainer } from '../components/styles/WidthContainers';
 import styled from 'styled-components';
 import { MainContainer } from '../components/styles/MainContainer';
+import { BackgroundImage } from '../components/styles/BackgroundImage';
 
 const Settings = () => (
   <LgWidthContainer>
@@ -12,6 +13,7 @@ const Settings = () => (
     <SideNav />
     <MainContainer>
       <SettingsComponent />
+      <BackgroundImage src="../static/kayaking.jpg" />
     </MainContainer>
   </LgWidthContainer>
 );
