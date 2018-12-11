@@ -11,6 +11,7 @@ import User from './User';
 const PasswordForm = styled(Form)`
   max-width: 56rem;
   height: 60rem;
+  opacity: 0.9;
   background: ${props => props.theme.grey};
   border-radius: 8px;
   margin: 4rem auto;
