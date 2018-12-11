@@ -81,7 +81,7 @@ const UPDATE_TRIP_MUTATION = gql`
     $title: String!
     $startDate: String!
     $endDate: String!
-    $tripId: String!
+    $tripId: ID!
     # $user: UserWhereUniqueInput!
     $markers: [MarkerCreateInput!]!
   ) {

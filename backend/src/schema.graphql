@@ -22,13 +22,13 @@ type Mutation {
     startDate: String!
     endDate: String!
     markers: [MarkerCreateInput!]!
-    tripId: String!
+    tripId: ID!
   ): Trip!
   createMarkerMutation(
     title: String!
     position: PositionCreateWithoutMarkerInput!
     status: Progress!
-    trip: String!
+    tripId: ID!
   ): Marker!
   signup(
     name: String!
@@ -60,6 +60,7 @@ type Mutation {
 type Query {
   trips: [Trip]!
   trip(where: TripWhereUniqueInput!): Trip
+  markers: [Marker!]!
   users: [User]!
   me: User
 }
