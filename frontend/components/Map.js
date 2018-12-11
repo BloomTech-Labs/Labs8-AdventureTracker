@@ -141,6 +141,18 @@ const MyMapComponent = compose(
               type="text"
             />
           </MarkerNameGroup>
+          <Instructions>
+            <div className="container">
+              <h1>Instructions for Creating a Trip</h1>
+              <ol>
+                <li>Use the date picker to select stat and end dates for your trip</li>
+                <li>Click on the map to place your markers</li>
+                <li>Click on the markers to give your waypoints a name and ETA</li>
+                <h4>**** Orange ! means late by 59 minutes or less</h4>
+                <h4>**** Red ! means late by 1 hour or more</h4>
+              </ol>
+            </div>
+          </Instructions>
           <ETAGroup>
             <ETA>ETA: </ETA>
             <DatePicker
