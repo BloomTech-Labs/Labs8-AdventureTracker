@@ -11,6 +11,7 @@ const TRIP_QUERY = gql`
       endDate
       title
       markers {
+        title
         position {
           lat
           lng
@@ -26,8 +27,9 @@ const App = props => {
   console.log(tripId);
   if (props.router.query.id) {
     return (
-      <Query query={TRIP_QUERY} variables={{ tripId }} refetch>
+      <Query query={TRIP_QUERY} variables={{ tripId }}>
         {({ data, loading, error }) => {
+          console.log(data);
           if (loading) {
             return <p>{loading}</p>;
           }

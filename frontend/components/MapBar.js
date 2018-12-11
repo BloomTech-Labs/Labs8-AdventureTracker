@@ -81,7 +81,7 @@ const UPDATE_TRIP_MUTATION = gql`
     $title: String!
     $startDate: String!
     $endDate: String!
-    $tripId: String!
+    $tripId: ID!
     # $user: UserWhereUniqueInput!
     $markers: [MarkerCreateInput!]!
   ) {
@@ -174,6 +174,7 @@ class MapBar extends Component {
             title: this.state.tripTitle,
             startDate: this.props.startDate,
             endDate: this.props.endDate,
+            tripId: this.props.tripId,
             markers: []
             // user: { id: '', email: '', facebookID: '' }
           }}

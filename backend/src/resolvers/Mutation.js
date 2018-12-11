@@ -52,7 +52,7 @@ const Mutations = {
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates
-    delete updates.id;
+    delete updates.tripId;
     // run the update method
     return ctx.db.mutation.updateTrip(
       {
@@ -66,14 +66,14 @@ const Mutations = {
   },
   async createMarkerMutation(parent, args, ctx, info) {
     console.log(args);
-    const marker = await ctx.db.mutation.createMarkerMutation({
+    const marker = await ctx.db.mutation.createMarker({
       data: {
         trip: {
           connect: {
             // commment out to test locally
             // id: args.tripId
             // uncomment to test locally
-            id: args.trip
+            id: args.tripId
           }
         },
         title: args.title,
@@ -87,6 +87,7 @@ const Mutations = {
       },
       info
     });
+    console.log(marker);
     return marker;
   },
   // async deleteTrip(parent, args, ctx, info) {

@@ -17,7 +17,7 @@ type User {
   facebookID: String @unique
   resetTokenExpiry: Float
   permissions: [Permission]
-  trip: [Trip!]!
+  trip: [Trip!]! @relation(name: "TripToUser", onDelete: CASCADE)
   tripCount: Int!
   paid: Boolean!
 }
@@ -31,7 +31,7 @@ type Order {
 
 type Trip {
   id: ID! @unique
-  user: User!
+  user: User! @relation(name: "TripToUser", onDelete: SET_NULL)
   title: String!
   startDate: String!
   endDate: String!

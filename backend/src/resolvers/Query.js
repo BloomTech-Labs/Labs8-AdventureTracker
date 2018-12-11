@@ -7,6 +7,11 @@ const Query = {
     const trips = await ctx.db.query.trips();
     return trips;
   },
+  async markers(parent, args, ctx, info) {
+    console.log(args);
+    const markers = await ctx.db.query.markers({});
+    return markers;
+  },
   async trip(parent, args, ctx, info) {
     // const user = ctx.db.query.user({
     //   where: {id: ctx.request.userId}
@@ -20,9 +25,18 @@ const Query = {
         id: args.where.id
       }
     });
-
+    const markers = await ctx.db.query.markers({
+      where: {
+        trip: {
+          id: args.where.id
+        }
+      }
+    });
+    console.log(markers);
+    trip.markers = markers;
     return trip;
   },
+
   me(parent, args, ctx, info) {
     // check if there is a current user ID
     if (!ctx.request.userId) {
