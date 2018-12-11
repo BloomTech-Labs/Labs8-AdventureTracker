@@ -21,32 +21,6 @@ import moment from 'moment';
 
 const Label = styled.label``;
 
-const SidebarWrapper = styled.aside`
-  display: flex;
-  flex-flow: column;
-  justify-content: flex-end;
-  width: 100%;
-  max-width: 35rem;
-  background: ${props => props.theme.opacityblack};
-  position: fixed;
-  top: 0;
-  bottom: 0;
-  text-transform: capitalize;
-  padding: 5em 2em;
-  color: ${props => props.theme.white};
-  & > * {
-    margin-bottom: 2rem;
-  }
-  margin: 6rem 0 0 0;
-`;
-
-const Instructions = styled.div`
-  direction: flex;
-  justify-content: flex-start;
-  align-self: auto;
-  padding-left: 25px;
-`;
-
 const ReachedCheckBox = styled.input`
   margin-bottom: 0.4em;
 `;
@@ -140,19 +114,7 @@ const MyMapComponent = compose(
       setEndDate={props.setEndDate}
       inputHandler={props.inputHandler}
     />
-    <SidebarWrapper>
-      <Instructions>
-        <h1>Steps to creating a trip.</h1>
-        <ol>
-          <li>Use the date picker on the navbar to select the start and end dates of your trip.</li>
-          <li>Click on the location of the map where you want to place your starting marker.</li>
-          <li>Continue placing markers on the map until you have all of your waypoints showing </li>
-          <li>Click the Save Trip button to save your trip</li>
-          <h4>****Orange ! is late by 59 minutes or less****</h4>
-          <h4>****Red ! is late by 1 hour or greater****</h4>
-        </ol>
-      </Instructions>
-    </SidebarWrapper>
+
     {props.showingInfoWindow && (
       <InfoWindow
         position={props.activeMarker.position}
