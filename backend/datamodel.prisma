@@ -36,7 +36,15 @@ type Trip {
   startDate: String!
   endDate: String!
   archived: Boolean!
-  markers: [Marker!]!
+  markers: [Marker!]! @relation(name: "MarkerToTrip", onDelete: CASCADE)
+}
+
+type Marker {
+  id: ID! @unique
+  title: String!
+  trip: Trip! @relation(name: "MarkerToTrip", onDelete: SET_NULL)
+  position: Position! @relation(name: "PositionToMarker", onDelete: CASCADE)
+  status: Progress!
 }
 
 enum Progress {
@@ -44,10 +52,9 @@ enum Progress {
   COMPLETED
 }
 
-type Marker {
+type Position {
   id: ID! @unique
-  title: String!
+  marker: Marker! @relation(name: "PositionToMarker", onDelete: SET_NULL)
   lat: Float!
   lng: Float!
-  status: Progress!
 }
