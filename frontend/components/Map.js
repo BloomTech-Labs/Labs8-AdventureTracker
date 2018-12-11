@@ -120,9 +120,7 @@ const MyMapComponent = compose(
   // }}>
   // {(createMarkerMutation, { error, loading }) => {
   <GoogleMap
-    onClick={() => {
-      createMarkerMutation();
-    }}
+    onClick={props.onMapClicked}
     defaultZoom={8}
     center={props.location}
     // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
@@ -136,6 +134,7 @@ const MyMapComponent = compose(
       setStartDate={props.setStartDate}
       setEndDate={props.setEndDate}
       inputHandler={props.inputHandler}
+      tripId={props.tripId}
     />
     {props.showingInfoWindow && (
       <InfoWindow
@@ -306,10 +305,16 @@ class Map extends React.PureComponent {
     this.setState({ activeMarker: {} });
   };
   componentDidMount() {
+    console.log(this.props.data);
     if (this.props.data) {
-      const { startDate, endDate, title, markers } = this.props.data.trip;
+      const { startDate, endDate, title } = this.props.data.trip;
 
-      this.setState({ startDate: new Date(startDate), endDate: new Date(endDate), title, markers });
+      this.setState({
+        startDate: new Date(startDate),
+        endDate: new Date(endDate),
+        title,
+        markers: []
+      });
     }
     const minute = 1000 * 60;
     setInterval(() => {
@@ -674,6 +679,9 @@ class Map extends React.PureComponent {
       checkpointName,
       checkedInTime
     } = this.state;
+
+    const { id } = this.props.data.trip;
+    // console.log(this.props.data);
     return (
       <MyMapComponent
         //state object props
@@ -689,6 +697,7 @@ class Map extends React.PureComponent {
         etaTime={etaTime}
         checkedInTime={checkedInTime}
         checkpointName={checkpointName}
+        tripId={id}
         //methods
         setEtaTime={this.setEtaTime}
         setEndDate={this.setEndDate}

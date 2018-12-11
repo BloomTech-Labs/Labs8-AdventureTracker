@@ -52,7 +52,7 @@ const Mutations = {
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates
-    delete updates.id;
+    delete updates.tripId;
     // run the update method
     return ctx.db.mutation.updateTrip(
       {

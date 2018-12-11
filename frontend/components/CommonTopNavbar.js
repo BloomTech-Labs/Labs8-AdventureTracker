@@ -95,7 +95,7 @@ class CommonTopNavbar extends Component {
                         onClick={async () => {
                           const trip = await createTrip();
                           console.log('createTrip: ', trip);
-                          Router.push({ pathname: '/app', query: { id: trip.id } });
+                          Router.push({ pathname: '/app', query: { id: trip.data.createTrip.id } });
                         }}
                       >
                         Create Trip
