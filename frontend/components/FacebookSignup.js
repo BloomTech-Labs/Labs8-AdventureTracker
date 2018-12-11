@@ -5,11 +5,16 @@ import uuidv4 from 'uuid/v4';
 import Router from 'next/router';
 import styled from 'styled-components';
 import Error from './ErrorMessage';
-
 import { PrimaryBtn } from './styles/ButtonStyles';
 import { NavbarContainer } from './styles/NavbarContainer';
+import { FacebookIcon } from './styles/SVGs';
 
-const Login = styled(PrimaryBtn)``;
+const Login = styled(PrimaryBtn)`
+  margin: 10px;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+`;
 const NavbarWrapper = styled(NavbarContainer)`
   height: 8rem;
 `;
@@ -60,7 +65,7 @@ class FacebookSignup extends React.Component {
     });
   }
 
-  render() {
+  render(props) {
     return (
       <Mutation mutation={FACEBOOKSIGNUP_MUTATION} variables={this.state}>
         {(facebooksignup, { error, loading }) => {
@@ -76,7 +81,10 @@ class FacebookSignup extends React.Component {
                 }}
               >
                 <FacebookIcon length={40} />
-                &nbsp; Account verified by Facebook, click to continue
+                &nbsp;{' '}
+                {this.props.btnTxt
+                  ? this.props.btnTxt
+                  : 'Account verified by Facebook, click to continue'}
               </Login>
               <Error error={error} />
             </NavbarWrapper>
