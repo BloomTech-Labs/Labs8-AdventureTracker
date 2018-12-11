@@ -9,6 +9,7 @@ const TRIP_QUERY = gql`
       startDate
       endDate
       title
+      markers
     }
   }
 `;

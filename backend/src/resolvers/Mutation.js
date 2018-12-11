@@ -25,7 +25,6 @@ const Mutations = {
           title: args.title,
           startDate: args.startDate,
           endDate: args.endDate,
-          description: args.description,
           archived: args.archived,
           markers: args.markers
         }

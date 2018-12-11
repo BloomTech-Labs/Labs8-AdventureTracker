@@ -17,7 +17,6 @@ const CURRENT_USER_QUERY = gql`
       trip {
         id
         title
-        description
         archived
         startDate
         endDate

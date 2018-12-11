@@ -108,10 +108,9 @@ const SIGNUP_MUTATION = gql`
 const CREATE_TRIP_MUTATION = gql`
   mutation CREATE_TRIP_MUTATION(
     $title: String!
-    $startDate: Int!
-    $endDate: Int!
+    $startDate: String!
+    $endDate: String!
     $user: UserWhereUniqueInput!
-    $description: String!
     $archived: Boolean! # $markers: [Marker!]!
   ) {
     createTrip(
@@ -119,7 +118,6 @@ const CREATE_TRIP_MUTATION = gql`
       user: $user
       startDate: $startDate
       endDate: $endDate
-      description: $description
       archived: $archived
     ) {
       id

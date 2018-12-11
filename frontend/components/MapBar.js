@@ -78,19 +78,19 @@ const CalendarWrapper = styled.div`
 const CREATE_TRIP_MUTATION = gql`
   mutation CREATE_TRIP_MUTATION(
     $title: String!
-    $startDate: Int!
-    $endDate: Int!
+    $startDate: String!
+    $endDate: String!
     $user: UserWhereUniqueInput!
-    $description: String!
-    $archived: Boolean! # $markers: [Marker!]!
+    $archived: Boolean!
+    $markers: [MarkerCreateInput!]!
   ) {
     createTrip(
       title: $title
       user: $user
       startDate: $startDate
       endDate: $endDate
-      description: $description
       archived: $archived
+      markers: $markers
     ) {
       id
     }
@@ -173,10 +173,8 @@ class MapBar extends Component {
             title: this.state.tripTitle,
             startDate: this.props.startDate,
             endDate: this.props.endDate,
-            //TODO - add description
-            description: 'awesome trip!',
             archived: false,
-            // markers: this.props.markers
+            markers: this.props.markers,
             user: { id: '', email: '', facebookID: '' }
           }}
         >
