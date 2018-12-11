@@ -3,6 +3,7 @@ import { FacebookProvider, LoginButton } from 'react-facebook';
 import { Mutation } from 'react-apollo';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { device } from '../lib/device';
 import { fab, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
 import { FacebookIcon } from './styles/SVGs';
 import gql from 'graphql-tag';
@@ -32,20 +33,40 @@ const ButtonGroup = styled.div`
 `;
 const PasswordBox = styled(FormBox)`
   border: 2px solid ${props => (props.passwordMatch ? 'none' : props.theme.red)};
+  @media ${device.tablet} {
+    font-size: 2.5rem;
+  }
 `;
 const BackBtn = styled(PrimaryBtn)`
   background: grey;
   height: 6.5rem;
   width: 12rem;
+  @media ${device.tablet} {
+    height: 5rem;
+    font-size: 2.5rem;
+  }
 `;
 const NextBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
+  @media ${device.tablet} {
+    font-size: 2.4rem;
+    margin: 0 0 2rem auto;
+  }
 `;
 const LoginInsteadBtn = styled(PrimaryLinkBtn)`
   width: 100%;
+  @media ${device.tablet} {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
 `;
 const SignUpBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
+  @media ${device.tablet} {
+    height: 5rem;
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const Facebook = styled(LoginButton)`
@@ -63,6 +84,10 @@ const Facebook = styled(LoginButton)`
   margin-bottom: 2rem;
   width: 100%;
   background-color: ${props => props.theme.blue};
+  @media ${device.tablet} {
+    font-size: 2.3rem;
+    margin-bottom: 1.5rem;
+  }
 `;
 
 const PasswordErrorGroup = styled.div`
