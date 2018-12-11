@@ -139,111 +139,103 @@ const MyMapComponent = compose(
             }
           }}
         >
-          <InfoWrapper
-            onKeyDown={e => {
-              if (e.keyCode === 13) {
+          <div className="container">
+            <h2>Click on the markers to give your waypoints a name and ETA</h2>
+          </div>
+          <MarkerNameGroup>
+            <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
+            <MarkerNameBox
+              name="checkpointName"
+              onChange={props.inputHandler}
+              value={props.checkpointName}
+              id="location"
+              type="text"
+            />
+          </MarkerNameGroup>
+          <ETAGroup>
+            <ETA>ETA: </ETA>
+            <DatePicker
+              selected={props.etaTime}
+              onChange={props.setEtaTime}
+              showTimeSelect
+              timeIntervals={15}
+              dateFormat="MM/dd/YYYY, h:mm aa"
+              timeCaption="Time"
+              onKeyDown={e => {
+                e.preventDefault();
+              }}
+            />
+            {/* <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} /> */}
+            <SaveBtn
+              onClick={() => {
                 props.saveMarkerInfo();
-              }
-            }}
-          >
-            <div className="container">
-              <h2>Click on the markers to give your waypoints a name and ETA</h2>
-            </div>
-            <MarkerNameGroup>
-              <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
-              <MarkerNameBox
-                name="checkpointName"
-                onChange={props.inputHandler}
-                value={props.checkpointName}
-                id="location"
-                type="text"
-              />
-            </MarkerNameGroup>
-            <ETAGroup>
-              <ETA>ETA: </ETA>
-              <DatePicker
-                selected={props.etaTime}
-                onChange={props.setEtaTime}
-                showTimeSelect
-                timeIntervals={15}
-                dateFormat="MM/dd/YYYY, h:mm aa"
-                timeCaption="Time"
-                onKeyDown={e => {
-                  e.preventDefault();
-                }}
-              />
-              {/* <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} /> */}
-              <SaveBtn
-                onClick={() => {
-                  props.saveMarkerInfo();
-                }}
-              >
-                Save Marker Info
-              </SaveBtn>
-            </ETAGroup>
-            <CheckboxGroup>
-              <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
-              <ReachedCheckBox
-                onChange={props.changeMarkerStatus}
-                id="reached-checkbox"
-                type="checkbox"
-                checked={props.activeMarker.status === 'COMPLETED' ? true : false}
-                value={props.checkedInTime}
-              />
-            </CheckboxGroup>
-            <CheckedInGroup>
-              <CheckedIn htmlFor="checked-in">Checked-in: </CheckedIn>
-              <CheckInBox
-                id="checked-in"
-                value={props.checkedInTime}
-                name="checkedInTime"
-                type="time"
-                disabled
-              />
-            </CheckedInGroup>
-            <ButtonGroup>
-              <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
-                Delete Marker?
-              </DeleteBtn>
-            </ButtonGroup>
-          </InfoWrapper>
-        </InfoWindow>
-      )}
-      {props.markers.map((mark, i) => {
-        // This is how we use the functions that our Marker component gives us
-        // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
-        // const click = function(e) {
-        //   console.log(this.getPosition(e));
-        // };
-        return (
-          <Marker
-            position={mark.position}
-            onClick={e => props.onMarkerClicked(e, mark)}
-            key={mark.id}
-            draggable={true}
-            onDragStart={props.onMarkerDragStart}
-            label={mark.label}
-            onDrag={e => props.onMarkerDragged(e, i)}
-            icon={mark.icon}
-          />
-        );
-      })}
+              }}
+            >
+              Save Marker Info
+            </SaveBtn>
+          </ETAGroup>
+          <CheckboxGroup>
+            <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
+            <ReachedCheckBox
+              onChange={props.changeMarkerStatus}
+              id="reached-checkbox"
+              type="checkbox"
+              checked={props.activeMarker.status === 'COMPLETED' ? true : false}
+              value={props.checkedInTime}
+            />
+          </CheckboxGroup>
+          <CheckedInGroup>
+            <CheckedIn htmlFor="checked-in">Checked-in: </CheckedIn>
+            <CheckInBox
+              id="checked-in"
+              value={props.checkedInTime}
+              name="checkedInTime"
+              type="time"
+              disabled
+            />
+          </CheckedInGroup>
+          <ButtonGroup>
+            <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
+              Delete Marker?
+            </DeleteBtn>
+          </ButtonGroup>
+        </InfoWrapper>
+      </InfoWindow>
+    )}
+    {props.markers.map((mark, i) => {
+      // This is how we use the functions that our Marker component gives us
+      // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
+      // const click = function(e) {
+      //   console.log(this.getPosition(e));
+      // };
+      return (
+        <Marker
+          position={mark.position}
+          onClick={e => props.onMarkerClicked(e, mark)}
+          key={mark.id}
+          draggable={true}
+          onDragStart={props.onMarkerDragStart}
+          label={mark.label}
+          onDrag={e => props.onMarkerDragged(e, i)}
+          icon={mark.icon}
+        />
+      );
+    })}
 
-      {props.polylines.map(line => {
-        return (
-          <Polyline
-            key={line.id}
-            path={line.path}
-            options={{
-              strokeColor: line.strokeColor,
-              strokeWeight: line.strokeWeight,
-              strokeOpacity: line.strokeOpacity,
-              icons: line.icons
-            }}
-          />
-        );
-      })}
-    </GoogleMap>
+    {props.polylines.map(line => {
+      return (
+        <Polyline
+          key={line.id}
+          path={line.path}
+          options={{
+            strokeColor: line.strokeColor,
+            strokeWeight: line.strokeWeight,
+            strokeOpacity: line.strokeOpacity,
+            icons: line.icons
+          }}
+        />
+      );
+    })}
 
     <MainContainerThree>
       <div style={{ marginBottom: '14em' }}>
@@ -256,7 +248,7 @@ const MyMapComponent = compose(
         </ul>
       </div>
     </MainContainerThree>
-  </div>
+  </GoogleMap>
 ));
 
 class Map extends React.PureComponent {
@@ -476,7 +468,6 @@ class Map extends React.PureComponent {
       origin: new google.maps.Point(0, 0),
       url: GREY_PIN
     };
-  };
 
     const marker = {
       position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
