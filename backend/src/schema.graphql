@@ -24,7 +24,7 @@ type Mutation {
     facebookUser: Boolean!
     password: String!
     password2: String!
-    tripcount: Int!
+    tripCount: Int!
     paid: Boolean!
   ): User!
   signin(email: String!, password: String!): User!
@@ -35,6 +35,8 @@ type Mutation {
     password: String!
     facebookID: String
     facebookUser: Boolean!
+    tripCount: Int!
+    paid: Boolean!
   ): User!
   facebooksignin(facebookID: String): User!
   # deleteTrip(id: ID!): Trip

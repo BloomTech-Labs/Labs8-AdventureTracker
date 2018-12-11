@@ -18,7 +18,7 @@ type User {
   resetTokenExpiry: Float
   permissions: [Permission]
   trip: [Trip!]!
-  tripcount: Int!
+  tripCount: Int!
   paid: Boolean!
 }
 
