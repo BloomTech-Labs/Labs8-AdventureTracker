@@ -476,6 +476,8 @@ class Map extends React.PureComponent {
       origin: new google.maps.Point(0, 0),
       url: GREY_PIN
     };
+  };
+
     const marker = {
       position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
       id: uuidv4(),
