@@ -22,6 +22,9 @@ const ErrorStyles = styled.div`
 
 const DisplayError = ({ error }) => {
   if (!error || !error.message) return null;
+  if (error == 'No user found for this Facebook account.') {
+    console.log('in error', error);
+  }
   if (error.networkError && error.networkError.result && error.networkError.result.errors.length) {
     return error.networkError.result.errors.map((error, i) => (
       <ErrorStyles key={i}>

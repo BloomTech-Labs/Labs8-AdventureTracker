@@ -9,6 +9,7 @@ import { PrimaryBtn } from './styles/ButtonStyles';
 import { NavbarContainer } from './styles/NavbarContainer';
 import { FacebookIcon } from './styles/SVGs';
 import { FacebookBtn } from './styles/LinkBtnStyles';
+import FacebookSignup from '../components/FacebookSignup';
 
 const Login = styled(PrimaryBtn)`
   margin: 10px;
@@ -36,7 +37,13 @@ class FacebookLogin extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      facebookID: ''
+      facebookID: '',
+      email: '',
+      password: '',
+      name: '',
+      facebookUser: true,
+      tripCount: 0,
+      paid: false
     };
   }
 
@@ -47,25 +54,34 @@ class FacebookLogin extends React.Component {
     });
   }
 
-  render() {
+  render(props) {
     return (
       <Mutation mutation={FACEBOOKSIGNIN_MUTATION} variables={this.state}>
         {(facebooksignin, { error, loading }) => {
           return (
             <NavbarWrapper>
-              <Login
-                onClick={async e => {
-                  e.preventDefault();
-                  await facebooksignin();
-                  Router.push({
-                    pathname: '/triplist'
-                  });
-                }}
-              >
-                <FacebookIcon length={40} />
-                &nbsp; Account verified by Facebook, click to continue
-              </Login>
-              <Error error={error} />
+              {!error ? (
+                <Login
+                  onClick={async e => {
+                    e.preventDefault();
+                    await facebooksignin();
+                    Router.push({
+                      pathname: '/triplist'
+                    });
+                  }}
+                >
+                  <FacebookIcon length={40} />
+                  &nbsp;{' '}
+                  {this.props.btnTxt
+                    ? this.props.btnTxt
+                    : 'Account verified by Facebook, click to continue'}
+                </Login>
+              ) : (
+                <FacebookSignup
+                  btnTxt={`You are new here, so we'll create your account! click to login`}
+                />
+              )}
+              {/* <Error error={error} /> */}
             </NavbarWrapper>
           );
         }}
