@@ -40,6 +40,21 @@ const LOGOUT_MUTATION = gql`
   }
 `;
 
+const CREATE_TRIP_MUTATION = gql`
+  mutation CREATE_TRIP_MUTATION {
+    createTrip(
+      title: ""
+      user: { id: "", email: "", facebookID: "" }
+      startDate: ""
+      endDate: ""
+      archived: false
+      markers: []
+    ) {
+      id
+    }
+  }
+`;
+
 class CommonTopNavbar extends Component {
   constructor() {
     super();
@@ -70,13 +85,24 @@ class CommonTopNavbar extends Component {
             return (
               <NavbarWrapper>
                 <Breadcrumbs startCrumb={'/'} router={this.props.router} />
-                <CreateTripBtn
-                  onClick={() => {
-                    Router.push({ pathname: '/app' });
+                <Mutation mutation={CREATE_TRIP_MUTATION}>
+                  {(createTrip, { error, loading }) => {
+                    if (loading) {
+                      return <p>loading</p>;
+                    }
+                    return (
+                      <CreateTripBtn
+                        onClick={async () => {
+                          const trip = await createTrip();
+                          console.log('createTrip: ', trip);
+                          Router.push({ pathname: '/app', query: { id: trip.id } });
+                        }}
+                      >
+                        Create Trip
+                      </CreateTripBtn>
+                    );
                   }}
-                >
-                  Create Trip
-                </CreateTripBtn>
+                </Mutation>
                 <ArchiveBtn
                   onClick={() => {
                     this.NavButton(this.props.router);

@@ -50,7 +50,7 @@ const ArchiveBtn = styled.button`
 
 const UPDATE_TRIP_MUTATION = gql`
   mutation UPDATE_TRIP_MUTATION($id: ID!, $archived: Boolean!) {
-    updateTrip(id: $id, archived: $archived) {
+    archiveTrip(id: $id, archived: $archived) {
       id
       archived
     }
@@ -77,11 +77,11 @@ const ArchiveTrip = ({ id, title, start, end, archived }) => {
           archived: false
         }}
       >
-        {(updateTrip, { error, loading }) => {
+        {(archiveTrip, { error, loading }) => {
           return (
             <ArchiveBtn
               onClick={async () => {
-                updateTrip();
+                archiveTrip();
                 Router.push({ pathname: '/archivelist' });
               }}
             >

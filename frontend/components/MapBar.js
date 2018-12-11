@@ -8,6 +8,7 @@ import { FormArea } from './styles/FormStyles';
 import { CURRENT_USER_QUERY } from './User';
 import { Fragment } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
+
 const ProgressWrapper = styled.div`
   display: flex;
   position: relative;
@@ -75,22 +76,22 @@ const CalendarWrapper = styled.div`
   align-items: flex-end;
 `;
 
-const CREATE_TRIP_MUTATION = gql`
-  mutation CREATE_TRIP_MUTATION(
+const UPDATE_TRIP_MUTATION = gql`
+  mutation UPDATE_TRIP_MUTATION(
     $title: String!
-    $startDate: Int!
-    $endDate: Int!
-    $user: UserWhereUniqueInput!
-    $description: String!
-    $archived: Boolean! # $markers: [Marker!]!
+    $startDate: String!
+    $endDate: String!
+    $tripId: String!
+    # $user: UserWhereUniqueInput!
+    $markers: [MarkerCreateInput!]!
   ) {
-    createTrip(
+    updateTrip(
       title: $title
-      user: $user
+      # user: $user
       startDate: $startDate
       endDate: $endDate
-      description: $description
-      archived: $archived
+      tripId: $tripId
+      markers: $markers
     ) {
       id
     }
@@ -167,24 +168,21 @@ class MapBar extends Component {
           </CalendarGroup>
         </CalendarWrapper>
         <Mutation
-          mutation={CREATE_TRIP_MUTATION}
+          mutation={UPDATE_TRIP_MUTATION}
           refetchQueries={[{ query: CURRENT_USER_QUERY }]}
           variables={{
             title: this.state.tripTitle,
             startDate: this.props.startDate,
             endDate: this.props.endDate,
-            //TODO - add description
-            description: 'awesome trip!',
-            archived: false,
-            // markers: this.props.markers
-            user: { id: '', email: '', facebookID: '' }
+            markers: []
+            // user: { id: '', email: '', facebookID: '' }
           }}
         >
-          {(createTrip, { error, loading }) => {
+          {(updateTrip, { error, loading }) => {
             return (
               <MapBtn
                 onClick={async () => {
-                  await createTrip();
+                  await updateTrip();
                   Router.push({ pathname: '/triplist' });
                 }}
               >

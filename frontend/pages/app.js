@@ -1,14 +1,22 @@
 import { Map } from '../components/Map';
 import gql from 'graphql-tag';
 import { withRouter } from 'next/router';
-
 import { Query } from 'react-apollo';
+
 const TRIP_QUERY = gql`
   query getTrip($tripId: ID!) {
     trip(where: { id: $tripId }) {
+      id
       startDate
       endDate
       title
+      markers {
+        position {
+          lat
+          lng
+        }
+        status
+      }
     }
   }
 `;

@@ -6,10 +6,9 @@ const { hashPassword } = require('../utils');
 const Mutations = {
   async createTrip(parent, args, ctx, info) {
     // comment out to test locally
-    if (!ctx.request.userId) {
-      throw new Error('You must be logged in to do that!');
-    }
-
+    // if (!ctx.request.userId) {
+    //   throw new Error('You must be logged in to do that!');
+    // }
     const trip = await ctx.db.mutation.createTrip(
       {
         data: {
@@ -19,13 +18,12 @@ const Mutations = {
               // commment out to test locally
               id: ctx.request.userId
               // uncomment to test locally
-              // id: 'cjp8taz6je1ti0a62gfi12dw0'
+              // id: args.user.id
             }
           },
           title: args.title,
           startDate: args.startDate,
           endDate: args.endDate,
-          description: args.description,
           archived: args.archived,
           markers: args.markers
         }
@@ -34,7 +32,7 @@ const Mutations = {
     );
     return trip;
   },
-  updateTrip(parent, args, ctx, info) {
+  archiveTrip(parent, args, ctx, info) {
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates
@@ -50,18 +48,45 @@ const Mutations = {
       info
     );
   },
-  async createMarker(parent, args, ctx, info) {
-    const marker = await ctx.db.mutation.createMarker(
+  updateTrip(parent, args, ctx, info) {
+    // first take a copy of the updates
+    const updates = { ...args };
+    // remove the ID from the updates
+    delete updates.id;
+    // run the update method
+    return ctx.db.mutation.updateTrip(
       {
-        data: {
-          title: args.title,
-          lat: args.lat,
-          lng: args.lng,
-          status: args.status
+        data: updates,
+        where: {
+          id: args.tripId
         }
       },
       info
     );
+  },
+  async createMarkerMutation(parent, args, ctx, info) {
+    console.log(args);
+    const marker = await ctx.db.mutation.createMarkerMutation({
+      data: {
+        trip: {
+          connect: {
+            // commment out to test locally
+            // id: args.tripId
+            // uncomment to test locally
+            id: args.trip
+          }
+        },
+        title: args.title,
+        status: args.status,
+        position: {
+          create: {
+            lat: args.position.lat,
+            lng: args.position.lng
+          }
+        }
+      },
+      info
+    });
     return marker;
   },
   // async deleteTrip(parent, args, ctx, info) {

@@ -18,6 +18,22 @@ import { GREY_PIN, CHECKMARK_ICON, ORANGE_EXCLAMATION, RED_EXCLAMATION } from '.
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+
+const CREATE_MARKER_MUTATION = gql`
+  mutation CREATE_MARKER_MUTATION(
+    $title: String!
+    $position: PositionCreateWithoutMarkerInput!
+    $status: Progress!
+    $trip: String!
+  ) {
+    createMarkerMutation(title: $title, position: $position, status: $status, trip: $trip) {
+      id
+    }
+  }
+`;
+
 const Label = styled.label``;
 const ReachedCheckBox = styled.input`
   margin-bottom: 0.4em;
@@ -96,8 +112,17 @@ const MyMapComponent = compose(
   withScriptjs,
   withGoogleMap
 )(props => (
+  // <Mutation variables ={{
+  //   title: props.
+  //   position: PositionCreateWithoutMarkerInput!,
+  //   status: Progress!,
+  //   trip: String!
+  // }}>
+  // {(createMarkerMutation, { error, loading }) => {
   <GoogleMap
-    onClick={props.onMapClicked}
+    onClick={() => {
+      createMarkerMutation();
+    }}
     defaultZoom={8}
     center={props.location}
     // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
@@ -223,6 +248,8 @@ const MyMapComponent = compose(
       );
     })}
   </GoogleMap>
+  //                 }}
+  // </Mutation>
 ));
 
 class Map extends React.PureComponent {
@@ -230,8 +257,8 @@ class Map extends React.PureComponent {
     super(props);
     this.state = {
       tripTitle: '',
-      startDate: Number(new Date()),
-      endDate: Number(new Date()),
+      startDate: new Date(),
+      endDate: new Date(),
       showingInfoWindow: false,
       // Storing location state for centering the map based on the marker
       location: { lat: 38.9260256843898, lng: -104.755169921875 },
@@ -239,7 +266,7 @@ class Map extends React.PureComponent {
       selectedPlace: {},
       markers: [],
       checkpointName: '',
-      etaTime: Number(new Date()),
+      etaTime: new Date(),
       checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0
@@ -280,8 +307,9 @@ class Map extends React.PureComponent {
   };
   componentDidMount() {
     if (this.props.data) {
-      const { startDate, endDate, title } = this.props.data.trip;
-      this.setState({ startDate, endDate, title });
+      const { startDate, endDate, title, markers } = this.props.data.trip;
+
+      this.setState({ startDate: new Date(startDate), endDate: new Date(endDate), title, markers });
     }
     const minute = 1000 * 60;
     setInterval(() => {
@@ -435,6 +463,7 @@ class Map extends React.PureComponent {
       origin: new google.maps.Point(0, 0),
       url: GREY_PIN
     };
+    // maybe do like a callback,
     const marker = {
       position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
       id: uuidv4(),
