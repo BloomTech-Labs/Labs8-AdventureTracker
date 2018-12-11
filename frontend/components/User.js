@@ -17,15 +17,16 @@ const CURRENT_USER_QUERY = gql`
       trip {
         id
         title
-        description
         archived
         startDate
         endDate
         markers {
           id
           title
-          lat
-          lng
+          position {
+            lat
+            lng
+          }
           status
         }
       }

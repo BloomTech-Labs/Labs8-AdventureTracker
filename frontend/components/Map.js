@@ -134,7 +134,7 @@ const MyMapComponent = compose(
             }}
           >
             <div className="container">
-              <h2>Name your marker and give an ETA</h2>
+              <h2>Click on the markers to give your waypoints a name and ETA</h2>
             </div>
             <MarkerNameGroup>
               <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
