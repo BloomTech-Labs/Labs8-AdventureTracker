@@ -58,7 +58,6 @@ class FacebookLogin extends React.Component {
     return (
       <Mutation mutation={FACEBOOKSIGNIN_MUTATION} variables={this.state}>
         {(facebooksignin, { error, loading }) => {
-          // if (error == 'Error: GraphQL error: No user found - please Signup first.') alert('BOO!');
           return (
             <NavbarWrapper>
               {!error ? (
