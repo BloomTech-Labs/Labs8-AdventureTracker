@@ -174,7 +174,6 @@ class MapBar extends Component {
             title: this.state.tripTitle,
             startDate: this.props.startDate,
             endDate: this.props.endDate,
-            // markers: this.props.markers
             markers: []
             // user: { id: '', email: '', facebookID: '' }
           }}
