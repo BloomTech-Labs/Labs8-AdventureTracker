@@ -112,8 +112,17 @@ const MyMapComponent = compose(
   withScriptjs,
   withGoogleMap
 )(props => (
+  // <Mutation variables ={{
+  //   title: props.
+  //   position: PositionCreateWithoutMarkerInput!,
+  //   status: Progress!,
+  //   trip: String!
+  // }}>
+  // {(createMarkerMutation, { error, loading }) => {
   <GoogleMap
-    onClick={props.onMapClicked}
+    onClick={() => {
+      createMarkerMutation();
+    }}
     defaultZoom={8}
     center={props.location}
     // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
@@ -239,6 +248,8 @@ const MyMapComponent = compose(
       );
     })}
   </GoogleMap>
+  //                 }}
+  // </Mutation>
 ));
 
 class Map extends React.PureComponent {
@@ -452,6 +463,7 @@ class Map extends React.PureComponent {
       origin: new google.maps.Point(0, 0),
       url: GREY_PIN
     };
+    // maybe do like a callback,
     const marker = {
       position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
       id: uuidv4(),

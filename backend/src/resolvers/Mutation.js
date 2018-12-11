@@ -9,7 +9,6 @@ const Mutations = {
     // if (!ctx.request.userId) {
     //   throw new Error('You must be logged in to do that!');
     // }
-
     const trip = await ctx.db.mutation.createTrip(
       {
         data: {
@@ -17,9 +16,9 @@ const Mutations = {
           user: {
             connect: {
               // commment out to test locally
-              // id: ctx.request.userId
+              id: ctx.request.userId
               // uncomment to test locally
-              id: args.trip
+              // id: args.user.id
             }
           },
           title: args.title,
@@ -33,7 +32,7 @@ const Mutations = {
     );
     return trip;
   },
-  updateTrip(parent, args, ctx, info) {
+  archiveTrip(parent, args, ctx, info) {
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates
@@ -44,6 +43,22 @@ const Mutations = {
         data: updates,
         where: {
           id: args.id
+        }
+      },
+      info
+    );
+  },
+  updateTrip(parent, args, ctx, info) {
+    // first take a copy of the updates
+    const updates = { ...args };
+    // remove the ID from the updates
+    delete updates.id;
+    // run the update method
+    return ctx.db.mutation.updateTrip(
+      {
+        data: updates,
+        where: {
+          id: args.tripId
         }
       },
       info

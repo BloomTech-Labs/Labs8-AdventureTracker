@@ -16,7 +16,14 @@ type Mutation {
     archived: Boolean!
     markers: [MarkerCreateInput!]!
   ): Trip!
-  updateTrip(id: ID!, archived: Boolean!): Trip!
+  archiveTrip(id: ID!, archived: Boolean!): Trip!
+  updateTrip(
+    title: String!
+    startDate: String!
+    endDate: String!
+    markers: [MarkerCreateInput!]!
+    tripId: String!
+  ): Trip!
   createMarkerMutation(
     title: String!
     position: PositionCreateWithoutMarkerInput!
