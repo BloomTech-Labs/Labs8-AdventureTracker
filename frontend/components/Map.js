@@ -18,6 +18,22 @@ import { GREY_PIN, CHECKMARK_ICON, ORANGE_EXCLAMATION, RED_EXCLAMATION } from '.
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
+import gql from 'graphql-tag';
+import { Mutation } from 'react-apollo';
+
+const CREATE_MARKER_MUTATION = gql`
+  mutation CREATE_MARKER_MUTATION(
+    $title: String!
+    $position: PositionCreateWithoutMarkerInput!
+    $status: Progress!
+    $trip: String!
+  ) {
+    createMarkerMutation(title: $title, position: $position, status: $status, trip: $trip) {
+      id
+    }
+  }
+`;
+
 const Label = styled.label``;
 const ReachedCheckBox = styled.input`
   margin-bottom: 0.4em;

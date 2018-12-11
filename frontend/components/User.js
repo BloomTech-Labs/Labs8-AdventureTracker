@@ -23,8 +23,10 @@ const CURRENT_USER_QUERY = gql`
         markers {
           id
           title
-          lat
-          lng
+          position {
+            lat
+            lng
+          }
           status
         }
       }

@@ -17,7 +17,12 @@ type Mutation {
     markers: [MarkerCreateInput!]!
   ): Trip!
   updateTrip(id: ID!, archived: Boolean!): Trip!
-  createMarker(title: String!, lat: Float!, lng: Float!, status: Progress!): Marker!
+  createMarkerMutation(
+    title: String!
+    position: PositionCreateWithoutMarkerInput!
+    status: Progress!
+    trip: String!
+  ): Marker!
   signup(
     name: String!
     email: String!
