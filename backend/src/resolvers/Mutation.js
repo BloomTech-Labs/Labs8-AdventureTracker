@@ -194,7 +194,7 @@ const Mutations = {
     // check if there is a user with that facebook ID
     const user = await ctx.db.query.user({ where: { facebookID } });
     if (!user) {
-      throw new Error(`No user found for this Facebook account.`);
+      throw new Error(`No user found. Click to create your account.`);
     }
     // generate the JWT Token
     const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET);
