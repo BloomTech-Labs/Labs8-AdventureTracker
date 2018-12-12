@@ -92,6 +92,22 @@ const Mutations = {
     console.log(marker);
     return marker;
   },
+  updateMarker(parent, args, ctx, info) {
+    // first take a copy of the updates
+    const updates = { ...args };
+    // remove the ID from the updates
+    delete updates.markerId;
+    // run the update method
+    return ctx.db.mutation.updateMarker(
+      {
+        data: updates,
+        where: {
+          id: args.markerId
+        }
+      },
+      info
+    );
+  },
   // async deleteTrip(parent, args, ctx, info) {
   //   const where = { id: args.id };
   //   // find the item

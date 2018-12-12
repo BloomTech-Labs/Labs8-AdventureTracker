@@ -26,6 +26,13 @@ type Mutation {
     checkpointName: String!
     checkedInTime: DateTime!
   ): Marker!
+  updateMarker(
+    markerId: ID!
+    status: Progress!
+    etaTime: DateTime!
+    checkpointName: String!
+    checkedInTime: DateTime!
+  ): Marker!
   signup(
     name: String!
     email: String!

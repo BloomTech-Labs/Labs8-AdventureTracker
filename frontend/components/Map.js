@@ -109,6 +109,26 @@ const CREATE_MARKER_MUTATION = gql`
   }
 `;
 
+const UPDATE_MARKER_MUTATION = gql`
+  mutation UPDATE_MARKER_MUTATION(
+    $markerId: ID!
+    $status: Progress!
+    $etaTime: DateTime!
+    $checkpointName: String!
+    $checkedInTime: DateTime!
+  ) {
+    updateMarker(
+      markerId: $markerId
+      status: $status
+      etaTime: $etaTime
+      checkpointName: $checkpointName
+      checkedInTime: $checkedInTime
+    ) {
+      id
+    }
+  }
+`;
+
 const MyMapComponent = compose(
   withProps({
     // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
@@ -327,6 +347,7 @@ class Map extends React.PureComponent {
     this.WHITE = 'white';
     this.BLACK = 'black';
     this.path = 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0';
+    this.labelRegex = /\b[A-Z]\b/;
   }
   componentDidMount() {
     console.log('PROPS', this.props.data);
@@ -334,12 +355,16 @@ class Map extends React.PureComponent {
     if (this.props.data) {
       const { startDate, endDate, markers, title } = this.props.data.trip;
 
-      this.setState({
-        startDate,
-        endDate,
-        markers,
-        tripTitle: title
-      });
+      this.setState(
+        {
+          startDate,
+          endDate,
+          tripTitle: title
+        },
+        () => {
+          this.updateMarkersAtStart(markers);
+        }
+      );
     }
     const minute = 1000 * 60;
     setInterval(() => {
@@ -352,6 +377,58 @@ class Map extends React.PureComponent {
   componentWillUnmount() {
     clearInterval();
   }
+  updateMarkersAtStart = markers => {
+    const now = moment();
+    for (let i = 0; i < markers.length; i++) {
+      const eta = moment(markers[i].etaTime);
+      const minutesDiff = eta.diff(now, 'minutes');
+      markers[i].icon = {
+        ...markers[i],
+        origin: new google.maps.Point(0, 0)
+      };
+      // based on eta time and current time, we need to change the marker to the right icon
+      // icon property:
+      // green icon needs to appear if status is true
+      // GREY_PIN, CHECKMARK_ICON, ORANGE_EXCLAMATION, RED_EXCLAMATION
+      // orange icon needs to appear if 59 minutes late or less
+      // red icon needs to appear if an hour late or more
+      // grey icon needs to appear if status is false and eta time is still later than current time
+      if (markers[i].status === this.NOT_STARTED && minutesDiff >= 0) {
+        markers[i] = {
+          ...markers[i],
+          url: GREY_PIN
+        };
+      } else if (markers[i].status === this.COMPLETED) {
+        markers[i] = {
+          ...markers[i],
+          url: CHECKMARK_ICON
+        };
+      } else if (markers[i].status === this.NOT_STARTED && minutesDiff > -59 && minutesDiff < 0) {
+        markers[i] = {
+          ...markers[i],
+          url: ORANGE_EXCLAMATION
+        };
+      } else if (markers[i].status === this.NOT_STARTED && minutesDiff < -59) {
+        markers[i] = {
+          ...markers[i],
+          url: RED_EXCLAMATION
+        };
+      }
+      markers[i] = {
+        ...markers[i],
+        draggable: true
+      };
+
+      // if(markers[i].checkpointName.match(this.labelRegex)) {
+      //   markers[i]
+      // }
+      // draggable property:
+      // need to make draggable true
+
+      // check if checkpointName is different from regular labels and if so then use calculateLabel to find the right letter
+    }
+    this.setState({ markers }, this.updateLines);
+  };
   setEndDate = date => {
     this.setState({
       endDate: date
@@ -494,7 +571,7 @@ class Map extends React.PureComponent {
     const newMarkers = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
     // Update marker labels
     for (let i = 0; i < newMarkers.length; i++) {
-      if (newMarkers[i].label.text.match(/\b[A-Z]\b/)) {
+      if (newMarkers[i].label.text.match(this.labelRegex)) {
         newMarkers[i].label = {
           ...newMarkers[i].label,
           text: this.calculateLabel(i)
