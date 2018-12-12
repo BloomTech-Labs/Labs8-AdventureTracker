@@ -11,6 +11,7 @@ const TRIP_QUERY = gql`
       endDate
       title
       markers {
+        id
         position {
           lat
           lng
@@ -32,7 +33,7 @@ const App = props => {
     return (
       <Query query={TRIP_QUERY} variables={{ tripId }}>
         {({ data, loading, error }) => {
-          console.log(data);
+          // console.log(data);
           if (loading) {
             return <p>{loading}</p>;
           }

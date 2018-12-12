@@ -288,12 +288,11 @@ const MyMapComponent = compose(
             // This is how we use the functions that our Marker component gives us
             // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
             // const click = function(e) {
-            //   console.log(this.getPosition(e));
             // };
             return (
               <Marker
                 position={mark.position}
-                onClick={e => props.onMarkerClicked(e, mark)}
+                onClick={e => props.onMarkerClicked(e, mark, mark.id)}
                 key={mark.id}
                 draggable={true}
                 onDragStart={props.onMarkerDragStart}
@@ -373,8 +372,6 @@ class Map extends React.PureComponent {
     this.labelRegex = /\b[A-Z]\b/;
   }
   componentDidMount() {
-    console.log('PROPS', this.props.data);
-    console.log('STATE', this.state);
     if (this.props.data) {
       const { startDate, endDate, markers, title } = this.props.data.trip;
 
@@ -403,7 +400,6 @@ class Map extends React.PureComponent {
   updateMarkersAtStart = markers => {
     const now = moment();
     for (let i = 0; i < markers.length; i++) {
-      console.log('in updateMarker marker[i]', i);
       const eta = moment(markers[i].etaTime);
       const minutesDiff = eta.diff(now, 'minutes');
       // markers[i].icon = {
@@ -486,7 +482,6 @@ class Map extends React.PureComponent {
   setMarkerColorsByDate = () => {
     const { etaTime, markers } = this.state;
 
-    // console.log(minutesDiff);
     const newMarkers = [...markers];
     const now = moment();
     for (let i = 0; i < newMarkers.length; i++) {
@@ -546,7 +541,6 @@ class Map extends React.PureComponent {
         if (activeMarker.status === this.NOT_STARTED) {
           newMarkers[i].status = this.COMPLETED;
           newMarkers[i].checkedInTime = this.calculateTime();
-          // console.log(newMarkers[i].icon);
           newMarkers[i].icon = {
             ...newMarkers[i].icon,
             url: CHECKMARK_ICON
@@ -557,7 +551,6 @@ class Map extends React.PureComponent {
 
           newMarkers[i].icon = null;
         }
-        // console.log(newMarkers[i].checkedInTime);
         markerIndex = i;
         break;
       }
@@ -567,7 +560,6 @@ class Map extends React.PureComponent {
         return;
       }
     } // for loop ends
-    console.log(this.state);
     this.setState(
       { markers: newMarkers, checkedInTime: newMarkers[markerIndex].checkedInTime },
       () => {
@@ -584,7 +576,6 @@ class Map extends React.PureComponent {
   deleteMarker = activeMarker => {
     const { markers } = this.state;
     let deleteIndex;
-    // console.log('deleteMarker');
     for (let i = 0; i < markers.length; i++) {
       if (markers[i].id === activeMarker.id) {
         deleteIndex = i;
@@ -612,7 +603,6 @@ class Map extends React.PureComponent {
 
     this.setState({ clickLocation: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, async () => {
       const baseMarker = await markerMutation();
-      console.log(baseMarker);
       const { clickLocation } = this.state;
       const icon = {
         origin: new google.maps.Point(0, 0),
@@ -694,10 +684,8 @@ class Map extends React.PureComponent {
       line.push({ lat: markerLat, lng: markerLng });
       //Once we have two vertices in the line array we can choose a line type
       if (line.length === 2) {
-        // console.log(line);
         //Depending on marker's status, this will choose what type of line to use
         if (markers[i - 1].status === this.NOT_STARTED) {
-          // console.log(this.NOT_STARTED);
           lineOptions = {
             ...greyLine
           };
@@ -706,7 +694,6 @@ class Map extends React.PureComponent {
           markers[i].status !== undefined &&
           markers[i].status === this.NOT_STARTED
         ) {
-          // console.log(this.IN_PROGRESS);
           lineOptions = {
             ...dashedLine
           };
@@ -715,7 +702,6 @@ class Map extends React.PureComponent {
           markers[i].status !== undefined &&
           markers[i].status === this.COMPLETED
         ) {
-          // console.log(this.COMPLETED);
           lineOptions = {
             ...solidBlackLine
           };
@@ -725,16 +711,14 @@ class Map extends React.PureComponent {
       if (i > 0) {
         lineOptions['path'] = line.slice();
         lines.push({ ...lineOptions, id: uuidv4() });
-        // console.log(lines);
         //We start at the end of the new polyline and store that vertex
         line = [{ lat: markerLat, lng: markerLng }];
       }
     }
     this.setState({ polylines: lines });
   };
-  onMarkerClicked = (e, marker) => {
+  onMarkerClicked = (e, marker, markId) => {
     this.clearMarkerInfo();
-    console.log(marker);
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
@@ -753,7 +737,6 @@ class Map extends React.PureComponent {
   };
   onMarkerDragged = (e, activeIndex) => {
     //activeIndex comes from the dragged <Marker> component
-    // console.log(this.state.activeMarker);
     const newMarkers = [...this.state.markers];
     const i = activeIndex;
     let newPosition = { lat: e.latLng.lat(), lng: e.latLng.lng() };
@@ -820,7 +803,6 @@ class Map extends React.PureComponent {
     } = this.state;
 
     const { id } = this.props.data.trip;
-    // console.log(this.props.data);
     return (
       <MyMapComponent
         //state object props
@@ -838,6 +820,7 @@ class Map extends React.PureComponent {
         checkpointName={checkpointName}
         tripId={id}
         clickLocation={clickLocation}
+        activeMarker={activeMarker}
         //methods
         setEtaTime={this.setEtaTime}
         setEndDate={this.setEndDate}
@@ -845,10 +828,9 @@ class Map extends React.PureComponent {
         clearMarkerInfo={this.clearMarkerInfo}
         clearActiveMarker={this.clearActiveMarker}
         saveMarkerInfo={this.saveMarkerInfo}
-        activeMarker={this.activeMarker}
+        // activeMarker={this.activeMarker}
         inputHandler={this.inputHandler}
         onMapClicked={this.onMapClicked}
-        activeMarker={activeMarker}
         onMarkerDragStart={this.onMarkerDragStart}
         onMarkerClicked={this.onMarkerClicked}
         onMarkerDragged={this.onMarkerDragged}
