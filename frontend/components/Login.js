@@ -3,6 +3,7 @@ import { Mutation } from 'react-apollo';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { fab, faFacebookSquare } from '@fortawesome/free-brands-svg-icons';
+import { device } from '../lib/device';
 import { FacebookProvider, LoginButton } from 'react-facebook';
 import { FacebookIcon } from './styles/SVGs';
 import gql from 'graphql-tag';
@@ -39,13 +40,25 @@ const Facebook = styled(LoginButton)`
   font-size: 3rem;
   width: 100%;
   background-color: ${props => props.theme.blue};
+  @media ${device.tablet} {
+    font-size: 2.5rem;
+    margin-bottom: 0;
+  }
 `;
 
 const LoginBtn = styled(PrimaryBtn)`
   margin: 0 0 3rem auto;
+  @media ${device.tablet} {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
 `;
 const SignupInsteadBtn = styled(PrimaryLinkBtn)`
   width: 100%;
+  @media ${device.tablet} {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+  }
 `;
 const SIGNIN_MUTATION = gql`
   mutation SIGNIN_MUTATION($email: String!, $password: String!) {
@@ -138,7 +151,8 @@ class Signin extends Component {
                 <FormBox
                   type="password"
                   name="password"
-                  placeholder="Enter Password"
+                  placeholder="Enter
+                  Password"
                   id="password"
                   value={this.state.password}
                   onChange={this.saveToState}
