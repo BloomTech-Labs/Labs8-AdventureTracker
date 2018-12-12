@@ -232,15 +232,25 @@ const MyMapComponent = compose(
       })}
     </GoogleMap>
 
-    <MainContainerThree>
+    <MainContainerThree color={props.toggleState ? 'rgba(0, 0, 0, 0.6)' : 'transparent'}>
       <div style={{ marginBottom: '14em' }}>
-        <h1>Instructions for Creating a Trip</h1>
-        <ul style={{ textAlgin: 'center' }}>
-          <li>Use the date picker to select start and end dates for your trip</li>
-          <li>Click on the map to place your markers</li>
-          <h4 style={{ color: 'orange' }}>**** Orange ! means late by 59 minutes or less</h4>
-          <h4 style={{ color: 'red' }}>**** Red ! means late by 1 hour or more</h4>
-        </ul>
+        {props.toggleState ? (
+          <div>
+            {' '}
+            <button onClick={props.toggleButton}>Close</button>
+            <h1>Instructions for Creating a Trip</h1>
+            <ul style={{ textAlgin: 'center' }}>
+              <li>Use the date picker to select start and end dates for your trip</li>
+              <li>Click on the map to place your markers</li>
+              <h4 style={{ color: 'orange' }}>**** Orange ! means late by 59 minutes or less</h4>
+              <h4 style={{ color: 'red' }}>**** Red ! means late by 1 hour or more</h4>
+            </ul>
+          </div>
+        ) : (
+          <button style={{ marginBottom: '45em' }} onClick={props.toggleButton}>
+            Instructions
+          </button>
+        )}
       </div>
     </MainContainerThree>
   </div>
@@ -263,7 +273,8 @@ class Map extends React.PureComponent {
       etaTime: Number(new Date()),
       checkedInTime: '',
       polylines: [],
-      completedCheckboxes: 0
+      completedCheckboxes: 0,
+      toggle: false
     };
     //Markers' Progress
     this.NOT_STARTED = 'NOT_STARTED';
@@ -294,6 +305,12 @@ class Map extends React.PureComponent {
     this.setState({
       etaTime: date
     });
+  };
+
+  // Instruction Toggle
+  toggleButton = () => {
+    const currentState = this.state.toggle;
+    this.setState({ toggle: !currentState });
   };
 
   clearActiveMarker = () => {
@@ -664,7 +681,8 @@ class Map extends React.PureComponent {
       location,
       etaTime,
       checkpointName,
-      checkedInTime
+      checkedInTime,
+      toggle
     } = this.state;
     return (
       <MyMapComponent
@@ -699,6 +717,9 @@ class Map extends React.PureComponent {
         updateLines={this.updateLines}
         changeMarkerStatus={this.changeMarkerStatus}
         toggleInfoWindow={this.toggleInfoWindow}
+        // Toggle Button
+        toggleState={toggle}
+        toggleButton={this.toggleButton}
       />
     );
   }
