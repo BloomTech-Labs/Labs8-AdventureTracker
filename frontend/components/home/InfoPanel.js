@@ -17,7 +17,15 @@ const InfoPanelWrapper = styled.aside`
   color: ${props => props.theme.white};
   @media ${device.tablet} {
     width: 100%;
-    padding-top: 10rem;
+    padding: 8rem;
+  }
+  @media ${device.mobileL} {
+    width: 100%;
+    padding: 3rem;
+  }
+  @media ${device.mobile} {
+    width: 100%;
+    padding: 2.5rem;
   }
 `;
 const Info = styled.p`

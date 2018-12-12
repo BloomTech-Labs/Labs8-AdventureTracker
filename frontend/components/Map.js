@@ -232,9 +232,11 @@ const MyMapComponent = compose(
                     variables={{
                       markerId: props.activeMarker.id,
                       status: props.activeMarker.status,
-                      etaTime: props.activeMarker.etaTime,
-                      checkpointName: ''
+                      etaTime: props.etaTime,
+                      checkpointName: props.checkpointName
                     }}
+                    // todo: add refetchQueries
+                    // refetchQueries={[{ query: CURRENT_USER_QUERY }]}
                   >
                     {(updateMarker, { error, loading }) => {
                       if (loading) {
@@ -354,7 +356,7 @@ class Map extends React.PureComponent {
       checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0,
-      id: ''
+      tripId: ''
     };
     //Markers' Progress
     this.NOT_STARTED = 'NOT_STARTED';
@@ -381,7 +383,7 @@ class Map extends React.PureComponent {
           startDate,
           endDate,
           tripTitle: title,
-          id
+          tripId: id
         },
         () => {
           this.updateMarkersAtStart(markers);
@@ -401,6 +403,14 @@ class Map extends React.PureComponent {
   }
   updateMarkersAtStart = markers => {
     const now = moment();
+    //set all markers to grey icons
+    for (let i = 0; i < markers.length; i++) {
+      markers[i].icon = {
+        ...markers[i].icon,
+        url: GREY_PIN
+      };
+    }
+    //sets the first one thats tardy
     for (let i = 0; i < markers.length; i++) {
       const eta = moment(markers[i].etaTime);
       const minutesDiff = eta.diff(now, 'minutes');
@@ -414,26 +424,30 @@ class Map extends React.PureComponent {
       // orange icon needs to appear if 59 minutes late or less
       // red icon needs to appear if an hour late or more
       // grey icon needs to appear if status is false and eta time is still later than current time
-      if (markers[i].status === this.NOT_STARTED && minutesDiff >= 0) {
-        markers[i].icon = {
-          ...markers[i].icon,
-          url: GREY_PIN
-        };
-      } else if (markers[i].status === this.COMPLETED) {
+      // if (markers[i].status === this.NOT_STARTED && minutesDiff >= 0) {
+      //   markers[i].icon = {
+      //     ...markers[i].icon,
+      //     url: GREY_PIN
+      //   };
+      // }
+      if (markers[i].status === this.COMPLETED) {
         markers[i].icon = {
           ...markers[i].icon,
           url: CHECKMARK_ICON
         };
+        break;
       } else if (markers[i].status === this.NOT_STARTED && minutesDiff > -59 && minutesDiff < 0) {
         markers[i].icon = {
           ...markers[i].icon,
           url: ORANGE_EXCLAMATION
         };
+        break;
       } else if (markers[i].status === this.NOT_STARTED && minutesDiff < -59) {
         markers[i].icon = {
           ...markers[i].icon,
           url: RED_EXCLAMATION
         };
+        break;
       }
       markers[i] = {
         ...markers[i],
@@ -587,7 +601,7 @@ class Map extends React.PureComponent {
     const newMarkers = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
     // Update marker labels
     for (let i = 0; i < newMarkers.length; i++) {
-      if (newMarkers[i].label.text.match(this.labelRegex)) {
+      if (newMarkers[i].checkpointName.match(this.labelRegex)) {
         newMarkers[i].label = {
           ...newMarkers[i].label,
           text: this.calculateLabel(i)
@@ -721,6 +735,7 @@ class Map extends React.PureComponent {
   };
   onMarkerClicked = (e, marker, markId) => {
     this.clearMarkerInfo();
+    console.log(marker);
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
@@ -802,7 +817,7 @@ class Map extends React.PureComponent {
       checkpointName,
       checkedInTime,
       clickLocation,
-      id
+      tripId
     } = this.state;
 
     // const { id } = this.props.data.trip;
@@ -821,7 +836,7 @@ class Map extends React.PureComponent {
         etaTime={etaTime}
         checkedInTime={checkedInTime}
         checkpointName={checkpointName}
-        tripId={id}
+        tripId={tripId}
         clickLocation={clickLocation}
         activeMarker={activeMarker}
         //methods
