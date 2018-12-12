@@ -395,7 +395,7 @@ class Map extends React.PureComponent {
       if (markers.length > 0) {
         this.setMarkerColorsByDate();
       }
-    }, minute);
+    }, 10000);
   }
   componentWillUnmount() {
     clearInterval();
@@ -403,11 +403,12 @@ class Map extends React.PureComponent {
   updateMarkersAtStart = markers => {
     const now = moment();
     for (let i = 0; i < markers.length; i++) {
+      console.log('in updateMarker marker[i]', i);
       const eta = moment(markers[i].etaTime);
       const minutesDiff = eta.diff(now, 'minutes');
-      markers[i].icon = {
-        ...markers[i]
-      };
+      // markers[i].icon = {
+      //   ...markers[i]
+      // };
       // based on eta time and current time, we need to change the marker to the right icon
       // icon property:
       // green icon needs to appear if status is true
@@ -416,23 +417,23 @@ class Map extends React.PureComponent {
       // red icon needs to appear if an hour late or more
       // grey icon needs to appear if status is false and eta time is still later than current time
       if (markers[i].status === this.NOT_STARTED && minutesDiff >= 0) {
-        markers[i] = {
-          ...markers[i],
+        markers[i].icon = {
+          ...markers[i].icon,
           url: GREY_PIN
         };
       } else if (markers[i].status === this.COMPLETED) {
-        markers[i] = {
-          ...markers[i],
+        markers[i].icon = {
+          ...markers[i].icon,
           url: CHECKMARK_ICON
         };
       } else if (markers[i].status === this.NOT_STARTED && minutesDiff > -59 && minutesDiff < 0) {
-        markers[i] = {
-          ...markers[i],
+        markers[i].icon = {
+          ...markers[i].icon,
           url: ORANGE_EXCLAMATION
         };
       } else if (markers[i].status === this.NOT_STARTED && minutesDiff < -59) {
-        markers[i] = {
-          ...markers[i],
+        markers[i].icon = {
+          ...markers[i].icon,
           url: RED_EXCLAMATION
         };
       }
