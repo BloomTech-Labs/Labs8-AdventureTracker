@@ -40,7 +40,8 @@ const MainContainerThree = styled.div`
   flex-flow: column;
   width: 100%;
   max-width: 35rem;
-  background: ${props => props.theme.opacityblack};
+  /* background: ${props => props.theme.opacityblack}; */
+  background: ${props => props.color};
   position: fixed;
   top: 0;
   bottom: 0;
