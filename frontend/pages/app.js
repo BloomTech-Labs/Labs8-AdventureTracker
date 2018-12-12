@@ -11,25 +11,34 @@ const TRIP_QUERY = gql`
       endDate
       title
       markers {
+        id
         position {
           lat
           lng
         }
         status
-      }
+        etaTime
+        checkpointName
+        checkedInTime
+        etaTime
+      } # end of markers
     }
   }
 `;
 
 const App = props => {
   const tripId = props.router.query.id;
-  console.log(tripId);
+  // console.log(tripId);
   if (props.router.query.id) {
     return (
-      <Query query={TRIP_QUERY} variables={{ tripId }} refetch>
+      <Query query={TRIP_QUERY} variables={{ tripId }}>
         {({ data, loading, error }) => {
+          // console.log(data);
           if (loading) {
             return <p>{loading}</p>;
+          }
+          if (error) {
+            return <p>{error}</p>;
           }
           return <Map data={data} />;
         }}

@@ -41,12 +41,12 @@ const LOGOUT_MUTATION = gql`
 `;
 
 const CREATE_TRIP_MUTATION = gql`
-  mutation CREATE_TRIP_MUTATION {
+  mutation CREATE_TRIP_MUTATION($title: String!, $startDate: DateTime!, $endDate: DateTime!) {
     createTrip(
-      title: ""
+      title: $title
       user: { id: "", email: "", facebookID: "" }
-      startDate: ""
-      endDate: ""
+      startDate: $startDate
+      endDate: $endDate
       archived: false
       markers: []
     ) {
@@ -85,7 +85,14 @@ class CommonTopNavbar extends Component {
             return (
               <NavbarWrapper>
                 <Breadcrumbs startCrumb={'/'} router={this.props.router} />
-                <Mutation mutation={CREATE_TRIP_MUTATION}>
+                <Mutation
+                  mutation={CREATE_TRIP_MUTATION}
+                  variables={{
+                    title: 'Give Title',
+                    startDate: new Date(),
+                    endDate: new Date()
+                  }}
+                >
                   {(createTrip, { error, loading }) => {
                     if (loading) {
                       return <p>loading</p>;
@@ -95,7 +102,7 @@ class CommonTopNavbar extends Component {
                         onClick={async () => {
                           const trip = await createTrip();
                           console.log('createTrip: ', trip);
-                          Router.push({ pathname: '/app', query: { id: trip.id } });
+                          Router.push({ pathname: '/app', query: { id: trip.data.createTrip.id } });
                         }}
                       >
                         Create Trip

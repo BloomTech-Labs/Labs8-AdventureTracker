@@ -79,20 +79,13 @@ const CalendarWrapper = styled.div`
 const UPDATE_TRIP_MUTATION = gql`
   mutation UPDATE_TRIP_MUTATION(
     $title: String!
-    $startDate: String!
-    $endDate: String!
-    $tripId: String!
-    # $user: UserWhereUniqueInput!
-    $markers: [MarkerCreateInput!]!
-  ) {
-    updateTrip(
-      title: $title
-      # user: $user
-      startDate: $startDate
-      endDate: $endDate
-      tripId: $tripId
-      markers: $markers
-    ) {
+    $startDate: DateTime!
+    $endDate: DateTime!
+    $tripId: ID!
+  ) # $user: UserWhereUniqueInput!
+
+  {
+    updateTrip(title: $title, startDate: $startDate, endDate: $endDate, tripId: $tripId) {
       id
     }
   }
@@ -174,11 +167,17 @@ class MapBar extends Component {
             title: this.state.tripTitle,
             startDate: this.props.startDate,
             endDate: this.props.endDate,
-            markers: []
+            tripId: this.props.tripId
             // user: { id: '', email: '', facebookID: '' }
           }}
         >
           {(updateTrip, { error, loading }) => {
+            if (loading) {
+              return <p>{loading}</p>;
+            }
+            if (error) {
+              return <p>{error}</p>;
+            }
             return (
               <MapBtn
                 onClick={async () => {

@@ -1,28 +1,24 @@
 const { forwardTo } = require('prisma-binding');
 const Query = {
   trips: forwardTo('db'),
-  // trip: forwardTo('db'),
+  positions: forwardTo('db'),
+  markers: forwardTo('db'),
+  trip: forwardTo('db'),
   users: forwardTo('db'),
   async trips(parent, args, ctx, info) {
     const trips = await ctx.db.query.trips();
     return trips;
   },
-  async trip(parent, args, ctx, info) {
-    // const user = ctx.db.query.user({
-    //   where: {id: ctx.request.userId}
-    // });
-    // if(!user) {
-    //   throw new Error('Please login to access the trip for that user.');
-    // }
-    console.log(args);
-    const trip = await ctx.db.query.trip({
+  async position(parent, args, ctx, info) {
+    const positions = await ctx.db.query.positions({
       where: {
         id: args.where.id
       }
     });
 
-    return trip;
+    return positions;
   },
+
   me(parent, args, ctx, info) {
     // check if there is a current user ID
     if (!ctx.request.userId) {

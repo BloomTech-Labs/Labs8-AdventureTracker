@@ -6,9 +6,9 @@ const { hashPassword } = require('../utils');
 const Mutations = {
   async createTrip(parent, args, ctx, info) {
     // comment out to test locally
-    // if (!ctx.request.userId) {
-    //   throw new Error('You must be logged in to do that!');
-    // }
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!');
+    }
     const trip = await ctx.db.mutation.createTrip(
       {
         data: {
@@ -52,7 +52,7 @@ const Mutations = {
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates
-    delete updates.id;
+    delete updates.tripId;
     // run the update method
     return ctx.db.mutation.updateTrip(
       {
@@ -66,28 +66,47 @@ const Mutations = {
   },
   async createMarkerMutation(parent, args, ctx, info) {
     console.log(args);
-    const marker = await ctx.db.mutation.createMarkerMutation({
+    const marker = await ctx.db.mutation.createMarker({
       data: {
         trip: {
           connect: {
             // commment out to test locally
             // id: args.tripId
             // uncomment to test locally
-            id: args.trip
+            id: args.tripId
           }
         },
-        title: args.title,
         status: args.status,
         position: {
           create: {
             lat: args.position.lat,
             lng: args.position.lng
           }
-        }
+        },
+        etaTime: args.etaTime,
+        checkpointName: args.checkpointName,
+        checkedInTime: args.checkedInTime
       },
       info
     });
+    console.log(marker);
     return marker;
+  },
+  updateMarker(parent, args, ctx, info) {
+    // first take a copy of the updates
+    const updates = { ...args };
+    // remove the ID from the updates
+    delete updates.markerId;
+    // run the update method
+    return ctx.db.mutation.updateMarker(
+      {
+        data: updates,
+        where: {
+          id: args.markerId
+        }
+      },
+      info
+    );
   },
   // async deleteTrip(parent, args, ctx, info) {
   //   const where = { id: args.id };
