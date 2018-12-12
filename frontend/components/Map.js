@@ -131,7 +131,7 @@ const MyMapComponent = compose(
       etaTime: new Date(),
       checkedInTime: new Date(),
       checkpointName: '',
-      position: { lat: 36.107, lng: 112.113 }
+      position: props.clickLocation
     }}
   >
     {(createMarkerMutation, { error, loading }) => {
@@ -143,10 +143,8 @@ const MyMapComponent = compose(
       }
       return (
         <GoogleMap
-          onClick={async e => {
-            props.onMapClicked(e);
-            const markerId = await createMarkerMutation();
-            console.log('MarkerID for grand canyon: ', markerId);
+          onClick={e => {
+            props.onMapClicked(e, createMarkerMutation);
           }}
           defaultZoom={8}
           center={props.location}
@@ -305,6 +303,7 @@ class Map extends React.PureComponent {
       showingInfoWindow: false,
       // Storing location state for centering the map based on the marker
       location: { lat: 38.9260256843898, lng: -104.755169921875 },
+      clickLocation: {},
       activeMarker: {},
       selectedPlace: {},
       markers: [],
@@ -507,7 +506,7 @@ class Map extends React.PureComponent {
 
     this.setState({ markers: newMarkers, showingInfoWindow: false }, this.updateLines);
   };
-  createMarker = e => {
+  createMarker = (e, markerMutation) => {
     const { markers } = this.state;
     const icon = {
       origin: new google.maps.Point(0, 0),
@@ -544,15 +543,24 @@ class Map extends React.PureComponent {
     //   position: {lat: 39.1819690168072, lng: -105.23444848632812}
     //   status: "NOT_STARTED"}
     const newMarkers = [...this.state.markers, marker];
-    this.setState({ markers: newMarkers }, this.updateLines);
+    this.setState(
+      { markers: newMarkers, clickLocation: { lat: e.latLng.lat(), lng: e.latLng.lng() } },
+      async () => {
+        this.updateLines();
+        //Creates marker information and stores in db
+        const markerId = await markerMutation();
+
+        console.log('MarkerID for grand canyon: ', markerId);
+      }
+    );
   };
-  onMapClicked = e => {
-    const { showingInfoWindow } = this.state;
+  onMapClicked = (e, markerMutation) => {
+    const { showingInfoWindow, clickLocation } = this.state;
 
     if (showingInfoWindow === true) {
       this.setState({ showingInfoWindow: false });
     }
-    this.createMarker(e);
+    this.createMarker(e, markerMutation);
   };
   toggleInfoWindow = () => {
     this.setState(prevState => ({
@@ -722,7 +730,8 @@ class Map extends React.PureComponent {
       location,
       etaTime,
       checkpointName,
-      checkedInTime
+      checkedInTime,
+      clickLocation
     } = this.state;
 
     const { id } = this.props.data.trip;
@@ -743,6 +752,7 @@ class Map extends React.PureComponent {
         checkedInTime={checkedInTime}
         checkpointName={checkpointName}
         tripId={id}
+        clickLocation={clickLocation}
         //methods
         setEtaTime={this.setEtaTime}
         setEndDate={this.setEndDate}

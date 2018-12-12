@@ -17,13 +17,7 @@ type Mutation {
     markers: [MarkerCreateInput!]!
   ): Trip!
   archiveTrip(id: ID!, archived: Boolean!): Trip!
-  updateTrip(
-    title: String!
-    startDate: DateTime!
-    endDate: DateTime!
-    markers: [MarkerCreateInput!]!
-    tripId: ID!
-  ): Trip!
+  updateTrip(title: String!, startDate: DateTime!, endDate: DateTime!, tripId: ID!): Trip!
   createMarkerMutation(
     position: PositionCreateWithoutMarkerInput!
     status: Progress!

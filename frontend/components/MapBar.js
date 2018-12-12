@@ -82,17 +82,10 @@ const UPDATE_TRIP_MUTATION = gql`
     $startDate: DateTime!
     $endDate: DateTime!
     $tripId: ID!
-    # $user: UserWhereUniqueInput!
-    $markers: [MarkerCreateInput!]!
-  ) {
-    updateTrip(
-      title: $title
-      # user: $user
-      startDate: $startDate
-      endDate: $endDate
-      tripId: $tripId
-      markers: $markers
-    ) {
+  ) # $user: UserWhereUniqueInput!
+
+  {
+    updateTrip(title: $title, startDate: $startDate, endDate: $endDate, tripId: $tripId) {
       id
     }
   }
@@ -174,12 +167,17 @@ class MapBar extends Component {
             title: this.state.tripTitle,
             startDate: this.props.startDate,
             endDate: this.props.endDate,
-            tripId: this.props.tripId,
-            markers: this.props.markers
+            tripId: this.props.tripId
             // user: { id: '', email: '', facebookID: '' }
           }}
         >
           {(updateTrip, { error, loading }) => {
+            if (loading) {
+              return <p>{loading}</p>;
+            }
+            if (error) {
+              return <p>{error}</p>;
+            }
             return (
               <MapBtn
                 onClick={async () => {
