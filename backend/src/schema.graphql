@@ -31,7 +31,6 @@ type Mutation {
     status: Progress!
     etaTime: DateTime!
     checkpointName: String!
-    checkedInTime: DateTime!
   ): Marker!
   signup(
     name: String!

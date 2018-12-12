@@ -105,6 +105,10 @@ const CREATE_MARKER_MUTATION = gql`
       position: $position
     ) {
       id
+      status
+      etaTime
+      checkedInTime
+      checkpointName
     }
   }
 `;
@@ -115,14 +119,12 @@ const UPDATE_MARKER_MUTATION = gql`
     $status: Progress!
     $etaTime: DateTime!
     $checkpointName: String!
-    $checkedInTime: DateTime!
   ) {
     updateMarker(
       markerId: $markerId
       status: $status
       etaTime: $etaTime
       checkpointName: $checkpointName
-      checkedInTime: $checkedInTime
     ) {
       id
     }
@@ -225,13 +227,34 @@ const MyMapComponent = compose(
                     }}
                   />
                   {/* <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} /> */}
-                  <SaveBtn
-                    onClick={() => {
-                      props.saveMarkerInfo();
+                  <Mutation
+                    mutation={UPDATE_MARKER_MUTATION}
+                    variables={{
+                      markerId: props.activeMarker.id,
+                      status: props.activeMarker.status,
+                      etaTime: props.activeMarker.etaTime,
+                      checkpointName: ''
                     }}
                   >
-                    Save Marker Info
-                  </SaveBtn>
+                    {(updateMarker, { error, loading }) => {
+                      if (loading) {
+                        return <p>{loading}</p>;
+                      }
+                      if (error) {
+                        return <p>{error}</p>;
+                      }
+                      return (
+                        <SaveBtn
+                          onClick={async () => {
+                            await updateMarker();
+                            props.saveMarkerInfo();
+                          }}
+                        >
+                          Save Marker Info
+                        </SaveBtn>
+                      );
+                    }}
+                  </Mutation>
                 </ETAGroup>
                 <CheckboxGroup>
                   <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
@@ -383,8 +406,7 @@ class Map extends React.PureComponent {
       const eta = moment(markers[i].etaTime);
       const minutesDiff = eta.diff(now, 'minutes');
       markers[i].icon = {
-        ...markers[i],
-        origin: new google.maps.Point(0, 0)
+        ...markers[i]
       };
       // based on eta time and current time, we need to change the marker to the right icon
       // icon property:
@@ -584,53 +606,37 @@ class Map extends React.PureComponent {
 
     this.setState({ markers: newMarkers, showingInfoWindow: false }, this.updateLines);
   };
-  createMarker = (e, markerMutation) => {
+  createMarker = async (e, markerMutation) => {
     const { markers } = this.state;
-    const icon = {
-      origin: new google.maps.Point(0, 0),
-      url: GREY_PIN
-    };
 
-    const marker = {
-      position: { lat: e.latLng.lat(), lng: e.latLng.lng() },
-      id: uuidv4(),
-      icon: icon,
-      draggable: true,
-      label: {
-        color: this.WHITE,
-        fontWeight: 'bold',
-        backgroundColor: this.BLACK,
-        text: this.calculateLabel(markers.length)
-      },
-      // status can be NOT_STARTED or COMPLETED but NOT_STARTED is default for creation of marker
-      status: this.NOT_STARTED,
-      etaTime: new Date(),
-      checkpointName: '',
-      checkedInTime: ''
-    };
-    //What a marker looks like
-    // {position: {…}, id: "27ab66d8-8ec3-46d8-9637-35ef52eebeab", draggable: true, label: "A", status: "NOT_STARTED", …}
-    //   checkedIn: ""
-    //   checkpointName: ""
-    //   draggable: true
-    //   etaDate: "2018-12-06"
-    //   etaTime: "02:32"
-    //   id: "27ab66d8-8ec3-46d8-9637-35ef52eebeab"
-    //   label: "A"
-    //   checkpointName: "abcdef"
-    //   position: {lat: 39.1819690168072, lng: -105.23444848632812}
-    //   status: "NOT_STARTED"}
-    const newMarkers = [...this.state.markers, marker];
-    this.setState(
-      { markers: newMarkers, clickLocation: { lat: e.latLng.lat(), lng: e.latLng.lng() } },
-      async () => {
-        this.updateLines();
-        //Creates marker information and stores in db
-        const markerId = await markerMutation();
+    this.setState({ clickLocation: { lat: e.latLng.lat(), lng: e.latLng.lng() } }, async () => {
+      const baseMarker = await markerMutation();
+      console.log(baseMarker);
+      const { clickLocation } = this.state;
+      const icon = {
+        origin: new google.maps.Point(0, 0),
+        url: GREY_PIN
+      };
 
-        console.log('MarkerID for grand canyon: ', markerId);
-      }
-    );
+      const fullMarker = {
+        position: clickLocation,
+
+        ...baseMarker.data.createMarkerMutation,
+        icon: icon,
+        draggable: true,
+        label: {
+          color: this.WHITE,
+          fontWeight: 'bold',
+          backgroundColor: this.BLACK,
+          text: this.calculateLabel(markers.length)
+        },
+        status: this.NOT_STARTED,
+        etaTime: new Date(),
+        checkpointName: '',
+        checkedInTime: ''
+      };
+      this.setState({ markers: [...markers, fullMarker] }, this.updateLines);
+    });
   };
   onMapClicked = (e, markerMutation) => {
     const { showingInfoWindow, clickLocation } = this.state;
@@ -727,7 +733,7 @@ class Map extends React.PureComponent {
   };
   onMarkerClicked = (e, marker) => {
     this.clearMarkerInfo();
-    // console.log(marker);
+    console.log(marker);
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
