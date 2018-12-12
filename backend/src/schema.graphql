@@ -11,24 +11,26 @@ type Mutation {
   createTrip(
     title: String!
     user: UserWhereUniqueInput!
-    startDate: String!
-    endDate: String!
+    startDate: DateTime!
+    endDate: DateTime!
     archived: Boolean!
     markers: [MarkerCreateInput!]!
   ): Trip!
   archiveTrip(id: ID!, archived: Boolean!): Trip!
-  updateTrip(
-    title: String!
-    startDate: String!
-    endDate: String!
-    markers: [MarkerCreateInput!]!
-    tripId: String!
-  ): Trip!
+  updateTrip(title: String!, startDate: DateTime!, endDate: DateTime!, tripId: ID!): Trip!
   createMarkerMutation(
-    title: String!
     position: PositionCreateWithoutMarkerInput!
     status: Progress!
-    trip: String!
+    tripId: ID!
+    etaTime: DateTime!
+    checkpointName: String!
+    checkedInTime: DateTime!
+  ): Marker!
+  updateMarker(
+    markerId: ID!
+    status: Progress!
+    etaTime: DateTime!
+    checkpointName: String!
   ): Marker!
   signup(
     name: String!
@@ -60,6 +62,10 @@ type Mutation {
 type Query {
   trips: [Trip]!
   trip(where: TripWhereUniqueInput!): Trip
+  markers: [Marker!]!
+  markersTrip(where: TripWhereUniqueInput!): [Marker!]!
+  positions: [Position!]!
+  position(where: PositionWhereUniqueInput!): [Position!]!
   users: [User]!
   me: User
 }
