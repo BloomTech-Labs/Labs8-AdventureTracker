@@ -25,10 +25,12 @@ type Mutation {
     tripId: ID!
   ): Trip!
   createMarkerMutation(
-    title: String!
     position: PositionCreateWithoutMarkerInput!
     status: Progress!
     tripId: ID!
+    etaTime: DateTime!
+    checkpointName: String!
+    checkedInTime: DateTime!
   ): Marker!
   signup(
     name: String!

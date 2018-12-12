@@ -41,10 +41,12 @@ type Trip {
 
 type Marker {
   id: ID! @unique
-  title: String!
   trip: Trip! @relation(name: "MarkerToTrip", onDelete: SET_NULL)
   position: Position! @relation(name: "PositionToMarker", onDelete: CASCADE)
   status: Progress!
+  etaTime: DateTime!
+  checkpointName: String!
+  checkedInTime: DateTime!
 }
 
 enum Progress {

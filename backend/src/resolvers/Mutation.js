@@ -76,14 +76,16 @@ const Mutations = {
             id: args.tripId
           }
         },
-        title: args.title,
         status: args.status,
         position: {
           create: {
             lat: args.position.lat,
             lng: args.position.lng
           }
-        }
+        },
+        etaTime: args.etaTime,
+        checkpointName: args.checkpointName,
+        checkedInTime: args.checkedInTime
       },
       info
     });
