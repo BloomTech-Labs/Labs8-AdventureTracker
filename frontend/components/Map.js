@@ -329,7 +329,8 @@ class Map extends React.PureComponent {
     this.path = 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0';
   }
   componentDidMount() {
-    console.log(this.props.data);
+    console.log('PROPS', this.props.data);
+    console.log('STATE', this.state);
     if (this.props.data) {
       const { startDate, endDate, markers, title } = this.props.data.trip;
 

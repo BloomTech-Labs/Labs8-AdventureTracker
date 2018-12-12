@@ -57,6 +57,9 @@ type Query {
   trips: [Trip]!
   trip(where: TripWhereUniqueInput!): Trip
   markers: [Marker!]!
+  markersTrip(where: TripWhereUniqueInput!): [Marker!]!
+  positions: [Position!]!
+  position(where: PositionWhereUniqueInput!): [Position!]!
   users: [User]!
   me: User
 }

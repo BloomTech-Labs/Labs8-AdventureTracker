@@ -10,17 +10,17 @@ const TRIP_QUERY = gql`
       startDate
       endDate
       title
-      markers {
-        position {
-          lat
-          lng
-        }
-        status
-        etaTime
-        checkpointName
-        checkedInTime
-        etaTime
-      } # end of markers
+      # markers {
+      #   position {
+      #     lat
+      #     lng
+      #   }
+      #   status
+      #   etaTime
+      #   checkpointName
+      #   checkedInTime
+      #   etaTime
+      # } # end of markers
     }
   }
 `;
