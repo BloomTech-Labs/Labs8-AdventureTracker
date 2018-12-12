@@ -116,6 +116,7 @@ const MyMapComponent = compose(
       title={props.tripTitle}
       completedChecks={props.completedCheckboxes}
       markerAmount={props.markers.length}
+      markers={props.markers}
       startDate={props.startDate}
       endDate={props.endDate}
       setStartDate={props.setStartDate}
@@ -307,13 +308,13 @@ class Map extends React.PureComponent {
   componentDidMount() {
     console.log(this.props.data);
     if (this.props.data) {
-      const { startDate, endDate, title } = this.props.data.trip;
+      const { startDate, endDate, markers, title } = this.props.data.trip;
 
       this.setState({
-        startDate: startDate,
-        endDate: endDate,
-        title,
-        markers: []
+        startDate,
+        endDate,
+        markers,
+        tripTitle: title
       });
     }
     const minute = 1000 * 60;

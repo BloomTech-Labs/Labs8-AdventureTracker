@@ -22,7 +22,7 @@ const CURRENT_USER_QUERY = gql`
         endDate
         markers {
           id
-          title
+          checkpointName
           position {
             lat
             lng
