@@ -353,7 +353,8 @@ class Map extends React.PureComponent {
       etaTime: Number(new Date()),
       checkedInTime: '',
       polylines: [],
-      completedCheckboxes: 0
+      completedCheckboxes: 0,
+      id: ''
     };
     //Markers' Progress
     this.NOT_STARTED = 'NOT_STARTED';
@@ -372,14 +373,15 @@ class Map extends React.PureComponent {
     this.labelRegex = /\b[A-Z]\b/;
   }
   componentDidMount() {
-    if (this.props.data) {
-      const { startDate, endDate, markers, title } = this.props.data.trip;
+    if (this.props.data.trip) {
+      const { startDate, endDate, markers, title, id } = this.props.data.trip;
 
       this.setState(
         {
           startDate,
           endDate,
-          tripTitle: title
+          tripTitle: title,
+          id
         },
         () => {
           this.updateMarkersAtStart(markers);
@@ -799,10 +801,11 @@ class Map extends React.PureComponent {
       etaTime,
       checkpointName,
       checkedInTime,
-      clickLocation
+      clickLocation,
+      id
     } = this.state;
 
-    const { id } = this.props.data.trip;
+    // const { id } = this.props.data.trip;
     return (
       <MyMapComponent
         //state object props
