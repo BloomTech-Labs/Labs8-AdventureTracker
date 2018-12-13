@@ -65,12 +65,6 @@ class SideNav extends Component {
             <SideNavText>Billing</SideNavText>
           </SideNavBtn>
         </Link>
-        <Link href="/app">
-          <SideNavBtn>
-            <GlobeIcon length={LENGTH} />
-            <SideNavText>Map</SideNavText>
-          </SideNavBtn>
-        </Link>
       </SidebarWrapper>
     );
   }
