@@ -320,15 +320,27 @@ const MyMapComponent = compose(
             );
           })}
 
-          <MainContainerThree>
+          <MainContainerThree color={props.toggleState ? 'rgba(0, 0, 0, 0.6)' : 'transparent'}>
             <div style={{ marginBottom: '14em' }}>
-              <h1>Instructions for Creating a Trip</h1>
-              <ul style={{ textAlgin: 'center' }}>
-                <li>Use the date picker to select start and end dates for your trip</li>
-                <li>Click on the map to place your markers</li>
-                <h4 style={{ color: 'orange' }}>**** Orange ! means late by 59 minutes or less</h4>
-                <h4 style={{ color: 'red' }}>**** Red ! means late by 1 hour or more</h4>
-              </ul>
+              {props.toggleState ? (
+                <div>
+                  {' '}
+                  <button onClick={props.toggleButton}>Close</button>
+                  <h1>Instructions for Creating a Trip</h1>
+                  <ul style={{ textAlgin: 'center' }}>
+                    <li>Use the date picker to select start and end dates for your trip</li>
+                    <li>Click on the map to place your markers</li>
+                    <h4 style={{ color: 'orange' }}>
+                      **** Orange ! means late by 59 minutes or less
+                    </h4>
+                    <h4 style={{ color: 'red' }}>**** Red ! means late by 1 hour or more</h4>
+                  </ul>
+                </div>
+              ) : (
+                <button style={{ marginBottom: '45em' }} onClick={props.toggleButton}>
+                  Instructions
+                </button>
+              )}
             </div>
           </MainContainerThree>
         </GoogleMap>
@@ -356,6 +368,7 @@ class Map extends React.PureComponent {
       checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0,
+      toggle: false,
       tripId: ''
     };
     //Markers' Progress
@@ -375,7 +388,7 @@ class Map extends React.PureComponent {
     this.labelRegex = /\b[A-Z]\b/;
   }
   componentDidMount() {
-    if (this.props.data.trip) {
+    if (this.props.data) {
       const { startDate, endDate, markers, title, id } = this.props.data.trip;
 
       this.setState(
@@ -817,7 +830,8 @@ class Map extends React.PureComponent {
       checkpointName,
       checkedInTime,
       clickLocation,
-      tripId
+      tripId,
+      toggle
     } = this.state;
 
     // const { id } = this.props.data.trip;
@@ -856,6 +870,9 @@ class Map extends React.PureComponent {
         updateLines={this.updateLines}
         changeMarkerStatus={this.changeMarkerStatus}
         toggleInfoWindow={this.toggleInfoWindow}
+        // Toggle button
+        toggleState={toggle}
+        toggleButton={this.toggleButton}
       />
     );
   }
