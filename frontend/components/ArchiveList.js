@@ -13,10 +13,14 @@ const TripsList = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-gap: 60px;
   max-width: ${props => props.theme.maxWidth};
-  margin: 0 auto;
+  margin: 3rem;
 `;
 
 class ArchiveTrips extends Component {
+  formatDate = date => {
+    const newDate = date.match(/(\d{4})-(\d{2})-(\d{2})/);
+    return newDate[0];
+  };
   render() {
     return (
       <Center>
@@ -36,8 +40,8 @@ class ArchiveTrips extends Component {
                             key={trip.id}
                             id={trip.id}
                             title={trip.title}
-                            start={trip.startDate}
-                            end={trip.endDate}
+                            start={this.formatDate(trip.startDate)}
+                            end={this.formatDate(trip.endDate)}
                             archived={trip.archived}
                           />
                         );

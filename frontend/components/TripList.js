@@ -21,7 +21,6 @@ class Trips extends Component {
   formatDate = date => {
     const newDate = date.match(/(\d{4})-(\d{2})-(\d{2})/);
     return newDate[0];
-    // return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`;
   };
   render() {
     return (
