@@ -81,10 +81,8 @@ const UPDATE_TRIP_MUTATION = gql`
     $title: String!
     $startDate: DateTime!
     $endDate: DateTime!
-    $tripId: ID!
-  ) # $user: UserWhereUniqueInput!
-
-  {
+    $tripId: ID! # $user: UserWhereUniqueInput!
+  ) {
     updateTrip(title: $title, startDate: $startDate, endDate: $endDate, tripId: $tripId) {
       id
     }
@@ -98,7 +96,9 @@ class MapBar extends Component {
       tripTitle: 'My Trip'
     };
   }
-
+  componentDidMount() {
+    this.setState({ tripTitle: this.props.title });
+  }
   saveToState = e => {
     this.setState({ [e.target.name]: e.target.value });
   };

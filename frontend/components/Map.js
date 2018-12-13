@@ -388,7 +388,7 @@ const MyMapComponent = compose(
             </InfoWindow>
           )}
 
-          {(() => {
+          {/* {(() => {
             if (props.activeMarker.id !== undefined) {
               <Query query={MARKER_FOR_POSITION_QUERY} variables={{ id: props.activeMarker.id }}>
                 {({ data, loading, error }) => {
@@ -468,11 +468,31 @@ const MyMapComponent = compose(
                         icon={mark.icon}
                       />
                     );
-                  })}{' '}
+                  }
+                  )}{' '}
                 </Fragment>
               );
             }
-          })()}
+          })()} */}
+          {props.markers.map((mark, i) => {
+            // This is how we use the functions that our Marker component gives us
+            // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
+            // const click = function(e) {
+            // };
+            return (
+              <Marker
+                position={mark.position}
+                onClick={e => props.onMarkerClicked(e, mark, mark.id)}
+                key={mark.id}
+                draggable={true}
+                onDragStart={() => props.onMarkerDragStart(mark)}
+                label={mark.label}
+                onDrag={e => props.onMarkerDragged(e, i)}
+                icon={mark.icon}
+              />
+            );
+          })}
+
           {props.polylines.map(line => {
             return (
               <Polyline
@@ -573,12 +593,13 @@ class Map extends React.PureComponent {
     const now = moment();
     //set all markers to grey icons
     for (let i = 0; i < markers.length; i++) {
+      let markerLabel = markers[i].checkpointName || this.calculateLabel(i);
       markers[i] = {
         ...markers[i],
         label: {
           color: this.WHITE,
           fontWeight: 'bold',
-          text: markers[i].checkpointName
+          text: markerLabel
         }
       };
       markers[i].icon = {
