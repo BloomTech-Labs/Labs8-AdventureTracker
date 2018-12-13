@@ -33,15 +33,18 @@ const MainContainerThree = styled.div`
   /* margin-top: ${props => props.theme.navbarHeight}; */
   /* margin-left: ${props => props.theme.sidebarWidth}; */
   height: 100vh;
-  @media ${device.tablet} {
-    margin: 0 0 0 auto;
-    background: pink;
+  @media ${device.mobile} {
+    float: none;
+    display: block;
+    text-align: left;
+    margin-top: 6em;
+    background: rgba(0, 0, 0, .2);
   }
   flex-flow: column;
   width: 100%;
   max-width: 35rem;
-  /* background: ${props => props.theme.opacityblack}; */
-  background: ${props => props.color};
+  background: ${props => props.theme.opacityblack};
+  /* background: ${props => props.color}; */
   position: fixed;
   top: 0;
   bottom: 0;

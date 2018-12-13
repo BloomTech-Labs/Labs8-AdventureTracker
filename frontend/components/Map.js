@@ -320,12 +320,10 @@ const MyMapComponent = compose(
             );
           })}
 
-          <MainContainerThree color={props.toggleState ? 'rgba(0, 0, 0, 0.6)' : 'transparent'}>
-            <div style={{ marginBottom: '14em' }}>
-              {props.toggleState ? (
-                <div>
-                  {' '}
-                  <button onClick={props.toggleButton}>Close</button>
+          <MainContainerThree>
+            <nav>
+              <div style={{ marginBottom: '14em' }}>
+                <div className="container">
                   <h1>Instructions for Creating a Trip</h1>
                   <ul style={{ textAlgin: 'center' }}>
                     <li>Use the date picker to select start and end dates for your trip</li>
@@ -336,12 +334,8 @@ const MyMapComponent = compose(
                     <h4 style={{ color: 'red' }}>**** Red ! means late by 1 hour or more</h4>
                   </ul>
                 </div>
-              ) : (
-                <button style={{ marginBottom: '45em' }} onClick={props.toggleButton}>
-                  Instructions
-                </button>
-              )}
-            </div>
+              </div>
+            </nav>
           </MainContainerThree>
         </GoogleMap>
       );
@@ -368,7 +362,7 @@ class Map extends React.PureComponent {
       checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0,
-      toggle: false,
+      toggle: true,
       tripId: ''
     };
     //Markers' Progress
