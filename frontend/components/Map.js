@@ -597,7 +597,7 @@ class Map extends React.PureComponent {
       markers[i] = {
         ...markers[i],
         label: {
-          color: this.WHITE,
+          color: this.BLACK,
           fontWeight: 'bold',
           text: markerLabel
         }
@@ -824,7 +824,7 @@ class Map extends React.PureComponent {
         icon: icon,
         draggable: true,
         label: {
-          color: this.WHITE,
+          color: this.BLACK,
           fontWeight: 'bold',
           text: this.calculateLabel(markers.length)
         },
