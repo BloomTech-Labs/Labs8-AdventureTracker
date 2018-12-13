@@ -8,6 +8,7 @@ type SuccessMessage {
 #   facebookID: String
 # }
 type Mutation {
+  deleteMarker(where: MarkerWhereUniqueInput!): Marker
   createTrip(
     title: String!
     user: UserWhereUniqueInput!
@@ -32,6 +33,9 @@ type Mutation {
     etaTime: DateTime!
     checkpointName: String!
   ): Marker!
+  updatePosition(data: PositionUpdateInput!, where: PositionWhereUniqueInput!): Position
+  updateMarkerStatus(markerId: ID!, status: Progress!, checkedInTime: DateTime!): Marker!
+  updateMarkerPosition(data: PositionUpdateInput!, where: PositionWhereUniqueInput!): Position
   signup(
     name: String!
     email: String!
@@ -63,6 +67,7 @@ type Query {
   trips: [Trip]!
   trip(where: TripWhereUniqueInput!): Trip
   markers: [Marker!]!
+  marker(where: MarkerWhereUniqueInput!): Marker
   markersTrip(where: TripWhereUniqueInput!): [Marker!]!
   positions: [Position!]!
   position(where: PositionWhereUniqueInput!): [Position!]!

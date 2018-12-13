@@ -3,6 +3,7 @@ const Query = {
   trips: forwardTo('db'),
   positions: forwardTo('db'),
   markers: forwardTo('db'),
+  marker: forwardTo('db'),
   trip: forwardTo('db'),
   users: forwardTo('db'),
   async trips(parent, args, ctx, info) {
