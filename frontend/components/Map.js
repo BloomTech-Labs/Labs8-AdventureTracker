@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import getConfig from 'next/config';
 // const { publicRuntimeConfig } = getConfig();
 import gql from 'graphql-tag';
-import { Mutation } from 'react-apollo';
+import { Mutation, Query } from 'react-apollo';
 import { compose, withProps } from 'recompose';
 import {
   withScriptjs,
@@ -113,7 +113,6 @@ const CREATE_MARKER_MUTATION = gql`
     }
   }
 `;
-
 const UPDATE_MARKER_MUTATION = gql`
   mutation UPDATE_MARKER_MUTATION(
     $markerId: ID!
@@ -134,18 +133,17 @@ const UPDATE_MARKER_MUTATION = gql`
     }
   }
 `;
-// TODO: UPDATE_MARKER_POSITION_MUTATION
-// const UPDATE_POSITION_MUTATION = gql`
-//   mutation UPDATE_POSITION_MUTATION($markerId: ID!, $position: Position!) {
-//     updateMarkerPosition(markerId: $markerId, position: $position) {
-//       id
-//       position {
-//         lat
-//         lng
-//       }
-//     }
-//   }
-// `;
+const UPDATE_POSITION_MUTATION = gql`
+  mutation UPDATE_POSITION_MUTATION($markerId: ID!, $position: Position!) {
+    updateMarkerPosition(markerId: $markerId, position: $position) {
+      id
+      position {
+        lat
+        lng
+      }
+    }
+  }
+`;
 const UPDATE_CHECKIN_MUTATION = gql`
   mutation UPDATE_CHECKIN_MUTATION($markerId: ID!, $status: Progress!, $checkedInTime: DateTime!) {
     updateMarkerStatus(markerId: $markerId, status: $status, checkedInTime: $checkedInTime) {
@@ -165,7 +163,22 @@ const CURRENT_MARKER_QUERY = gql`
     }
   }
 `;
-
+const MARKER_FOR_POSITION_QUERY = gql`
+  query CURRENT_MARKER_QUERY($id: ID!) {
+    marker(where: { id: $id }) {
+      position {
+        id
+      }
+    }
+  }
+`;
+const POSITION_TO_UPDATE_MUTATION = gql`
+  mutation POSITION_TO_UPDATE_MUTATION($id: ID!, $lat: Float!, $lng: Float!) {
+    updatePosition(where: { id: $id }, data: { lat: $lat, lng: $lng }) {
+      id
+    }
+  }
+`;
 const DELETE_MARKER_MUTATION = gql`
   mutation DELETE_MARKER_MUTATION($id: ID!) {
     deleteMarker(where: { id: $id }) {
@@ -340,33 +353,126 @@ const MyMapComponent = compose(
                     disabled
                   />
                 </CheckedInGroup>
-                <ButtonGroup>
-                  <DeleteBtn onClick={() => props.deleteMarker(props.activeMarker)}>
-                    Delete Marker?
-                  </DeleteBtn>
-                </ButtonGroup>
+                <Mutation
+                  mutation={DELETE_MARKER_MUTATION}
+                  variables={{
+                    id: props.activeMarker.id
+                  }}
+                  // todo: add refetchQueries
+                  // refetchQueries={[{ query: CURRENT_MARKER_QUERY }]}
+                >
+                  {(deleteMarker, { error, loading }) => {
+                    if (loading) {
+                      return <p>{loading}</p>;
+                    }
+                    if (error) {
+                      return <p>{error}</p>;
+                    }
+                    return (
+                      <ButtonGroup>
+                        <DeleteBtn
+                          onClick={async () => {
+                            const marker = await deleteMarker();
+                            // console.log('MARKER DELETE DATA: ', marker);
+                            const id = marker.data.deleteMarker.id;
+                            props.deleteMarker(id);
+                          }}
+                        >
+                          Delete Marker?
+                        </DeleteBtn>
+                      </ButtonGroup>
+                    );
+                  }}
+                </Mutation>
               </InfoWrapper>
             </InfoWindow>
           )}
-          {props.markers.map((mark, i) => {
-            // This is how we use the functions that our Marker component gives us
-            // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
-            // const click = function(e) {
-            // };
-            return (
-              <Marker
-                position={mark.position}
-                onClick={e => props.onMarkerClicked(e, mark, mark.id)}
-                key={mark.id}
-                draggable={true}
-                onDragStart={props.onMarkerDragStart}
-                label={mark.label}
-                onDrag={e => props.onMarkerDragged(e, i)}
-                icon={mark.icon}
-              />
-            );
-          })}
 
+          {(() => {
+            if (props.activeMarker.id !== undefined) {
+              <Query query={MARKER_FOR_POSITION_QUERY} variables={{ id: props.activeMarker.id }}>
+                {({ data, loading, error }) => {
+                  console.log('POSITION ID data: ', data);
+                  if (loading) {
+                    return <p>{loading}</p>;
+                  }
+                  if (error) {
+                    return <p>{error}</p>;
+                  }
+                  return (
+                    <Mutation
+                      mutation={UPDATE_POSITION_MUTATION}
+                      variables={{
+                        id: data.id
+                      }}
+                      // todo: add refetchQueries
+                      // refetchQueries={[{ query: CURRENT_MARKER_QUERY }]}
+                    >
+                      {(updateMarkerPosition, { error, loading }) => {
+                        if (loading) {
+                          return <p>{loading}</p>;
+                        }
+                        if (error) {
+                          return <p>{error}</p>;
+                        }
+                        return (
+                          <Fragment>
+                            {props.markers.map((mark, i) => {
+                              // This is how we use the functions that our Marker component gives us
+                              // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
+                              // const click = function(e) {
+                              // };
+                              return (
+                                <Marker
+                                  position={mark.position}
+                                  onClick={e => props.onMarkerClicked(e, mark, mark.id)}
+                                  key={mark.id}
+                                  draggable={true}
+                                  onDragStart={() => props.onMarkerDragStart(mark)}
+                                  onDragEnd={async () => {
+                                    //need to query
+                                    //updatePositionFromID
+                                    const position = await updateMarkerPosition();
+                                    console.log('Updated Position data: ', position);
+                                  }}
+                                  label={mark.label}
+                                  onDrag={e => props.onMarkerDragged(e, i)}
+                                  icon={mark.icon}
+                                />
+                              );
+                            })}{' '}
+                          </Fragment>
+                        );
+                      }}
+                    </Mutation>
+                  ); //return statement for Query
+                }}
+              </Query>;
+            } else {
+              return (
+                <Fragment>
+                  {props.markers.map((mark, i) => {
+                    // This is how we use the functions that our Marker component gives us
+                    // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
+                    // const click = function(e) {
+                    // };
+                    return (
+                      <Marker
+                        position={mark.position}
+                        onClick={e => props.onMarkerClicked(e, mark, mark.id)}
+                        key={mark.id}
+                        draggable={true}
+                        onDragStart={() => props.onMarkerDragStart(mark)}
+                        label={mark.label}
+                        onDrag={e => props.onMarkerDragged(e, i)}
+                        icon={mark.icon}
+                      />
+                    );
+                  })}{' '}
+                </Fragment>
+              );
+            }
+          })()}
           {props.polylines.map(line => {
             return (
               <Polyline
@@ -614,14 +720,6 @@ class Map extends React.PureComponent {
   inputHandler = e => {
     this.setState({ [e.target.name]: e.target.value });
   };
-  // checkBoxHandler = () => {
-  //   const { activeMarker } = this.state;
-  //   if (activeMarker.status === this.COMPLETED) {
-  //     this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes + 1 }));
-  //   } else {
-  //     this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes - 1 }));
-  //   }
-  // };
   changeMarkerStatus = checkInMutation => {
     const newMarkers = [...this.state.markers];
     const { activeMarker } = this.state;
@@ -655,7 +753,6 @@ class Map extends React.PureComponent {
       async () => {
         await checkInMutation();
         this.updateLines();
-        // this.checkBoxHandler();
         this.setMarkerColorsByDate();
       }
     );
@@ -664,29 +761,29 @@ class Map extends React.PureComponent {
   calculateLabel = letterIndex => {
     return this.labels[letterIndex % this.labels.length];
   };
-  deleteMarker = activeMarker => {
-    // const { markers } = this.state;
-    // let deleteIndex;
-    // for (let i = 0; i < markers.length; i++) {
-    //   if (markers[i].id === activeMarker.id) {
-    //     deleteIndex = i;
-    //     break;
-    //   }
-    // }
-    // const newMarkers = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
-    // // Update marker labels
-    // for (let i = 0; i < newMarkers.length; i++) {
-    //   if (newMarkers[i].label.text.match(this.labelRegex)) {
-    //     newMarkers[i].label = {
-    //       ...newMarkers[i].label,
-    //       text: this.calculateLabel(i)
-    //     };
-    //   }
-    // }
+  deleteMarker = markerId => {
+    const { markers, activeMarker } = this.state;
+    let deleteIndex;
+    for (let i = 0; i < markers.length; i++) {
+      if (markerId === activeMarker.id) {
+        deleteIndex = i;
+        break;
+      }
+    }
+    const newMarkers = [...markers.slice(0, deleteIndex), ...markers.slice(deleteIndex + 1)];
+    // Update marker labels
+    for (let i = 0; i < newMarkers.length; i++) {
+      if (newMarkers[i].label.text.match(this.labelRegex)) {
+        newMarkers[i].label = {
+          ...newMarkers[i].label,
+          text: this.calculateLabel(i)
+        };
+      }
+    }
     // if (activeMarker.status === this.COMPLETED) {
     //   this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes - 1 }));
     // }
-    // this.setState({ markers: newMarkers, showingInfoWindow: false }, this.updateLines);
+    this.setState({ markers: newMarkers, showingInfoWindow: false }, this.updateLines);
   };
   createMarker = async (e, markerMutation) => {
     const { markers } = this.state;
@@ -815,7 +912,7 @@ class Map extends React.PureComponent {
   };
   onMarkerClicked = (e, marker, markId) => {
     this.clearMarkerInfo();
-    console.log(marker);
+    // console.log(marker);
     this.setState({
       activeMarker: marker,
       showingInfoWindow: true,
@@ -829,8 +926,8 @@ class Map extends React.PureComponent {
       return obj1[key] === obj2[key];
     });
   };
-  onMarkerDragStart = () => {
-    this.setState({ activeMarker: {} });
+  onMarkerDragStart = marker => {
+    this.setState({ activeMarker: marker });
   };
   onMarkerDragged = (e, activeIndex) => {
     //activeIndex comes from the dragged <Marker> component
@@ -851,7 +948,7 @@ class Map extends React.PureComponent {
       }
     }
     // const newText = checkpointName !== '' ? checkpointName : this.calculateLabel(markerIndex);
-    console.log("Update marker INFO: ", updateMutation.data.updateMarker)
+    // console.log('Update marker INFO: ', updateMutation.data.updateMarker);
     const editedMarker = {
       ...markers[markerIndex],
       ...updateMutation.data.updateMarker
@@ -904,7 +1001,6 @@ class Map extends React.PureComponent {
         polylines={polylines}
         showingInfoWindow={showingInfoWindow}
         completedCheckboxes={completedCheckboxes}
-        // checkBoxHandler={this.checkBoxHandler}
         tripTitle={tripTitle}
         startDate={startDate}
         endDate={endDate}
