@@ -13,7 +13,8 @@ const TripsList = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-gap: 60px;
   max-width: ${props => props.theme.maxWidth};
-  margin: 0 auto;
+  /* margin: 0 auto; */
+  margin: 3rem;
 `;
 
 class Trips extends Component {

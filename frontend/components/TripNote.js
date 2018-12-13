@@ -45,6 +45,8 @@ const ArchiveBtn = styled.button`
   height: 8rem;
   width: 6rem;
   border: none;
+  margin: .5rem;
+  border-radius: 10px;
   border-top-left-radius: 8px;
   cursor: pointer;
 `;
