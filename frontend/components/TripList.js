@@ -18,6 +18,15 @@ const TripsList = styled.div`
 `;
 
 class Trips extends Component {
+  formatDate = date => {
+    const dateRegex = date.match(/(\d{4})-(\d{2})-(\d{2})/);
+    console.log(date, dateRegex);
+    const year = date[1];
+    const month = date[2];
+    const day = date[3];
+    return `${year}-${month}-${day}`;
+    // return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`;
+  };
   render() {
     return (
       <Center>
@@ -31,6 +40,8 @@ class Trips extends Component {
               <TripsList>
                 {data.me !== null
                   ? data.me.trip.map(trip => {
+                      console.log(trip.startDate);
+
                       if (!trip.archived) {
                         return (
                           <TripNote
@@ -40,6 +51,7 @@ class Trips extends Component {
                             start={trip.startDate}
                             end={trip.endDate}
                             archived={trip.archived}
+                            formatDate={this.formatDate}
                           />
                         );
                       } else {

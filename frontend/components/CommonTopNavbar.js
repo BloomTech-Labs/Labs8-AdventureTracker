@@ -88,7 +88,7 @@ class CommonTopNavbar extends Component {
                 <Mutation
                   mutation={CREATE_TRIP_MUTATION}
                   variables={{
-                    title: 'Give Title',
+                    title: '',
                     startDate: new Date(),
                     endDate: new Date()
                   }}

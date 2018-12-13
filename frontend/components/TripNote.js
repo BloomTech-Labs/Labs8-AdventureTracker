@@ -60,7 +60,7 @@ const UPDATE_TRIP_MUTATION = gql`
   }
 `;
 
-const TripNote = ({ id, title, start, end, archived }) => {
+const TripNote = ({ id, title, start, end, archived, formatDate }) => {
   return (
     <Link href={`/app?id=${id}`}>
       <NoteWrapper length={'30rem'}>
@@ -68,11 +68,11 @@ const TripNote = ({ id, title, start, end, archived }) => {
         <MapImage src="../static/hiking-girl.jpg" />
         <BadgeGroup>
           <BadgeText>Start:</BadgeText>
-          <DateBadge background={'green'}>{start}</DateBadge>
+          <DateBadge background={'green'}>{formatDate(start)}</DateBadge>
         </BadgeGroup>
         <BadgeGroup>
           <BadgeText>End:</BadgeText>
-          <DateBadge>{end}</DateBadge>
+          <DateBadge>{formatDate(end)}</DateBadge>
         </BadgeGroup>
         <Mutation
           mutation={UPDATE_TRIP_MUTATION}

@@ -1,9 +1,12 @@
+const { forwardTo } = require('prisma-binding');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const stripe = require('../stripe');
 const { hashPassword } = require('../utils');
 
 const Mutations = {
+  deleteMarker: forwardTo('db'),
+  updatePosition: forwardTo('db'),
   async createTrip(parent, args, ctx, info) {
     // comment out to test locally
     if (!ctx.request.userId) {
@@ -65,14 +68,10 @@ const Mutations = {
     );
   },
   async createMarkerMutation(parent, args, ctx, info) {
-    console.log(args);
     const marker = await ctx.db.mutation.createMarker({
       data: {
         trip: {
           connect: {
-            // commment out to test locally
-            // id: args.tripId
-            // uncomment to test locally
             id: args.tripId
           }
         },
@@ -89,10 +88,25 @@ const Mutations = {
       },
       info
     });
-    console.log(marker);
     return marker;
   },
   updateMarker(parent, args, ctx, info) {
+    // first take a copy of the updates
+    const updates = { ...args };
+    // remove the ID from the updates
+    delete updates.markerId;
+    // run the update method
+    return ctx.db.mutation.updateMarker(
+      {
+        data: updates,
+        where: {
+          id: args.markerId
+        }
+      },
+      info
+    );
+  },
+  updateMarkerStatus(parent, args, ctx, info) {
     // first take a copy of the updates
     const updates = { ...args };
     // remove the ID from the updates
