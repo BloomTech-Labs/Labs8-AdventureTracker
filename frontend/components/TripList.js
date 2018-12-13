@@ -18,13 +18,8 @@ const TripsList = styled.div`
 
 class Trips extends Component {
   formatDate = date => {
-    const dateRegex = date.match(/(\d{4})-(\d{2})-(\d{2})/);
-    console.log(date, dateRegex);
-    const year = date[1];
-    const month = date[2];
-    const day = date[3];
-    return `${year}-${month}-${day}`;
-    // return `${date.getFullYear()}-${date.getMonth()}-${date.getDay()}`;
+    const newDate = date.match(/(\d{4})-(\d{2})-(\d{2})/);
+    return newDate[0];
   };
   render() {
     return (

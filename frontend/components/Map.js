@@ -47,7 +47,7 @@ const SaveBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
   font-size: 1.3rem;
-  margin: .5rem;
+  margin: 0.5rem;
   border: 0;
   background: ${props => props.theme.blue};
   color: ${props => props.theme.white};
@@ -195,8 +195,10 @@ const MyMapComponent = compose(
     // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
     //   publicRuntimeConfig.GOOGLE_MAPS_API_KEY
     // }&v=3.exp&libraries=geometry,drawing,places`,
-    googleMapURL:
-      'https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places',
+    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
+      process.env.GOOGLE_MAP_KEY !== undefined ? process.env.GOOGLE_MAP_KEY : ''
+    }&v=3.exp&libraries=geometry,drawing,places`,
+    // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${''}&v=3.exp&libraries=geometry,drawing,places`,
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `100%`, width: '100%', position: 'relative' }} />,
     mapElement: <div style={{ height: `100%` }} />
@@ -598,7 +600,7 @@ class Map extends React.PureComponent {
       markers[i] = {
         ...markers[i],
         label: {
-          color: this.WHITE,
+          color: this.BLACK,
           fontWeight: 'bold',
           text: markerLabel
         }
@@ -825,7 +827,7 @@ class Map extends React.PureComponent {
         icon: icon,
         draggable: true,
         label: {
-          color: this.WHITE,
+          color: this.BLACK,
           fontWeight: 'bold',
           text: this.calculateLabel(markers.length)
         },

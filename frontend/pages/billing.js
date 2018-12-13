@@ -5,6 +5,7 @@ import SideNav from '../components/SideNav';
 import CommonTopNavbar from '../components/CommonTopNavbar';
 import { LgWidthContainer } from '../components/styles/WidthContainers';
 import styled, { css } from 'styled-components';
+import { MainContainer } from '../components/styles/MainContainer';
 
 const Container = styled.div`
   display: flex;
@@ -76,23 +77,25 @@ const Billing = () => (
   <LgWidthContainer>
     <CommonTopNavbar />
     <SideNav />
-    <Container>
-      <Card main_card>
-        <h1> Create up to three free trips with the free tier. </h1>
-        <p>See below for more information on subscription tier.</p>
-        <CardContainer>
-          <Card indv_card>
-            <h2>Paid Tier</h2>
-            <ul>
-              <li>Unlimited Trip Creation</li>
-              <li>Share with unlimited Friends and Family</li>
-              <li>Use custom map markers to plot your trip locators</li>
-            </ul>
-          </Card>
-        </CardContainer>
-      </Card>
-      <Payment className="payment-btn" />
-    </Container>
+    <MainContainer>
+      <Container>
+        <Card main_card>
+          <h1> Create up to three free trips with the free tier. </h1>
+          <p>See below for more information on subscription tier.</p>
+          <CardContainer>
+            <Card indv_card>
+              <h2>Paid Tier</h2>
+              <ul>
+                <li>Unlimited Trip Creation</li>
+                <li>Share with unlimited Friends and Family</li>
+                <li>Use custom map markers to plot your trip locators</li>
+              </ul>
+            </Card>
+          </CardContainer>
+        </Card>
+        <Payment className="payment-btn" />
+      </Container>
+    </MainContainer>
     <MobileNavContainer />
   </LgWidthContainer>
 );
