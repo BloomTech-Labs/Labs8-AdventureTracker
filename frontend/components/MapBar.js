@@ -66,7 +66,8 @@ const MapBtn = styled.button`
   color: ${props => props.theme.black};
   padding: 0.5em;
   font-size: 2rem;
-  height: 100%;
+  margin: 1rem;
+  width: 15rem;
   cursor: pointer;
   border: none;
 `;
