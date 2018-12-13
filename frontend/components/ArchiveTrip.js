@@ -44,7 +44,8 @@ const ArchiveBtn = styled.button`
   height: 8rem;
   width: 6rem;
   border: none;
-  border-top-left-radius: 8px;
+  margin: .5rem;
+  border-radius: 10px;
   cursor: pointer;
 `;
 
@@ -85,7 +86,7 @@ const ArchiveTrip = ({ id, title, start, end, archived }) => {
                 Router.push({ pathname: '/archivelist' });
               }}
             >
-              Unarchive?
+              Unarchive
             </ArchiveBtn>
           );
         }}

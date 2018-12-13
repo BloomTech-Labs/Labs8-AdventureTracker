@@ -46,6 +46,7 @@ const SaveBtn = styled.button`
   font-size: 1rem;
   padding: 0.5em 0.5em;
   font-size: 1.3rem;
+  margin: .5rem;
   border: 0;
   background: ${props => props.theme.blue};
   color: ${props => props.theme.white};
