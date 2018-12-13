@@ -29,7 +29,7 @@ const MapImage = styled.img`
 const BadgeGroup = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 14rem;
+  width: 16rem;
 `;
 const BadgeText = styled.span`
   font-weight: 400;
@@ -45,7 +45,7 @@ const ArchiveBtn = styled.button`
   height: 8rem;
   width: 6rem;
   border: none;
-  margin: .5rem;
+  margin: 0.5rem;
   border-radius: 10px;
   border-top-left-radius: 8px;
   cursor: pointer;
