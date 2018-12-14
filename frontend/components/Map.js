@@ -214,7 +214,7 @@ const MyMapComponent = compose(
         refs.map = ref;
       },
       onZoomChanged: ({ onZoomChange }) => () => {
-        console.log(refs.map.getZoom());
+        // console.log(refs.map.getZoom());
         onZoomChange(refs.map.getZoom());
       }
     };
