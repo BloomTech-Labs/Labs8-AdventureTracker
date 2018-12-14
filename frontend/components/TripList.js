@@ -34,7 +34,7 @@ class Trips extends Component {
               <TripsList>
                 {data.me !== null
                   ? data.me.trip.map(trip => {
-                      console.log(trip.startDate);
+                      // console.log(trip.startDate);
 
                       if (!trip.archived) {
                         return (

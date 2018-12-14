@@ -3,7 +3,7 @@ import getConfig from 'next/config';
 // const { publicRuntimeConfig } = getConfig();
 import gql from 'graphql-tag';
 import { Mutation, Query } from 'react-apollo';
-import { compose, withProps } from 'recompose';
+import { compose, withProps, withState, withHandlers } from 'recompose';
 import {
   withScriptjs,
   withGoogleMap,
@@ -203,6 +203,27 @@ const MyMapComponent = compose(
     containerElement: <div style={{ height: `100%`, width: '100%', position: 'relative' }} />,
     mapElement: <div style={{ height: `100%` }} />
   }),
+  withState('zoom', 'onZoomChange', 4),
+  withState('center', 'onCenterChange', { lat: 38.9260256843898, lng: -104.755169921875 }),
+  withHandlers(() => {
+    const refs = {
+      map: undefined
+    };
+
+    return {
+      onMapMounted: () => ref => {
+        refs.map = ref;
+      },
+      onZoomChanged: ({ onZoomChange }) => () => {
+        // console.log(refs.map.getZoom());
+        onZoomChange(refs.map.getZoom());
+      },
+      onCenterChanged: ({ onCenterChange }) => () => {
+        // console.log(refs.map.getCenter().lat());
+        onCenterChange(refs.map.getCenter());
+      }
+    };
+  }),
   withScriptjs,
   withGoogleMap
 )(props => (
@@ -229,8 +250,12 @@ const MyMapComponent = compose(
           onClick={e => {
             props.onMapClicked(e, createMarkerMutation);
           }}
-          defaultZoom={8}
-          center={props.location}
+          defaultZoom={4}
+          zoom={props.zoom}
+          center={props.center}
+          ref={props.onMapMounted}
+          onZoomChanged={props.onZoomChanged}
+          onCenterChanged={props.onCenterChanged}
           // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
         >
           <MapBar
