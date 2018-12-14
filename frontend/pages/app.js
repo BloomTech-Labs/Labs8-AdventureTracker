@@ -1,4 +1,4 @@
-import { Map } from '../components/Map';
+import { MapContainer } from '../components/MapContainer';
 import gql from 'graphql-tag';
 import { withRouter } from 'next/router';
 import { Query } from 'react-apollo';
@@ -40,12 +40,12 @@ const App = props => {
           if (error) {
             return <p>{error}</p>;
           }
-          return <Map data={data} />;
+          return <MapContainer data={data} />;
         }}
       </Query>
     );
   } else {
-    return <Map />;
+    return <MapContainer />;
   }
 };
 
