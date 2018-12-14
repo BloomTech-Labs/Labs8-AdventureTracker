@@ -240,7 +240,7 @@ class MapContainer extends React.PureComponent {
     const { markers, activeMarker } = this.state;
     let deleteIndex;
     for (let i = 0; i < markers.length; i++) {
-      if (markerId === activeMarker.id) {
+      if (markerId === markers[i].id) {
         deleteIndex = i;
         break;
       }
@@ -419,13 +419,16 @@ class MapContainer extends React.PureComponent {
         break;
       }
     }
-    // const newText = checkpointName !== '' ? checkpointName : this.calculateLabel(markerIndex);
+    const newText = checkpointName !== '' ? checkpointName : this.calculateLabel(markerIndex);
     // console.log('Update marker INFO: ', updateMutation.data.updateMarker);
     const editedMarker = {
       ...markers[markerIndex],
       ...updateMutation.data.updateMarker
     };
-
+    editedMarker.label = {
+      ...editedMarker.label,
+      text: newText
+    };
     this.setState(
       {
         markers: [
