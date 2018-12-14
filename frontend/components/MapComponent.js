@@ -4,9 +4,9 @@ import { Mutation, Query } from 'react-apollo';
 import React, { Fragment } from 'react';
 import { CREATE_MARKER_MUTATION } from './map-components/Mutations';
 import { InfoWindowComponent } from './map-components/InfoWindow';
-import { MainContainerThree } from './styles/MainContainer';
 import MapBar from './map-components/MapBar';
 import { CURRENT_USER_QUERY } from './User';
+import { InstructionsContainer } from './map-components/styles/InstructionsContainer';
 
 const MapComponent = compose(
   withProps({
@@ -140,7 +140,7 @@ const MapComponent = compose(
             );
           })}
 
-          <MainContainerThree style={{ color: 'black' }}>
+          <InstructionsContainer>
             <div style={{ marginBottom: '16em' }}>
               <h1>Instructions for Creating a Trip</h1>
               <ul style={{ textAlign: 'center' }}>
@@ -150,7 +150,7 @@ const MapComponent = compose(
                 <h4 style={{ color: 'red' }}>**** Red ! means late by 1 hour or more</h4>
               </ul>
             </div>
-          </MainContainerThree>
+          </InstructionsContainer>
         </GoogleMap>
       );
     }}
