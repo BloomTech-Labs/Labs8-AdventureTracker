@@ -204,6 +204,7 @@ const MyMapComponent = compose(
     mapElement: <div style={{ height: `100%` }} />
   }),
   withState('zoom', 'onZoomChange', 4),
+  withState('center', 'onCenterChange', { lat: 38.9260256843898, lng: -104.755169921875 }),
   withHandlers(() => {
     const refs = {
       map: undefined
@@ -216,6 +217,10 @@ const MyMapComponent = compose(
       onZoomChanged: ({ onZoomChange }) => () => {
         // console.log(refs.map.getZoom());
         onZoomChange(refs.map.getZoom());
+      },
+      onCenterChanged: ({ onCenterChange }) => () => {
+        // console.log(refs.map.getCenter().lat());
+        onCenterChange(refs.map.getCenter());
       }
     };
   }),
@@ -247,9 +252,10 @@ const MyMapComponent = compose(
           }}
           defaultZoom={4}
           zoom={props.zoom}
-          center={props.location}
+          center={props.center}
           ref={props.onMapMounted}
           onZoomChanged={props.onZoomChanged}
+          onCenterChanged={props.onCenterChanged}
           // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
         >
           <MapBar
