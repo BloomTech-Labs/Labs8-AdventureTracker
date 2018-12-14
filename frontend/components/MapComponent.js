@@ -10,13 +10,9 @@ import { CURRENT_USER_QUERY } from './User';
 
 const MapComponent = compose(
   withProps({
-    // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
-    //   publicRuntimeConfig.GOOGLE_MAPS_API_KEY
-    // }&v=3.exp&libraries=geometry,drawing,places`,
     googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
       process.env.GOOGLE_MAP_KEY !== undefined ? process.env.GOOGLE_MAP_KEY : ''
     }&v=3.exp&libraries=geometry,drawing,places`,
-    // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${''}&v=3.exp&libraries=geometry,drawing,places`,
     loadingElement: <div style={{ height: `100%` }} />,
     containerElement: <div style={{ height: `100%`, width: '100%', position: 'relative' }} />,
     mapElement: <div style={{ height: `100%` }} />
@@ -144,8 +140,8 @@ const MapComponent = compose(
             );
           })}
 
-          <MainContainerThree>
-            <div style={{ marginTop: '10em' }}>
+          <MainContainerThree style={{ color: 'black' }}>
+            <div style={{ marginBottom: '16em' }}>
               <h1>Instructions for Creating a Trip</h1>
               <ul style={{ textAlign: 'center' }}>
                 <li>Use the date picker to select start and end dates for your trip</li>
