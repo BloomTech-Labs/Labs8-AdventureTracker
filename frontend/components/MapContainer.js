@@ -237,7 +237,7 @@ class MapContainer extends React.PureComponent {
   };
 
   deleteMarker = markerId => {
-    const { markers, activeMarker } = this.state;
+    const { markers } = this.state;
     let deleteIndex;
     for (let i = 0; i < markers.length; i++) {
       if (markerId === markers[i].id) {
@@ -390,12 +390,6 @@ class MapContainer extends React.PureComponent {
       showingInfoWindow: true,
       ...marker,
       location: marker.position
-    });
-  };
-  shallowObjEquals = (obj1, obj2) => {
-    //helper function, not used for making the app work
-    return Object.keys(obj1).every(key => {
-      return obj1[key] === obj2[key];
     });
   };
   onMarkerDragStart = marker => {
