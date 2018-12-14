@@ -44,6 +44,8 @@ const App = props => {
         }}
       </Query>
     );
+  } else {
+    return <MapContainer />;
   }
 };
 
