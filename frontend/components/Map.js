@@ -1,7 +1,4 @@
 import React, { Fragment } from 'react';
-import getConfig from 'next/config';
-// const { publicRuntimeConfig } = getConfig();
-import gql from 'graphql-tag';
 import { Mutation, Query } from 'react-apollo';
 import { compose, withProps, withState, withHandlers } from 'recompose';
 import {
@@ -13,180 +10,26 @@ import {
   InfoWindow
 } from 'react-google-maps';
 //react-google-maps docs: https://tomchentw.github.io/react-google-maps/
-import styled from 'styled-components';
-import { MainContainerThree } from './styles/MainContainer';
 import uuidv4 from 'uuid/v4';
-import { MapBar } from './MapBar';
+import { MainContainerThree } from './styles/MainContainer';
+
+import MapBar from './map-components/MapBar';
 import { CURRENT_USER_QUERY } from './User';
 import { GREY_PIN, CHECKMARK_ICON, ORANGE_EXCLAMATION, RED_EXCLAMATION } from './styles/MapIcons';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import moment from 'moment';
 
-const Label = styled.label``;
-
-const ReachedCheckBox = styled.input`
-  margin-bottom: 0.4em;
-`;
-const CheckboxGroup = styled.div`
-  display: flex;
-  margin: 0.2em 0;
-`;
-const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-const DeleteBtn = styled.button`
-  font-size: 1rem;
-  padding: 0.5em 0.5em;
-  border: 0;
-  color: ${props => props.theme.black};
-  background: #ff6262;
-`;
-const SaveBtn = styled.button`
-  font-size: 1rem;
-  padding: 0.5em 0.5em;
-  font-size: 1.3rem;
-  margin: 0.5rem;
-  border: 0;
-  background: ${props => props.theme.blue};
-  color: ${props => props.theme.white};
-`;
-const MarkerNameLabel = styled.label`
-  margin-bottom: 0.4em;
-`;
-const MarkerNameBox = styled.input`
-  height: 3rem;
-  width: 100%;
-  margin-bottom: 0.6em;
-`;
-const MarkerNameGroup = styled.div``;
-const InfoWrapper = styled.div`
-  display: flex;
-  flex-flow: column;
-`;
-
-const CheckedInGroup = styled.div`
-  display: flex;
-  flex-flow: column;
-  align-items: flex-start;
-  width: 100%;
-  margin-bottom: 1em;
-`;
-const CheckedIn = styled.label`
-  font-size: 1.4rem;
-  margin-bottom: 0.4em;
-`;
-
-const CheckInBox = styled(ReachedCheckBox)`
-  width: 60%;
-`;
-const ETAGroup = styled(CheckedInGroup)`
-  & > * {
-    margin-bottom: 0.5em;
-  }
-  margin-bottom: 1.5em;
-`;
-const ETA = styled(CheckedIn)``;
-
-const CREATE_MARKER_MUTATION = gql`
-  mutation CREATE_MARKER_MUTATION(
-    $tripId: ID!
-    $status: Progress!
-    $etaTime: DateTime!
-    $checkedInTime: DateTime!
-    $checkpointName: String!
-    $position: PositionCreateWithoutMarkerInput!
-  ) {
-    createMarkerMutation(
-      tripId: $tripId
-      status: $status
-      etaTime: $etaTime
-      checkedInTime: $checkedInTime
-      checkpointName: $checkpointName
-      position: $position
-    ) {
-      id
-      status
-      etaTime
-      checkedInTime
-      checkpointName
-    }
-  }
-`;
-const UPDATE_MARKER_MUTATION = gql`
-  mutation UPDATE_MARKER_MUTATION(
-    $markerId: ID!
-    $status: Progress!
-    $etaTime: DateTime!
-    $checkpointName: String!
-  ) {
-    updateMarker(
-      markerId: $markerId
-      status: $status
-      etaTime: $etaTime
-      checkpointName: $checkpointName
-    ) {
-      id
-      status
-      etaTime
-      checkpointName
-    }
-  }
-`;
-const UPDATE_POSITION_MUTATION = gql`
-  mutation UPDATE_POSITION_MUTATION($markerId: ID!, $position: Position!) {
-    updateMarkerPosition(markerId: $markerId, position: $position) {
-      id
-      position {
-        lat
-        lng
-      }
-    }
-  }
-`;
-const UPDATE_CHECKIN_MUTATION = gql`
-  mutation UPDATE_CHECKIN_MUTATION($markerId: ID!, $status: Progress!, $checkedInTime: DateTime!) {
-    updateMarkerStatus(markerId: $markerId, status: $status, checkedInTime: $checkedInTime) {
-      id
-      status
-    }
-  }
-`;
-const CURRENT_MARKER_QUERY = gql`
-  query CURRENT_MARKER_QUERY($id: ID!) {
-    marker(where: { id: $id }) {
-      id
-      status
-      etaTime
-      checkedInTime
-      checkpointName
-    }
-  }
-`;
-const MARKER_FOR_POSITION_QUERY = gql`
-  query CURRENT_MARKER_QUERY($id: ID!) {
-    marker(where: { id: $id }) {
-      position {
-        id
-      }
-    }
-  }
-`;
-const POSITION_TO_UPDATE_MUTATION = gql`
-  mutation POSITION_TO_UPDATE_MUTATION($id: ID!, $lat: Float!, $lng: Float!) {
-    updatePosition(where: { id: $id }, data: { lat: $lat, lng: $lng }) {
-      id
-    }
-  }
-`;
-const DELETE_MARKER_MUTATION = gql`
-  mutation DELETE_MARKER_MUTATION($id: ID!) {
-    deleteMarker(where: { id: $id }) {
-      id
-    }
-  }
-`;
+import {
+  CREATE_MARKER_MUTATION,
+  UPDATE_MARKER_MUTATION,
+  UPDATE_POSITION_MUTATION,
+  UPDATE_CHECKIN_MUTATION,
+  POSITION_TO_UPDATE_MUTATION,
+  DELETE_MARKER_MUTATION
+} from './map-components/Mutations';
+import { CURRENT_MARKER_QUERY, MARKER_FOR_POSITION_QUERY } from './map-components/Queries';
+import { InfoWindowComponent } from './map-components/InfoWindow';
 
 // TODO: Use Google API KEY to take it out of development mode
 
@@ -219,7 +62,6 @@ const MyMapComponent = compose(
         onZoomChange(refs.map.getZoom());
       },
       onCenterChanged: ({ onCenterChange }) => () => {
-        // console.log(refs.map.getCenter().lat());
         onCenterChange(refs.map.getCenter());
       }
     };
@@ -259,258 +101,50 @@ const MyMapComponent = compose(
           // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
         >
           <MapBar
+            //info props
             title={props.tripTitle}
             completedChecks={props.completedCheckboxes}
             markerAmount={props.markers.length}
             markers={props.markers}
+            tripId={props.tripId}
             startDate={props.startDate}
             endDate={props.endDate}
+            //methods
             setStartDate={props.setStartDate}
             setEndDate={props.setEndDate}
             inputHandler={props.inputHandler}
-            tripId={props.tripId}
           />
           {props.showingInfoWindow && (
-            <InfoWindow
+            <InfoWindowComponent
+              //info props
               position={props.activeMarker.position}
-              onCloseClick={() => {
-                props.toggleInfoWindow();
-                props.clearActiveMarker();
-                props.clearMarkerInfo();
-              }}
-            >
-              <InfoWrapper>
-                <div className="container">
-                  <h2>Click on the markers to give your waypoints a name and ETA</h2>
-                </div>
-                <MarkerNameGroup>
-                  <MarkerNameLabel htmlFor="location">Checkpoint Name?</MarkerNameLabel>
-                  <MarkerNameBox
-                    name="checkpointName"
-                    onChange={props.inputHandler}
-                    value={props.checkpointName}
-                    id="location"
-                    type="text"
-                  />
-                </MarkerNameGroup>
-                <ETAGroup>
-                  <ETA>ETA: </ETA>
-                  <DatePicker
-                    selected={props.etaTime}
-                    onChange={props.setEtaTime}
-                    showTimeSelect
-                    timeIntervals={15}
-                    dateFormat="MM/dd/YYYY, h:mm aa"
-                    timeCaption="Time"
-                    onKeyDown={e => {
-                      e.preventDefault();
-                    }}
-                  />
-                  {/* <input type="time" name="etaTime" value={props.etaTime} onChange={props.inputHandler} /> */}
-                  <Mutation
-                    mutation={UPDATE_MARKER_MUTATION}
-                    variables={{
-                      markerId: props.activeMarker.id,
-                      status: props.activeMarker.status,
-                      etaTime: props.etaTime,
-                      checkpointName: props.checkpointName
-                    }}
-                    // todo: add refetchQueries
-                    // refetchQueries={[{ query: CURRENT_MARKER_QUERY }]}
-                  >
-                    {(updateMarker, { error, loading }) => {
-                      if (loading) {
-                        return <p>{loading}</p>;
-                      }
-                      if (error) {
-                        return <p>{error}</p>;
-                      }
-                      return (
-                        <SaveBtn
-                          onClick={async () => {
-                            const markerInfo = await updateMarker();
-                            props.saveMarkerInfo(markerInfo);
-                          }}
-                        >
-                          Save Marker Info
-                        </SaveBtn>
-                      );
-                    }}
-                  </Mutation>
-                </ETAGroup>
-                <CheckboxGroup>
-                  <Label htmlFor="reached-checkbox">Reached Checkpoint?</Label>
-                  <Mutation
-                    mutation={UPDATE_CHECKIN_MUTATION}
-                    variables={{
-                      markerId: props.activeMarker.id,
-
-                      status:
-                        props.activeMarker.status === 'COMPLETED' ? 'NOT_STARTED' : 'COMPLETED',
-                      checkedInTime: new Date()
-                    }}
-                  >
-                    {(updateMarkerStatus, { error, loading }) => {
-                      if (loading) {
-                        return <p>{loading}</p>;
-                      }
-                      if (error) {
-                        return <p>{error}</p>;
-                      }
-                      return (
-                        <ReachedCheckBox
-                          onChange={() => {
-                            props.changeMarkerStatus(updateMarkerStatus);
-                          }}
-                          id="reached-checkbox"
-                          type="checkbox"
-                          checked={props.activeMarker.status === 'COMPLETED' ? true : false}
-                          value={props.checkedInTime === '' ? '' : new Date()}
-                        />
-                      );
-                    }}
-                  </Mutation>
-                </CheckboxGroup>
-                <CheckedInGroup>
-                  <CheckedIn htmlFor="checked-in">Checked-in: </CheckedIn>
-                  <CheckInBox
-                    id="checked-in"
-                    value={props.checkedInTime}
-                    name="checkedInTime"
-                    type="time"
-                    disabled
-                  />
-                </CheckedInGroup>
-                <Mutation
-                  mutation={DELETE_MARKER_MUTATION}
-                  variables={{
-                    id: props.activeMarker.id
-                  }}
-                  // todo: add refetchQueries
-                  // refetchQueries={[{ query: CURRENT_MARKER_QUERY }]}
-                >
-                  {(deleteMarker, { error, loading }) => {
-                    if (loading) {
-                      return <p>{loading}</p>;
-                    }
-                    if (error) {
-                      return <p>{error}</p>;
-                    }
-                    return (
-                      <ButtonGroup>
-                        <DeleteBtn
-                          onClick={async () => {
-                            const marker = await deleteMarker();
-                            // console.log('MARKER DELETE DATA: ', marker);
-                            const id = marker.data.deleteMarker.id;
-                            props.deleteMarker(id);
-                          }}
-                        >
-                          Delete Marker?
-                        </DeleteBtn>
-                      </ButtonGroup>
-                    );
-                  }}
-                </Mutation>
-              </InfoWrapper>
-            </InfoWindow>
+              etaTime={props.etaTime}
+              activeMarker={props.activeMarker}
+              checkpointName={props.checkpointName}
+              checkedInTime={props.checkedInTime}
+              //methods
+              inputHandler={props.inputHandler}
+              clearMarkerInfo={props.clearMarkerInfo}
+              setEtaTime={props.setEtaTime}
+              clearActiveMarker={props.clearActiveMarker}
+              toggleInfoWindow={props.toggleInfoWindow}
+              saveMarkerInfo={props.saveMarkerInfo}
+              changeMarkerStatus={props.changeMarkerStatus}
+              deleteMarker={props.deleteMarker}
+            />
           )}
-
-          {/* {(() => {
-            if (props.activeMarker.id !== undefined) {
-              <Query query={MARKER_FOR_POSITION_QUERY} variables={{ id: props.activeMarker.id }}>
-                {({ data, loading, error }) => {
-                  console.log('POSITION ID data: ', data);
-                  if (loading) {
-                    return <p>{loading}</p>;
-                  }
-                  if (error) {
-                    return <p>{error}</p>;
-                  }
-                  return (
-                    <Mutation
-                      mutation={UPDATE_POSITION_MUTATION}
-                      variables={{
-                        id: data.id
-                      }}
-                      // todo: add refetchQueries
-                      // refetchQueries={[{ query: CURRENT_MARKER_QUERY }]}
-                    >
-                      {(updateMarkerPosition, { error, loading }) => {
-                        if (loading) {
-                          return <p>{loading}</p>;
-                        }
-                        if (error) {
-                          return <p>{error}</p>;
-                        }
-                        return (
-                          <Fragment>
-                            {props.markers.map((mark, i) => {
-                              // This is how we use the functions that our Marker component gives us
-                              // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
-                              // const click = function(e) {
-                              // };
-                              return (
-                                <Marker
-                                  position={mark.position}
-                                  onClick={e => props.onMarkerClicked(e, mark, mark.id)}
-                                  key={mark.id}
-                                  draggable={true}
-                                  onDragStart={() => props.onMarkerDragStart(mark)}
-                                  onDragEnd={async () => {
-                                    //need to query
-                                    //updatePositionFromID
-                                    const position = await updateMarkerPosition();
-                                    console.log('Updated Position data: ', position);
-                                  }}
-                                  label={mark.label}
-                                  onDrag={e => props.onMarkerDragged(e, i)}
-                                  icon={mark.icon}
-                                />
-                              );
-                            })}{' '}
-                          </Fragment>
-                        );
-                      }}
-                    </Mutation>
-                  ); //return statement for Query
-                }}
-              </Query>;
-            } else {
-              return (
-                <Fragment>
-                  {props.markers.map((mark, i) => {
-                    // This is how we use the functions that our Marker component gives us
-                    // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
-                    // const click = function(e) {
-                    // };
-                    return (
-                      <Marker
-                        position={mark.position}
-                        onClick={e => props.onMarkerClicked(e, mark, mark.id)}
-                        key={mark.id}
-                        draggable={true}
-                        onDragStart={() => props.onMarkerDragStart(mark)}
-                        label={mark.label}
-                        onDrag={e => props.onMarkerDragged(e, i)}
-                        icon={mark.icon}
-                      />
-                    );
-                  }
-                  )}{' '}
-                </Fragment>
-              );
-            }
-          })()} */}
           {props.markers.map((mark, i) => {
             // This is how we use the functions that our Marker component gives us
             // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
-            // const click = function(e) {
-            // };
+
             return (
               <Marker
                 position={mark.position}
-                onClick={e => props.onMarkerClicked(e, mark, mark.id)}
+                onClick={e => {
+                  props.onMarkerClicked(e, mark, mark.id);
+                  // console.log('marker center: ');
+                  props.onCenterChanged(props.position);
+                }}
                 key={mark.id}
                 draggable={true}
                 onDragStart={() => props.onMarkerDragStart(mark)}
@@ -536,8 +170,8 @@ const MyMapComponent = compose(
             );
           })}
 
-          {/* <MainContainerThree>
-            <div style={{ marginBottom: '14em' }}>
+          <MainContainerThree>
+            <div style={{ marginTop: '10em' }}>
               <h1>Instructions for Creating a Trip</h1>
               <ul style={{ textAlgin: 'center' }}>
                 <li>Use the date picker to select start and end dates for your trip</li>
@@ -546,7 +180,7 @@ const MyMapComponent = compose(
                 <h4 style={{ color: 'red' }}>**** Red ! means late by 1 hour or more</h4>
               </ul>
             </div>
-          </MainContainerThree> */}
+          </MainContainerThree>
         </GoogleMap>
       );
     }}

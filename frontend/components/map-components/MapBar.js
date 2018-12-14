@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import styled from 'styled-components';
-import { Mutation, Query } from 'react-apollo';
+import { Mutation } from 'react-apollo';
 import Router from 'next/router';
 import gql from 'graphql-tag';
 import DatePicker from 'react-datepicker';
-import { FormArea } from './styles/FormStyles';
-import { CURRENT_USER_QUERY } from './User';
-import { Fragment } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
-
+import { FormArea } from '../styles/FormStyles';
+import { CURRENT_USER_QUERY } from '../User';
 const ProgressWrapper = styled.div`
   display: flex;
   position: relative;
@@ -197,4 +195,4 @@ class MapBar extends Component {
   }
 }
 
-export { MapBar, CalendarGroup, CalendarInput, CalendarLabel, CalendarWrapper };
+export default MapBar;
