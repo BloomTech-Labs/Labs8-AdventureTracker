@@ -1,199 +1,24 @@
-import React, { Fragment } from 'react';
-import { Mutation, Query } from 'react-apollo';
-import { compose, withProps, withState, withHandlers } from 'recompose';
-import {
-  withScriptjs,
-  withGoogleMap,
-  GoogleMap,
-  Marker,
-  Polyline,
-  InfoWindow
-} from 'react-google-maps';
+import React from 'react';
+
 //react-google-maps docs: https://tomchentw.github.io/react-google-maps/
 import uuidv4 from 'uuid/v4';
-import { MainContainerThree } from './styles/MainContainer';
-
-import MapBar from './map-components/MapBar';
-import { CURRENT_USER_QUERY } from './User';
-import { GREY_PIN, CHECKMARK_ICON, ORANGE_EXCLAMATION, RED_EXCLAMATION } from './styles/MapIcons';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
-import moment from 'moment';
-
 import {
-  CREATE_MARKER_MUTATION,
-  UPDATE_MARKER_MUTATION,
-  UPDATE_POSITION_MUTATION,
-  UPDATE_CHECKIN_MUTATION,
-  POSITION_TO_UPDATE_MUTATION,
-  DELETE_MARKER_MUTATION
-} from './map-components/Mutations';
-import { CURRENT_MARKER_QUERY, MARKER_FOR_POSITION_QUERY } from './map-components/Queries';
-import { InfoWindowComponent } from './map-components/InfoWindow';
+  GREY_PIN,
+  CHECKMARK_ICON,
+  ORANGE_EXCLAMATION,
+  RED_EXCLAMATION
+} from './map-components/styles/MapIcons';
+import moment from 'moment';
+import { MapComponent } from './MapComponent';
 
-// TODO: Use Google API KEY to take it out of development mode
-
-const MyMapComponent = compose(
-  withProps({
-    // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
-    //   publicRuntimeConfig.GOOGLE_MAPS_API_KEY
-    // }&v=3.exp&libraries=geometry,drawing,places`,
-    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
-      process.env.GOOGLE_MAP_KEY !== undefined ? process.env.GOOGLE_MAP_KEY : ''
-    }&v=3.exp&libraries=geometry,drawing,places`,
-    // googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${''}&v=3.exp&libraries=geometry,drawing,places`,
-    loadingElement: <div style={{ height: `100%` }} />,
-    containerElement: <div style={{ height: `100%`, width: '100%', position: 'relative' }} />,
-    mapElement: <div style={{ height: `100%` }} />
-  }),
-  withState('zoom', 'onZoomChange', 4),
-  withState('center', 'onCenterChange', { lat: 38.9260256843898, lng: -104.755169921875 }),
-  withHandlers(() => {
-    const refs = {
-      map: undefined
-    };
-
-    return {
-      onMapMounted: () => ref => {
-        refs.map = ref;
-      },
-      onZoomChanged: ({ onZoomChange }) => () => {
-        // console.log(refs.map.getZoom());
-        onZoomChange(refs.map.getZoom());
-      },
-      onCenterChanged: ({ onCenterChange }) => () => {
-        onCenterChange(refs.map.getCenter());
-      }
-    };
-  }),
-  withScriptjs,
-  withGoogleMap
-)(props => (
-  <Mutation
-    mutation={CREATE_MARKER_MUTATION}
-    variables={{
-      tripId: props.tripId,
-      status: 'NOT_STARTED',
-      etaTime: new Date(),
-      checkedInTime: new Date(),
-      checkpointName: '',
-      position: props.clickLocation
-    }}
-  >
-    {(createMarkerMutation, { error, loading }) => {
-      if (loading) {
-        return <p>{loading}</p>;
-      }
-      if (error) {
-        return <p>{error}</p>;
-      }
-      return (
-        <GoogleMap
-          onClick={e => {
-            props.onMapClicked(e, createMarkerMutation);
-          }}
-          defaultZoom={4}
-          zoom={props.zoom}
-          center={props.center}
-          ref={props.onMapMounted}
-          onZoomChanged={props.onZoomChanged}
-          onCenterChanged={props.onCenterChanged}
-          // bootstrapURLKeys={{ key: [serverRuntimeConfig.GOOGLE_MAPS_API_KEY] }}
-        >
-          <MapBar
-            //info props
-            title={props.tripTitle}
-            completedChecks={props.completedCheckboxes}
-            markerAmount={props.markers.length}
-            markers={props.markers}
-            tripId={props.tripId}
-            startDate={props.startDate}
-            endDate={props.endDate}
-            //methods
-            setStartDate={props.setStartDate}
-            setEndDate={props.setEndDate}
-            inputHandler={props.inputHandler}
-          />
-          {props.showingInfoWindow && (
-            <InfoWindowComponent
-              //info props
-              position={props.activeMarker.position}
-              etaTime={props.etaTime}
-              activeMarker={props.activeMarker}
-              checkpointName={props.checkpointName}
-              checkedInTime={props.checkedInTime}
-              //methods
-              inputHandler={props.inputHandler}
-              clearMarkerInfo={props.clearMarkerInfo}
-              setEtaTime={props.setEtaTime}
-              clearActiveMarker={props.clearActiveMarker}
-              toggleInfoWindow={props.toggleInfoWindow}
-              saveMarkerInfo={props.saveMarkerInfo}
-              changeMarkerStatus={props.changeMarkerStatus}
-              deleteMarker={props.deleteMarker}
-            />
-          )}
-          {props.markers.map((mark, i) => {
-            // This is how we use the functions that our Marker component gives us
-            // https://stackoverflow.com/questions/43513518/how-call-function-getcenter-and-others-in-react-google-maps
-
-            return (
-              <Marker
-                position={mark.position}
-                onClick={e => {
-                  props.onMarkerClicked(e, mark, mark.id);
-                  // console.log('marker center: ');
-                  props.onCenterChanged(props.position);
-                }}
-                key={mark.id}
-                draggable={true}
-                onDragStart={() => props.onMarkerDragStart(mark)}
-                label={mark.label}
-                onDrag={e => props.onMarkerDragged(e, i)}
-                icon={mark.icon}
-              />
-            );
-          })}
-
-          {props.polylines.map(line => {
-            return (
-              <Polyline
-                key={line.id}
-                path={line.path}
-                options={{
-                  strokeColor: line.strokeColor,
-                  strokeWeight: line.strokeWeight,
-                  strokeOpacity: line.strokeOpacity,
-                  icons: line.icons
-                }}
-              />
-            );
-          })}
-
-          <MainContainerThree>
-            <div style={{ marginTop: '10em' }}>
-              <h1>Instructions for Creating a Trip</h1>
-              <ul style={{ textAlgin: 'center' }}>
-                <li>Use the date picker to select start and end dates for your trip</li>
-                <li>Click on the map to place your markers</li>
-                <h4 style={{ color: 'orange' }}>**** Orange ! means late by 59 minutes or less</h4>
-                <h4 style={{ color: 'red' }}>**** Red ! means late by 1 hour or more</h4>
-              </ul>
-            </div>
-          </MainContainerThree>
-        </GoogleMap>
-      );
-    }}
-  </Mutation>
-));
-
-class Map extends React.PureComponent {
+class MapContainer extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       tripTitle: '',
       startDate: new Date(),
       endDate: new Date(),
+      etaTime: new Date(),
       showingInfoWindow: false,
       // Storing location state for centering the map based on the marker
       location: { lat: 38.9260256843898, lng: -104.755169921875 },
@@ -202,7 +27,6 @@ class Map extends React.PureComponent {
       selectedPlace: {},
       markers: [],
       checkpointName: '',
-      etaTime: new Date(),
       checkedInTime: '',
       polylines: [],
       completedCheckboxes: 0,
@@ -224,10 +48,10 @@ class Map extends React.PureComponent {
     this.path = 'M-20,0a20,20 0 1,0 40,0a20,20 0 1,0 -40,0';
     this.labelRegex = /\b[A-Z]\b/;
   }
+  //Keep all lifecycle methods above the rest of the methods
   componentDidMount() {
     if (this.props.data.trip) {
       const { startDate, endDate, markers, title, id } = this.props.data.trip;
-
       this.setState(
         {
           startDate,
@@ -273,22 +97,6 @@ class Map extends React.PureComponent {
     for (let i = 0; i < markers.length; i++) {
       const eta = moment(markers[i].etaTime);
       const minutesDiff = eta.diff(now, 'minutes');
-      // markers[i].icon = {
-      //   ...markers[i]
-      // };
-      // based on eta time and current time, we need to change the marker to the right icon
-      // icon property:
-      // green icon needs to appear if status is true
-      // GREY_PIN, CHECKMARK_ICON, ORANGE_EXCLAMATION, RED_EXCLAMATION
-      // orange icon needs to appear if 59 minutes late or less
-      // red icon needs to appear if an hour late or more
-      // grey icon needs to appear if status is false and eta time is still later than current time
-      // if (markers[i].status === this.NOT_STARTED && minutesDiff >= 0) {
-      //   markers[i].icon = {
-      //     ...markers[i].icon,
-      //     url: GREY_PIN
-      //   };
-      // }
 
       if (markers[i].status === this.COMPLETED) {
         markers[i].icon = {
@@ -316,14 +124,6 @@ class Map extends React.PureComponent {
         ...markers[i],
         draggable: true
       };
-
-      // if(markers[i].checkpointName.match(this.labelRegex)) {
-      //   markers[i]
-      // }
-      // draggable property:
-      // need to make draggable true
-
-      // check if checkpointName is different from regular labels and if so then use calculateLabel to find the right letter
     }
     this.setState({ markers }, this.updateLines);
   };
@@ -342,15 +142,11 @@ class Map extends React.PureComponent {
       etaTime: date
     });
   };
-
+  inputHandler = e => {
+    this.setState({ [e.target.name]: e.target.value });
+  };
   clearActiveMarker = () => {
     this.setState({ activeMarker: {} });
-  };
-
-  calculateDate = (plusDay = 0, plusMonth = 0, plusYear = 0) => {
-    const date = new Date();
-    return `${date.getFullYear() + plusYear}-${date.getMonth() + plusMonth}-${date.getDay() +
-      plusDay}`;
   };
   calculateTime = (plusMinute = 0, plusHour = 0) => {
     const date = new Date();
@@ -358,9 +154,12 @@ class Map extends React.PureComponent {
       date.getMinutes() > 9 ? date.getMinutes() : '0' + date.getMinutes()
     }`;
   };
+  //Calculates the label for the marker
+  calculateLabel = letterIndex => {
+    return this.labels[letterIndex % this.labels.length];
+  };
   setMarkerColorsByDate = () => {
-    const { etaTime, markers } = this.state;
-
+    const { markers } = this.state;
     const newMarkers = [...markers];
     const now = moment();
     for (let i = 0; i < newMarkers.length; i++) {
@@ -399,10 +198,6 @@ class Map extends React.PureComponent {
 
     this.setState({ markers: newMarkers });
   };
-
-  inputHandler = e => {
-    this.setState({ [e.target.name]: e.target.value });
-  };
   changeMarkerStatus = checkInMutation => {
     const newMarkers = [...this.state.markers];
     const { activeMarker } = this.state;
@@ -440,10 +235,7 @@ class Map extends React.PureComponent {
       }
     );
   };
-  //Calculates the label for the marker
-  calculateLabel = letterIndex => {
-    return this.labels[letterIndex % this.labels.length];
-  };
+
   deleteMarker = markerId => {
     const { markers, activeMarker } = this.state;
     let deleteIndex;
@@ -463,9 +255,6 @@ class Map extends React.PureComponent {
         };
       }
     }
-    // if (activeMarker.status === this.COMPLETED) {
-    //   this.setState(prevState => ({ completedCheckboxes: prevState.completedCheckboxes - 1 }));
-    // }
     this.setState({ markers: newMarkers, showingInfoWindow: false }, this.updateLines);
   };
   createMarker = async (e, markerMutation) => {
@@ -499,7 +288,7 @@ class Map extends React.PureComponent {
     });
   };
   onMapClicked = (e, markerMutation) => {
-    const { showingInfoWindow, clickLocation } = this.state;
+    const { showingInfoWindow } = this.state;
 
     if (showingInfoWindow === true) {
       this.setState({ showingInfoWindow: false });
@@ -593,7 +382,7 @@ class Map extends React.PureComponent {
     }
     this.setState({ polylines: lines });
   };
-  onMarkerClicked = (e, marker, markId) => {
+  onMarkerClicked = (e, marker) => {
     this.clearMarkerInfo();
     // console.log(marker);
     this.setState({
@@ -675,10 +464,9 @@ class Map extends React.PureComponent {
       tripId
     } = this.state;
 
-    // const { id } = this.props.data.trip;
     return (
-      <MyMapComponent
-        //state object props
+      <MapComponent
+        //state object props to send down
         location={location}
         markers={markers}
         polylines={polylines}
@@ -700,7 +488,6 @@ class Map extends React.PureComponent {
         clearMarkerInfo={this.clearMarkerInfo}
         clearActiveMarker={this.clearActiveMarker}
         saveMarkerInfo={this.saveMarkerInfo}
-        // activeMarker={this.activeMarker}
         inputHandler={this.inputHandler}
         onMapClicked={this.onMapClicked}
         onMarkerDragStart={this.onMarkerDragStart}
@@ -715,4 +502,4 @@ class Map extends React.PureComponent {
   }
 }
 
-export { Map, MyMapComponent };
+export { MapContainer };
