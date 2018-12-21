@@ -35,11 +35,7 @@ server.start(
   {
     cors: {
       credentials: true,
-      origin: [
-        process.env.FRONTEND_URL,
-        'https://adventure-tracker-frontend.netlify.com',
-        'https://www.adventure-tracker.com/'
-      ]
+      origin: [process.env.FRONTEND_URL, 'https://adventure-tracker-frontend.netlify.com']
     }
   },
   details => {
