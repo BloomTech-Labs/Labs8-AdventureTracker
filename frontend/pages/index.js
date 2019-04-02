@@ -1,13 +1,7 @@
-import Link from 'next/link';
-import React from 'react';
-import ReactDOM from 'react-dom';
-import App from './app';
-import LandingContainer from '../components/home/LandingContainer';
+import MapComponent from "../components/map/MapComponent";
 
-const Home = props => (
-  <div>
-    <LandingContainer />
-  </div>
-);
+const Map = () => {
+  return <MapComponent />;
+};
 
-export default Home;
+export default Map;
