@@ -13,6 +13,7 @@ import {useContext} from "react";
 //@ts-ignore
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import MapContext from "../context/MapContext";
+import {getUserLocation} from "./helper-functions/index";
 
 const confirm = Modal.confirm;
 
@@ -50,6 +51,7 @@ const OverlayMenu = props => {
     setSaveTripStep,
     setTripModalOpen,
     setUserPosition,
+    userPosition,
   } = useContext(MapContext);
   return (
     <MainMenu>
@@ -87,38 +89,27 @@ const OverlayMenu = props => {
       </CopyToClipboard>
       <MenuItem
         onClick={() => {
-          function getUserLocation() {
-            if (navigator.geolocation) {
-              navigator.geolocation.getCurrentPosition(position => {
-                console.log(position);
-                const {coords} = position;
-                setUserPosition({
-                  lat: coords.latitude,
-                  lng: coords.longitude,
-                });
-              });
-              return {status: "success"};
-            } else {
-              return {status: "failed"};
+          if (!userPosition.lat) {
+            confirm({
+              title: "Allow access to find your location?",
+              content:
+                "A marker will be placed at your location. This will let followers know your current position.",
+              onOk() {
+                const statusObj = getUserLocation(setUserPosition);
+                if (statusObj.status === "failed") {
+                  message.error("We could not get your location.");
+                }
+              },
+            });
+          } else {
+            const statusObj = getUserLocation(setUserPosition);
+            if (statusObj.status === "failed") {
+              message.error("We could not get your location.");
             }
           }
-          confirm({
-            title: "Allow access to find your location?",
-            content:
-              "A marker will be placed at your location. This will let followers know your current position.",
-            onOk() {
-              const statusObj = getUserLocation();
-              if (statusObj.status === "failed") {
-                message.error("We could not get your location.");
-              }
-            },
-            onCancel() {
-              console.log("Cancel");
-            },
-          });
         }}
       >
-        <Icon type="link" /> Mark my position
+        Mark my position
       </MenuItem>
     </MainMenu>
   );

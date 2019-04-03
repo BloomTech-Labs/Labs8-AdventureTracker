@@ -140,7 +140,7 @@ const MapComponent = compose(
       options={{
         disableDefaultUI: true,
       }}
-      defaultCenter={{lat: -34.397, lng: 150.644}}
+      defaultCenter={{lat: 31, lng: -83}}
     >
       <StepsStatusBar
         step={saveTripStep}
@@ -163,6 +163,7 @@ const MapComponent = compose(
           setSaveTripStep,
           setTripModalOpen,
           setUserPosition,
+          userPosition,
         }}
       >
         {isInfoWindowOpen && (
