@@ -59,13 +59,12 @@ const CustomInfoWindow = ({
                 updateMarkerProps(activeMarker, {
                   address: address.display_name,
                 });
-                console.log(activeMarker);
               }}
+              style={{marginBottom: "12px"}}
             >
               Generate Marker Address
             </Button>
-            <Divider dashed />
-            {activeMarker.address ? <h3>{activeMarker.address}</h3> : null}
+            {activeMarker.address ? <p>{activeMarker.address}</p> : null}
           </CardGrid>
         </StyledCard>
       </>
