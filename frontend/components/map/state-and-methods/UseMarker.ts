@@ -22,6 +22,7 @@ export default () => {
       label: letters[markers.length % letters.length].toUpperCase(),
       url: GREY_PIN,
       date: moment(),
+      address: "",
       //@ts-ignore
       labelStyle: {
         backgroundColor: "#131313",
@@ -198,6 +199,26 @@ export default () => {
     }
     return url;
   };
+  const updateMarkerProps = (
+    markerToUpdate: Marker,
+    updatedProps: object,
+  ) => {
+    const updateIndex = markers.findIndex((marker: Marker) => {
+      return marker.id === markerToUpdate.id;
+    });
+    const updatedMarker = {
+      ...markerToUpdate,
+      ...updatedProps,
+    };
+    console.log(updatedMarker);
+    //@ts-ignore
+    setMarkers([
+      ...markers.slice(0, updateIndex),
+      updatedMarker,
+      ...markers.slice(updateIndex + 1),
+    ]);
+    setActiveMarker(updatedMarker);
+  };
   return {
     //methods
     addMarker,
@@ -213,6 +234,7 @@ export default () => {
     updateMarkerLabelName,
     setMarkerDate,
     decideMarkerURL,
+    updateMarkerProps,
     //state
     markers,
     activeMarker,

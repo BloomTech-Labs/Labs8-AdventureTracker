@@ -10,8 +10,7 @@ import getReverseGeocoding from "../../../lib/requestEndpoints/getReverseGeocodi
 const CustomInfoWindow = ({
   activeMarker,
   setInfoWindowOpen,
-  setMarkerAddress,
-  markerAddress,
+  updateMarkerProps,
 }) => {
   const position =
     activeMarker.position !== undefined
@@ -57,16 +56,16 @@ const CustomInfoWindow = ({
             <Button
               onClick={async () => {
                 const {address} = await getReverseGeocoding(lat, lng);
-                setMarkerAddress(address);
+                updateMarkerProps(activeMarker, {
+                  address: address.display_name,
+                });
+                console.log(activeMarker);
               }}
             >
               Generate Marker Address
             </Button>
-            <Button>Update Marker Address</Button>
             <Divider dashed />
-            {markerAddress.display_name ? (
-              <h3>{markerAddress.display_name}</h3>
-            ) : null}
+            {activeMarker.address ? <h3>{activeMarker.address}</h3> : null}
           </CardGrid>
         </StyledCard>
       </>
