@@ -83,6 +83,7 @@ const MapComponent = compose(
   const {polylines, updateLines} = usePolyline();
   const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
   const [saveTripStep, setSaveTripStep] = useState(-1);
+  const [markerAddress, setMarkerAddress] = useState({});
   const {
     //state
     screenLatLng,
@@ -164,6 +165,8 @@ const MapComponent = compose(
           <CustomInfoWindow
             activeMarker={activeMarker}
             setInfoWindowOpen={setInfoWindowOpen}
+            markerAddress={markerAddress}
+            setMarkerAddress={setMarkerAddress}
           />
         )}
         <SaveTripProcess step={saveTripStep} />

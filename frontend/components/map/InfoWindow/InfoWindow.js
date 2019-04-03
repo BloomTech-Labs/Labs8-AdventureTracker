@@ -1,16 +1,23 @@
-import {Button, Card} from "antd";
+import {Button, Card, Divider} from "antd";
 import {InfoWindow, GoogleMap} from "react-google-maps";
 import {useRef, useEffect} from "react";
 import styled from "styled-components";
 import ReachedCheckbox from "./ReachedCheckbox";
 import MarkerNameInput from "./MarkerNameInput";
 import ArrivalDatePicker from "./ArrivalDatePicker";
+import getReverseGeocoding from "../../../lib/requestEndpoints/getReverseGeocoding";
 
-const CustomInfoWindow = ({activeMarker, setInfoWindowOpen}) => {
+const CustomInfoWindow = ({
+  activeMarker,
+  setInfoWindowOpen,
+  setMarkerAddress,
+  markerAddress,
+}) => {
   const position =
     activeMarker.position !== undefined
       ? activeMarker.position
       : {lat: 0, lng: 0};
+  const {lat, lng} = activeMarker.position;
   return (
     <StyledInfoWindow
       position={{lat: position.lat, lng: position.lng}}
@@ -45,6 +52,21 @@ const CustomInfoWindow = ({activeMarker, setInfoWindowOpen}) => {
           </CardGrid>
           <CardGrid>
             <ReachedCheckbox />
+          </CardGrid>
+          <CardGrid>
+            <Button
+              onClick={async () => {
+                const {address} = await getReverseGeocoding(lat, lng);
+                setMarkerAddress(address);
+              }}
+            >
+              Generate Marker Address
+            </Button>
+            <Button>Update Marker Address</Button>
+            <Divider dashed />
+            {markerAddress.display_name ? (
+              <h3>{markerAddress.display_name}</h3>
+            ) : null}
           </CardGrid>
         </StyledCard>
       </>
