@@ -11,6 +11,7 @@ import {
   withGoogleMap,
   GoogleMap,
   Polyline,
+  Marker,
 } from "react-google-maps";
 import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 import ProgressCircle from "./ProgressCircle";
@@ -84,6 +85,7 @@ const MapComponent = compose(
   const {polylines, updateLines} = usePolyline();
   const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
   const [saveTripStep, setSaveTripStep] = useState(-1);
+  const [userPosition, setUserPosition] = useState({});
   const {
     //state
     screenLatLng,
@@ -160,6 +162,7 @@ const MapComponent = compose(
           crossHairs,
           setSaveTripStep,
           setTripModalOpen,
+          setUserPosition,
         }}
       >
         {isInfoWindowOpen && (
@@ -184,6 +187,7 @@ const MapComponent = compose(
         setIsModalVisible={setTripModalOpen}
         trips={[]}
       />
+      <Marker position={userPosition} />
       {markers.map((mark: IMarker) => {
         return (
           <MarkerWithLabel

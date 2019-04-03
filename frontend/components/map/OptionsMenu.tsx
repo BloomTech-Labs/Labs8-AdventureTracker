@@ -1,9 +1,21 @@
-import {Menu, Dropdown, Button, Icon, Avatar, Badge, message} from "antd";
+import {
+  Menu,
+  Dropdown,
+  Button,
+  Icon,
+  Avatar,
+  Badge,
+  message,
+  Modal,
+} from "antd";
 import styled from "styled-components";
 import {useContext} from "react";
 //@ts-ignore
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import MapContext from "../context/MapContext";
+
+const confirm = Modal.confirm;
+
 const OptionsMenuWrapper = styled.div`
   position: absolute;
   left: 3%;
@@ -33,9 +45,12 @@ const MainMenu = styled(Menu)`
 
 //@ts-ignore
 const OverlayMenu = props => {
-  const {setScreenOn, setSaveTripStep, setTripModalOpen} = useContext(
-    MapContext,
-  );
+  const {
+    setScreenOn,
+    setSaveTripStep,
+    setTripModalOpen,
+    setUserPosition,
+  } = useContext(MapContext);
   return (
     <MainMenu>
       <MenuItem
@@ -70,6 +85,41 @@ const OverlayMenu = props => {
           <Icon type="link" /> Share
         </MenuItem>
       </CopyToClipboard>
+      <MenuItem
+        onClick={() => {
+          function getUserLocation() {
+            if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition(position => {
+                console.log(position);
+                const {coords} = position;
+                setUserPosition({
+                  lat: coords.latitude,
+                  lng: coords.longitude,
+                });
+              });
+              return {status: "success"};
+            } else {
+              return {status: "failed"};
+            }
+          }
+          confirm({
+            title: "Allow access to find your location?",
+            content:
+              "A marker will be placed at your location. This will let followers know your current position.",
+            onOk() {
+              const statusObj = getUserLocation();
+              if (statusObj.status === "failed") {
+                message.error("We could not get your location.");
+              }
+            },
+            onCancel() {
+              console.log("Cancel");
+            },
+          });
+        }}
+      >
+        <Icon type="link" /> Mark my position
+      </MenuItem>
     </MainMenu>
   );
 };
