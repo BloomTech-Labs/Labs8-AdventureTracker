@@ -109,7 +109,7 @@ const OverlayMenu = props => {
           }
         }}
       >
-        Mark my position
+        {userPosition.lat ? "Update my position" : "Mark my position"}
       </MenuItem>
     </MainMenu>
   );
