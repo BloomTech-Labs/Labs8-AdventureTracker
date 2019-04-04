@@ -7,6 +7,10 @@ const Meta = () => (
     <link rel="shortcut icon" href="/static/favicon.ico" />
     <link rel="stylesheet" type="text/css" href="/static/style.css" />
     <title>Adventure Tracker</title>
+    <script
+      type="text/javascript"
+      src="node_modules/auth0-js/build/auth0.js"
+    />
   </Head>
 );
 
