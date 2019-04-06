@@ -9,4 +9,4 @@ hooks:
     - prisma generate
 generate:
   - generator: graphql-schema
-    output: ./src/generated/
+    output: ./src/generated/prisma.graphql
