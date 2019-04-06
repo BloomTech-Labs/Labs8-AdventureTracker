@@ -1,10 +1,7 @@
-enum Permission {
-  ADMIN
-  USER
-  TRIPCREATE
-  TRIPDELETE
-  TRIPUPDATE
-  PERMISSIONUPDATE
+enum TripFilter {
+  FOLLOWING
+  ACTIVE
+  ARCHIVED
 }
 
 type User {
@@ -12,51 +9,90 @@ type User {
   name: String!
   email: String! @unique
   password: String!
-  resetToken: String
-  facebookUser: Boolean!
-  facebookID: String @unique
-  resetTokenExpiry: Float
-  permissions: [Permission]
   trip: [Trip!]! @relation(name: "TripToUser", onDelete: CASCADE)
-  tripCount: Int!
-  paid: Boolean!
-}
-
-type Order {
-  id: ID! @unique
-  price: Int!
-  user: User!
-  charge: String!
 }
 
 type Trip {
   id: ID! @unique
   user: User! @relation(name: "TripToUser", onDelete: SET_NULL)
   title: String!
-  startDate: DateTime!
-  endDate: DateTime!
+  description: String
   archived: Boolean!
   markers: [Marker!]! @relation(name: "MarkerToTrip", onDelete: CASCADE)
+  # startDate: DateTime
+  # endDate: DateTime
 }
 
 type Marker {
   id: ID! @unique
   trip: Trip! @relation(name: "MarkerToTrip", onDelete: SET_NULL)
-  position: Position! @relation(name: "PositionToMarker", onDelete: CASCADE)
-  status: Progress!
-  etaTime: DateTime!
+  hasReached: Boolean!
   checkpointName: String!
-  checkedInTime: DateTime!
-}
-
-enum Progress {
-  NOT_STARTED
-  COMPLETED
-}
-
-type Position {
-  id: ID! @unique
-  marker: Marker! @relation(name: "PositionToMarker", onDelete: SET_NULL)
+  etaTime: DateTime
+  checkedInTime: DateTime
   lat: Float!
   lng: Float!
 }
+
+# enum Permission {
+#   ADMIN
+#   USER
+#   TRIPCREATE
+#   TRIPDELETE
+#   TRIPUPDATE
+#   PERMISSIONUPDATE
+# }
+
+# type User {
+#   id: ID! @unique
+#   name: String!
+#   email: String! @unique
+#   password: String!
+#   resetToken: String
+#   facebookUser: Boolean!
+#   facebookID: String @unique
+#   resetTokenExpiry: Float
+#   permissions: [Permission]
+#   trip: [Trip!]! @relation(name: "TripToUser", onDelete: CASCADE)
+#   tripCount: Int!
+#   paid: Boolean!
+# }
+
+# type Order {
+#   id: ID! @unique
+#   price: Int!
+#   user: User!
+#   charge: String!
+# }
+
+# type Trip {
+#   id: ID! @unique
+#   user: User! @relation(name: "TripToUser", onDelete: SET_NULL)
+#   title: String!
+#   startDate: DateTime!
+#   endDate: DateTime!
+#   archived: Boolean!
+#   markers: [Marker!]! @relation(name: "MarkerToTrip", onDelete: CASCADE)
+# }
+
+# type Marker {
+#   id: ID! @unique
+#   trip: Trip! @relation(name: "MarkerToTrip", onDelete: SET_NULL)
+#   position: Position! @relation(name: "PositionToMarker", onDelete: CASCADE)
+#   status: Progress!
+#   etaTime: DateTime!
+#   checkpointName: String!
+#   checkedInTime: DateTime!
+# }
+
+# enum Progress {
+#   NOT_STARTED
+#   COMPLETED
+# }
+
+# type Position {
+#   id: ID! @unique
+#   marker: Marker! @relation(name: "PositionToMarker", onDelete: SET_NULL)
+#   lat: Float!
+#   lng: Float!
+# }

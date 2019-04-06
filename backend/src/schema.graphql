@@ -1,14 +1,8 @@
 # import * from './generated/prisma.graphql'
-type SuccessMessage {
-  message: String
-}
-# input UserWhereUniqueInput {
-#   id: ID
-#   email: String
-#   facebookID: String
-# }
+
 type Mutation {
-  deleteMarker(where: MarkerWhereUniqueInput!): Marker
+  signup(name: String!, email: String!, password: String!, password2: String!): User!
+  signin(email: String!, password: String!): User!
   createTrip(
     title: String!
     user: UserWhereUniqueInput!
@@ -17,60 +11,97 @@ type Mutation {
     archived: Boolean!
     markers: [MarkerCreateInput!]!
   ): Trip!
-  archiveTrip(id: ID!, archived: Boolean!): Trip!
-  updateTrip(title: String!, startDate: DateTime!, endDate: DateTime!, tripId: ID!): Trip!
   createMarkerMutation(
-    position: PositionCreateWithoutMarkerInput!
-    status: Progress!
     tripId: ID!
-    etaTime: DateTime!
+    hasReached: Boolean!
     checkpointName: String!
-    checkedInTime: DateTime!
+    etaTime: DateTime
+    checkedInTime: DateTime
+    lat: Float!
+    lng: Float!
   ): Marker!
-  updateMarker(
-    markerId: ID!
-    status: Progress!
-    etaTime: DateTime!
-    checkpointName: String!
-  ): Marker!
-  updatePosition(data: PositionUpdateInput!, where: PositionWhereUniqueInput!): Position
-  updateMarkerStatus(markerId: ID!, status: Progress!, checkedInTime: DateTime!): Marker!
-  updateMarkerPosition(data: PositionUpdateInput!, where: PositionWhereUniqueInput!): Position
-  signup(
-    name: String!
-    email: String!
-    facebookUser: Boolean!
-    password: String!
-    password2: String!
-    tripCount: Int!
-    paid: Boolean!
-  ): User!
-  signin(email: String!, password: String!): User!
-  signout(message: String): SuccessMessage
-  facebooksignup(
-    name: String!
-    email: String!
-    password: String!
-    facebookID: String
-    facebookUser: Boolean!
-    tripCount: Int!
-    paid: Boolean!
-  ): User!
-  facebooksignin(facebookID: String): User!
-  # deleteTrip(id: ID!): Trip
-  deleteUser(id: ID!): User!
-  changePassword(email: String!, oldPassword: String!, newPassword: String!): User!
-  createOrder(token: String!): Order!
 }
 
 type Query {
   trips: [Trip]!
-  trip(where: TripWhereUniqueInput!): Trip
   markers: [Marker!]!
-  marker(where: MarkerWhereUniqueInput!): Marker
-  markersTrip(where: TripWhereUniqueInput!): [Marker!]!
-  positions: [Position!]!
-  position(where: PositionWhereUniqueInput!): [Position!]!
   users: [User]!
   me: User
 }
+
+# # import * from './generated/prisma.graphql'
+# type SuccessMessage {
+#   message: String
+# }
+# # input UserWhereUniqueInput {
+# #   id: ID
+# #   email: String
+# #   facebookID: String
+# # }
+# type Mutation {
+#   deleteMarker(where: MarkerWhereUniqueInput!): Marker
+#   createTrip(
+#     title: String!
+#     user: UserWhereUniqueInput!
+#     startDate: DateTime!
+#     endDate: DateTime!
+#     archived: Boolean!
+#     markers: [MarkerCreateInput!]!
+#   ): Trip!
+#   archiveTrip(id: ID!, archived: Boolean!): Trip!
+#   updateTrip(title: String!, startDate: DateTime!, endDate: DateTime!, tripId: ID!): Trip!
+#   createMarkerMutation(
+#     position: PositionCreateWithoutMarkerInput!
+#     status: Progress!
+#     tripId: ID!
+#     etaTime: DateTime!
+#     checkpointName: String!
+#     checkedInTime: DateTime!
+#   ): Marker!
+#   updateMarker(
+#     markerId: ID!
+#     status: Progress!
+#     etaTime: DateTime!
+#     checkpointName: String!
+#   ): Marker!
+#   updatePosition(data: PositionUpdateInput!, where: PositionWhereUniqueInput!): Position
+#   updateMarkerStatus(markerId: ID!, status: Progress!, checkedInTime: DateTime!): Marker!
+#   updateMarkerPosition(data: PositionUpdateInput!, where: PositionWhereUniqueInput!): Position
+#   signup(
+#     name: String!
+#     email: String!
+#     facebookUser: Boolean!
+#     password: String!
+#     password2: String!
+#     tripCount: Int!
+#     paid: Boolean!
+#   ): User!
+#   signin(email: String!, password: String!): User!
+#   signout(message: String): SuccessMessage
+#   facebooksignup(
+#     name: String!
+#     email: String!
+#     password: String!
+#     facebookID: String
+#     facebookUser: Boolean!
+#     tripCount: Int!
+#     paid: Boolean!
+#   ): User!
+#   facebooksignin(facebookID: String): User!
+#   # deleteTrip(id: ID!): Trip
+#   deleteUser(id: ID!): User!
+#   changePassword(email: String!, oldPassword: String!, newPassword: String!): User!
+#   createOrder(token: String!): Order!
+# }
+
+# type Query {
+#   trips: [Trip]!
+#   trip(where: TripWhereUniqueInput!): Trip
+#   markers: [Marker!]!
+#   marker(where: MarkerWhereUniqueInput!): Marker
+#   markersTrip(where: TripWhereUniqueInput!): [Marker!]!
+#   positions: [Position!]!
+#   position(where: PositionWhereUniqueInput!): [Position!]!
+#   users: [User]!
+#   me: User
+# }
