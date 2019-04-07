@@ -97,7 +97,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
             })(
               <Input
                 prefix={
-                  <Icon type="email" style={{color: "rgba(0,0,0,.25)"}} />
+                  <Icon type="mail" style={{color: "rgba(0,0,0,.25)"}} />
                 }
                 placeholder="Enter Email"
                 name="email"
