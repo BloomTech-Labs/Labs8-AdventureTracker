@@ -8,30 +8,42 @@ import {FormComponentProps} from "antd/lib/form";
 
 export interface Props extends FormComponentProps {}
 
-const LOGIN_MUTATION = gql`
-  mutation LOGIN_MUTATION($email: String!, $password: String!) {
-    signin(email: $email, password: $password) {
+const SIGNUP_MUTATION = gql`
+  mutation SIGNUP_MUTATION(
+    $name: String
+    $email: String!
+    $password: String!
+    $password2: String!
+  ) {
+    signup(
+      name: $name
+      email: $email
+      password: $password
+      password2: $password2
+    ) {
       id
       email
       name
     }
   }
 `;
-const LoginForm: React.SFC<Props> = ({form}) => {
-  const {getFieldDecorator} = form;
-  const [loginInfo, setLoginInfo] = useState({
+const SignUpForm: React.SFC<Props> = ({form}) => {
+  const {getFieldDecorator, getFieldValue} = form;
+  const [signupInfo, setSignupInfo] = useState({
     email: "",
     password: "",
+    password2: "",
+    name: "",
   });
-  const loginInputHandler = formInputHandler.bind(
+  const signupInputHandler = formInputHandler.bind(
     null,
-    loginInfo,
-    setLoginInfo,
+    signupInfo,
+    setSignupInfo,
   );
 
-  const submitLogin = (
+  const submitSignup = (
     e: React.FormEvent<HTMLInputElement>,
-    loginCb: Function,
+    signUpCb: Function,
   ) => {
     e.preventDefault();
     form.validateFields(async (err: any, values: object) => {
@@ -40,16 +52,32 @@ const LoginForm: React.SFC<Props> = ({form}) => {
         console.log("Received values of form: ", values);
       }
 
-      const data = await loginCb();
+      const data = await signUpCb();
       console.log(data);
     });
   };
+  //    //@ts-ignore
+  //    const compareToFirstPassword = (rule, value, callback) => {
+  //     if (value && value !== getFieldValue("new-password")) {
+  //       callback("Your new passwords don't match!");
+  //     } else {
+  //       callback();
+  //     }
+  //   };
+
+  //   //@ts-ignore
+  //   const validateToNextPassword = (rule, value, callback) => {
+  //     if (value) {
+  //       form.validateFields(["new-password-again"], {force: true});
+  //     }
+  //     callback();
+  //   };
   return (
-    <Mutation mutation={LOGIN_MUTATION} variables={loginInfo}>
-      {(login, {error, loading}) => (
+    <Mutation mutation={SIGNUP_MUTATION} variables={{...signupInfo}}>
+      {(signup, {error, loading}) => (
         <Form
           onSubmit={(e: any) => {
-            submitLogin(e, login);
+            submitSignup(e, signup);
           }}
         >
           <Form.Item>
@@ -71,7 +99,7 @@ const LoginForm: React.SFC<Props> = ({form}) => {
                 }
                 placeholder="Enter Email"
                 name="email"
-                onChange={loginInputHandler}
+                onChange={signupInputHandler}
               />,
             )}
           </Form.Item>
@@ -91,13 +119,33 @@ const LoginForm: React.SFC<Props> = ({form}) => {
                 type="password"
                 placeholder="Password"
                 name="password"
-                onChange={loginInputHandler}
+                onChange={signupInputHandler}
+              />,
+            )}
+          </Form.Item>
+          <Form.Item>
+            {getFieldDecorator("password2", {
+              rules: [
+                {
+                  required: true,
+                  message: "Please input your Password Again!",
+                },
+              ],
+            })(
+              <Input
+                prefix={
+                  <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
+                }
+                type="password"
+                placeholder="Enter Password again!"
+                name="password2"
+                onChange={signupInputHandler}
               />,
             )}
           </Form.Item>
           <Form.Item>
             <Button type="primary" htmlType="submit" loading={loading}>
-              Login
+              SignUp
             </Button>
           </Form.Item>
         </Form>
@@ -105,6 +153,6 @@ const LoginForm: React.SFC<Props> = ({form}) => {
     </Mutation>
   );
 };
-const WrappedLoginForm = Form.create({name: "auth_form"})(LoginForm);
+const WrappedSignUpForm = Form.create({name: "signup_form"})(SignUpForm);
 
-export default WrappedLoginForm;
+export default WrappedSignUpForm;

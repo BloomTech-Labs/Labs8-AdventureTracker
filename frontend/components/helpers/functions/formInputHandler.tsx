@@ -13,5 +13,6 @@ export default (
   setFormInfo: Function,
   e: EventTarget,
 ): void => {
+  console.log(formInfo);
   setFormInfo({...formInfo, [e.target.name]: e.target.value});
 };
