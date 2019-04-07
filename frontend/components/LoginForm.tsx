@@ -6,7 +6,9 @@ import gql from "graphql-tag";
 import {Mutation} from "react-apollo";
 import {FormComponentProps} from "antd/lib/form";
 
-export interface Props extends FormComponentProps {}
+export interface Props extends FormComponentProps {
+  isVisible: boolean;
+}
 
 const LOGIN_MUTATION = gql`
   mutation LOGIN_MUTATION($email: String!, $password: String!) {
@@ -17,7 +19,7 @@ const LOGIN_MUTATION = gql`
     }
   }
 `;
-const LoginForm: React.SFC<Props> = ({form}) => {
+const LoginForm: React.SFC<Props> = ({form, isVisible}) => {
   const {getFieldDecorator} = form;
   const [loginInfo, setLoginInfo] = useState({
     email: "",
@@ -50,6 +52,7 @@ const LoginForm: React.SFC<Props> = ({form}) => {
           onSubmit={(e: any) => {
             submitLogin(e, login);
           }}
+          style={{display: `${isVisible ? "" : "none"}`}}
         >
           <Form.Item>
             {getFieldDecorator("email", {

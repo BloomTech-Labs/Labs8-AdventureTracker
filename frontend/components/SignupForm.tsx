@@ -6,7 +6,9 @@ import gql from "graphql-tag";
 import {Mutation} from "react-apollo";
 import {FormComponentProps} from "antd/lib/form";
 
-export interface Props extends FormComponentProps {}
+export interface Props extends FormComponentProps {
+  isVisible: boolean;
+}
 
 const SIGNUP_MUTATION = gql`
   mutation SIGNUP_MUTATION(
@@ -27,7 +29,7 @@ const SIGNUP_MUTATION = gql`
     }
   }
 `;
-const SignUpForm: React.SFC<Props> = ({form}) => {
+const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
   const {getFieldDecorator, getFieldValue} = form;
   const [signupInfo, setSignupInfo] = useState({
     email: "",
@@ -78,6 +80,7 @@ const SignUpForm: React.SFC<Props> = ({form}) => {
           onSubmit={(e: any) => {
             submitSignup(e, signup);
           }}
+          style={{display: `${isVisible ? "" : "none"}`}}
         >
           <Form.Item>
             {getFieldDecorator("email", {
