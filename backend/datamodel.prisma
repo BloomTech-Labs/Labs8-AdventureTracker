@@ -6,7 +6,7 @@ enum TripFilter {
 
 type User {
   id: ID! @unique
-  name: String!
+  name: String
   email: String! @unique
   password: String!
   trip: [Trip!]! @relation(name: "TripToUser", onDelete: CASCADE)
