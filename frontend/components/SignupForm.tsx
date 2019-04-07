@@ -46,35 +46,34 @@ const SignUpForm: React.SFC<Props> = ({form}) => {
     signUpCb: Function,
   ) => {
     e.preventDefault();
-    form.validateFields(async (err: any, values: object) => {
-      console.log(err, values);
-      if (!err) {
-        console.log("Received values of form: ", values);
+    form.validateFields(async (err: any) => {
+      if (err) {
+        return;
       }
 
       const data = await signUpCb();
       console.log(data);
     });
   };
-  //    //@ts-ignore
-  //    const compareToFirstPassword = (rule, value, callback) => {
-  //     if (value && value !== getFieldValue("new-password")) {
-  //       callback("Your new passwords don't match!");
-  //     } else {
-  //       callback();
-  //     }
-  //   };
+  //@ts-ignore
+  const compareToFirstPassword = (rule, value, callback) => {
+    if (value && value !== getFieldValue("password")) {
+      callback("Your passwords don't match!");
+    } else {
+      callback();
+    }
+  };
 
-  //   //@ts-ignore
-  //   const validateToNextPassword = (rule, value, callback) => {
-  //     if (value) {
-  //       form.validateFields(["new-password-again"], {force: true});
-  //     }
-  //     callback();
-  //   };
+  //@ts-ignore
+  const validateToNextPassword = (rule, value, callback) => {
+    if (value) {
+      form.validateFields(["password2"], {force: true});
+    }
+    callback();
+  };
   return (
     <Mutation mutation={SIGNUP_MUTATION} variables={{...signupInfo}}>
-      {(signup, {error, loading}) => (
+      {(signup, {loading}) => (
         <Form
           onSubmit={(e: any) => {
             submitSignup(e, signup);
@@ -110,6 +109,7 @@ const SignUpForm: React.SFC<Props> = ({form}) => {
                   required: true,
                   message: "Please input your Password!",
                 },
+                {validator: validateToNextPassword},
               ],
             })(
               <Input
@@ -130,6 +130,7 @@ const SignUpForm: React.SFC<Props> = ({form}) => {
                   required: true,
                   message: "Please input your Password Again!",
                 },
+                {validator: compareToFirstPassword},
               ],
             })(
               <Input

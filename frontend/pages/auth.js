@@ -1,10 +1,10 @@
 import LoginForm from "../components/LoginForm";
-import WrappedSignUpForm from "../components/SignupForm";
+import SignupForm from "../components/SignupForm";
 
 const AuthPage = () => {
   return (
     <div>
-      <WrappedSignUpForm />
+      <SignupForm />
       <LoginForm />
     </div>
   );

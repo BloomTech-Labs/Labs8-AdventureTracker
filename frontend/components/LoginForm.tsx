@@ -34,10 +34,9 @@ const LoginForm: React.SFC<Props> = ({form}) => {
     loginCb: Function,
   ) => {
     e.preventDefault();
-    form.validateFields(async (err: any, values: object) => {
-      console.log(err, values);
-      if (!err) {
-        console.log("Received values of form: ", values);
+    form.validateFields(async (err: any) => {
+      if (err) {
+        return;
       }
 
       const data = await loginCb();
@@ -46,7 +45,7 @@ const LoginForm: React.SFC<Props> = ({form}) => {
   };
   return (
     <Mutation mutation={LOGIN_MUTATION} variables={loginInfo}>
-      {(login, {error, loading}) => (
+      {(login, {loading}) => (
         <Form
           onSubmit={(e: any) => {
             submitLogin(e, login);
