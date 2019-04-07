@@ -5,6 +5,7 @@ import {emailRegex} from "./helpers/regex";
 import gql from "graphql-tag";
 import {Mutation} from "react-apollo";
 import {FormComponentProps} from "antd/lib/form";
+import Router from "next/router";
 
 export interface Props extends FormComponentProps {
   isVisible: boolean;
@@ -43,6 +44,9 @@ const LoginForm: React.SFC<Props> = ({form, isVisible}) => {
 
       const data = await loginCb();
       console.log(data);
+      Router.push({
+        pathname: "/map",
+      });
     });
   };
   return (
