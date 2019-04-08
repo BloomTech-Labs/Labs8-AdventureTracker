@@ -1,6 +1,6 @@
+import {useState, useEffect} from "react";
+import {MY_TRIPS_QUERY} from "../../resolvers/Queries";
 import {Radio} from "antd";
-import {useState} from "react";
-import {ALL_MY_TRIPS_QUERY} from "../../resolvers/Queries";
 
 interface Props {
   client: {
@@ -11,7 +11,20 @@ interface Props {
 
 const TripFilter: React.SFC<Props> = ({client, setTrips}) => {
   const [status, setStatus] = useState("active");
-  const handleStatusChange = e => {
+
+  const fetchTrips = async (options?: {
+    archived: boolean;
+  }): Promise<any> => {
+    const {data} = await client.query({
+      query: MY_TRIPS_QUERY,
+      variables: {
+        ...options,
+      },
+    });
+    return data;
+  };
+
+  const handleStatusChange = (e: any) => {
     setStatus(e.target.value);
   };
   return (
@@ -19,17 +32,30 @@ const TripFilter: React.SFC<Props> = ({client, setTrips}) => {
       <Radio.Button
         value="all"
         onClick={async () => {
-          const {data} = await client.query({
-            query: ALL_MY_TRIPS_QUERY,
-          });
-          console.log(data);
-          setTrips(data.me.trip);
+          const data = await fetchTrips();
+          setTrips(data.myTrips);
         }}
       >
         All
       </Radio.Button>
-      <Radio.Button value="active">Active</Radio.Button>
-      <Radio.Button value="archived">Archived</Radio.Button>
+      <Radio.Button
+        value="active"
+        onClick={async () => {
+          const data = await fetchTrips({archived: false});
+          setTrips(data.myTrips);
+        }}
+      >
+        Active
+      </Radio.Button>
+      <Radio.Button
+        value="archived"
+        onClick={async () => {
+          const data = await fetchTrips({archived: true});
+          setTrips(data.myTrips);
+        }}
+      >
+        Archived
+      </Radio.Button>
     </Radio.Group>
   );
 };

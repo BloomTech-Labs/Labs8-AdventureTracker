@@ -1,7 +1,7 @@
 import {Modal} from "antd";
 import TripCard from "./TripCard";
-import {useState, useEffect} from "react";
-import {Query, ApolloConsumer} from "react-apollo";
+import {useState} from "react";
+import {ApolloConsumer} from "react-apollo";
 import TripFilter from "./TripFilter";
 interface Trip {
   id: string;
