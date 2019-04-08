@@ -7,7 +7,7 @@ interface Props {
   description: string;
   avatarImg: string;
   imageCoverSrc: string;
-  isArchived: boolean;
+  archived: boolean;
 }
 
 const TripCard: React.SFC<Props> = ({
@@ -15,13 +15,13 @@ const TripCard: React.SFC<Props> = ({
   description,
   avatarImg,
   imageCoverSrc,
-  isArchived,
+  archived,
 }) => {
   return (
     <Card
       style={{width: 300}}
       cover={<img alt="" src={imageCoverSrc} />}
-      actions={[<Icon type={isArchived ? "import" : "folder"} />]}
+      actions={[<Icon type={archived ? "import" : "folder"} />]}
     >
       <Meta
         avatar={<Avatar src={avatarImg} />}

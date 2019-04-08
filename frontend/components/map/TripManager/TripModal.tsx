@@ -1,48 +1,58 @@
-import TripFilter from "./TripFilter";
 import {Modal} from "antd";
 import TripCard from "./TripCard";
+import {useState, useEffect} from "react";
+import {Query, ApolloConsumer} from "react-apollo";
+import TripFilter from "./TripFilter";
 interface Trip {
+  id: string;
   title: string;
   description: string;
   avatarImg: string;
   imageCoverSrc: string;
-  isArchived: boolean;
+  archived: boolean;
 }
 interface Props {
   isModalVisible: boolean;
   setIsModalVisible: Function;
-  trips: Trip[];
 }
 
 const TripModal: React.SFC<Props> = ({
   isModalVisible,
   setIsModalVisible,
-  trips,
 }) => {
+  const [trips, setTrips] = useState([]);
+  const [filteredTrips, setFilteredTrips] = useState([]);
   return (
-    <Modal
-      title="Trips"
-      visible={isModalVisible}
-      onOk={() => {
-        setIsModalVisible(false);
+    <ApolloConsumer>
+      {client => {
+        return (
+          <Modal
+            title="Trips"
+            visible={isModalVisible}
+            onOk={() => {
+              setIsModalVisible(false);
+            }}
+            onCancel={() => setIsModalVisible(false)}
+          >
+            <TripFilter client={client} setTrips={setTrips} />
+            {trips !== undefined
+              ? trips.map((trip: Trip) => {
+                  return (
+                    <TripCard
+                      key={trip.id}
+                      title={trip.title}
+                      description={trip.description}
+                      avatarImg={trip.avatarImg}
+                      imageCoverSrc={trip.imageCoverSrc}
+                      archived={trip.archived}
+                    />
+                  );
+                })
+              : null}
+          </Modal>
+        );
       }}
-      onCancel={() => setIsModalVisible(false)}
-    >
-      <TripFilter />
-      {trips.length
-        ? trips.map(trip => {
-            return (
-              <TripCard
-                title={trip.title}
-                description={trip.description}
-                avatarImg={trip.avatarImg}
-                imageCoverSrc={trip.imageCoverSrc}
-                isArchived={trip.isArchived}
-              />
-            );
-          })
-        : null}
-    </Modal>
+    </ApolloConsumer>
   );
 };
 
