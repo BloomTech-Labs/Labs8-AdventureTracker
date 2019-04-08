@@ -1,9 +1,22 @@
-import {Menu, Dropdown, Button, Icon, Avatar, Badge, message} from "antd";
+import {
+  Menu,
+  Dropdown,
+  Button,
+  Icon,
+  Avatar,
+  Badge,
+  message,
+  Modal,
+} from "antd";
 import styled from "styled-components";
 import {useContext} from "react";
 //@ts-ignore
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import MapContext from "../context/MapContext";
+import {getUserLocation} from "./helper-functions/index";
+
+const confirm = Modal.confirm;
+
 const OptionsMenuWrapper = styled.div`
   position: absolute;
   left: 3%;
@@ -33,9 +46,13 @@ const MainMenu = styled(Menu)`
 
 //@ts-ignore
 const OverlayMenu = props => {
-  const {setScreenOn, setSaveTripStep, setTripModalOpen} = useContext(
-    MapContext,
-  );
+  const {
+    setScreenOn,
+    setSaveTripStep,
+    setTripModalOpen,
+    setUserPosition,
+    userPosition,
+  } = useContext(MapContext);
   return (
     <MainMenu>
       <MenuItem
@@ -70,6 +87,30 @@ const OverlayMenu = props => {
           <Icon type="link" /> Share
         </MenuItem>
       </CopyToClipboard>
+      <MenuItem
+        onClick={() => {
+          if (!userPosition.lat) {
+            confirm({
+              title: "Allow access to find your location?",
+              content:
+                "A marker will be placed at your location. This will let followers know your current position.",
+              onOk() {
+                const statusObj = getUserLocation(setUserPosition);
+                if (statusObj.status === "failed") {
+                  message.error("We could not get your location.");
+                }
+              },
+            });
+          } else {
+            const statusObj = getUserLocation(setUserPosition);
+            if (statusObj.status === "failed") {
+              message.error("We could not get your location.");
+            }
+          }
+        }}
+      >
+        {userPosition.lat ? "Update my position" : "Mark my position"}
+      </MenuItem>
     </MainMenu>
   );
 };

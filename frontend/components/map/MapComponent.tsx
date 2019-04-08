@@ -11,6 +11,7 @@ import {
   withGoogleMap,
   GoogleMap,
   Polyline,
+  Marker,
 } from "react-google-maps";
 import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 import ProgressCircle from "./ProgressCircle";
@@ -69,6 +70,7 @@ const MapComponent = compose(
     //State
     markers,
     activeMarker,
+    updateMarkerProps,
     markerId,
   } = useMarker();
   const {
@@ -83,6 +85,7 @@ const MapComponent = compose(
   const {polylines, updateLines} = usePolyline();
   const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
   const [saveTripStep, setSaveTripStep] = useState(-1);
+  const [userPosition, setUserPosition] = useState({});
   const {
     //state
     screenLatLng,
@@ -104,6 +107,7 @@ const MapComponent = compose(
   } = useTrip();
   useEffect(() => {
     updateLines(markers);
+    console.log(markers);
   }, [markers]);
 
   useEffect(() => {
@@ -136,7 +140,7 @@ const MapComponent = compose(
       options={{
         disableDefaultUI: true,
       }}
-      defaultCenter={{lat: -34.397, lng: 150.644}}
+      defaultCenter={{lat: 31, lng: -83}}
     >
       <StepsStatusBar
         step={saveTripStep}
@@ -158,12 +162,15 @@ const MapComponent = compose(
           crossHairs,
           setSaveTripStep,
           setTripModalOpen,
+          setUserPosition,
+          userPosition,
         }}
       >
         {isInfoWindowOpen && (
           <CustomInfoWindow
             activeMarker={activeMarker}
             setInfoWindowOpen={setInfoWindowOpen}
+            updateMarkerProps={updateMarkerProps}
           />
         )}
         <SaveTripProcess step={saveTripStep} />
@@ -181,6 +188,7 @@ const MapComponent = compose(
         setIsModalVisible={setTripModalOpen}
         trips={[]}
       />
+      <Marker position={userPosition} />
       {markers.map((mark: IMarker) => {
         return (
           <MarkerWithLabel

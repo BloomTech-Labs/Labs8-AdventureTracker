@@ -10,4 +10,5 @@ export interface Marker {
   labelStyle: object;
   url: string;
   date: Moment;
+  address: string;
 }
