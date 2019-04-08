@@ -107,7 +107,7 @@ const MapComponent = compose(
   } = useTrip();
   useEffect(() => {
     updateLines(markers);
-    console.log(markers);
+    // console.log(markers);
   }, [markers]);
 
   useEffect(() => {
