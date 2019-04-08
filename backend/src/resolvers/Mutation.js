@@ -52,6 +52,30 @@ const Mutations = {
     });
     // return the user
     return user;
+  },
+  async createTrip(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!');
+    }
+    const trip = await ctx.db.mutation.createTrip(
+      {
+        data: {
+          // This is how to create a relationship between the Trip and the User
+          user: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
+          title: args.title,
+          startDate: args.startDate,
+          endDate: args.endDate,
+          archived: args.archived,
+          markers: args.markers
+        }
+      },
+      info
+    );
+    return trip;
   }
 };
 

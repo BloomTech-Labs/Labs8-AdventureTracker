@@ -5,9 +5,8 @@ type Mutation {
   signin(email: String!, password: String!): User!
   createTrip(
     title: String!
-    user: UserWhereUniqueInput!
-    startDate: DateTime!
-    endDate: DateTime!
+    startDate: DateTime
+    endDate: DateTime
     archived: Boolean!
     markers: [MarkerCreateInput!]!
   ): Trip!

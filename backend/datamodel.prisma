@@ -16,11 +16,11 @@ type Trip {
   id: ID! @unique
   user: User! @relation(name: "TripToUser", onDelete: SET_NULL)
   title: String!
-  description: String
   archived: Boolean!
   markers: [Marker!]! @relation(name: "MarkerToTrip", onDelete: CASCADE)
-  # startDate: DateTime
-  # endDate: DateTime
+  description: String
+  startDate: DateTime
+  endDate: DateTime
 }
 
 type Marker {
