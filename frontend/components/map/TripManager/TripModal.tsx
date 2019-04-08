@@ -33,6 +33,11 @@ const TripModal: React.SFC<Props> = ({
               setIsModalVisible(false);
             }}
             onCancel={() => setIsModalVisible(false)}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
           >
             <TripFilter client={client} setTrips={setTrips} />
             {trips !== undefined
