@@ -10,19 +10,13 @@ const Query = {
     if (!userId) {
       return null;
     }
-
-    const opArgs = {};
-    if (args.archived) {
-      opArgs['archived'] = args.archived;
-    }
-
     return ctx.db.query.trips(
       {
         where: {
           user: {
             id: userId
           },
-          ...opArgs
+          archived: args.archived
         }
       },
       info
