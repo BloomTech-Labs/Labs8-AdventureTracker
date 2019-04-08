@@ -6,7 +6,7 @@ const Query = {
 
   myTrips(parent, args, ctx, info) {
     const userId = getUserId(ctx);
-    console.log(args);
+    // console.log(args);
     if (!userId) {
       return null;
     }
