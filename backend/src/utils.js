@@ -5,6 +5,10 @@ async function hashPassword(password) {
   return hashedPassword;
 }
 
+function getUserId(ctx) {
+  return ctx.request.userId;
+}
 module.exports = {
-  hashPassword
+  hashPassword,
+  getUserId
 };

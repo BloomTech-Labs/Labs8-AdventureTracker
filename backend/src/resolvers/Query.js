@@ -1,4 +1,5 @@
 const { forwardTo } = require('prisma-binding');
+const { getUserId } = require('../utils');
 const Query = {
   trips: forwardTo('db'),
   markers: forwardTo('db'),
@@ -6,14 +7,15 @@ const Query = {
 
   me(parent, args, ctx, info) {
     // check if there is a current user ID
-    if (!ctx.request.userId) {
+    const userId = getUserId(ctx);
+    if (!userId) {
       // returning null when a person is not logged in
       return null;
     }
     // found the user
     return ctx.db.query.user(
       {
-        where: { id: ctx.request.userId }
+        where: { id: userId }
       },
       // info is the query that's coming from client side
       info
