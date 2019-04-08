@@ -23,6 +23,7 @@ type Mutation {
 
 type Query {
   trips: [Trip]!
+  myTrips(archived: Boolean): [Trip]!
   markers: [Marker!]!
   users: [User]!
   me: User

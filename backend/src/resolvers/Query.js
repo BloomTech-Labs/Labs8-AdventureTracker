@@ -1,10 +1,33 @@
 const { forwardTo } = require('prisma-binding');
 const { getUserId } = require('../utils');
 const Query = {
-  trips: forwardTo('db'),
   markers: forwardTo('db'),
   users: forwardTo('db'),
 
+  myTrips(parent, args, ctx, info) {
+    const userId = getUserId(ctx);
+    console.log(args);
+    if (!userId) {
+      return null;
+    }
+
+    const opArgs = {};
+    if (args.archived) {
+      opArgs['archived'] = args.archived;
+    }
+
+    return ctx.db.query.trips(
+      {
+        where: {
+          user: {
+            id: userId
+          },
+          ...opArgs
+        }
+      },
+      info
+    );
+  },
   me(parent, args, ctx, info) {
     // check if there is a current user ID
     const userId = getUserId(ctx);
