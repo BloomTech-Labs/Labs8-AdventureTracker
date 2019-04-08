@@ -1,7 +1,7 @@
 const cookieParser = require('cookie-parser');
-var secure = require('express-force-https');
+const secure = require('express-force-https');
 const jwt = require('jsonwebtoken');
-require('dotenv').config({ path: 'variables.env' });
+require('dotenv').config({ path: '.env' });
 const createServer = require('./createServer');
 const db = require('./db');
 
@@ -38,7 +38,8 @@ server.start(
       origin: [
         process.env.FRONTEND_URL,
         'https://adventure-tracker-frontend.netlify.com',
-        'https://www.adventure-tracker.com/'
+        'https://www.adventure-tracker.com/',
+        'https://main-adventure-tracker.netlify.com/'
       ]
     }
   },
