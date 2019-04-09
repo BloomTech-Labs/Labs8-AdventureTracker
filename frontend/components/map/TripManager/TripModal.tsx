@@ -3,14 +3,8 @@ import TripCard from "./TripCard";
 import {useState, useEffect} from "react";
 import {ApolloConsumer} from "react-apollo";
 import TripFilter from "./TripFilter";
-interface Trip {
-  id: string;
-  title: string;
-  description: string;
-  avatarImg: string;
-  imageCoverSrc: string;
-  archived: boolean;
-}
+import {Trip} from "../interfaces";
+
 interface Props {
   isModalVisible: boolean;
   setIsModalVisible: Function;

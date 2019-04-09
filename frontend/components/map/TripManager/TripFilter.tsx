@@ -1,6 +1,7 @@
 import {useState, useEffect} from "react";
 import {MY_TRIPS_QUERY} from "../../resolvers/Queries";
 import {Radio} from "antd";
+import {Trip} from "../interfaces";
 
 interface Props {
   client: {
@@ -34,8 +35,10 @@ const TripFilter: React.SFC<Props> = ({
     });
     return data;
   };
-  //@ts-ignore
-  const removeDuplicates = (trips1, trips2) => {
+  const removeDuplicateTrips = (
+    trips1: Trip[],
+    trips2: Trip[],
+  ): Trip[] => {
     return trips1
       .filter(trip1 => {
         return trips2.every(trip2 => {
@@ -90,7 +93,7 @@ const TripFilter: React.SFC<Props> = ({
             });
             const data = await fetchTrips({archived: false});
             setTrips((prevState: any) => {
-              const non = removeDuplicates(prevState, data.myTrips);
+              const non = removeDuplicateTrips(prevState, data.myTrips);
               console.log(non);
               return non;
             });
@@ -112,7 +115,7 @@ const TripFilter: React.SFC<Props> = ({
             const data = await fetchTrips({archived: true});
 
             setTrips((prevState: any) => {
-              const non = removeDuplicates(prevState, data.myTrips);
+              const non = removeDuplicateTrips(prevState, data.myTrips);
               console.log(non);
               return non;
             });
