@@ -64,8 +64,7 @@ const TripFilter: React.SFC<Props> = ({
         value={ALL}
         onClick={async () => {
           const allFiltersVisited = Object.keys(visitedFilters).every(
-            filter => {
-              //@ts-ignore
+            (filter: any) => {
               return visitedFilters[filter] === 1;
             },
           );
