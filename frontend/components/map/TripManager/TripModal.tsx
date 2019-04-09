@@ -45,6 +45,7 @@ const TripModal: React.SFC<Props> = ({
                   return (
                     <TripCard
                       key={trip.id}
+                      id={trip.id}
                       title={trip.title}
                       description={trip.description}
                       avatarImg={trip.avatarImg}

@@ -186,7 +186,6 @@ const MapComponent = compose(
       <TripModal
         isModalVisible={tripModalOpen}
         setIsModalVisible={setTripModalOpen}
-        trips={[]}
       />
       <Marker position={userPosition} />
       {markers.map((mark: IMarker) => {

@@ -80,7 +80,6 @@ const Mutations = {
   },
   async updateTrip(parent, args, ctx, info) {
     const userId = getUserId(ctx);
-
     if (!userId) {
       throw new Error("Can't update trip if not logged in");
     }
