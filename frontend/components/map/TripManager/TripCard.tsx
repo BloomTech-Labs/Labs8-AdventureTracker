@@ -1,6 +1,7 @@
 import {Card, Icon, Avatar, Button} from "antd";
 import {Mutation} from "react-apollo";
 import {ARCHIVE_TRIP_MUTATION} from "../../resolvers/Mutations";
+import {Trip} from "../interfaces";
 
 const {Meta} = Card;
 
@@ -39,7 +40,7 @@ const TripCard: React.SFC<Props> = ({
                 let {data} = await updateTrip();
                 const {id, archived} = data.updateTrip;
                 setTrips((trips: any) => {
-                  const updateIndex = trips.findIndex(trip => {
+                  const updateIndex = trips.findIndex((trip: Trip) => {
                     return trip.id === id;
                   });
                   const updatedTrip = {
