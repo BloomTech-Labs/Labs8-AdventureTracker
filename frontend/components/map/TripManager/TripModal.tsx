@@ -39,9 +39,15 @@ const TripModal: React.SFC<Props> = ({
               alignItems: "center",
             }}
           >
-            <TripFilter client={client} setTrips={setTrips} />
-            {trips !== undefined
-              ? trips.map((trip: Trip, i: number) => {
+            <TripFilter
+              client={client}
+              setTrips={setTrips}
+              trips={trips}
+              filteredTrips={filteredTrips}
+              setFilteredTrips={setFilteredTrips}
+            />
+            {filteredTrips !== undefined
+              ? filteredTrips.map((trip: Trip, i: number) => {
                   return (
                     <TripCard
                       key={trip.id}

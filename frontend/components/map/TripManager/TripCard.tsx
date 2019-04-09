@@ -39,7 +39,6 @@ const TripCard: React.SFC<Props> = ({
               onClick={async () => {
                 //@ts-ignore
                 let {data} = await updateTrip();
-                console.log(data);
                 const {archived} = data.updateTrip;
                 setTrips((trips: any) => {
                   const updatedTrip = {

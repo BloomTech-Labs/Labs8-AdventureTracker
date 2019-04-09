@@ -7,14 +7,26 @@ interface Props {
     query: Function;
   };
   setTrips: Function;
+  filteredTrips: any;
+  trips: any;
+  setFilteredTrips: Function;
 }
 
-const TripFilter: React.SFC<Props> = ({client, setTrips}) => {
+const TripFilter: React.SFC<Props> = ({
+  client,
+  setTrips,
+  filteredTrips,
+  trips,
+  setFilteredTrips,
+}) => {
   const ALL = "all";
   const ACTIVE = "active";
   const ARCHIVED = "archived";
   const [status, setStatus] = useState(ACTIVE);
-
+  const [visitedFilters, setVisitedFilters] = useState({
+    [ACTIVE]: 0,
+    [ARCHIVED]: 0,
+  });
   const fetchTrips = async (options?: {
     archived: boolean;
   }): Promise<any> => {
@@ -28,8 +40,10 @@ const TripFilter: React.SFC<Props> = ({client, setTrips}) => {
   };
   useEffect(() => {
     const fetchInitialTrips = async () => {
+      visitedFilters[ACTIVE] = 1;
       const data = await fetchTrips({archived: false});
       setTrips(data.myTrips);
+      setFilteredTrips(data.myTrips);
     };
     fetchInitialTrips();
   }, []);
@@ -41,8 +55,24 @@ const TripFilter: React.SFC<Props> = ({client, setTrips}) => {
       <Radio.Button
         value={ALL}
         onClick={async () => {
-          const data = await fetchTrips();
-          setTrips(data.myTrips);
+          const allFiltersVisited = Object.keys(visitedFilters).every(
+            filter => {
+              //@ts-ignore
+              console.log(visitedFilters[filter]);
+              return visitedFilters[filter] === 1;
+            },
+          );
+          if (allFiltersVisited) {
+            setFilteredTrips(trips);
+          } else {
+            setVisitedFilters({
+              [ACTIVE]: 1,
+              [ARCHIVED]: 1,
+            });
+            const data = await fetchTrips();
+            setTrips(data.myTrips);
+            setFilteredTrips(data.myTrips);
+          }
         }}
       >
         All
@@ -50,8 +80,23 @@ const TripFilter: React.SFC<Props> = ({client, setTrips}) => {
       <Radio.Button
         value={ACTIVE}
         onClick={async () => {
-          const data = await fetchTrips({archived: false});
-          setTrips(data.myTrips);
+          if (visitedFilters[ACTIVE] === 1) {
+            setFilteredTrips(
+              trips.filter((trip: any) => {
+                return trip.archived === false;
+              }),
+            );
+          } else {
+            setVisitedFilters((prevState: any) => {
+              return {
+                ...prevState,
+                [ACTIVE]: 1,
+              };
+            });
+            const data = await fetchTrips({archived: false});
+            setTrips((prevState: any) => [...prevState, ...data.myTrips]);
+            setFilteredTrips(data.myTrips);
+          }
         }}
       >
         Active
@@ -59,8 +104,23 @@ const TripFilter: React.SFC<Props> = ({client, setTrips}) => {
       <Radio.Button
         value={ARCHIVED}
         onClick={async () => {
-          const data = await fetchTrips({archived: true});
-          setTrips(data.myTrips);
+          if (visitedFilters[ARCHIVED] === 1) {
+            setFilteredTrips(
+              trips.filter((trip: any) => {
+                return trip.archived === true;
+              }),
+            );
+          } else {
+            setVisitedFilters((prevState: any) => {
+              return {
+                ...prevState,
+                [ARCHIVED]: 1,
+              };
+            });
+            const data = await fetchTrips({archived: true});
+            setTrips((prevState: any) => [...prevState, ...data.myTrips]);
+            setFilteredTrips(data.myTrips);
+          }
         }}
       >
         Archived
