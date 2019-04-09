@@ -59,7 +59,11 @@ const TripFilter: React.SFC<Props> = ({
     setStatus(e.target.value);
   };
   return (
-    <Radio.Group value={status} onChange={handleStatusChange}>
+    <Radio.Group
+      value={status}
+      onChange={handleStatusChange}
+      style={{display: "flex", justifyContent: "center"}}
+    >
       <Radio.Button
         value={ALL}
         onClick={async () => {
