@@ -36,7 +36,6 @@ export default () => {
       //@ts-ignore
       apiKey,
     );
-    console.log(url);
     setGoogleImageUrl(url);
   };
   const setScreenLatLng = (e: MapEvent) => {
