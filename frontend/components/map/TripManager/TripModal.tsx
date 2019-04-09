@@ -41,16 +41,18 @@ const TripModal: React.SFC<Props> = ({
           >
             <TripFilter client={client} setTrips={setTrips} />
             {trips !== undefined
-              ? trips.map((trip: Trip) => {
+              ? trips.map((trip: Trip, i: number) => {
                   return (
                     <TripCard
                       key={trip.id}
                       id={trip.id}
+                      cardIndex={i}
                       title={trip.title}
                       description={trip.description}
                       avatarImg={trip.avatarImg}
                       imageCoverSrc={trip.imageCoverSrc}
                       archived={trip.archived}
+                      setTrips={setTrips}
                     />
                   );
                 })

@@ -28,7 +28,7 @@ const TripFilter: React.SFC<Props> = ({client, setTrips}) => {
   };
   useEffect(() => {
     const fetchInitialTrips = async () => {
-      const data = await fetchTrips();
+      const data = await fetchTrips({archived: false});
       setTrips(data.myTrips);
     };
     fetchInitialTrips();

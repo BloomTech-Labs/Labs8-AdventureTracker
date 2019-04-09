@@ -11,6 +11,8 @@ interface Props {
   imageCoverSrc: string;
   archived: boolean;
   id: string;
+  setTrips: Function;
+  cardIndex: number;
 }
 
 const TripCard: React.SFC<Props> = ({
@@ -20,6 +22,8 @@ const TripCard: React.SFC<Props> = ({
   imageCoverSrc,
   archived,
   id,
+  setTrips,
+  cardIndex,
 }) => {
   return (
     <Card
@@ -34,8 +38,21 @@ const TripCard: React.SFC<Props> = ({
             <Icon
               type={archived ? "import" : "folder"}
               onClick={async () => {
-                let data = await updateTrip();
+                //@ts-ignore
+                let {data} = await updateTrip();
                 console.log(data);
+                const {archived} = data.updateTrip;
+                setTrips((trips: any) => {
+                  const updatedTrip = {
+                    ...trips[cardIndex],
+                    archived,
+                  };
+                  return [
+                    ...trips.slice(0, cardIndex),
+                    updatedTrip,
+                    ...trips.slice(cardIndex + 1),
+                  ];
+                });
               }}
             />
           )}
