@@ -19,6 +19,7 @@ type Trip {
   archived: Boolean!
   markers: [Marker!]! @relation(name: "MarkerToTrip", onDelete: CASCADE)
   description: String
+  image: String!
   startDate: DateTime
   endDate: DateTime
 }

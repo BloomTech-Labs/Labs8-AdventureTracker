@@ -8,6 +8,7 @@ type Mutation {
     startDate: DateTime
     endDate: DateTime
     archived: Boolean!
+    image: String!
     markers: [MarkerCreateInput!]!
   ): Trip!
   updateTrip(id: ID!, data: TripUpdateInput!): Trip!
@@ -25,6 +26,7 @@ type Mutation {
 type Query {
   trips: [Trip]!
   myTrips(archived: Boolean): [Trip]!
+  tripById(id: String!): Trip
   markers: [Marker!]!
   users: [User]!
   me: User

@@ -71,7 +71,8 @@ const Mutations = {
           startDate: args.startDate,
           endDate: args.endDate,
           archived: args.archived,
-          markers: args.markers
+          markers: args.markers,
+          image: args.image
         }
       },
       info
