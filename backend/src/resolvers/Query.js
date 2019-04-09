@@ -3,27 +3,25 @@ const { getUserId } = require('../utils');
 const Query = {
   markers: forwardTo('db'),
   users: forwardTo('db'),
-  tripById(parent, args, ctx, info) {
+  async tripById(parent, args, ctx, info) {
     const userId = getUserId(ctx);
     if (!userId) {
       return null;
     }
-    return ctx.db.query.trips({
+    const trip = await ctx.db.query.trip({
       where: {
-        user: {
-          id: userId
-        },
         id: args.id
       }
     });
+    return trip;
   },
-  myTrips(parent, args, ctx, info) {
+  async myTrips(parent, args, ctx, info) {
     const userId = getUserId(ctx);
     // console.log(args);
     if (!userId) {
       return null;
     }
-    return ctx.db.query.trips(
+    return await ctx.db.query.trips(
       {
         where: {
           user: {
@@ -35,7 +33,7 @@ const Query = {
       info
     );
   },
-  me(parent, args, ctx, info) {
+  async me(parent, args, ctx, info) {
     // check if there is a current user ID
     const userId = getUserId(ctx);
     if (!userId) {
@@ -43,7 +41,7 @@ const Query = {
       return null;
     }
     // found the user
-    return ctx.db.query.user(
+    return await ctx.db.query.user(
       {
         where: { id: userId }
       },
