@@ -18,6 +18,7 @@ const MY_TRIPS_QUERY = gql`
       title
       description
       archived
+      image
     }
   }
 `;

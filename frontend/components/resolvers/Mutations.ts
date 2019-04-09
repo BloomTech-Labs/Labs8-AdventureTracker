@@ -9,6 +9,7 @@ const CREATE_TRIP_MUTATION = gql`
     $endDate: DateTime
     $archived: Boolean!
     $markers: [MarkerCreateInput!]!
+    $image: String!
   ) {
     createTrip(
       title: $title
@@ -16,6 +17,7 @@ const CREATE_TRIP_MUTATION = gql`
       endDate: $endDate
       archived: $archived
       markers: $markers
+      image: $image
     ) {
       id
     }

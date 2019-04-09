@@ -142,11 +142,6 @@ const MapComponent = compose(
       }}
       defaultCenter={{lat: 31, lng: -83}}
     >
-      <StepsStatusBar
-        step={saveTripStep}
-        setStep={setSaveTripStep}
-        googleImageUrl={googleImageUrl}
-      />
       <MapContext.Provider
         value={{
           activeMarker,
@@ -164,6 +159,7 @@ const MapComponent = compose(
           setTripModalOpen,
           setUserPosition,
           userPosition,
+          googleImageUrl,
         }}
       >
         {isInfoWindowOpen && (
@@ -174,6 +170,11 @@ const MapComponent = compose(
           />
         )}
         <SaveTripProcess step={saveTripStep} />
+        <StepsStatusBar
+          step={saveTripStep}
+          setStep={setSaveTripStep}
+          googleImageUrl={googleImageUrl}
+        />
         {isScreenOn ? null : <OptionsMenu />}
       </MapContext.Provider>
       {isScreenOn ? null : <ProgressCircle markers={markers} />}

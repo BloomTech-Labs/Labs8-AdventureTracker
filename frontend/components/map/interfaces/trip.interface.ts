@@ -3,6 +3,6 @@ export interface Trip {
   title: string;
   description: string;
   avatarImg: string;
-  imageCoverSrc: string;
+  image: string;
   archived: boolean;
 }
