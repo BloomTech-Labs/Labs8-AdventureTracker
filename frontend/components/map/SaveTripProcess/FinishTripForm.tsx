@@ -1,5 +1,8 @@
-import {Form, Input} from "antd";
-import React, {useState} from "react";
+import {Form, Input, Button} from "antd";
+import React, {useState, useContext} from "react";
+import styled from "styled-components";
+import {Mutation} from "react-apollo";
+import {CREATE_TRIP_MUTATION} from "../../resolvers/Mutations";
 
 interface Props {
   form: {
@@ -9,11 +12,31 @@ interface Props {
   };
   buttonGroup: React.ReactElement;
   step: number;
+  setStep: Function;
 }
 interface InputEventTarget {
   target: {name: string; value: string};
 }
-const FinishTripForm: React.SFC<Props> = ({form, buttonGroup, step}) => {
+const StepButtonGroup = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+`;
+const ExitBtn = styled(Button)`
+  display: ${(props: {step: number}) =>
+    props.step === 0 ? "flex" : "none"};
+`;
+const PreviousBtn = styled(Button)`
+  display: ${(props: {step: number}) =>
+    props.step > 0 ? "flex" : "none"};
+`;
+const NextBtn = styled(Button)`
+  display: flex;
+`;
+const DoneBtn = styled(Button)`
+  display: flex;
+`;
+const FinishTripForm: React.SFC<Props> = ({form, setStep, step}) => {
   const {getFieldDecorator} = form;
   const [tripInfo, setTripInfo] = useState({
     title: "",
@@ -68,7 +91,54 @@ const FinishTripForm: React.SFC<Props> = ({form, buttonGroup, step}) => {
           )}
         </Form.Item>
       ) : null}
-      <Form.Item>{React.cloneElement(buttonGroup)}</Form.Item>
+      <Form.Item>
+        <StepButtonGroup>
+          <ExitBtn step={step} type="danger" onClick={() => setStep(-1)}>
+            Exit
+          </ExitBtn>
+          <PreviousBtn
+            step={step}
+            onClick={() => setStep((prevState: number) => prevState - 1)}
+            disabled={step === 0 ? true : false}
+          >
+            Previous
+          </PreviousBtn>
+          {step === 2 ? null : (
+            <NextBtn
+              step={step}
+              type="primary"
+              onClick={() => setStep((prevState: number) => prevState + 1)}
+              disabled={step > 2 ? true : false}
+            >
+              Next
+            </NextBtn>
+          )}
+          {step === 2 ? (
+            <Mutation
+              mutation={CREATE_TRIP_MUTATION}
+              variables={{
+                title: tripInfo.title,
+                description: tripInfo.description,
+                archived: false,
+                markers: [],
+              }}
+            >
+              {createTrip => (
+                <DoneBtn
+                  type="primary"
+                  onClick={async () => {
+                    setStep(-1);
+                    const data = await createTrip();
+                    console.log(data);
+                  }}
+                >
+                  Done
+                </DoneBtn>
+              )}
+            </Mutation>
+          ) : null}
+        </StepButtonGroup>
+      </Form.Item>
     </Form>
   );
 };
