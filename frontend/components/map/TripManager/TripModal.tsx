@@ -1,6 +1,6 @@
 import {Modal} from "antd";
 import TripCard from "./TripCard";
-import {useState} from "react";
+import {useState, useEffect} from "react";
 import {ApolloConsumer} from "react-apollo";
 import TripFilter from "./TripFilter";
 interface Trip {
@@ -22,6 +22,28 @@ const TripModal: React.SFC<Props> = ({
 }) => {
   const [trips, setTrips] = useState([]);
   const [filteredTrips, setFilteredTrips] = useState([]);
+  const ALL = "all";
+  const ACTIVE = "active";
+  const ARCHIVED = "archived";
+  const [status, setStatus] = useState(ACTIVE);
+
+  useEffect(() => {
+    if (status === ACTIVE) {
+      setFilteredTrips(
+        trips.filter((trip: Trip) => {
+          return trip.archived === false;
+        }),
+      );
+    } else if (status === ARCHIVED) {
+      setFilteredTrips(
+        trips.filter((trip: Trip) => {
+          return trip.archived === true;
+        }),
+      );
+    } else if (status === ALL) {
+      setFilteredTrips(trips);
+    }
+  }, [trips, status]);
   return (
     <ApolloConsumer>
       {client => {
@@ -43,16 +65,15 @@ const TripModal: React.SFC<Props> = ({
               client={client}
               setTrips={setTrips}
               trips={trips}
-              filteredTrips={filteredTrips}
-              setFilteredTrips={setFilteredTrips}
+              setStatus={setStatus}
+              filterTypes={{ALL, ACTIVE, ARCHIVED}}
             />
             {filteredTrips !== undefined
-              ? filteredTrips.map((trip: Trip, i: number) => {
+              ? filteredTrips.map((trip: Trip) => {
                   return (
                     <TripCard
                       key={trip.id}
                       id={trip.id}
-                      cardIndex={i}
                       title={trip.title}
                       description={trip.description}
                       avatarImg={trip.avatarImg}

@@ -12,7 +12,6 @@ interface Props {
   archived: boolean;
   id: string;
   setTrips: Function;
-  cardIndex: number;
 }
 
 const TripCard: React.SFC<Props> = ({
@@ -23,7 +22,6 @@ const TripCard: React.SFC<Props> = ({
   archived,
   id,
   setTrips,
-  cardIndex,
 }) => {
   return (
     <Card
@@ -39,16 +37,19 @@ const TripCard: React.SFC<Props> = ({
               onClick={async () => {
                 //@ts-ignore
                 let {data} = await updateTrip();
-                const {archived} = data.updateTrip;
+                const {id, archived} = data.updateTrip;
                 setTrips((trips: any) => {
+                  const updateIndex = trips.findIndex(trip => {
+                    return trip.id === id;
+                  });
                   const updatedTrip = {
-                    ...trips[cardIndex],
+                    ...trips[updateIndex],
                     archived,
                   };
                   return [
-                    ...trips.slice(0, cardIndex),
+                    ...trips.slice(0, updateIndex),
                     updatedTrip,
-                    ...trips.slice(cardIndex + 1),
+                    ...trips.slice(updateIndex + 1),
                   ];
                 });
               }}
