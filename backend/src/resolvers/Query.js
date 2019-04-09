@@ -3,7 +3,20 @@ const { getUserId } = require('../utils');
 const Query = {
   markers: forwardTo('db'),
   users: forwardTo('db'),
-
+  tripById(parent, args, ctx, info) {
+    const userId = getUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+    return ctx.db.query.trips({
+      where: {
+        user: {
+          id: userId
+        },
+        id: args.id
+      }
+    });
+  },
   myTrips(parent, args, ctx, info) {
     const userId = getUserId(ctx);
     // console.log(args);

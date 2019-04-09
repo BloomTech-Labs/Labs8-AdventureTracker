@@ -1,4 +1,4 @@
-export {CURRENT_USER_QUERY, MY_TRIPS_QUERY};
+export {CURRENT_USER_QUERY, MY_TRIPS_QUERY, MY_TRIP_BY_ID};
 
 import gql from "graphql-tag";
 
@@ -18,6 +18,18 @@ const MY_TRIPS_QUERY = gql`
       title
       description
       archived
+    }
+  }
+`;
+
+const MY_TRIP_BY_ID = gql`
+  query tripById($id: String!) {
+    tripById(id: $id) {
+      id
+      title
+      description
+      archived
+      markers
     }
   }
 `;
