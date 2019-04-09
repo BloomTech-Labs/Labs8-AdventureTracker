@@ -1,4 +1,4 @@
-import {Card, Icon, Avatar} from "antd";
+import {Card, Icon, Avatar, Button} from "antd";
 import {Mutation} from "react-apollo";
 import {ARCHIVE_TRIP_MUTATION} from "../../resolvers/Mutations";
 
@@ -35,8 +35,7 @@ const TripCard: React.SFC<Props> = ({
           variables={{tripId: id, data: {archived: !archived}}}
         >
           {(updateTrip, {loading}) => (
-            <Icon
-              type={archived ? "import" : "folder"}
+            <Button
               onClick={async () => {
                 //@ts-ignore
                 let {data} = await updateTrip();
@@ -54,7 +53,12 @@ const TripCard: React.SFC<Props> = ({
                   ];
                 });
               }}
-            />
+            >
+              <Icon
+                type={loading ? "loading" : archived ? "import" : "folder"}
+              />
+              {archived ? "Restore" : "Archive"}
+            </Button>
           )}
         </Mutation>,
       ]}
