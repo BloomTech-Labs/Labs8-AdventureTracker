@@ -34,6 +34,9 @@ const PreviousBtn = styled(Button)`
 const NextBtn = styled(Button)`
   display: flex;
 `;
+const DoneBtn = styled(Button)`
+  display: flex;
+`;
 const PreviewImage = styled.img`
   width: 200px;
   height: 200px;
@@ -76,27 +79,53 @@ const StepsStatusBar: React.SFC<Props> = ({
               alt="Google Map Preview Image"
             />
           ) : null}
-          {step === 2 ? <WrappedFinishTripForm /> : null}
-          <StepButtonGroup>
-            <ExitBtn step={step} type="danger" onClick={() => setStep(-1)}>
-              Exit
-            </ExitBtn>
-            <PreviousBtn
-              step={step}
-              onClick={() => setStep((prevState: number) => prevState - 1)}
-              disabled={step === 0 ? true : false}
-            >
-              Previous
-            </PreviousBtn>
-            <NextBtn
-              step={step}
-              type="primary"
-              onClick={() => setStep((prevState: number) => prevState + 1)}
-              disabled={step > 2 ? true : false}
-            >
-              {step >= 2 ? "Done" : "Next"}
-            </NextBtn>
-          </StepButtonGroup>
+          <WrappedFinishTripForm
+            step={step}
+            buttonGroup={
+              <StepButtonGroup>
+                <ExitBtn
+                  step={step}
+                  type="danger"
+                  onClick={() => setStep(-1)}
+                >
+                  Exit
+                </ExitBtn>
+                <PreviousBtn
+                  step={step}
+                  onClick={() =>
+                    setStep((prevState: number) => prevState - 1)
+                  }
+                  disabled={step === 0 ? true : false}
+                >
+                  Previous
+                </PreviousBtn>
+                {step === 2 ? null : (
+                  <NextBtn
+                    step={step}
+                    type="primary"
+                    onClick={() =>
+                      setStep((prevState: number) => prevState + 1)
+                    }
+                    disabled={step > 2 ? true : false}
+                  >
+                    Next
+                  </NextBtn>
+                )}
+                {step === 2 ? (
+                  <DoneBtn
+                    step={step}
+                    type="primary"
+                    onClick={() =>
+                      setStep((prevState: number) => prevState + 1)
+                    }
+                    disabled={step > 2 ? true : false}
+                  >
+                    Done
+                  </DoneBtn>
+                ) : null}
+              </StepButtonGroup>
+            }
+          />
         </Card>
       </StepsWrapper>
     );
