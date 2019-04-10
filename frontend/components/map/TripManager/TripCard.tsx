@@ -62,6 +62,14 @@ const TripCard: React.SFC<Props> = ({
             </Button>
           )}
         </Mutation>,
+        <Button
+          type="primary"
+          onClick={() => {
+            window.location.href = `/map?id=${id}`;
+          }}
+        >
+          Go To Trip
+        </Button>,
       ]}
     >
       <Meta
