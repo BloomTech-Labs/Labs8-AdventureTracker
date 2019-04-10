@@ -30,7 +30,12 @@ const MY_TRIP_BY_ID = gql`
       title
       description
       archived
-      markers
+      markers {
+        lat
+        lng
+        hasReached
+        checkpointName
+      }
     }
   }
 `;

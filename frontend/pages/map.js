@@ -1,7 +1,14 @@
 import MapComponent from "../components/map/MapComponent";
+import {ApolloConsumer} from "react-apollo";
+import {withRouter} from "next/router";
 
-const Map = () => {
-  return <MapComponent />;
+const Map = props => {
+  const {query} = props.router;
+  return (
+    <ApolloConsumer>
+      {client => <MapComponent client={client} tripId={query.id} />}
+    </ApolloConsumer>
+  );
 };
 
-export default Map;
+export default withRouter(Map);
