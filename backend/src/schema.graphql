@@ -5,16 +5,17 @@ type Mutation {
   signin(email: String!, password: String!): User!
   createTrip(
     title: String!
-    user: UserWhereUniqueInput!
-    startDate: DateTime!
-    endDate: DateTime!
+    startDate: DateTime
+    endDate: DateTime
     archived: Boolean!
-    markers: [MarkerCreateInput!]!
+    image: String!
+    markers: [MarkerCreateManyWithoutTripInput!]!
   ): Trip!
+  updateTrip(id: ID!, data: TripUpdateInput!): Trip!
   createMarkerMutation(
     tripId: ID!
     hasReached: Boolean!
-    checkpointName: String!
+    label: String!
     etaTime: DateTime
     checkedInTime: DateTime
     lat: Float!
@@ -24,6 +25,8 @@ type Mutation {
 
 type Query {
   trips: [Trip]!
+  myTrips(archived: Boolean): [Trip]!
+  tripById(id: String!): Trip!
   markers: [Marker!]!
   users: [User]!
   me: User

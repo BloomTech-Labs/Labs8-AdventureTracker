@@ -1,19 +1,52 @@
 const { forwardTo } = require('prisma-binding');
+const { getUserId } = require('../utils');
 const Query = {
-  trips: forwardTo('db'),
   markers: forwardTo('db'),
   users: forwardTo('db'),
-
-  me(parent, args, ctx, info) {
+  async tripById(parent, args, ctx, info) {
+    const userId = getUserId(ctx);
+    if (!userId) {
+      return null;
+    }
+    const trip = await ctx.db.query.trip(
+      {
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
+    return trip;
+  },
+  async myTrips(parent, args, ctx, info) {
+    const userId = getUserId(ctx);
+    // console.log(args);
+    if (!userId) {
+      return null;
+    }
+    return await ctx.db.query.trips(
+      {
+        where: {
+          user: {
+            id: userId
+          },
+          archived: args.archived
+        }
+      },
+      info
+    );
+  },
+  async me(parent, args, ctx, info) {
     // check if there is a current user ID
-    if (!ctx.request.userId) {
+    const userId = getUserId(ctx);
+    if (!userId) {
       // returning null when a person is not logged in
       return null;
     }
     // found the user
-    return ctx.db.query.user(
+    return await ctx.db.query.user(
       {
-        where: { id: ctx.request.userId }
+        where: { id: userId }
       },
       // info is the query that's coming from client side
       info

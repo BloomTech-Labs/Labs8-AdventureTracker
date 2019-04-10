@@ -16,18 +16,19 @@ type Trip {
   id: ID! @unique
   user: User! @relation(name: "TripToUser", onDelete: SET_NULL)
   title: String!
-  description: String
   archived: Boolean!
   markers: [Marker!]! @relation(name: "MarkerToTrip", onDelete: CASCADE)
-  # startDate: DateTime
-  # endDate: DateTime
+  description: String
+  image: String!
+  startDate: DateTime
+  endDate: DateTime
 }
 
 type Marker {
   id: ID! @unique
   trip: Trip! @relation(name: "MarkerToTrip", onDelete: SET_NULL)
   hasReached: Boolean!
-  checkpointName: String!
+  label: String!
   etaTime: DateTime
   checkedInTime: DateTime
   lat: Float!
