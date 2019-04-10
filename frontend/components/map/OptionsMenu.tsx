@@ -93,7 +93,9 @@ const OverlayMenu = props => {
             confirm({
               title: "Allow access to find your location?",
               content:
-                "A marker will be placed at your location. This will let followers know your current position.",
+                "A marker will be placed at your location,\
+                this will let followers know your current position. \
+                It might be in-accurate since GPS signals can be interfered with.",
               onOk() {
                 const statusObj = getUserLocation(setUserPosition);
                 if (statusObj.status === "failed") {
