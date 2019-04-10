@@ -29,8 +29,9 @@ export default () => {
     const updatedMarkers = [];
     for (let i = 0; i < markers.length; i++) {
       const marker = markers[i];
-      const {label, lat, lng} = marker;
+      const {hasReached, label, lat, lng} = marker;
       updatedMarkers.push({
+        hasReached,
         url: decideMarkerURL(marker),
         label,
         address: "",
