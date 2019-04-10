@@ -71,7 +71,9 @@ const TripModal: React.SFC<Props> = ({
                       title={trip.title}
                       description={trip.description}
                       avatarImg={trip.avatarImg}
-                      imageCoverSrc={trip.image}
+                      imageCoverSrc={
+                        trip.image === "" ? tripPlaceholderImg : trip.image
+                      }
                       archived={trip.archived}
                       setTrips={setTrips}
                     />
