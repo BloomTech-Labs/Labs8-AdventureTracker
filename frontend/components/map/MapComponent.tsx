@@ -68,6 +68,7 @@ const MapComponent = compose(
     setMarkers,
     updateMarkerLabelName,
     setMarkerDate,
+    setStartingMarkers,
     //State
     markers,
     activeMarker,
@@ -128,6 +129,8 @@ const MapComponent = compose(
           },
         });
         console.log(data);
+        const {markers} = data.tripById;
+        setStartingMarkers(markers);
         return data;
       }
     };
