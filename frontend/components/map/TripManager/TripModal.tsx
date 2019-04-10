@@ -1,10 +1,10 @@
-import {Modal} from "antd";
+import {Modal, Button} from "antd";
 import TripCard from "./TripCard";
 import {useState, useEffect} from "react";
 import {ApolloConsumer} from "react-apollo";
 import TripFilter from "./TripFilter";
 import {Trip} from "../interfaces";
-
+import tripPlaceholderImg from "static/trip-placeholder.jpg";
 interface Props {
   isModalVisible: boolean;
   setIsModalVisible: Function;
@@ -45,15 +45,21 @@ const TripModal: React.SFC<Props> = ({
           <Modal
             title="Trips"
             visible={isModalVisible}
-            onOk={() => {
-              setIsModalVisible(false);
-            }}
             onCancel={() => setIsModalVisible(false)}
             style={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
             }}
+            footer={[
+              <Button
+                type="danger"
+                key="back"
+                onClick={() => setIsModalVisible(false)}
+              >
+                Exit
+              </Button>,
+            ]}
           >
             <TripFilter
               client={client}
