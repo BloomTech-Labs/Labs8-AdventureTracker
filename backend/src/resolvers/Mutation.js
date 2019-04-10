@@ -67,11 +67,13 @@ const Mutations = {
               id: ctx.request.userId
             }
           },
+          markers: {
+            create: args.markers[0].create
+          },
           title: args.title,
           startDate: args.startDate,
           endDate: args.endDate,
           archived: args.archived,
-          markers: args.markers,
           image: args.image
         }
       },
