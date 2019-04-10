@@ -28,7 +28,7 @@ type Marker {
   id: ID! @unique
   trip: Trip! @relation(name: "MarkerToTrip", onDelete: SET_NULL)
   hasReached: Boolean!
-  checkpointName: String!
+  label: String!
   etaTime: DateTime
   checkedInTime: DateTime
   lat: Float!

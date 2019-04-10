@@ -34,7 +34,7 @@ const MY_TRIP_BY_ID = gql`
         lat
         lng
         hasReached
-        checkpointName
+        label
       }
     }
   }

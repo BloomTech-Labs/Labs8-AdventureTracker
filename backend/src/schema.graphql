@@ -15,7 +15,7 @@ type Mutation {
   createMarkerMutation(
     tripId: ID!
     hasReached: Boolean!
-    checkpointName: String!
+    label: String!
     etaTime: DateTime
     checkedInTime: DateTime
     lat: Float!

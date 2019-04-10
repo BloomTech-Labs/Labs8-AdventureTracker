@@ -132,7 +132,7 @@ const FinishTripForm: React.SFC<Props> = ({form, setStep, step}) => {
                       hasReached,
                       lat: position.lat,
                       lng: position.lng,
-                      checkpointName: label,
+                      label,
                     };
                   }),
                 },
