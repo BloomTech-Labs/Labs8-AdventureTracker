@@ -32,6 +32,7 @@ import {centerMarkerLabel} from "./helper-functions/index";
 import SaveTripProcess from "./SaveTripProcess/SaveTripProcess";
 import StepsStatusBar from "./SaveTripProcess/StepsStatusBar";
 import TripModal from "./TripManager/TripModal";
+import {MY_TRIP_BY_ID} from "../resolvers/Queries";
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
   withProps({
@@ -52,7 +53,7 @@ const MapComponent = compose(
   }),
   withScriptjs,
   withGoogleMap,
-)(() => {
+)(({client, tripId}) => {
   const {
     //Methods
     addMarker,
@@ -67,6 +68,7 @@ const MapComponent = compose(
     setMarkers,
     updateMarkerLabelName,
     setMarkerDate,
+    setStartingMarkers,
     //State
     markers,
     activeMarker,
@@ -107,7 +109,7 @@ const MapComponent = compose(
   } = useTrip();
   useEffect(() => {
     updateLines(markers);
-    console.log(markers);
+    // console.log(markers);
   }, [markers]);
 
   useEffect(() => {
@@ -118,6 +120,21 @@ const MapComponent = compose(
     }
   }, [saveTripStep]);
   useEffect(() => {
+    const fetchInitialTrip = async () => {
+      if (tripId) {
+        const {data} = await client.query({
+          query: MY_TRIP_BY_ID,
+          variables: {
+            id: tripId,
+          },
+        });
+        console.log(data);
+        const {markers} = data.tripById;
+        setStartingMarkers(markers);
+        return data;
+      }
+    };
+    fetchInitialTrip();
     window.addEventListener("mousemove", setCrossHairsPosition);
     return () => {
       window.removeEventListener("mousemove", setCrossHairsPosition);
@@ -142,11 +159,6 @@ const MapComponent = compose(
       }}
       defaultCenter={{lat: 31, lng: -83}}
     >
-      <StepsStatusBar
-        step={saveTripStep}
-        setStep={setSaveTripStep}
-        googleImageUrl={googleImageUrl}
-      />
       <MapContext.Provider
         value={{
           activeMarker,
@@ -164,6 +176,7 @@ const MapComponent = compose(
           setTripModalOpen,
           setUserPosition,
           userPosition,
+          googleImageUrl,
         }}
       >
         {isInfoWindowOpen && (
@@ -174,6 +187,11 @@ const MapComponent = compose(
           />
         )}
         <SaveTripProcess step={saveTripStep} />
+        <StepsStatusBar
+          step={saveTripStep}
+          setStep={setSaveTripStep}
+          googleImageUrl={googleImageUrl}
+        />
         {isScreenOn ? null : <OptionsMenu />}
       </MapContext.Provider>
       {isScreenOn ? null : <ProgressCircle markers={markers} />}
@@ -186,7 +204,6 @@ const MapComponent = compose(
       <TripModal
         isModalVisible={tripModalOpen}
         setIsModalVisible={setTripModalOpen}
-        trips={[]}
       />
       <Marker position={userPosition} />
       {markers.map((mark: IMarker) => {

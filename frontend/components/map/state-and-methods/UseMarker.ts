@@ -13,7 +13,38 @@ export default () => {
   const [markers, setMarkers] = useState([]);
   const [markerId, setMarkerId] = useState("");
   const [activeMarker, setActiveMarker] = useState({});
-
+  const labelStyle = {
+    backgroundColor: "#131313",
+    textAlign: "center",
+    opacity: ".8",
+    fontSize: "12px",
+    fontFamily: "monospace",
+    padding: "3px 6px",
+    color: "#E4E4E4",
+    borderRadius: "5px",
+    textOverflow: "eclipse",
+    pointerEvents: "none",
+  };
+  const setStartingMarkers = markers => {
+    const updatedMarkers = [];
+    for (let i = 0; i < markers.length; i++) {
+      const marker = markers[i];
+      const {label, lat, lng} = marker;
+      updatedMarkers.push({
+        url: decideMarkerURL(marker),
+        label,
+        address: "",
+        draggable: true,
+        labelStyle,
+        id: uuidv4(),
+        position: {
+          lat,
+          lng,
+        },
+      });
+    }
+    setMarkers(updatedMarkers);
+  };
   const addMarker = (e: MapEvent) => {
     const lat: number = e.latLng.lat();
     const lng: number = e.latLng.lng();
@@ -24,18 +55,7 @@ export default () => {
       date: moment(),
       address: "",
       //@ts-ignore
-      labelStyle: {
-        backgroundColor: "#131313",
-        textAlign: "center",
-        opacity: ".8",
-        fontSize: "12px",
-        fontFamily: "monospace",
-        padding: "3px 6px",
-        color: "#E4E4E4",
-        borderRadius: "5px",
-        textOverflow: "eclipse",
-        pointerEvents: "none",
-      },
+      labelStyle,
       id: uuidv4(),
       position: {
         lat,
@@ -225,6 +245,7 @@ export default () => {
     deleteMarker,
     updateMarkerPosition,
     setMarkerId,
+    setStartingMarkers,
     clearMarkerId,
     updateAllMarkerLabels,
     setActiveMarker,

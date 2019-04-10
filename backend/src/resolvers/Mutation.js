@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { hashPassword } = require('../utils');
+const { getUserId } = require('../utils');
 
 const Mutations = {
   async signup(parent, args, ctx, info) {
@@ -52,6 +53,47 @@ const Mutations = {
     });
     // return the user
     return user;
+  },
+  async createTrip(parent, args, ctx, info) {
+    if (!ctx.request.userId) {
+      throw new Error('You must be logged in to do that!');
+    }
+    // console.log(JSON.stringify(args.markers[0]));
+    const trip = await ctx.db.mutation.createTrip(
+      {
+        data: {
+          // This is how to create a relationship between the Trip and the User
+          user: {
+            connect: {
+              id: ctx.request.userId
+            }
+          },
+          markers: {
+            // https://www.prisma.io/docs/prisma-client/basic-data-access/writing-data-JAVASCRIPT-rsc6/
+            create: args.markers[0].create
+          },
+          title: args.title,
+          startDate: args.startDate,
+          endDate: args.endDate,
+          archived: args.archived,
+          image: args.image
+        }
+      },
+      info
+    );
+    return trip;
+  },
+  async updateTrip(parent, args, ctx, info) {
+    const userId = getUserId(ctx);
+    if (!userId) {
+      throw new Error("Can't update trip if not logged in");
+    }
+    return ctx.db.mutation.updateTrip({
+      where: {
+        id: args.id
+      },
+      data: args.data
+    });
   }
 };
 

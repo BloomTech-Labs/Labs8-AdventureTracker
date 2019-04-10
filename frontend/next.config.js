@@ -1,5 +1,6 @@
 // next.config.js
 const {parsed: localEnv} = require("dotenv").config();
+const path = require("path");
 const webpack = require("webpack");
 const withCSS = require("@zeit/next-css");
 const withLess = require("@zeit/next-less");
@@ -20,6 +21,11 @@ module.exports = compose([
   {
     webpack: config => {
       config.plugins.push(new webpack.EnvironmentPlugin(localEnv));
+
+      config.resolve.modules = [
+        path.resolve(__dirname, "node_modules"),
+        path.resolve(__dirname),
+      ];
       return config;
     },
   },
