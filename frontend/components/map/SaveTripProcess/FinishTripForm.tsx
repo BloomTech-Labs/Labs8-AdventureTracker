@@ -124,7 +124,17 @@ const FinishTripForm: React.SFC<Props> = ({form, setStep, step}) => {
                 description: tripInfo.description,
                 archived: false,
                 image: googleImageUrl,
-                markers: [],
+                markers: {
+                  create: markers.map((marker: Marker) => {
+                    const {hasReached, position, label} = marker;
+                    return {
+                      hasReached,
+                      lat: position.lat,
+                      lng: position.lng,
+                      checkpointName: label,
+                    };
+                  }),
+                },
               }}
             >
               {createTrip => (

@@ -8,7 +8,7 @@ const CREATE_TRIP_MUTATION = gql`
     $startDate: DateTime
     $endDate: DateTime
     $archived: Boolean!
-    $markers: [MarkerCreateInput!]!
+    $markers: [MarkerCreateManyWithoutTripInput!]!
     $image: String!
   ) {
     createTrip(
