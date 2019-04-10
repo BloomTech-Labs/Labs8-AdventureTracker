@@ -1,4 +1,4 @@
-import {Marker, MapEvent} from "../interfaces/index";
+import {Marker, MapEvent, QueryMarker} from "../interfaces/index";
 import {useState} from "react";
 import uuidv4 from "uuid/v4";
 import {letters} from "../lib/labels";
@@ -9,6 +9,7 @@ import {
   RED_EXCLAMATION_PIN,
 } from "../map-icons/markerIcons";
 import moment, {Moment} from "moment";
+
 export default () => {
   const [markers, setMarkers] = useState([]);
   const [markerId, setMarkerId] = useState("");
@@ -25,7 +26,7 @@ export default () => {
     textOverflow: "eclipse",
     pointerEvents: "none",
   };
-  const setStartingMarkers = markers => {
+  const setStartingMarkers = (markers: QueryMarker[]) => {
     const updatedMarkers = [];
     for (let i = 0; i < markers.length; i++) {
       const marker = markers[i];
@@ -44,6 +45,7 @@ export default () => {
         },
       });
     }
+    //@ts-ignore
     setMarkers(updatedMarkers);
   };
   const addMarker = (e: MapEvent) => {
@@ -201,7 +203,7 @@ export default () => {
       ...markers.slice(updateIndex + 1),
     ]);
   };
-  const decideMarkerURL = (marker: Marker) => {
+  const decideMarkerURL = (marker: Marker | QueryMarker) => {
     let url = GREY_PIN;
     if (marker.hasReached) {
       url = CHECKED_PIN;
