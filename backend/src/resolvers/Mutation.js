@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { hashPassword } = require('../utils');
-const { getUserId } = require('../utils');
+const { getUserId, hashPassword } = require('../lib/utils');
 
 const Mutations = {
   async signup(parent, args, ctx, info) {
