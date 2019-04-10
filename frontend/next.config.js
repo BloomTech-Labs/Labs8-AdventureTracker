@@ -24,7 +24,7 @@ module.exports = compose([
 
       config.resolve.modules = [
         path.resolve(__dirname, "node_modules"),
-        path.resolve(__dirname, "static"),
+        path.resolve(__dirname),
       ];
       return config;
     },
