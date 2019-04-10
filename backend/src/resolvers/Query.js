@@ -8,11 +8,14 @@ const Query = {
     if (!userId) {
       return null;
     }
-    const trip = await ctx.db.query.trip({
-      where: {
-        id: args.id
-      }
-    });
+    const trip = await ctx.db.query.trip(
+      {
+        where: {
+          id: args.id
+        }
+      },
+      info
+    );
     return trip;
   },
   async myTrips(parent, args, ctx, info) {
