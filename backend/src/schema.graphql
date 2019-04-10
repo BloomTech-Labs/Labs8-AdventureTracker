@@ -9,7 +9,7 @@ type Mutation {
     endDate: DateTime
     archived: Boolean!
     image: String!
-    markers: [MarkerCreateManyWithoutTripInput!] # markers: [MarkerCreateManyWithoutTripInput!]!
+    markers: [MarkerCreateManyWithoutTripInput!]!
   ): Trip!
   updateTrip(id: ID!, data: TripUpdateInput!): Trip!
   createMarkerMutation(

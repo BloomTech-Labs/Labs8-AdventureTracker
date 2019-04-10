@@ -58,6 +58,7 @@ const Mutations = {
     if (!ctx.request.userId) {
       throw new Error('You must be logged in to do that!');
     }
+    // console.log(JSON.stringify(args.markers[0]));
     const trip = await ctx.db.mutation.createTrip(
       {
         data: {
@@ -68,6 +69,7 @@ const Mutations = {
             }
           },
           markers: {
+            // https://www.prisma.io/docs/prisma-client/basic-data-access/writing-data-JAVASCRIPT-rsc6/
             create: args.markers[0].create
           },
           title: args.title,
