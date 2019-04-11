@@ -5,6 +5,7 @@ import {ApolloConsumer} from "react-apollo";
 import TripFilter from "./TripFilter";
 import {Trip} from "../interfaces";
 import tripPlaceholderImg from "static/trip-placeholder.jpg";
+import TripList from "./TripList";
 interface Props {
   isModalVisible: boolean;
   setIsModalVisible: Function;
@@ -45,12 +46,11 @@ const TripModal: React.SFC<Props> = ({
           <Modal
             title="Trips"
             visible={isModalVisible}
-            onCancel={() => setIsModalVisible(false)}
-            style={{
+            bodyStyle={{
               display: "flex",
               flexDirection: "column",
-              alignItems: "center",
             }}
+            onCancel={() => setIsModalVisible(false)}
             footer={[
               <Button
                 type="danger"
@@ -68,24 +68,28 @@ const TripModal: React.SFC<Props> = ({
               setStatus={setStatus}
               filterTypes={{ALL, ACTIVE, ARCHIVED}}
             />
-            {filteredTrips !== undefined
-              ? filteredTrips.map((trip: Trip) => {
-                  return (
-                    <TripCard
-                      key={trip.id}
-                      id={trip.id}
-                      title={trip.title}
-                      description={trip.description}
-                      avatarImg={trip.avatarImg}
-                      imageCoverSrc={
-                        trip.image === "" ? tripPlaceholderImg : trip.image
-                      }
-                      archived={trip.archived}
-                      setTrips={setTrips}
-                    />
-                  );
-                })
-              : null}
+            <TripList>
+              {filteredTrips !== undefined
+                ? filteredTrips.map((trip: Trip) => {
+                    return (
+                      <TripCard
+                        key={trip.id}
+                        id={trip.id}
+                        title={trip.title}
+                        description={trip.description}
+                        avatarImg={trip.avatarImg}
+                        imageCoverSrc={
+                          trip.image === ""
+                            ? tripPlaceholderImg
+                            : trip.image
+                        }
+                        archived={trip.archived}
+                        setTrips={setTrips}
+                      />
+                    );
+                  })
+                : null}
+            </TripList>
           </Modal>
         );
       }}
