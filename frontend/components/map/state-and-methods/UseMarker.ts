@@ -69,7 +69,18 @@ export default () => {
     //@ts-ignore
     setMarkers([...markers, newMarker]);
   };
-
+  const setMarkersByTime = (markers: Marker[]) => {
+    setMarkers(
+      //@ts-ignore
+      markers.map(mark => {
+        const url = decideMarkerURL(mark);
+        return {
+          ...mark,
+          url,
+        };
+      }),
+    );
+  };
   const deleteMarker = (id: string) => {
     const deleteIndex = markers.findIndex((mark: Marker) => {
       return mark.id === id;
@@ -259,6 +270,7 @@ export default () => {
     setMarkerDate,
     decideMarkerURL,
     updateMarkerProps,
+    setMarkersByTime,
     //state
     markers,
     activeMarker,

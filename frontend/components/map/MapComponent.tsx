@@ -69,6 +69,7 @@ const MapComponent = compose(
     updateMarkerLabelName,
     setMarkerDate,
     setStartingMarkers,
+    setMarkersByTime,
     //State
     markers,
     activeMarker,
@@ -109,7 +110,12 @@ const MapComponent = compose(
   } = useTrip();
   useEffect(() => {
     updateLines(markers);
-    // console.log(markers);
+    const m1 = setInterval(() => {
+      setMarkersByTime(markers);
+    }, 30000);
+    return () => {
+      clearInterval(m1);
+    };
   }, [markers]);
 
   useEffect(() => {
