@@ -25,7 +25,11 @@ const OptionsMenuWrapper = styled.div`
 //@ts-ignore
 const OptionsMenu = props => (
   <OptionsMenuWrapper>
-    <Dropdown overlay={<OverlayMenu />} placement="topLeft">
+    <Dropdown
+      overlay={<OverlayMenu />}
+      placement="topLeft"
+      trigger={["click"]}
+    >
       <Button type="primary" size="large">
         <Icon type="plus-circle" theme="filled" />
         Menu
