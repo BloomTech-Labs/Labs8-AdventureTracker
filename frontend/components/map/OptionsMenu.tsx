@@ -28,7 +28,7 @@ const OptionsMenu = props => (
     <Dropdown
       overlay={<OverlayMenu />}
       placement="topLeft"
-      trigger={["click"]}
+      trigger={["click", "hover"]}
     >
       <Button type="primary" size="large">
         <Icon type="plus-circle" theme="filled" />
