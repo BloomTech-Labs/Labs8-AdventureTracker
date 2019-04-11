@@ -9,6 +9,7 @@ interface Props {
   };
   setTrips: Function;
   setStatus: Function;
+  setLoadingTrips: Function;
   trips: any;
   filterTypes: any;
 }
@@ -18,6 +19,7 @@ const TripFilter: React.SFC<Props> = ({
   setTrips,
   setStatus,
   filterTypes,
+  setLoadingTrips,
 }) => {
   const {ALL, ACTIVE, ARCHIVED} = filterTypes;
   const [visitedFilters, setVisitedFilters] = useState({
@@ -27,13 +29,20 @@ const TripFilter: React.SFC<Props> = ({
   const fetchTrips = async (options?: {
     archived: boolean;
   }): Promise<any> => {
-    const {data} = await client.query({
-      query: MY_TRIPS_QUERY,
-      variables: {
-        ...options,
-      },
-    });
-    return data;
+    try {
+      setLoadingTrips(true);
+      const {data} = await client.query({
+        query: MY_TRIPS_QUERY,
+        variables: {
+          ...options,
+        },
+      });
+      return data;
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoadingTrips(false);
+    }
   };
   const removeDuplicateTrips = (
     trips1: Trip[],
@@ -49,9 +58,16 @@ const TripFilter: React.SFC<Props> = ({
   };
   useEffect(() => {
     const fetchInitialTrips = async () => {
-      visitedFilters[ACTIVE] = 1;
-      const data = await fetchTrips({archived: false});
-      setTrips(data.myTrips);
+      try {
+        setLoadingTrips(true);
+        visitedFilters[ACTIVE] = 1;
+        const data = await fetchTrips({archived: false});
+        setTrips(data.myTrips);
+      } catch (err) {
+        console.log(err);
+      } finally {
+        setLoadingTrips(false);
+      }
     };
     fetchInitialTrips();
   }, []);
