@@ -14,6 +14,7 @@ export default () => {
   const [markers, setMarkers] = useState([]);
   const [markerId, setMarkerId] = useState("");
   const [activeMarker, setActiveMarker] = useState({});
+  const [deletedMarkerIds, setDeletedMarkerIds] = useState([]);
   const labelStyle = {
     backgroundColor: "#131313",
     textAlign: "center",
@@ -85,6 +86,7 @@ export default () => {
     const deleteIndex = markers.findIndex((mark: Marker) => {
       return mark.id === id;
     });
+    setDeletedMarkerIds(prevState => [...prevState, {id}]);
     setMarkers([
       ...markers.slice(0, deleteIndex),
       ...markers.slice(deleteIndex + 1),
@@ -257,6 +259,7 @@ export default () => {
     //methods
     addMarker,
     deleteMarker,
+    deletedMarkerIds,
     updateMarkerPosition,
     setMarkerId,
     setStartingMarkers,

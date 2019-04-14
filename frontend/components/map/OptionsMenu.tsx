@@ -62,7 +62,9 @@ const OverlayMenu = props => {
     tripExists,
     tripId,
     markers,
+    deletedMarkerIds,
   } = useContext(MapContext);
+  console.log(deletedMarkerIds);
   return (
     <Mutation
       mutation={UPDATE_TRIP_MUTATION}
@@ -70,6 +72,7 @@ const OverlayMenu = props => {
         tripId: tripId,
         data: {
           markers: {
+            delete: deletedMarkerIds,
             upsert: changeMarkersForUpsert(markers),
           },
         },

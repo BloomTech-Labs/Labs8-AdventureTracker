@@ -70,10 +70,11 @@ const MapComponent = compose(
     setMarkerDate,
     setStartingMarkers,
     setMarkersByTime,
+    updateMarkerProps,
     //State
     markers,
     activeMarker,
-    updateMarkerProps,
+    deletedMarkerIds,
     markerId,
   } = useMarker();
   const {
@@ -193,6 +194,7 @@ const MapComponent = compose(
           googleImageUrl,
           tripExists,
           tripId,
+          deletedMarkerIds,
         }}
       >
         {isInfoWindowOpen && (
