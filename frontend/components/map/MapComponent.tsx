@@ -108,6 +108,7 @@ const MapComponent = compose(
     //methods
     tripModalOpen,
   } = useTrip();
+  const [tripExists, setTripExists] = useState(false);
   useEffect(() => {
     updateLines(markers);
     const m1 = setInterval(() => {
@@ -141,6 +142,7 @@ const MapComponent = compose(
           );
         } else {
           const {markers} = data.tripById;
+          setTripExists(true);
           setStartingMarkers(markers);
           return data;
         }
@@ -189,6 +191,8 @@ const MapComponent = compose(
           setUserPosition,
           userPosition,
           googleImageUrl,
+          tripExists,
+          tripId,
         }}
       >
         {isInfoWindowOpen && (
