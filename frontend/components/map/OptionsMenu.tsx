@@ -63,7 +63,6 @@ const OverlayMenu = props => {
     tripId,
     markers,
   } = useContext(MapContext);
-  console.log(tripExists);
   return (
     <Mutation
       mutation={UPDATE_TRIP_MUTATION}
