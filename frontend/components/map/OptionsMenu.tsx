@@ -64,7 +64,6 @@ const OverlayMenu = props => {
     markers,
     deletedMarkerIds,
   } = useContext(MapContext);
-  console.log(deletedMarkerIds);
   return (
     <Mutation
       mutation={UPDATE_TRIP_MUTATION}

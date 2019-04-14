@@ -86,7 +86,8 @@ export default () => {
     const deleteIndex = markers.findIndex((mark: Marker) => {
       return mark.id === id;
     });
-    setDeletedMarkerIds(prevState => [...prevState, {id}]);
+    //@ts-ignore
+    setDeletedMarkerIds([...deletedMarkerIds, {id}]);
     setMarkers([
       ...markers.slice(0, deleteIndex),
       ...markers.slice(deleteIndex + 1),
