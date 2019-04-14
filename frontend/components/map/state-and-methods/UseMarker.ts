@@ -1,4 +1,4 @@
-import {Marker, MapEvent} from "../interfaces/index";
+import {Marker, MapEvent, QueryMarker} from "../interfaces/index";
 import {useState} from "react";
 import uuidv4 from "uuid/v4";
 import {letters} from "../lib/labels";
@@ -9,10 +9,12 @@ import {
   RED_EXCLAMATION_PIN,
 } from "../map-icons/markerIcons";
 import moment, {Moment} from "moment";
+
 export default () => {
   const [markers, setMarkers] = useState([]);
   const [markerId, setMarkerId] = useState("");
   const [activeMarker, setActiveMarker] = useState({});
+  const [deletedMarkerIds, setDeletedMarkerIds] = useState([]);
   const labelStyle = {
     backgroundColor: "#131313",
     textAlign: "center",
@@ -25,24 +27,26 @@ export default () => {
     textOverflow: "eclipse",
     pointerEvents: "none",
   };
-  const setStartingMarkers = markers => {
+  const setStartingMarkers = (markers: QueryMarker[]) => {
     const updatedMarkers = [];
     for (let i = 0; i < markers.length; i++) {
       const marker = markers[i];
-      const {label, lat, lng} = marker;
+      const {hasReached, label, lat, lng, id} = marker;
       updatedMarkers.push({
+        hasReached,
         url: decideMarkerURL(marker),
         label,
         address: "",
         draggable: true,
         labelStyle,
-        id: uuidv4(),
+        id,
         position: {
           lat,
           lng,
         },
       });
     }
+    //@ts-ignore
     setMarkers(updatedMarkers);
   };
   const addMarker = (e: MapEvent) => {
@@ -66,11 +70,28 @@ export default () => {
     //@ts-ignore
     setMarkers([...markers, newMarker]);
   };
-
+  const setMarkersByTime = (markers: Marker[]) => {
+    setMarkers(
+      //@ts-ignore
+      markers.map(mark => {
+        const url = decideMarkerURL(mark);
+        return {
+          ...mark,
+          url,
+        };
+      }),
+    );
+  };
   const deleteMarker = (id: string) => {
     const deleteIndex = markers.findIndex((mark: Marker) => {
       return mark.id === id;
     });
+    if (!id.match(/(\w+-)+\w+/)) {
+      //setDeleteMarkerIds should take in only graphql marker ids to be able to update trip
+      //@ts-ignore
+      setDeletedMarkerIds([...deletedMarkerIds, {id}]);
+    }
+
     setMarkers([
       ...markers.slice(0, deleteIndex),
       ...markers.slice(deleteIndex + 1),
@@ -200,7 +221,7 @@ export default () => {
       ...markers.slice(updateIndex + 1),
     ]);
   };
-  const decideMarkerURL = (marker: Marker) => {
+  const decideMarkerURL = (marker: Marker | QueryMarker) => {
     let url = GREY_PIN;
     if (marker.hasReached) {
       url = CHECKED_PIN;
@@ -243,6 +264,7 @@ export default () => {
     //methods
     addMarker,
     deleteMarker,
+    deletedMarkerIds,
     updateMarkerPosition,
     setMarkerId,
     setStartingMarkers,
@@ -256,6 +278,8 @@ export default () => {
     setMarkerDate,
     decideMarkerURL,
     updateMarkerProps,
+    setMarkersByTime,
+    setDeletedMarkerIds,
     //state
     markers,
     activeMarker,

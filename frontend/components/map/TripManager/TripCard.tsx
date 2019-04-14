@@ -26,7 +26,7 @@ const TripCard: React.SFC<Props> = ({
 }) => {
   return (
     <Card
-      style={{width: 300}}
+      bodyStyle={{width: "275px"}}
       cover={<img alt="" src={imageCoverSrc} />}
       actions={[
         <Mutation

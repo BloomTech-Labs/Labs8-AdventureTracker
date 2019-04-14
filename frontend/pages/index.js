@@ -5,7 +5,7 @@ import {useState} from "react";
 import styled from "styled-components";
 import homeImg from "../static/jumbotron-home.jpg";
 import {Divider} from "antd";
-
+import media from "lib/mediaQueries";
 const AuthPage = () => {
   const LOGIN = "login";
   const SIGNUP = "signup";
@@ -47,21 +47,37 @@ const AuthPage = () => {
     </AuthPageWrapper>
   );
 };
-
-const IntroVideo = styled.iframe`
+const AuthPageWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 0 12px;
+`;
+const Twin = styled.div`
+  display: flex;
+  max-width: 1000px;
   width: 100%;
-  min-height: 100%;
+  margin: 64px auto;
+  ${media.phone`
+    flex-direction: column-reverse;
+  `}
+`;
+const IntroVideo = styled.iframe`
+  padding-top: 400 / 400 * 100%;
+  height: 400px;
+  width: 100%;
 `;
 const Title = styled.h1`
-  margin-top: 64px;
+  margin-top: 128px;
   text-align: center;
   font-weight: 800;
   font-size: 8rem;
   color: ${props => props.theme.white};
   transform: rotateY(56deg);
   letter-spacing: 1rem;
+  line-height: 1;
 `;
-const AuthPageWrapper = styled.div``;
+
 const BackgroundImage = styled.img`
   /* Set rules to fill background */
   min-height: 100%;
@@ -78,16 +94,7 @@ const BackgroundImage = styled.img`
   z-index: -1000;
   filter: brightness(50%);
 `;
-const Twin = styled.div`
-  display: flex;
-  max-width: 1000px;
-  width: 100%;
-  margin: 0 auto;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-`;
+
 const AuthCard = styled(Card)`
   max-width: 500px;
   width: 100%;

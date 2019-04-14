@@ -26,7 +26,7 @@ type Mutation {
 type Query {
   trips: [Trip]!
   myTrips(archived: Boolean): [Trip]!
-  tripById(id: String!): Trip!
+  tripById(id: String!): Trip
   markers: [Marker!]!
   users: [User]!
   me: User

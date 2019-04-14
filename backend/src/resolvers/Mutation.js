@@ -1,7 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const { hashPassword } = require('../utils');
-const { getUserId } = require('../utils');
+const { getUserId, hashPassword } = require('../lib/utils');
 
 const Mutations = {
   async signup(parent, args, ctx, info) {
@@ -84,16 +83,20 @@ const Mutations = {
     return trip;
   },
   async updateTrip(parent, args, ctx, info) {
+    // console.log(JSON.stringify(args));
     const userId = getUserId(ctx);
     if (!userId) {
       throw new Error("Can't update trip if not logged in");
     }
-    return ctx.db.mutation.updateTrip({
-      where: {
-        id: args.id
+    return ctx.db.mutation.updateTrip(
+      {
+        where: {
+          id: args.id
+        },
+        data: args.data
       },
-      data: args.data
-    });
+      info
+    );
   }
 };
 

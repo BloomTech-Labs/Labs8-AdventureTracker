@@ -31,6 +31,7 @@ const MY_TRIP_BY_ID = gql`
       description
       archived
       markers {
+        id
         lat
         lng
         hasReached
