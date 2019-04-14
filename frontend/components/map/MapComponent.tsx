@@ -135,9 +135,15 @@ const MapComponent = compose(
           },
         });
         console.log(data);
-        const {markers} = data.tripById;
-        setStartingMarkers(markers);
-        return data;
+        if (!data.tripById) {
+          message.error(
+            `Sorry either you are not logged in or the trip does not exist`,
+          );
+        } else {
+          const {markers} = data.tripById;
+          setStartingMarkers(markers);
+          return data;
+        }
       }
     };
     fetchInitialTrip();
