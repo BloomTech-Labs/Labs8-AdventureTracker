@@ -79,8 +79,16 @@ const OverlayMenu = props => {
         <MainMenu>
           {tripExists ? (
             <MenuItem
-              onClick={() => {
-                updateTrip();
+              onClick={async () => {
+                const hide = message.loading("Saving trip...", 0);
+                const {data} = await updateTrip();
+                if (data) {
+                  message.success("Trip was successfully updated!");
+                  hide();
+                } else {
+                  hide();
+                  message.error("Was unable to save trip");
+                }
               }}
             >
               Update Trip

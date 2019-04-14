@@ -27,7 +27,6 @@ const UPDATE_TRIP_MUTATION = gql`
   mutation UPDATE_TRIP_MUTATION($tripId: ID!, $data: TripUpdateInput!) {
     updateTrip(id: $tripId, data: $data) {
       id
-      title
     }
   }
 `;
