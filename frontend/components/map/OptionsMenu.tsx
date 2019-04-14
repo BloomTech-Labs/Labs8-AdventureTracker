@@ -9,7 +9,7 @@ import {
   Modal,
 } from "antd";
 import styled from "styled-components";
-import {useContext} from "react";
+import {useContext, useState} from "react";
 //@ts-ignore
 import {CopyToClipboard} from "react-copy-to-clipboard";
 import MapContext from "../context/MapContext";
@@ -63,7 +63,9 @@ const OverlayMenu = props => {
     tripId,
     markers,
     deletedMarkerIds,
+    setDeletedMarkerIds,
   } = useContext(MapContext);
+  const [updateTripLoading, setUpdateTripLoading] = useState(false);
   return (
     <Mutation
       mutation={UPDATE_TRIP_MUTATION}
@@ -81,15 +83,21 @@ const OverlayMenu = props => {
         <MainMenu>
           {tripExists ? (
             <MenuItem
+              disabled={updateTripLoading}
               onClick={async () => {
                 const hide = message.loading("Saving trip...", 0);
-                const {data} = await updateTrip();
-                if (data) {
-                  message.success("Trip was successfully updated!");
-                  hide();
-                } else {
-                  hide();
+                try {
+                  setUpdateTripLoading(true);
+                  const {data} = await updateTrip();
+                  if (data) {
+                    message.success("Trip was successfully updated!");
+                    setDeletedMarkerIds([]);
+                  }
+                } catch (err) {
                   message.error("Was unable to save trip");
+                } finally {
+                  setUpdateTripLoading(false);
+                  hide();
                 }
               }}
             >

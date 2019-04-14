@@ -86,8 +86,12 @@ export default () => {
     const deleteIndex = markers.findIndex((mark: Marker) => {
       return mark.id === id;
     });
-    //@ts-ignore
-    setDeletedMarkerIds([...deletedMarkerIds, {id}]);
+    if (!id.match(/(\w+-)+\w+/)) {
+      //setDeleteMarkerIds should take in only graphql marker ids to be able to update trip
+      //@ts-ignore
+      setDeletedMarkerIds([...deletedMarkerIds, {id}]);
+    }
+
     setMarkers([
       ...markers.slice(0, deleteIndex),
       ...markers.slice(deleteIndex + 1),
@@ -275,6 +279,7 @@ export default () => {
     decideMarkerURL,
     updateMarkerProps,
     setMarkersByTime,
+    setDeletedMarkerIds,
     //state
     markers,
     activeMarker,

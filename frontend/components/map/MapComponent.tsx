@@ -71,6 +71,7 @@ const MapComponent = compose(
     setStartingMarkers,
     setMarkersByTime,
     updateMarkerProps,
+    setDeletedMarkerIds,
     //State
     markers,
     activeMarker,
@@ -195,6 +196,7 @@ const MapComponent = compose(
           tripExists,
           tripId,
           deletedMarkerIds,
+          setDeletedMarkerIds,
         }}
       >
         {isInfoWindowOpen && (
