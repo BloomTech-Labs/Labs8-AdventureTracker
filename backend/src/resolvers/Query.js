@@ -1,11 +1,17 @@
 const { forwardTo } = require('prisma-binding');
-const { getUserId } = require('../utils');
+const { getUserId } = require('../lib/utils');
 const Query = {
   markers: forwardTo('db'),
   users: forwardTo('db'),
   async tripById(parent, args, ctx, info) {
     const userId = getUserId(ctx);
     if (!userId) {
+      return null;
+    }
+    const tripExists = await ctx.db.exists.Trip({
+      id: args.id
+    });
+    if (!tripExists) {
       return null;
     }
     const trip = await ctx.db.query.trip(

@@ -69,10 +69,13 @@ const MapComponent = compose(
     updateMarkerLabelName,
     setMarkerDate,
     setStartingMarkers,
+    setMarkersByTime,
+    updateMarkerProps,
+    setDeletedMarkerIds,
     //State
     markers,
     activeMarker,
-    updateMarkerProps,
+    deletedMarkerIds,
     markerId,
   } = useMarker();
   const {
@@ -107,9 +110,15 @@ const MapComponent = compose(
     //methods
     tripModalOpen,
   } = useTrip();
+  const [tripExists, setTripExists] = useState(false);
   useEffect(() => {
     updateLines(markers);
-    // console.log(markers);
+    const m1 = setInterval(() => {
+      setMarkersByTime(markers);
+    }, 30000);
+    return () => {
+      clearInterval(m1);
+    };
   }, [markers]);
 
   useEffect(() => {
@@ -129,9 +138,16 @@ const MapComponent = compose(
           },
         });
         console.log(data);
-        const {markers} = data.tripById;
-        setStartingMarkers(markers);
-        return data;
+        if (!data.tripById) {
+          message.error(
+            `Sorry either you are not logged in or the trip does not exist`,
+          );
+        } else {
+          const {markers} = data.tripById;
+          setTripExists(true);
+          setStartingMarkers(markers);
+          return data;
+        }
       }
     };
     fetchInitialTrip();
@@ -177,6 +193,10 @@ const MapComponent = compose(
           setUserPosition,
           userPosition,
           googleImageUrl,
+          tripExists,
+          tripId,
+          deletedMarkerIds,
+          setDeletedMarkerIds,
         }}
       >
         {isInfoWindowOpen && (
