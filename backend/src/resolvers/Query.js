@@ -8,6 +8,12 @@ const Query = {
     if (!userId) {
       return null;
     }
+    const tripExists = await ctx.db.exists.Trip({
+      id: args.id
+    });
+    if (!tripExists) {
+      return null;
+    }
     const trip = await ctx.db.query.trip(
       {
         where: {
