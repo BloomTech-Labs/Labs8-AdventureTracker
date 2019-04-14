@@ -6,4 +6,5 @@ export interface QueryMarker {
   lat: number;
   lng: number;
   date: Moment;
+  id: string;
 }

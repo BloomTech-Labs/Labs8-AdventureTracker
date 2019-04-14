@@ -30,7 +30,7 @@ export default () => {
     const updatedMarkers = [];
     for (let i = 0; i < markers.length; i++) {
       const marker = markers[i];
-      const {hasReached, label, lat, lng} = marker;
+      const {hasReached, label, lat, lng, id} = marker;
       updatedMarkers.push({
         hasReached,
         url: decideMarkerURL(marker),
@@ -38,7 +38,7 @@ export default () => {
         address: "",
         draggable: true,
         labelStyle,
-        id: uuidv4(),
+        id,
         position: {
           lat,
           lng,
