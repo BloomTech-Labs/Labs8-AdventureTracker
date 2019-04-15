@@ -32,6 +32,8 @@ const SIGNUP_MUTATION = gql`
 `;
 const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
   const {getFieldDecorator, getFieldValue} = form;
+  const [passwordsVisible, setPasswordsVisible] = useState(false);
+
   const [signupInfo, setSignupInfo] = useState({
     email: "",
     password: "",
@@ -54,11 +56,11 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
         return;
       }
       try {
-      const data = await signUpCb();
+        const data = await signUpCb();
         if (data) {
-      Router.push({
-        pathname: "/map",
-      });
+          Router.push({
+            pathname: "/map",
+          });
         }
       } catch (err) {
         console.log(err);
@@ -127,10 +129,19 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
                 prefix={
                   <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
                 }
-                type="password"
+                type={passwordsVisible ? "" : "password"}
                 placeholder="Password"
                 name="password"
                 onChange={signupInputHandler}
+                addonAfter={
+                  <Icon
+                    type={passwordsVisible ? "eye-invisible" : "eye"}
+                    style={{cursor: "pointer"}}
+                    onClick={() => {
+                      setPasswordsVisible(!passwordsVisible);
+                    }}
+                  />
+                }
               />,
             )}
           </Form.Item>
