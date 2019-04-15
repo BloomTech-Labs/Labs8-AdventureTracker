@@ -53,12 +53,16 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
       if (err) {
         return;
       }
-
+      try {
       const data = await signUpCb();
-      console.log(data);
+        if (data) {
       Router.push({
         pathname: "/map",
       });
+        }
+      } catch (err) {
+        console.log(err);
+      }
     });
   };
   //@ts-ignore
