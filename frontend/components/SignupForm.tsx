@@ -135,7 +135,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
                 onChange={signupInputHandler}
                 addonAfter={
                   <Icon
-                    type={passwordsVisible ? "eye-invisible" : "eye"}
+                    type={passwordsVisible ? "eye" : "eye-invisible"}
                     style={{cursor: "pointer"}}
                     onClick={() => {
                       setPasswordsVisible(!passwordsVisible);
