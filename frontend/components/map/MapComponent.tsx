@@ -37,7 +37,7 @@ import {MY_TRIP_BY_ID} from "../resolvers/Queries";
 const MapComponent = compose(
   withProps({
     googleMapURL:
-      "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places",
+      `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`,
     loadingElement: <MapLoadingElement />,
     containerElement: (
       <div
