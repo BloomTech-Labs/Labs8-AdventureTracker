@@ -1,4 +1,4 @@
-import {Button, Card, Divider, Checkbox} from "antd";
+import {Button, Card, Divider, Checkbox, Modal} from "antd";
 import {InfoWindow, GoogleMap} from "react-google-maps";
 import {useRef, useEffect} from "react";
 import styled from "styled-components";
@@ -6,7 +6,9 @@ import ReachedCheckbox from "./ReachedCheckbox";
 import MarkerNameInput from "./MarkerNameInput";
 import ArrivalDatePicker from "./ArrivalDatePicker";
 import getReverseGeocoding from "../../../lib/requestEndpoints/getReverseGeocoding";
+import MarkerOptions from "./MarkerOptions";
 
+const confirm = Modal.confirm;
 const CustomInfoWindow = ({
   activeMarker,
   setInfoWindowOpen,
@@ -66,17 +68,8 @@ const CustomInfoWindow = ({
             </Button>
             {activeMarker.address ? <p>{activeMarker.address}</p> : null}
           </CardGrid>
-          <CardGrid>
-            <Checkbox
-              checked={activeMarker.draggable}
-              onClick={() => {
-                updateMarkerProps(activeMarker, {
-                  draggable: !activeMarker.draggable,
-                });
-              }}
-            >
-              Marker Draggable
-            </Checkbox>
+          <CardGrid style={{display: "flex", flexDirection: "column"}}>
+            <MarkerOptions />
           </CardGrid>
         </StyledCard>
       </>
