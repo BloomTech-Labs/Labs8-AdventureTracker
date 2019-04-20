@@ -1,4 +1,4 @@
-import {Button, Card, Divider} from "antd";
+import {Button, Card, Divider, Checkbox} from "antd";
 import {InfoWindow, GoogleMap} from "react-google-maps";
 import {useRef, useEffect} from "react";
 import styled from "styled-components";
@@ -65,6 +65,18 @@ const CustomInfoWindow = ({
               Generate Marker Address
             </Button>
             {activeMarker.address ? <p>{activeMarker.address}</p> : null}
+          </CardGrid>
+          <CardGrid>
+            <Checkbox
+              checked={activeMarker.draggable}
+              onClick={() => {
+                updateMarkerProps(activeMarker, {
+                  draggable: !activeMarker.draggable,
+                });
+              }}
+            >
+              Marker Draggable
+            </Checkbox>
           </CardGrid>
         </StyledCard>
       </>
