@@ -5,7 +5,14 @@ const confirm = Modal.confirm;
 interface Props {}
 
 const MarkerOptions: React.SFC<Props> = () => {
-  const {updateMarkerProps, activeMarker} = useContext(MapContext);
+  const {
+    updateMarkerProps,
+    activeMarker,
+    deleteMarker,
+    updateAllMarkerLabels,
+    clearMarkerId,
+    setInfoWindowOpen,
+  } = useContext(MapContext);
   return (
     <>
       <Checkbox
@@ -29,6 +36,10 @@ const MarkerOptions: React.SFC<Props> = () => {
             cancelText: "No",
             onOk() {
               message.info(`Marker has been deleted!`);
+              deleteMarker(activeMarker.id);
+              updateAllMarkerLabels(activeMarker.id);
+              clearMarkerId();
+              setInfoWindowOpen(false);
             },
           });
         }}

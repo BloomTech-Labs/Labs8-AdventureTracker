@@ -36,8 +36,9 @@ import {MY_TRIP_BY_ID} from "../resolvers/Queries";
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
   withProps({
-    googleMapURL:
-      `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&v=3.exp&libraries=geometry,drawing,places`,
+    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
+      process.env.GOOGLE_MAPS_API_KEY
+    }&v=3.exp&libraries=geometry,drawing,places`,
     loadingElement: <MapLoadingElement />,
     containerElement: (
       <div
@@ -195,8 +196,13 @@ const MapComponent = compose(
           googleImageUrl,
           tripExists,
           tripId,
+          deleteMarker,
           deletedMarkerIds,
           setDeletedMarkerIds,
+          updateMarkerProps,
+          updateAllMarkerLabels,
+          clearMarkerId,
+          setInfoWindowOpen,
         }}
       >
         {isInfoWindowOpen && (
@@ -215,12 +221,7 @@ const MapComponent = compose(
         {isScreenOn ? null : <OptionsMenu />}
       </MapContext.Provider>
       {isScreenOn ? null : <ProgressCircle markers={markers} />}
-      {isScreenOn ? null : (
-        <Trash
-          isTrashActive={isTrashActive}
-          setInTrashArea={setInTrashArea}
-        />
-      )}
+
       <TripModal
         isModalVisible={tripModalOpen}
         setIsModalVisible={setTripModalOpen}
@@ -256,21 +257,8 @@ const MapComponent = compose(
               setActiveMarker(mark);
               setInfoWindowOpen(false);
             }}
-            onDrag={enableTrash}
             onDragEnd={(e: MapEvent) => {
-              // console.log(isTrashActive, inTrashArea);
-              if (isTrashActive && inTrashArea) {
-                message.info(`Marker has been deleted!`);
-                deleteMarker(mark.id);
-                updateAllMarkerLabels(mark.id);
-                disableTrash();
-                setInTrashArea(false);
-                clearMarkerId();
-              } else {
-                updateMarkerPosition(mark.id, e);
-                disableTrash();
-                clearMarkerId();
-              }
+              updateMarkerPosition(mark.id, e);
             }}
             className="marker"
             role="marker"
