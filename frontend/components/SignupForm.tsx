@@ -64,7 +64,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
           });
         }
       } catch (err) {
-        console.log({err});
+        // console.log({err});
         if (err.graphQLErrors.length === 0) {
           message.error("There has been a server error, try again later");
         } else {

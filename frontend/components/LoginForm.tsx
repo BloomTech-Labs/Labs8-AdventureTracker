@@ -1,4 +1,4 @@
-import {Form, Button, Input, Icon} from "antd";
+import {Form, Button, Input, Icon, message} from "antd";
 import {useState} from "react";
 import {formInputHandler} from "./helpers/functions/index";
 import {emailRegex} from "./helpers/regex";
@@ -41,12 +41,24 @@ const LoginForm: React.SFC<Props> = ({form, isVisible}) => {
       if (err) {
         return;
       }
-
-      const data = await loginCb();
-      console.log(data);
-      Router.push({
-        pathname: "/map",
-      });
+      try {
+        const data = await loginCb();
+        // console.log(data);
+        Router.push({
+          pathname: "/map",
+        });
+      } catch (err) {
+        // console.log({err});
+        if (err.graphQLErrors.length === 0) {
+          message.error(
+            "There might be a problem with the server, please try again later.",
+          );
+        } else {
+          message.error(
+            "Your email or password is incorrect, please try again.",
+          );
+        }
+      }
     });
   };
   return (
