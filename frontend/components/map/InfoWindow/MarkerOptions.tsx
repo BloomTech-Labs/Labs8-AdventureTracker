@@ -30,7 +30,7 @@ const MarkerOptions: React.SFC<Props> = () => {
         type="danger"
         onClick={() => {
           confirm({
-            title: "Are you sure delete this marker?",
+            title: "Are you sure you want to delete this marker?",
             okText: "Yes",
             okType: "danger",
             cancelText: "No",
