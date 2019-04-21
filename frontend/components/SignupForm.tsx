@@ -1,4 +1,4 @@
-import {Form, Button, Input, Icon} from "antd";
+import {Form, Button, Input, Icon, message} from "antd";
 import {useState} from "react";
 import {formInputHandler} from "./helpers/functions/index";
 import {emailRegex} from "./helpers/regex";
@@ -55,6 +55,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
       if (err) {
         return;
       }
+
       try {
         const data = await signUpCb();
         if (data) {
@@ -63,7 +64,17 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
           });
         }
       } catch (err) {
-        console.log(err);
+        console.log({err});
+        if (err.graphQLErrors.length === 0) {
+          message.error("There has been a server error, try again later");
+        } else {
+          const {code, message: graphqlMsg} = err.graphQLErrors[0];
+          if (code === 3010) {
+            if (graphqlMsg.match(/email/i)) {
+              message.error("Email already taken.");
+            }
+          }
+        }
       }
     });
   };
@@ -85,7 +96,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
   };
   return (
     <Mutation mutation={SIGNUP_MUTATION} variables={{...signupInfo}}>
-      {(signup, {loading}) => (
+      {(signup, {loading, error}) => (
         <Form
           onSubmit={(e: any) => {
             submitSignup(e, signup);
