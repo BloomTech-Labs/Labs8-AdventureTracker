@@ -16,10 +16,8 @@ import {
 import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 import ProgressCircle from "./ProgressCircle";
 import OptionsMenu from "./OptionsMenu";
-import Trash from "./Trash";
 import {
   useMarker,
-  useTrash,
   usePolyline,
   useInfoWindow,
   useScreenCapture,
@@ -77,17 +75,8 @@ const MapComponent = compose(
     markers,
     activeMarker,
     deletedMarkerIds,
-    markerId,
   } = useMarker();
-  const {
-    //Methods
-    enableTrash,
-    disableTrash,
-    setInTrashArea,
-    //State
-    inTrashArea,
-    isTrashActive,
-  } = useTrash();
+
   const {polylines, updateLines} = usePolyline();
   const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
   const [saveTripStep, setSaveTripStep] = useState(-1);
