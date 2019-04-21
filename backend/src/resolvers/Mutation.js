@@ -26,7 +26,8 @@ const Mutations = {
     // we set the jwt as a cookie on the response
     ctx.response.cookie('token', token, {
       httpOnly: true,
-      maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
+      maxAge: 1000 * 60 * 60 * 24 * 365, // 1 year cookie
+      sameSite: 'lax'
     });
 
     // Return the user to the browser
