@@ -1,4 +1,4 @@
-import {Form, Button, Input, Icon} from "antd";
+import {Form, Button, Input, Icon, message} from "antd";
 import {useState} from "react";
 import {formInputHandler} from "./helpers/functions/index";
 import {emailRegex} from "./helpers/regex";
@@ -32,6 +32,8 @@ const SIGNUP_MUTATION = gql`
 `;
 const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
   const {getFieldDecorator, getFieldValue} = form;
+  const [passwordsVisible, setPasswordsVisible] = useState(false);
+
   const [signupInfo, setSignupInfo] = useState({
     email: "",
     password: "",
@@ -54,11 +56,26 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
         return;
       }
 
-      const data = await signUpCb();
-      console.log(data);
-      Router.push({
-        pathname: "/map",
-      });
+      try {
+        const data = await signUpCb();
+        if (data) {
+          Router.push({
+            pathname: "/map",
+          });
+        }
+      } catch (err) {
+        // console.log({err});
+        if (err.graphQLErrors.length === 0) {
+          message.error("There has been a server error, try again later");
+        } else {
+          const {code, message: graphqlMsg} = err.graphQLErrors[0];
+          if (code === 3010) {
+            if (graphqlMsg.match(/email/i)) {
+              message.error("Email already taken.");
+            }
+          }
+        }
+      }
     });
   };
   //@ts-ignore
@@ -79,7 +96,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
   };
   return (
     <Mutation mutation={SIGNUP_MUTATION} variables={{...signupInfo}}>
-      {(signup, {loading}) => (
+      {(signup, {loading, error}) => (
         <Form
           onSubmit={(e: any) => {
             submitSignup(e, signup);
@@ -123,10 +140,19 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
                 prefix={
                   <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
                 }
-                type="password"
+                type={passwordsVisible ? "" : "password"}
                 placeholder="Password"
                 name="password"
                 onChange={signupInputHandler}
+                addonAfter={
+                  <Icon
+                    type={passwordsVisible ? "eye" : "eye-invisible"}
+                    style={{cursor: "pointer"}}
+                    onClick={() => {
+                      setPasswordsVisible(!passwordsVisible);
+                    }}
+                  />
+                }
               />,
             )}
           </Form.Item>

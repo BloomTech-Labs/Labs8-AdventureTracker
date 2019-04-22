@@ -133,8 +133,13 @@ export default () => {
       const marker: Marker = markers[i];
       let updatedMarker = {
         ...marker,
-        label: letters[(i - 1) % letters.length].toUpperCase(),
       };
+      if (marker.label.match(/\b[A-Z]\b/i)) {
+        updatedMarker.label = letters[
+          (i - 1) % letters.length
+        ].toUpperCase();
+      }
+
       affectedMarkers.push(updatedMarker);
     }
     //@ts-ignore
