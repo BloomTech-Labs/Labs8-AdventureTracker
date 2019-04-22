@@ -6,6 +6,8 @@ import styled from "styled-components";
 import homeImg from "../static/jumbotron-home.jpg";
 import {Divider} from "antd";
 import media from "lib/mediaQueries";
+import Router from "next/router";
+
 const AuthPage = () => {
   const LOGIN = "login";
   const SIGNUP = "signup";
@@ -43,6 +45,29 @@ const AuthPage = () => {
           allowfullscreen
         />
       </Twin>
+      <Card
+        bodyStyle={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          width: "100%",
+        }}
+      >
+        <h2>
+          Don't want to login? Go to the map directly and try it out!
+        </h2>
+        <Button
+          type="primary"
+          size="large"
+          onClick={() => {
+            Router.push({
+              pathname: "/map",
+            });
+          }}
+        >
+          Try me!
+        </Button>
+      </Card>
       <BackgroundImage src={homeImg} />
     </AuthPageWrapper>
   );

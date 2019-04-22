@@ -16,10 +16,8 @@ import {
 import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 import ProgressCircle from "./ProgressCircle";
 import OptionsMenu from "./OptionsMenu";
-import Trash from "./Trash";
 import {
   useMarker,
-  useTrash,
   usePolyline,
   useInfoWindow,
   useScreenCapture,
@@ -33,11 +31,14 @@ import SaveTripProcess from "./SaveTripProcess/SaveTripProcess";
 import StepsStatusBar from "./SaveTripProcess/StepsStatusBar";
 import TripModal from "./TripManager/TripModal";
 import {MY_TRIP_BY_ID} from "../resolvers/Queries";
+import getConfig from "next/config";
+const {publicRuntimeConfig} = getConfig();
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
   withProps({
-    googleMapURL:
-      "https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places",
+    googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
+      publicRuntimeConfig.GOOGLE_MAPS_API_KEY
+    }&v=3.exp&libraries=geometry,drawing,places`,
     loadingElement: <MapLoadingElement />,
     containerElement: (
       <div
@@ -76,17 +77,8 @@ const MapComponent = compose(
     markers,
     activeMarker,
     deletedMarkerIds,
-    markerId,
   } = useMarker();
-  const {
-    //Methods
-    enableTrash,
-    disableTrash,
-    setInTrashArea,
-    //State
-    inTrashArea,
-    isTrashActive,
-  } = useTrash();
+
   const {polylines, updateLines} = usePolyline();
   const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
   const [saveTripStep, setSaveTripStep] = useState(-1);
@@ -129,7 +121,7 @@ const MapComponent = compose(
     }
   }, [saveTripStep]);
   useEffect(() => {
-    const fetchInitialTrip = async () => {
+    const fetchInitialEntities = async () => {
       if (tripId) {
         const {data} = await client.query({
           query: MY_TRIP_BY_ID,
@@ -150,7 +142,7 @@ const MapComponent = compose(
         }
       }
     };
-    fetchInitialTrip();
+    fetchInitialEntities();
     window.addEventListener("mousemove", setCrossHairsPosition);
     return () => {
       window.removeEventListener("mousemove", setCrossHairsPosition);
@@ -195,8 +187,13 @@ const MapComponent = compose(
           googleImageUrl,
           tripExists,
           tripId,
+          deleteMarker,
           deletedMarkerIds,
           setDeletedMarkerIds,
+          updateMarkerProps,
+          updateAllMarkerLabels,
+          clearMarkerId,
+          setInfoWindowOpen,
         }}
       >
         {isInfoWindowOpen && (
@@ -215,12 +212,7 @@ const MapComponent = compose(
         {isScreenOn ? null : <OptionsMenu />}
       </MapContext.Provider>
       {isScreenOn ? null : <ProgressCircle markers={markers} />}
-      {isScreenOn ? null : (
-        <Trash
-          isTrashActive={isTrashActive}
-          setInTrashArea={setInTrashArea}
-        />
-      )}
+
       <TripModal
         isModalVisible={tripModalOpen}
         setIsModalVisible={setTripModalOpen}
@@ -256,21 +248,8 @@ const MapComponent = compose(
               setActiveMarker(mark);
               setInfoWindowOpen(false);
             }}
-            onDrag={enableTrash}
             onDragEnd={(e: MapEvent) => {
-              // console.log(isTrashActive, inTrashArea);
-              if (isTrashActive && inTrashArea) {
-                message.info(`Marker has been deleted!`);
-                deleteMarker(mark.id);
-                updateAllMarkerLabels(mark.id);
-                disableTrash();
-                setInTrashArea(false);
-                clearMarkerId();
-              } else {
-                updateMarkerPosition(mark.id, e);
-                disableTrash();
-                clearMarkerId();
-              }
+              updateMarkerPosition(mark.id, e);
             }}
             className="marker"
             role="marker"
