@@ -1,5 +1,6 @@
 // next.config.js
 const {parsed: localEnv} = require("dotenv").config();
+const withPlugins = require("next-compose-plugins");
 const path = require("path");
 const webpack = require("webpack");
 const withCSS = require("@zeit/next-css");
@@ -10,23 +11,31 @@ const tsConfig = {};
 const cssConfig = {};
 const lessConfig = {};
 const imagesConfig = {};
-// https://github.com/JerryCauser/next-compose
-const compose = require("next-compose");
+//https://github.com/cyrilwanner/next-compose-plugins
 
-module.exports = compose([
-  [withCSS, cssConfig],
-  [withLess, lessConfig],
-  [withTypescript, tsConfig],
-  [withImages, imagesConfig],
-  {
-    webpack: config => {
-      config.plugins.push(new webpack.EnvironmentPlugin(localEnv));
-
-      config.resolve.modules = [
-        path.resolve(__dirname, "node_modules"),
-        path.resolve(__dirname),
-      ];
-      return config;
-    },
+const nextConfig = {
+  webpack: config => {
+    config.plugins.push(new webpack.EnvironmentPlugin(localEnv));
+    config.resolve.modules = [
+      path.resolve(__dirname, "node_modules"),
+      path.resolve(__dirname),
+    ];
+    return config;
   },
-]);
+  serverRuntimeConfig: {
+    //will only be available on the server side
+  },
+  publicRuntimeConfig: {
+    // will be available on both server and client
+    GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
+  },
+};
+module.exports = withPlugins(
+  [
+    [withCSS, cssConfig],
+    [withLess, lessConfig],
+    [withTypescript, tsConfig],
+    [withImages, imagesConfig],
+  ],
+  nextConfig,
+);

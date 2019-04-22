@@ -31,11 +31,13 @@ import SaveTripProcess from "./SaveTripProcess/SaveTripProcess";
 import StepsStatusBar from "./SaveTripProcess/StepsStatusBar";
 import TripModal from "./TripManager/TripModal";
 import {MY_TRIP_BY_ID} from "../resolvers/Queries";
+import getConfig from "next/config";
+const {publicRuntimeConfig} = getConfig();
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
   withProps({
     googleMapURL: `https://maps.googleapis.com/maps/api/js?key=${
-      process.env.GOOGLE_MAPS_API_KEY
+      publicRuntimeConfig.GOOGLE_MAPS_API_KEY
     }&v=3.exp&libraries=geometry,drawing,places`,
     loadingElement: <MapLoadingElement />,
     containerElement: (
@@ -119,7 +121,7 @@ const MapComponent = compose(
     }
   }, [saveTripStep]);
   useEffect(() => {
-    const fetchInitialTrip = async () => {
+    const fetchInitialEntities = async () => {
       if (tripId) {
         const {data} = await client.query({
           query: MY_TRIP_BY_ID,
@@ -140,7 +142,7 @@ const MapComponent = compose(
         }
       }
     };
-    fetchInitialTrip();
+    fetchInitialEntities();
     window.addEventListener("mousemove", setCrossHairsPosition);
     return () => {
       window.removeEventListener("mousemove", setCrossHairsPosition);
