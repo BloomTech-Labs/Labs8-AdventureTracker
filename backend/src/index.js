@@ -40,7 +40,7 @@ server.start(
         'https://adventure-tracker-frontend.netlify.com',
         'https://www.adventure-tracker.com/',
         'https://main-adventure-tracker.netlify.com/',
-        'https://adventuretracker.now.sh/'
+        'https://main-adventure-tracker.netlify.com/map'
       ]
     }
   },
