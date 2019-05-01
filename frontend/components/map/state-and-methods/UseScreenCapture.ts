@@ -1,6 +1,8 @@
 import {useState, KeyboardEvent, MouseEvent} from "react";
 import {MapEvent} from "../interfaces/index";
 import {mapImageUrlGenerator} from "../helper-functions/index";
+import getConfig from "next/config";
+const {publicRuntimeConfig} = getConfig();
 export default () => {
   const [googleImageUrl, setGoogleImageUrl] = useState("");
   const [isScreenOn, setScreenOn] = useState(false);
@@ -24,7 +26,7 @@ export default () => {
     captureWidth: number,
     captureHeight: number,
   ): void => {
-    const apiKey = process.env.GOOGLE_MAPS_API_KEY;
+    const apiKey = publicRuntimeConfig.GOOGLE_MAPS_API_KEY;
     const url = mapImageUrlGenerator(
       latLng.lat,
       latLng.lng,

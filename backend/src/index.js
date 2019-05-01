@@ -39,7 +39,9 @@ server.start(
         process.env.FRONTEND_URL,
         'https://adventure-tracker-frontend.netlify.com',
         'https://www.adventure-tracker.com/',
-        'https://main-adventure-tracker.netlify.com/'
+        'https://main-adventure-tracker.netlify.com/',
+        'https://main-adventure-tracker.netlify.com/map',
+        'https://main-adventure-tracker.com/'
       ]
     }
   },
