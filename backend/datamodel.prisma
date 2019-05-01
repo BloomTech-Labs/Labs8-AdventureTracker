@@ -5,15 +5,17 @@ enum TripFilter {
 }
 
 type User {
-  id: ID! @unique
+  id: ID! @unique @id
   name: String
   email: String! @unique
   password: String!
   trip: [Trip!]! @relation(name: "TripToUser", onDelete: CASCADE)
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Trip {
-  id: ID! @unique
+  id: ID! @unique @id
   user: User! @relation(name: "TripToUser", onDelete: SET_NULL)
   title: String!
   archived: Boolean!
@@ -22,10 +24,12 @@ type Trip {
   image: String!
   startDate: DateTime
   endDate: DateTime
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 type Marker {
-  id: ID! @unique
+  id: ID! @unique @id
   trip: Trip! @relation(name: "MarkerToTrip", onDelete: SET_NULL)
   hasReached: Boolean!
   label: String!
@@ -33,6 +37,8 @@ type Marker {
   checkedInTime: DateTime
   lat: Float!
   lng: Float!
+  createdAt: DateTime! @createdAt
+  updatedAt: DateTime! @updatedAt
 }
 
 # enum Permission {
