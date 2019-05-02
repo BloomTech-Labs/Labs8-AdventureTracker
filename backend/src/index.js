@@ -32,8 +32,9 @@ express.use((req, res, next) => {
 });
 express.use((req, res, next) => {
   req.headers[
-    'Authorization'
+    'authorization'
   ] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NTY5MDMwOTQsIm5iZiI6MTU1NjgxNjY5NH0.uK0KNwXRGP13rnm8yxMxnVR04VSTeBNxdUP11QxfVyE`;
+  console.log(req.headers);
   next();
 });
 server.start(
