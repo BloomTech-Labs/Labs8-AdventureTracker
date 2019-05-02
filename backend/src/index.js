@@ -42,7 +42,8 @@ server.start(
         'https://main-adventure-tracker.netlify.com/',
         'https://main-adventure-tracker.netlify.com/map',
         'https://main-adventure-tracker.com/',
-        /https?:\/\/(localhost:\d+|(deploy-preview-\d+--)?main-adventure-tracker.netlify.com)\/?/
+        /https?:\/\/(localhost:\d+|(deploy-preview-\d+--)?main-adventure-tracker.netlify.com)\/?/,
+        /https?:\/\/(localhost:\d+|(\w+--)?main-adventure-tracker.netlify.com)\/?/
       ]
     }
   },
