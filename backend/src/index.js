@@ -34,17 +34,16 @@ express.use((req, res, next) => {
 server.start(
   {
     cors: {
-      // credentials: true,
-      origin: false
-      // origin: [
-      //   process.env.FRONTEND_URL,
-      //   'https://adventure-tracker-frontend.netlify.com',
-      //   'https://www.adventure-tracker.com/',
-      //   'https://main-adventure-tracker.netlify.com/',
-      //   'https://main-adventure-tracker.netlify.com/map',
-      //   'https://main-adventure-tracker.com/',
-      //   /https?:\/\/(localhost:\d+|(deploy-preview-\d+--)?main-adventure-tracker.netlify.com)\/?/
-      // ]
+      credentials: true,
+      origin: [
+        process.env.FRONTEND_URL,
+        'https://adventure-tracker-frontend.netlify.com',
+        'https://www.adventure-tracker.com/',
+        'https://main-adventure-tracker.netlify.com/',
+        'https://main-adventure-tracker.netlify.com/map',
+        'https://main-adventure-tracker.com/',
+        /https?:\/\/(localhost:\d+|(deploy-preview-\d+--)?main-adventure-tracker.netlify.com)\/?/
+      ]
     }
   },
   details => {
