@@ -7,7 +7,7 @@ layout.md
 variables.env
 keys.js
 /backend/src/generated/prisma.graphql
-
+dist/
 .env
 prod.env
 dev.env
