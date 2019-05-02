@@ -1,4 +1,6 @@
 const { GraphQLServer } = require('graphql-yoga');
+const { Prisma } = require('prisma-binding');
+
 const Mutation = require('./resolvers/Mutation');
 const Query = require('./resolvers/Query');
 const db = require('./db');
@@ -17,7 +19,15 @@ function createServer() {
     },
     // get the context for every request
     // so we can access the db from the resolvers
-    context: req => ({ ...req, db })
+    context: req => ({
+      ...req,
+      db: new Prisma({
+        typeDefs: 'src/generated/prisma.graphql',
+        endpoint: `https://us1.prisma.sh/thomas-greenhalgh/AdventureTracker/dev`,
+        secret: process.env.PRISMA_ENDPOINT,
+        debug: true
+      })
+    })
   });
 }
 
