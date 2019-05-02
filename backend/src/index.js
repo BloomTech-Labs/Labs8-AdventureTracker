@@ -1,3 +1,4 @@
+require('@babel/polyfill');
 const cookieParser = require('cookie-parser');
 const secure = require('express-force-https');
 const jwt = require('jsonwebtoken');
@@ -30,15 +31,10 @@ express.use((req, res, next) => {
   }
   next();
 });
-express.use((req, res, next) => {
-  req.headers[
-    'authorization'
-  ] = `Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE1NTY5MDMwOTQsIm5iZiI6MTU1NjgxNjY5NH0.uK0KNwXRGP13rnm8yxMxnVR04VSTeBNxdUP11QxfVyE`;
-  console.log(req.headers);
-  next();
-});
+
 server.start(
   {
+    port: process.env.PORT || 4444,
     cors: {
       credentials: true,
       origin: [

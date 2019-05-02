@@ -9,3 +9,5 @@ keys.js
 /backend/src/generated/prisma.graphql
 
 .env
+prod.env
+dev.env

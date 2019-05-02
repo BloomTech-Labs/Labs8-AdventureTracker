@@ -23,9 +23,8 @@ function createServer() {
       ...req,
       db: new Prisma({
         typeDefs: 'src/generated/prisma.graphql',
-        endpoint: `https://us1.prisma.sh/thomas-greenhalgh/AdventureTracker/dev`,
-        secret: process.env.PRISMA_ENDPOINT,
-        debug: true
+        endpoint: process.env.PRISMA_ENDPOINT,
+        secret: process.env.PRISMA_SECRET
       })
     })
   });
