@@ -27,7 +27,7 @@ const nextConfig = {
   },
   publicRuntimeConfig: {
     // will be available on both server and client
-    GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY,
+    ...process.env,
   },
 };
 module.exports = withPlugins(
