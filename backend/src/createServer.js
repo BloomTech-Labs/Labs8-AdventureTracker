@@ -21,11 +21,7 @@ function createServer() {
     // so we can access the db from the resolvers
     context: req => ({
       ...req,
-      db: new Prisma({
-        typeDefs: 'src/generated/prisma.graphql',
-        endpoint: process.env.PRISMA_ENDPOINT,
-        secret: process.env.PRISMA_SECRET
-      })
+      db
     })
   });
 }
