@@ -7,6 +7,3 @@ hooks:
   post-deploy:
     - graphql get-schema -p prisma # downloads prisma.graphql so we can use it
     - prisma generate
-generate:
-  - generator: graphql-schema
-    output: ./src/generated/prisma.graphql
