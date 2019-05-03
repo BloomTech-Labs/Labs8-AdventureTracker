@@ -1,4 +1,4 @@
-require('@babel/polyfill');
+require('@babel/polyfill/noConflict');
 const cookieParser = require('cookie-parser');
 const secure = require('express-force-https');
 const jwt = require('jsonwebtoken');
