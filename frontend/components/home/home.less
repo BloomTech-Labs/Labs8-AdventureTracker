@@ -1,5 +1,55 @@
 @import "../../lib/styles/variables.less";
 
 .home {
-    color: @black;
+    color: @white;
+}
+
+.jumbotron {
+    display: flex;
+    align-items: center;
+    height: 100vh;
+    width: 100vw;
+    background: url(../../static/adventure-tracker-jumbo.png);
+    background-size: cover;
+    background-position: center;
+    padding: 200px;
+}
+
+.jumbotron__content {
+    display: flex;
+    flex-direction: column;
+    max-width: 520px;
+}
+
+.jumbotron__heading {
+    color: @white;
+    font-size: 10rem;
+    font-weight: 600;
+    line-height: 1.2;
+    border-bottom: 8px solid @orange;
+    margin-bottom: @space-lg;
+}
+
+.jumbotron__text {
+    line-height: 2;
+    margin-bottom: 50px;
+}
+
+.jumbotron__cta-btn {
+    align-self: flex-start;
+    font-size: 2.4rem;
+    padding: @space-sm;
+    background: @orange;
+    border: 0;
+    padding: @space-md;
+    cursor: pointer;
+    &:focus {
+        outline: 2px solid @light-blue;
+    }
+    &:hover {
+        background: @dark-orange;
+    }
+    &:active {
+        background: @darker-orange;
+    }
 }

@@ -7,70 +7,13 @@ import homeImg from "../static/jumbotron-home.jpg";
 import {Divider} from "antd";
 import media from "lib/mediaQueries";
 import Router from "next/router";
+import Home from "../components/home/Home";
 
 const AuthPage = () => {
   const LOGIN = "login";
   const SIGNUP = "signup";
   const [tab, setTab] = useState(LOGIN);
-  return (
-    <AuthPageWrapper>
-      <Title>Adventure Tracker</Title>
-      <Twin>
-        <AuthCard title={tab === SIGNUP ? "Signup" : "Login"}>
-          <SignupForm isVisible={tab === SIGNUP ? true : false} />
-          <LoginForm isVisible={tab === LOGIN ? true : false} />
-
-          <AuthTabGroup size={"large"}>
-            <Tab
-              type={tab === SIGNUP ? "primary" : ""}
-              onClick={() => setTab(SIGNUP)}
-            >
-              <Icon type="user-add" />
-              Signup
-            </Tab>
-            <Tab
-              type={tab === LOGIN ? "primary" : ""}
-              onClick={() => setTab(LOGIN)}
-            >
-              <Icon type="login" />
-              Login
-            </Tab>
-          </AuthTabGroup>
-        </AuthCard>
-        <Divider type="vertical" />
-        <IntroVideo
-          src="https://www.youtube.com/embed/pX7lvQyMvtA"
-          frameborder="0"
-          allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen
-        />
-      </Twin>
-      <Card
-        bodyStyle={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          width: "100%",
-        }}
-      >
-        <h2>
-          Don't want to login? Go to the map directly and try it out!
-        </h2>
-        <Button
-          type="primary"
-          size="large"
-          onClick={() => {
-            Router.push({
-              pathname: "/map",
-            });
-          }}
-        >
-          Try me!
-        </Button>
-      </Card>
-      <BackgroundImage src={homeImg} />
-    </AuthPageWrapper>
-  );
+  return <Home />;
 };
 const AuthPageWrapper = styled.div`
   display: flex;
