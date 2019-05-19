@@ -1,0 +1,42 @@
+@import "../../../../lib/styles/variables.less";
+.navbar {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    background: @light-grey;
+    padding: 0 @space-xl;
+    -webkit-box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    -moz-box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+}
+
+.navbar__logo {
+    font-size: 3.6rem;
+    font-weight: 600;
+    border-right: 2px solid @orange;
+    margin: 0;
+    padding: 0 @space-xl;
+}
+.navbar__nav-list,
+.navbar__auth-list {
+    display: flex;
+    margin: 0;
+    font-size: 2.4rem;
+    font-weight: 550;
+    list-style-type: none;
+    height: 100%;
+}
+.navbar__auth-list {
+    margin: 0 0 0 auto;
+}
+.nav-list__item,
+.auth-list__item {
+    display: inline-block;
+    padding: @space-xl;
+    
+    &:hover {
+        border-bottom: 2px solid @orange;
+        background: @grey;
+    }
+}
+
