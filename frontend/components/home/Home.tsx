@@ -4,26 +4,30 @@ import {
 } from "./base64Images";
 //@ts-ignore
 import AdventureTrackerJumbo from "static/adventure-tracker-jumbo.png";
+//@ts-ignore
 import NorthAmericaWithMarkers from "static/north-america-with-markers.png";
 import "./stylesheets/home.less";
 import "./stylesheets/jumbotron.less";
 import "./stylesheets/plan-your-trip.less";
 import Navbar from "./components/Navbar/Navbar";
 import {
-  InfoSection,
   TextContent,
   Title,
   Description,
 } from "./components/SectionStyles/SectionStyles";
 import BlurImage from "../BlurImage/BlurImage";
-//@ts-ignore
+import {useState} from "react";
 
 export interface HomeProps {}
 
 const Home: React.SFC<HomeProps> = () => {
+  const [navbarMenuActive, setNavbarMenuActive] = useState(false);
   return (
     <div className="home">
-      <Navbar />
+      <Navbar
+        setMenuActive={setNavbarMenuActive}
+        isMenuActive={navbarMenuActive}
+      />
       <section className="jumbotron">
         <BlurImage
           className="jumbotron__bg-image"
@@ -46,7 +50,7 @@ const Home: React.SFC<HomeProps> = () => {
           </button>
         </div>
       </section>
-      <section className="plan-trip">
+      <section className="discover-section plan-trip" id="discover">
         <TextContent>
           <Title>Plan Your Trip</Title>
           <Description>

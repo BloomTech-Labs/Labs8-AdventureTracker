@@ -25,6 +25,10 @@
     @media screen and (max-width: @navbar-tablet) {
         font-size: 3rem;
     }
+    @media screen and (max-width: @tablet) {
+        font-size: 2.4rem;
+        line-height: 1.2;
+    }
 }
 .navbar__nav-list,
 .navbar__auth-list {
@@ -49,12 +53,15 @@
         margin: 0 auto 0 0;
         width: 100%;
     }
+    @media screen and (max-width: 550px) {
+        display: none;
+    }
 }
 .nav-list__item,
 .auth-list__item {
     display: inline-block;
     padding: @space-xl;
-    
+    position: relative;
     &:hover {
         border-bottom: 2px solid @orange;
         background: @grey;
