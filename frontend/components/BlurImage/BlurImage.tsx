@@ -42,7 +42,7 @@ const BlurImage: React.SFC<BlurImageProps> = (props: BlurImageProps) => {
   const {src, base64, alt} = props;
   const currentSrc = loaded ? src : base64;
 
-  return <img {...props} alt={alt} data-src={currentSrc} ref={imgRef} />;
+  return <img {...props} alt={alt} src={currentSrc} ref={imgRef} />;
 };
 
 export default BlurImage;
