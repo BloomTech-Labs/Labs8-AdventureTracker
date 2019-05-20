@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 
 const loadImageWithPromiseTimeout = (src: string) =>
   new Promise((resolve, reject) => {
@@ -25,12 +25,14 @@ export interface BlurImageProps {
 
 const BlurImage: React.SFC<BlurImageProps> = (props: BlurImageProps) => {
   const [loaded, setLoaded] = useState(false);
+  const imgRef = useRef(null);
   useEffect(() => {
     awaitImage();
   }, []);
 
   const awaitImage = async () => {
     try {
+      console.log(imgRef);
       await loadImageWithPromiseTimeout(props.src);
       setLoaded(true);
     } catch {
@@ -40,7 +42,7 @@ const BlurImage: React.SFC<BlurImageProps> = (props: BlurImageProps) => {
   const {src, base64, alt} = props;
   const currentSrc = loaded ? src : base64;
 
-  return <img {...props} alt={alt} src={currentSrc} />;
+  return <img {...props} alt={alt} data-src={currentSrc} ref={imgRef} />;
 };
 
 export default BlurImage;

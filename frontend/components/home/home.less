@@ -7,14 +7,21 @@
 .jumbotron {
     display: flex;
     align-items: center;
+    position: relative;
     height: 100vh;
     width: 100vw;
-    background: url(../../static/adventure-tracker-jumbo.png);
-    background-size: cover;
-    background-position: center;
     padding: 200px;
 }
-
+.jumbotron__bg-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    z-index: -5;
+}
 .jumbotron__content {
     display: flex;
     flex-direction: column;
@@ -52,4 +59,8 @@
     &:active {
         background: @darker-orange;
     }
+}
+
+.plan-trip {
+    overflow: hidden;
 }
