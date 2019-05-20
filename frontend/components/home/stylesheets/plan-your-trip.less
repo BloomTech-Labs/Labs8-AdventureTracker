@@ -1,0 +1,29 @@
+@import "../../../lib/styles/variables.less";
+
+.plan-trip {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background: @light-blue;
+    height: 100vh;
+    width: 100%;
+    padding: @space-xl;
+    overflow: hidden;
+    @media screen and (max-width: @desktop) {
+        flex-direction: column;
+        justify-content: space-between;
+        background: pink;
+    }
+    @media screen and (max-width: @tablet) {
+        justify-content: flex-start;
+        background: #ff4362;
+        padding: 0 @space-sm;
+
+    }
+}
+
+
+.plan-trip__img {
+    max-width: 800px;
+    width: 100%;
+}

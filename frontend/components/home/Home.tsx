@@ -5,7 +5,9 @@ import {
 //@ts-ignore
 import AdventureTrackerJumbo from "static/adventure-tracker-jumbo.png";
 import NorthAmericaWithMarkers from "static/north-america-with-markers.png";
-import "./home.less";
+import "./stylesheets/home.less";
+import "./stylesheets/jumbotron.less";
+import "./stylesheets/plan-your-trip.less";
 import Navbar from "./components/Navbar/Navbar";
 import {
   InfoSection,
