@@ -44,7 +44,7 @@ const Home: React.SFC<HomeProps> = () => {
           </button>
         </div>
       </section>
-      <InfoSection className="plan-trip">
+      <section className="plan-trip">
         <TextContent>
           <Title>Plan Your Trip</Title>
           <Description>
@@ -57,7 +57,7 @@ const Home: React.SFC<HomeProps> = () => {
           base64={blurNorthAmericaWithMarkers}
           alt=""
         />
-      </InfoSection>
+      </section>
     </div>
   );
 };

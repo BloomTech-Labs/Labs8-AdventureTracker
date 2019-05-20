@@ -16,6 +16,6 @@ export default {
 
   phone: "320px",
   tablet: "768px",
-  desktop: "1224px",
-  large_desktop: "1824px",
+  desktop: "1300px",
+  large_desktop: "1600px",
 };

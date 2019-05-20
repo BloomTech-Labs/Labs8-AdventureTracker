@@ -25,6 +25,7 @@ const Title = styled.button`
   padding: 0.6em;
   font-size: 6.4rem;
   border: none;
+  min-width: 500px;
 `;
 
 const Description = styled.p`
