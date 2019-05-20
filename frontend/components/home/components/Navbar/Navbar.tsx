@@ -1,7 +1,11 @@
 import "./navbar.less";
+//@ts-ignore
+import mobileMenu from "static/mobile-menu.png";
+import {useState} from "react";
 export interface NavbarProps {}
 
 const Navbar: React.SFC<NavbarProps> = () => {
+  const [isHamburgerActive, setIsHamburgerActive] = useState(false);
   return (
     <nav className="navbar">
       <h2 className="navbar__logo">
@@ -27,6 +31,20 @@ const Navbar: React.SFC<NavbarProps> = () => {
           <a className="auth-link">Login</a>
         </li>
       </ul>
+      <button
+        className="nav__mobile-menu-btn"
+        onClick={() => setIsHamburgerActive(prevState => !prevState)}
+      >
+        {isHamburgerActive ? (
+          <div className="mobile-menu__content-x">X</div>
+        ) : (
+          <img
+            src={mobileMenu}
+            className="mobile-menu__content-ham"
+            alt="navigation menu closed"
+          />
+        )}
+      </button>
     </nav>
   );
 };
