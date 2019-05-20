@@ -1,0 +1,54 @@
+@import "../../../lib/styles/variables.less";
+
+.share-family {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    @media screen and (max-width: @desktop) {
+        align-items: flex-start;
+        justify-content: center;
+    }
+}
+
+.share-family__img {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    -webkit-transform: scaleX(-1);
+    transform: scaleX(-1);
+    filter: brightness(80%);
+}
+.share-family__content {
+    margin: 0 100px 0 0;
+    @media screen and (max-width: @desktop) {
+        margin: @space-xl 0 0 0;
+        padding: 0 40px;
+    }
+}
+.share-family__title {
+    width: 100%;
+}
+//  {
+//     display: flex;
+//     justify-content: space-around;
+//     align-items: center;
+//     height: 100vh;
+//     max-width: 100vw;
+//     width: 100%;
+//     padding: @space-xl;
+//     overflow: hidden;
+    // @media screen and (max-width: @desktop) {
+    //     flex-direction: column;
+    //     justify-content: space-between;
+    //     background: pink;
+    // }
+    // @media screen and (max-width: @tablet) {
+    //     justify-content: flex-start;
+    //     background: #ff4362;
+    //     padding: 0 @space-sm;
+    // }
+// }

@@ -1,14 +1,18 @@
 import {
   blurAdventureTrackerJumbo,
   blurNorthAmericaWithMarkers,
+  blurFamily,
 } from "./base64Images";
 //@ts-ignore
 import AdventureTrackerJumbo from "static/adventure-tracker-jumbo.png";
 //@ts-ignore
 import NorthAmericaWithMarkers from "static/north-america-with-markers.png";
+//@ts-ignore
+import ShareWithFamilySrc from "static/family.jpg";
 import "./stylesheets/home.less";
 import "./stylesheets/jumbotron.less";
 import "./stylesheets/plan-your-trip.less";
+import "./stylesheets/share-family.less";
 import Navbar from "./components/Navbar/Navbar";
 import {
   TextContent,
@@ -50,7 +54,7 @@ const Home: React.SFC<HomeProps> = () => {
           </button>
         </div>
       </section>
-      <section className="discover-section plan-trip" id="discover">
+      <section className="plan-trip" id="plan-trip">
         <TextContent>
           <Title>Plan Your Trip</Title>
           <Description>
@@ -61,6 +65,20 @@ const Home: React.SFC<HomeProps> = () => {
           className="plan-trip__img"
           src={NorthAmericaWithMarkers}
           base64={blurNorthAmericaWithMarkers}
+          alt=""
+        />
+      </section>
+      <section className="share-family" id="share">
+        <TextContent className="share-family__content">
+          <Title className="share-family__title">Share</Title>
+          <Description>
+            Share your trip with friends and family by sending a link.
+          </Description>
+        </TextContent>
+        <BlurImage
+          className="share-family__img"
+          src={ShareWithFamilySrc}
+          base64={blurFamily}
           alt=""
         />
       </section>

@@ -15,13 +15,13 @@ const Navbar: React.SFC<NavbarProps> = ({setMenuActive, isMenuActive}) => {
       </h2>
       <ul className="navbar__nav-list" aria-label="menu">
         <li className="nav-list__item" role="menuitem" tabIndex={0}>
-          <a href="#discover" className="nav-link">
-            Discover
+          <a href="#plan-trip" className="nav-link">
+            Plan Trip
           </a>
         </li>
         <li className="nav-list__item" role="menuitem" tabIndex={0}>
-          <a href="#about" className="nav-link">
-            About Us
+          <a href="#share" className="nav-link">
+            Share
           </a>
         </li>
         <li className="nav-list__item" role="menuitem" tabIndex={0}>

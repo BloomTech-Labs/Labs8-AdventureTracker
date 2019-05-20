@@ -4,3 +4,4 @@ export {
 export {
   default as blurNorthAmericaWithMarkers,
 } from "./blurNorthAmericaWithMarkers";
+export {default as blurFamily} from "./blurFamily";
