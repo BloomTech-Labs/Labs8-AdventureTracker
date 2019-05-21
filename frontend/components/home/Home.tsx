@@ -23,6 +23,7 @@ import BlurImage from "../BlurImage/BlurImage";
 import {useState} from "react";
 import HamburgerNavMenu from "./components/HamburgerNavMenu/HamburgerNavMenu";
 import WrappedContactForm from "./components/ContactForm/ContactForm";
+import Link from "next/link";
 
 export interface HomeProps {}
 
@@ -54,9 +55,11 @@ const Home: React.SFC<HomeProps> = () => {
             With Adventure Tracker, we want to improve your trip experience
             and keep your friends and family informed of your whereabouts.
           </p>
-          <button className="jumbotron__cta-btn">
-            Start Your Adventure
-          </button>
+          <Link href="/auth">
+            <button className="jumbotron__cta-btn">
+              Start Your Adventure
+            </button>
+          </Link>
         </div>
       </section>
       <section className="plan-trip" id="plan-trip">
