@@ -258,6 +258,16 @@ const MapComponent = compose(
             }}
             onDragEnd={(e: MapEvent) => {
               // updateMarkerPosition(mark.id, e);
+              markDispatch({
+                type: "UPDATE_MARKER",
+                marker: mark,
+                props: {
+                  position: {
+                    lat: e.latLng.lat(),
+                    lng: e.latLng.lng(),
+                  },
+                },
+              });
             }}
             className="marker"
             role="marker"

@@ -4,12 +4,12 @@ import {labels, labelStyle} from "../../../../lib/index";
 import {GREY_PIN} from "../../../../map-icons/markerIcons";
 import moment from "moment";
 
-export default (e: MapEvent, markers: Marker[]) => {
+export default (e: MapEvent, numOfMarkers: number) => {
   const lat: number = e.latLng.lat();
   const lng: number = e.latLng.lng();
   const newMarker: Marker = {
     draggable: true,
-    label: labels[markers.length % labels.length].toUpperCase(),
+    label: labels[numOfMarkers % labels.length].toUpperCase(),
     url: GREY_PIN,
     date: moment(),
     address: "",

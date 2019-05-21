@@ -1,6 +1,7 @@
 import {useReducer} from "react";
 import {Marker} from "../../interfaces";
 import addMarker from "./lib/helpers/addMarker";
+import updateMarker from "./lib/helpers/updateMarker";
 
 interface State {
   markers: Marker[];
@@ -11,6 +12,7 @@ interface Action {
   [key: string]: any;
   markers: Marker[];
   marker: Marker;
+  props: object;
 }
 
 const initialState = {
@@ -24,7 +26,7 @@ const markerReducer = (state: State, action: Action) => {
         ...state,
         markers: [
           ...state.markers,
-          addMarker(action.event, state.markers),
+          addMarker(action.event, state.markers.length),
         ],
       };
     }
@@ -36,6 +38,7 @@ const markerReducer = (state: State, action: Action) => {
     case "UPDATE_MARKER": {
       return {
         ...state,
+        markers: updateMarker(state.markers, action.marker, action.props),
       };
     }
     case "SET_ACTIVE_MARKER": {
