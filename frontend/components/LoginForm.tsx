@@ -84,6 +84,7 @@ const LoginForm: React.SFC<Props> = ({form, isVisible}) => {
               ],
             })(
               <Input
+                size="large"
                 prefix={
                   <Icon type="mail" style={{color: "rgba(0,0,0,.25)"}} />
                 }
@@ -103,6 +104,7 @@ const LoginForm: React.SFC<Props> = ({form, isVisible}) => {
               ],
             })(
               <Input
+                size="large"
                 prefix={
                   <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
                 }

@@ -117,6 +117,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
               ],
             })(
               <Input
+                size="large"
                 prefix={
                   <Icon type="mail" style={{color: "rgba(0,0,0,.25)"}} />
                 }
@@ -137,6 +138,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
               ],
             })(
               <Input
+                size="large"
                 prefix={
                   <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
                 }
@@ -146,7 +148,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
                 onChange={signupInputHandler}
                 addonAfter={
                   <Icon
-                    type={passwordsVisible ? "eye" : "eye-invisible"}
+                    type={passwordsVisible ? "eye-invisible" : "eye"}
                     style={{cursor: "pointer"}}
                     onClick={() => {
                       setPasswordsVisible(!passwordsVisible);
@@ -167,6 +169,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
               ],
             })(
               <Input
+                size="large"
                 prefix={
                   <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
                 }
