@@ -1,6 +1,8 @@
 import "./navbar.less";
 //@ts-ignore
 import mobileMenu from "static/mobile-menu.png";
+import Link from "next/link";
+
 export interface NavbarProps {
   setMenuActive: Function;
   isMenuActive: boolean;
@@ -32,12 +34,14 @@ const Navbar: React.SFC<NavbarProps> = ({setMenuActive, isMenuActive}) => {
       </ul>
       <ul className="navbar__auth-list" aria-label="menu">
         <li className="auth-list__item" role="menuitem" tabIndex={0}>
-          <a className="auth-link" href="/map">
-            Sign up
-          </a>
+          <Link href={{pathname: "/auth", query: {start: "sign-up"}}}>
+            <a className="auth-link">Sign up</a>
+          </Link>
         </li>
         <li className="auth-list__item" role="menuitem" tabIndex={0}>
-          <a className="auth-link">Login</a>
+          <Link href={{pathname: "/auth", query: {start: "login"}}}>
+            <a className="auth-link">Login</a>
+          </Link>
         </li>
       </ul>
       <button

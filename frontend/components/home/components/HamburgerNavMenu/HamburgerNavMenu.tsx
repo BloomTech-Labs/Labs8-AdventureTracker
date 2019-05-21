@@ -8,6 +8,7 @@ import {
   ExitBtn,
   HamDivider,
 } from "./HamburgerStyles";
+import Link from "next/link";
 
 export interface HamburgerNavMenuProps {
   setMenuActive: Function;
@@ -45,14 +46,18 @@ const HamburgerNavMenu: React.SFC<HamburgerNavMenuProps> = ({
       <HamDivider />
       <MenuList aria-label="menu">
         <ListItem role="menuitem" tabIndex={0}>
-          <NavLink href="/auth">
-            <Button>Sign Up</Button>
-          </NavLink>
+          <Link href={{pathname: "/auth", query: {start: "sign-up"}}}>
+            <NavLink href="/auth">
+              <Button>Sign Up</Button>
+            </NavLink>
+          </Link>
         </ListItem>
         <ListItem role="menuitem" tabIndex={0}>
-          <NavLink href="/auth">
-            <Button>Login</Button>
-          </NavLink>
+          <Link href={{pathname: "/auth", query: {start: "login"}}}>
+            <NavLink href="/auth">
+              <Button>Login</Button>
+            </NavLink>
+          </Link>
         </ListItem>
       </MenuList>
     </Nav>
