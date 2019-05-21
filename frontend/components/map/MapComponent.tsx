@@ -33,6 +33,7 @@ import TripModal from "./TripManager/TripModal";
 import {MY_TRIP_BY_ID} from "../resolvers/Queries";
 import getConfig from "next/config";
 import lineReducer from "./reducers/lineReducer/lineReducer";
+import markerReducer from "./reducers/markerReducer/markerReducer";
 const {publicRuntimeConfig} = getConfig();
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
@@ -56,145 +57,148 @@ const MapComponent = compose(
   withScriptjs,
   withGoogleMap,
 )(({client, tripId}) => {
-  const {
-    //Methods
-    addMarker,
-    deleteMarker,
-    setMarkerId,
-    clearMarkerId,
-    updateMarkerPosition,
-    updateAllMarkerLabels,
-    setActiveMarker,
-    clearActiveMarker,
-    toggleMarkerReached,
-    setMarkers,
-    updateMarkerLabelName,
-    setMarkerDate,
-    setStartingMarkers,
-    setMarkersByTime,
-    updateMarkerProps,
-    setDeletedMarkerIds,
-    //State
-    markers,
-    activeMarker,
-    deletedMarkerIds,
-  } = useMarker();
-
+  // const {
+  //   //Methods
+  //   addMarker,
+  //   deleteMarker,
+  //   setMarkerId,
+  //   clearMarkerId,
+  //   updateMarkerPosition,
+  //   updateAllMarkerLabels,
+  //   setActiveMarker,
+  //   clearActiveMarker,
+  //   toggleMarkerReached,
+  //   setMarkers,
+  //   updateMarkerLabelName,
+  //   setMarkerDate,
+  //   setStartingMarkers,
+  //   setMarkersByTime,
+  //   updateMarkerProps,
+  //   setDeletedMarkerIds,
+  //   //State
+  //   markers,
+  //   activeMarker,
+  //   deletedMarkerIds,
+  // } = useMarker();
+  const [markState, markDispatch] = markerReducer();
+  const {markers, activeMarker} = markState;
   const [lineState, lineDispatch] = lineReducer();
-  const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
-  const [saveTripStep, setSaveTripStep] = useState(-1);
-  const [userPosition, setUserPosition] = useState({});
-  const {
-    //state
-    screenLatLng,
-    isScreenOn,
-    crossHairs,
-    googleImageUrl,
-    //methods
-    setScreenOn,
-    setScreenLatLng,
-    onEndScreenCapture,
-    setCrossHairsPosition,
-  } = useScreenCapture();
+  const {lines} = lineState;
+  // const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
+  // const [saveTripStep, setSaveTripStep] = useState(-1);
+  // const [userPosition, setUserPosition] = useState({});
+  // const {
+  //   //state
+  //   screenLatLng,
+  //   isScreenOn,
+  //   crossHairs,
+  //   googleImageUrl,
+  //   //methods
+  //   setScreenOn,
+  //   setScreenLatLng,
+  //   onEndScreenCapture,
+  //   setCrossHairsPosition,
+  // } = useScreenCapture();
 
-  const {
-    //state
-    setTripModalOpen,
-    //methods
-    tripModalOpen,
-  } = useTrip();
+  // const {
+  //   //state
+  //   setTripModalOpen,
+  //   //methods
+  //   tripModalOpen,
+  // } = useTrip();
   const [tripExists, setTripExists] = useState(false);
   useEffect(() => {
     lineDispatch({type: "UPDATE_LINES", markers});
-    const m1 = setInterval(() => {
-      setMarkersByTime(markers);
-    }, 30000);
-    return () => {
-      clearInterval(m1);
-    };
+    // const m1 = setInterval(() => {
+    //   setMarkersByTime(markers);
+    // }, 30000);
+    // return () => {
+    //   clearInterval(m1);
+    // };
   }, [markers]);
 
-  useEffect(() => {
-    if (saveTripStep !== 1) {
-      setScreenOn(false);
-    } else {
-      setScreenOn(true);
-    }
-  }, [saveTripStep]);
-  useEffect(() => {
-    const fetchInitialEntities = async () => {
-      if (tripId) {
-        const {data} = await client.query({
-          query: MY_TRIP_BY_ID,
-          variables: {
-            id: tripId,
-          },
-        });
-        console.log(data);
-        if (!data.tripById) {
-          message.error(
-            `Sorry either you are not logged in or the trip does not exist`,
-          );
-        } else {
-          const {markers} = data.tripById;
-          setTripExists(true);
-          setStartingMarkers(markers);
-          return data;
-        }
-      }
-    };
-    fetchInitialEntities();
-    window.addEventListener("mousemove", setCrossHairsPosition);
-    return () => {
-      window.removeEventListener("mousemove", setCrossHairsPosition);
-    };
-  }, []);
-  useEffect(() => {
-    onEndScreenCapture(400, 400);
-  }, [screenLatLng]);
+  // useEffect(() => {
+  //   if (saveTripStep !== 1) {
+  //     setScreenOn(false);
+  //   } else {
+  //     setScreenOn(true);
+  //   }
+  // }, [saveTripStep]);
+  // useEffect(() => {
+  //   const fetchInitialEntities = async () => {
+  //     if (tripId) {
+  //       const {data} = await client.query({
+  //         query: MY_TRIP_BY_ID,
+  //         variables: {
+  //           id: tripId,
+  //         },
+  //       });
+  //       console.log(data);
+  //       if (!data.tripById) {
+  //         message.error(
+  //           `Sorry either you are not logged in or the trip does not exist`,
+  //         );
+  //       } else {
+  //         const {markers} = data.tripById;
+  //         setTripExists(true);
+  //         setStartingMarkers(markers);
+  //         return data;
+  //       }
+  //     }
+  //   };
+  //   fetchInitialEntities();
+  //   window.addEventListener("mousemove", setCrossHairsPosition);
+  //   return () => {
+  //     window.removeEventListener("mousemove", setCrossHairsPosition);
+  //   };
+  // }, []);
+  // useEffect(() => {
+  //   onEndScreenCapture(400, 400);
+  // }, [screenLatLng]);
   return (
     <GoogleMap
       defaultZoom={6}
       onClick={e => {
-        if (!isScreenOn) {
-          addMarker(e);
-          setInfoWindowOpen(false);
-        } else {
-          setScreenLatLng(e);
-        }
+        // if (!isScreenOn) {
+        markDispatch({type: "ADD_MARKER", event: e});
+        // addMarker(e);
+        // setInfoWindowOpen(false);
+        // } else {
+        // setScreenLatLng(e);
       }}
       options={{
         disableDefaultUI: true,
       }}
       defaultCenter={{lat: 31, lng: -83}}
     >
-      <MapContext.Provider
+      {/* <MapContext.Provider
         value={{
-          activeMarker,
-          markers,
-          toggleMarkerReached,
-          clearActiveMarker,
-          setMarkers,
-          setActiveMarker,
-          updateMarkerLabelName,
-          setMarkerDate,
-          setScreenOn,
-          isScreenOn,
-          crossHairs,
-          setSaveTripStep,
-          setTripModalOpen,
-          setUserPosition,
-          userPosition,
-          googleImageUrl,
-          tripExists,
-          tripId,
-          deleteMarker,
-          deletedMarkerIds,
-          setDeletedMarkerIds,
-          updateMarkerProps,
-          updateAllMarkerLabels,
-          clearMarkerId,
-          setInfoWindowOpen,
+          markers
+          // activeMarker,
+          // markers,
+          // toggleMarkerReached,
+          // clearActiveMarker,
+          // setMarkers,
+          // setActiveMarker,
+          // updateMarkerLabelName,
+          // setMarkerDate,
+          // setScreenOn,
+          // isScreenOn,
+          // crossHairs,
+          // setSaveTripStep,
+          // setTripModalOpen,
+          // setUserPosition,
+          // userPosition,
+          // googleImageUrl,
+          // tripExists,
+          // tripId,
+          // deleteMarker,
+          // deletedMarkerIds,
+          // setDeletedMarkerIds,
+          // updateMarkerProps,
+          // updateAllMarkerLabels,
+          // clearMarkerId,
+          // setInfoWindowOpen,
         }}
       >
         {isInfoWindowOpen && (
@@ -218,7 +222,7 @@ const MapComponent = compose(
         isModalVisible={tripModalOpen}
         setIsModalVisible={setTripModalOpen}
       />
-      <Marker position={userPosition} />
+      <Marker position={userPosition} /> */}
       {markers.map((mark: IMarker) => {
         return (
           <MarkerWithLabel
@@ -240,17 +244,18 @@ const MapComponent = compose(
             }}
             date={mark.date}
             onClick={() => {
-              setMarkerId(mark.id);
-              setActiveMarker(mark);
-              setInfoWindowOpen(true);
+              // setMarkerId(mark.id);
+              // setActiveMarker(mark);
+              // setInfoWindowOpen(true);
+              markDispatch({type: "SET_ACTIVE_MARKER", marker: mark});
             }}
             onDragStart={() => {
-              setMarkerId(mark.id);
-              setActiveMarker(mark);
-              setInfoWindowOpen(false);
+              // setMarkerId(mark.id);
+              // setActiveMarker(mark);
+              // setInfoWindowOpen(false);
             }}
             onDragEnd={(e: MapEvent) => {
-              updateMarkerPosition(mark.id, e);
+              // updateMarkerPosition(mark.id, e);
             }}
             className="marker"
             role="marker"
@@ -259,7 +264,7 @@ const MapComponent = compose(
           </MarkerWithLabel>
         );
       })}
-      {lineState.lines.map((line: IPolyline) => {
+      {lines.map((line: IPolyline) => {
         return (
           <Polyline
             key={line.id}

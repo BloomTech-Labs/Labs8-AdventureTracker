@@ -1,5 +1,3 @@
-export {greyLine, dashedLine, solidBlackLine};
-
 // thin grey is not reached yet and the person has not started that path
 
 const greyLine = {
@@ -29,3 +27,5 @@ const solidBlackLine = {
   strokeWeight: 8,
   strokeColor: "#000000",
 };
+
+export default {greyLine, dashedLine, solidBlackLine};

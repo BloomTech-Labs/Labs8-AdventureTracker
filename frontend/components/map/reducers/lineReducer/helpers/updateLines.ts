@@ -2,12 +2,12 @@ import uuidv4 from "uuid/v4";
 import {Marker} from "../../../interfaces/marker.interface";
 
 //Refer to lines.js for what they represent in this app
-import {greyLine, solidBlackLine, dashedLine} from "../../../lib/lines";
+import {lineTypes} from "../../../lib/index";
 
 export default (markers: Marker[]) => {
   const lines = [];
   let line: any[] = [];
-
+  const {greyLine, dashedLine, solidBlackLine} = lineTypes;
   for (let i = 0; i < markers.length; i++) {
     let lineOptions = {};
     let markerLat = markers[i].position.lat;

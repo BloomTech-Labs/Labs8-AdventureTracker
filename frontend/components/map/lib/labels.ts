@@ -1,3 +1,1 @@
-export {letters};
-
-const letters = "abcdefghijklmnopqrstuvwxyz";
+export default "abcdefghijklmnopqrstuvwxyz";
