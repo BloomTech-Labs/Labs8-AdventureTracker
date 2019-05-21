@@ -21,6 +21,7 @@ import {
 } from "./components/SectionStyles/SectionStyles";
 import BlurImage from "../BlurImage/BlurImage";
 import {useState} from "react";
+import HamburgerNavMenu from "./components/HamburgerNavMenu/HamburgerNavMenu";
 
 export interface HomeProps {}
 
@@ -32,6 +33,9 @@ const Home: React.SFC<HomeProps> = () => {
         setMenuActive={setNavbarMenuActive}
         isMenuActive={navbarMenuActive}
       />
+      {navbarMenuActive ? (
+        <HamburgerNavMenu setMenuActive={setNavbarMenuActive} />
+      ) : null}
       <section className="jumbotron">
         <BlurImage
           className="jumbotron__bg-image"
@@ -82,6 +86,7 @@ const Home: React.SFC<HomeProps> = () => {
           alt=""
         />
       </section>
+      <section className="contact" id="contact" />
     </div>
   );
 };
