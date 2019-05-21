@@ -1,8 +1,8 @@
 import uuidv4 from "uuid/v4";
-import {Marker} from "../../../interfaces/marker.interface";
+import {Marker} from "../../../../interfaces/marker.interface";
 
 //Refer to lines.js for what they represent in this app
-import {lineTypes} from "../../../lib/index";
+import {lineTypes} from "../../../../lib/index";
 
 export default (markers: Marker[]) => {
   const lines = [];

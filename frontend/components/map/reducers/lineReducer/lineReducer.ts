@@ -1,6 +1,6 @@
 import {useReducer} from "react";
 import {Marker} from "../../interfaces";
-import {updateLines} from "./helpers";
+import {updateLines} from "./lib/helpers";
 
 interface Action {
   type: string;
