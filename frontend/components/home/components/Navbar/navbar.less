@@ -14,6 +14,9 @@
     -webkit-box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
     -moz-box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
     box-shadow: 0px 4px 4px 0px rgba(0,0,0,0.25);
+    @media screen and (max-width: 890px) {
+        justify-content: space-between;
+    }
 }
 
 .navbar__logo {
@@ -22,12 +25,15 @@
     border-right: 2px solid @orange;
     margin: 0;
     padding: 0 @space-xl;
-    @media screen and (max-width: @navbar-tablet) {
+    @media screen and (max-width: 890px) {
         font-size: 3rem;
     }
     @media screen and (max-width: @tablet) {
         font-size: 2.4rem;
         line-height: 1.2;
+    }
+    @media screen and (max-width: 550px) {
+        border: none;
     }
 }
 .navbar__nav-list,
@@ -43,13 +49,13 @@
     }
 }
 .navbar__nav-list {
-    @media screen and (max-width: @navbar-tablet) {
+    @media screen and (max-width: 890px) {
         display: none;
     }
 }
 .navbar__auth-list {
     margin: 0 0 0 auto;
-    @media screen and (max-width: @navbar-tablet) {
+    @media screen and (max-width: 890px) {
         margin: 0 auto 0 0;
         width: 100%;
     }
@@ -79,7 +85,7 @@
     min-width: 50px;
     font-size: 2.4rem;
     font-weight: 600;
-    @media screen and (max-width: @navbar-tablet) {
+    @media screen and (max-width: 890px) {
         display: flex;
         justify-content: center;
         align-items: center;

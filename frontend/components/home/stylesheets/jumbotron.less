@@ -6,9 +6,10 @@
     position: relative;
     height: 100vh;
     width: 100vw;
-    padding: 200px;
+    padding: 0px 200px;
     @media screen and (max-width: @desktop) {
     flex-direction: column;
+    justify-content: center;
     }
 }
 .jumbotron__bg-image {
@@ -28,6 +29,7 @@
     max-width: 520px;
     width: 100vw;
     padding: 1em;
+    margin-top: @space-lg;
 }
 
 .jumbotron__heading {
@@ -39,6 +41,9 @@
     margin-bottom: @space-lg;
     @media screen and (max-width: @tablet) {
         font-size: 4rem;
+    }
+    @media screen and (max-height: 650px) {
+        font-size: 3.6rem;
     }
 }
 
