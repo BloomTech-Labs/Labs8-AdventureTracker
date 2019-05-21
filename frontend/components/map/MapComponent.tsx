@@ -32,6 +32,7 @@ import StepsStatusBar from "./SaveTripProcess/StepsStatusBar";
 import TripModal from "./TripManager/TripModal";
 import {MY_TRIP_BY_ID} from "../resolvers/Queries";
 import getConfig from "next/config";
+import lineReducer from "./reducers/lineReducer/lineReducer";
 const {publicRuntimeConfig} = getConfig();
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
@@ -79,7 +80,7 @@ const MapComponent = compose(
     deletedMarkerIds,
   } = useMarker();
 
-  const {polylines, updateLines} = usePolyline();
+  const [lineState, lineDispatch] = lineReducer();
   const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
   const [saveTripStep, setSaveTripStep] = useState(-1);
   const [userPosition, setUserPosition] = useState({});
@@ -104,7 +105,7 @@ const MapComponent = compose(
   } = useTrip();
   const [tripExists, setTripExists] = useState(false);
   useEffect(() => {
-    updateLines(markers);
+    lineDispatch({type: "UPDATE_LINES", markers});
     const m1 = setInterval(() => {
       setMarkersByTime(markers);
     }, 30000);
@@ -258,7 +259,7 @@ const MapComponent = compose(
           </MarkerWithLabel>
         );
       })}
-      {polylines.map((line: IPolyline) => {
+      {lineState.lines.map((line: IPolyline) => {
         return (
           <Polyline
             key={line.id}
