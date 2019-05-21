@@ -173,7 +173,16 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
                 prefix={
                   <Icon type="lock" style={{color: "rgba(0,0,0,.25)"}} />
                 }
-                type="password"
+                type={passwordsVisible ? "" : "password"}
+                addonAfter={
+                  <Icon
+                    type={passwordsVisible ? "eye-invisible" : "eye"}
+                    style={{cursor: "pointer"}}
+                    onClick={() => {
+                      setPasswordsVisible(!passwordsVisible);
+                    }}
+                  />
+                }
                 placeholder="Enter Password again!"
                 name="password2"
                 onChange={signupInputHandler}
