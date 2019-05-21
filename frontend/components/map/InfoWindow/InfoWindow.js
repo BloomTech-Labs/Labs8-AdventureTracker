@@ -12,7 +12,7 @@ const confirm = Modal.confirm;
 const CustomInfoWindow = ({
   activeMarker,
   setInfoWindowOpen,
-  updateMarkerProps,
+  // updateMarkerProps,
 }) => {
   const position =
     activeMarker.position !== undefined
@@ -28,7 +28,8 @@ const CustomInfoWindow = ({
       }}
       activeMarker={activeMarker}
     >
-      <>
+      <div>s</div>
+      {/* <>
         <ExitBtn
           type="danger"
           onClick={() => {
@@ -72,7 +73,7 @@ const CustomInfoWindow = ({
             <MarkerOptions />
           </CardGrid>
         </StyledCard>
-      </>
+      </> */}
     </StyledInfoWindow>
   );
 };

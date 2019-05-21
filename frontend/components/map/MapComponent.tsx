@@ -84,7 +84,7 @@ const MapComponent = compose(
   const {markers, activeMarker} = markState;
   const [lineState, lineDispatch] = lineReducer();
   const {lines} = lineState;
-  // const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
+  const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
   // const [saveTripStep, setSaveTripStep] = useState(-1);
   // const [userPosition, setUserPosition] = useState({});
   // const {
@@ -162,7 +162,7 @@ const MapComponent = compose(
         // if (!isScreenOn) {
         markDispatch({type: "ADD_MARKER", event: e});
         // addMarker(e);
-        // setInfoWindowOpen(false);
+        setInfoWindowOpen(false);
         // } else {
         // setScreenLatLng(e);
       }}
@@ -171,6 +171,12 @@ const MapComponent = compose(
       }}
       defaultCenter={{lat: 31, lng: -83}}
     >
+      {isInfoWindowOpen && (
+        <CustomInfoWindow
+          activeMarker={activeMarker}
+          setInfoWindowOpen={setInfoWindowOpen}
+        />
+      )}
       {/* <MapContext.Provider
         value={{
           markers
@@ -245,14 +251,12 @@ const MapComponent = compose(
             date={mark.date}
             onClick={() => {
               // setMarkerId(mark.id);
-              // setActiveMarker(mark);
-              // setInfoWindowOpen(true);
               markDispatch({type: "SET_ACTIVE_MARKER", marker: mark});
+              setInfoWindowOpen(true);
             }}
             onDragStart={() => {
-              // setMarkerId(mark.id);
-              // setActiveMarker(mark);
-              // setInfoWindowOpen(false);
+              setInfoWindowOpen(false);
+              markDispatch({type: "SET_ACTIVE_MARKER", marker: mark});
             }}
             onDragEnd={(e: MapEvent) => {
               // updateMarkerPosition(mark.id, e);
