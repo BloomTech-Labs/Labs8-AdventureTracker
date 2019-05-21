@@ -22,6 +22,7 @@ import {
 import BlurImage from "../BlurImage/BlurImage";
 import {useState} from "react";
 import HamburgerNavMenu from "./components/HamburgerNavMenu/HamburgerNavMenu";
+import WrappedContactForm from "./components/ContactForm/ContactForm";
 
 export interface HomeProps {}
 
@@ -86,7 +87,10 @@ const Home: React.SFC<HomeProps> = () => {
           alt=""
         />
       </section>
-      <section className="contact" id="contact" />
+      <section className="contact" id="contact">
+        <h2 className="contact__title">Contact Us!</h2>
+        <WrappedContactForm />
+      </section>
     </div>
   );
 };
