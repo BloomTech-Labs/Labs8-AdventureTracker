@@ -1,6 +1,6 @@
 import {Button, Card, Divider, Checkbox, Modal} from "antd";
-import {InfoWindow, GoogleMap} from "react-google-maps";
-import {useRef, useEffect, useContext} from "react";
+import {InfoWindow} from "react-google-maps";
+import {useEffect, useContext} from "react";
 import MapContext from "../../context/MapContext";
 import styled from "styled-components";
 import ReachedCheckbox from "./ReachedCheckbox";
@@ -56,12 +56,14 @@ const CustomInfoWindow = ({setInfoWindowOpen}) => {
           <CardGrid>
             <Button
               onClick={async () => {
-                const {address} = await getReverseGeocoding(lat, lng);
-                markDispatch({
-                  type: "UPDATE_MARKER",
-                  marker: activeMarker,
-                  props: {address: address.display_name},
-                });
+                const data = await getReverseGeocoding(lat, lng);
+                if (data.address) {
+                  markDispatch({
+                    type: "UPDATE_MARKER",
+                    marker: activeMarker,
+                    props: {address: data.address.display_name},
+                  });
+                }
               }}
               style={{marginBottom: "12px"}}
             >
