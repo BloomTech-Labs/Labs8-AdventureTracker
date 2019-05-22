@@ -13,7 +13,9 @@ const MarkerOptions: React.SFC<Props> = () => {
   //   clearMarkerId,
   //   setInfoWindowOpen,
   // } = useContext(MapContext);
-  const {markState, markDispatch} = useContext(MapContext);
+  const {markState, markDispatch, setInfoWindowOpen} = useContext(
+    MapContext,
+  );
   const {activeMarker} = markState;
   return (
     <>
@@ -46,6 +48,7 @@ const MarkerOptions: React.SFC<Props> = () => {
                 type: "DELETE_MARKER",
                 marker: activeMarker,
               });
+              setInfoWindowOpen(false);
             },
           });
         }}

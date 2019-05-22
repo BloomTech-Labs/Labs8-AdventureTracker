@@ -176,6 +176,7 @@ const MapComponent = compose(
           markDispatch,
           lineState,
           lineDispatch,
+          setInfoWindowOpen,
         }}
       >
         {isInfoWindowOpen && (
