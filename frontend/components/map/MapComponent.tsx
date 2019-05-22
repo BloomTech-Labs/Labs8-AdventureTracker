@@ -16,13 +16,7 @@ import {
 import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 import ProgressCircle from "./ProgressCircle";
 import OptionsMenu from "./OptionsMenu";
-import {
-  useMarker,
-  usePolyline,
-  useInfoWindow,
-  useScreenCapture,
-  useTrip,
-} from "./state-and-methods/index";
+import {useInfoWindow} from "./state-and-methods/index";
 import CustomInfoWindow from "./InfoWindow/InfoWindow";
 import {message} from "antd";
 import {MapLoadingElement} from "./MapLoadingElement";
@@ -81,7 +75,7 @@ const MapComponent = compose(
   //   deletedMarkerIds,
   // } = useMarker();
   const [markState, markDispatch] = markerReducer();
-  const {activeMarker, markers} = markState;
+  const {markers} = markState;
   const [lineState, lineDispatch] = lineReducer();
   const {lines} = lineState;
   const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
