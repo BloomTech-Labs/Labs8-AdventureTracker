@@ -5,14 +5,6 @@ const confirm = Modal.confirm;
 interface Props {}
 
 const MarkerOptions: React.SFC<Props> = () => {
-  // const {
-  //   updateMarkerProps,
-  //   activeMarker,
-  //   deleteMarker,
-  //   updateAllMarkerLabels,
-  //   clearMarkerId,
-  //   setInfoWindowOpen,
-  // } = useContext(MapContext);
   const {markState, markDispatch, setInfoWindowOpen} = useContext(
     MapContext,
   );
