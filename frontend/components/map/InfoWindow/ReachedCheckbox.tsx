@@ -37,6 +37,7 @@ const ReachedCheckbox = () => {
           });
         } else if (
           activeMarker.hasReached &&
+          markers[activeIndex + 1] &&
           markers[activeIndex + 1].hasReached
         ) {
           confirm({
