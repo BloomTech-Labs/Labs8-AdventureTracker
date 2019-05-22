@@ -21,9 +21,13 @@ const MarkerOptions: React.SFC<Props> = () => {
         style={{marginBottom: "12px"}}
         checked={activeMarker.draggable}
         onClick={() => {
-          // updateMarkerProps(activeMarker, {
-          //   draggable: !activeMarker.draggable,
-          // });
+          markDispatch({
+            type: "UPDATE_MARKER",
+            marker: activeMarker,
+            props: {
+              draggable: !activeMarker.draggable,
+            },
+          });
         }}
       >
         Marker Draggable
