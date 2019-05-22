@@ -42,10 +42,10 @@ const MarkerOptions: React.SFC<Props> = () => {
             cancelText: "No",
             onOk() {
               message.info(`Marker has been deleted!`);
-              // deleteMarker(activeMarker.id);
-              // updateAllMarkerLabels(activeMarker.id);
-              // clearMarkerId();
-              // setInfoWindowOpen(false);
+              markDispatch({
+                type: "DELETE_MARKER",
+                marker: activeMarker,
+              });
             },
           });
         }}

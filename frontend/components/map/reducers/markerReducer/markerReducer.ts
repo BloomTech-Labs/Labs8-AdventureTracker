@@ -1,7 +1,10 @@
 import {useReducer} from "react";
 import {Marker} from "../../interfaces";
-import addMarker from "./lib/helpers/addMarker";
-import updateMarker from "./lib/helpers/updateMarker";
+import {
+  addMarker,
+  updateMarker,
+  findMarkerIndex,
+} from "./lib/helpers/index";
 
 interface State {
   markers: Marker[];
@@ -31,8 +34,13 @@ const markerReducer = (state: State, action: Action) => {
       };
     }
     case "DELETE_MARKER": {
+      const index = findMarkerIndex(state.markers, action.marker);
       return {
         ...state,
+        markers: [
+          ...state.markers.slice(0, index),
+          ...state.markers.slice(index + 1),
+        ],
       };
     }
     case "UPDATE_MARKER": {
