@@ -9,7 +9,6 @@ import {Card, Button, Icon} from "antd";
 import homeImg from "static/jumbotron-home.jpg";
 //@ts-ignore
 import media from "lib/mediaQueries";
-import {Divider} from "antd";
 
 export interface AuthProps {
   router: {
@@ -60,10 +59,11 @@ const AuthPageWrapper = styled.div`
   align-items: center;
   flex-direction: column;
   padding-top: 12px;
+  overflow-y: scroll;
+  height: 100vh;
 `;
 
 const Title = styled.h1`
-  margin-top: 128px;
   text-align: center;
   font-weight: 800;
   font-size: 8rem;

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 //@ts-ignore
 import vars from "lib/styles/variables";
+//@ts-ignore
+import media from "lib/mediaQueries";
 const InfoSection = styled.section`
   display: flex;
   justify-content: space-around;
@@ -24,8 +26,10 @@ const Title = styled.button`
   background: ${vars.orange};
   padding: 0.6em;
   font-size: 6.4rem;
+  min-height: 120px;
   border: none;
-  min-width: 500px;
+  width: 100%;
+  ${media.phone` font-size: 4rem;`}
 `;
 
 const Description = styled.p`
