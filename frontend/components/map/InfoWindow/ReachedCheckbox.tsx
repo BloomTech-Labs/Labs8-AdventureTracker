@@ -3,6 +3,7 @@ import {Checkbox, Modal} from "antd";
 import {Marker} from "../interfaces/marker.interface";
 import MapContext from "../../context/MapContext";
 import {GREY_PIN, CHECKED_PIN} from "../map-icons/markerIcons";
+import {decideMarkerURL} from "../reducers/markerReducer/lib/helpers";
 const confirm = Modal.confirm;
 const ReachedCheckbox = () => {
   const {markState, markDispatch} = useContext(MapContext);
@@ -58,12 +59,18 @@ const ReachedCheckbox = () => {
             },
           });
         } else {
+          const activeMarkerWithReachedUpdated = {
+            ...activeMarker,
+            hasReached: e.target.checked,
+          };
           markDispatch({
             type: "UPDATE_MARKER",
             marker: activeMarker,
             props: {
               hasReached: e.target.checked,
-              url: e.target.checked ? CHECKED_PIN : GREY_PIN,
+              url: e.target.checked
+                ? CHECKED_PIN
+                : decideMarkerURL(activeMarkerWithReachedUpdated),
             },
           });
         }
