@@ -5,23 +5,25 @@ const confirm = Modal.confirm;
 interface Props {}
 
 const MarkerOptions: React.SFC<Props> = () => {
-  const {
-    updateMarkerProps,
-    activeMarker,
-    deleteMarker,
-    updateAllMarkerLabels,
-    clearMarkerId,
-    setInfoWindowOpen,
-  } = useContext(MapContext);
+  // const {
+  //   updateMarkerProps,
+  //   activeMarker,
+  //   deleteMarker,
+  //   updateAllMarkerLabels,
+  //   clearMarkerId,
+  //   setInfoWindowOpen,
+  // } = useContext(MapContext);
+  const {markState, markDispatch} = useContext(MapContext);
+  const {activeMarker} = markState;
   return (
     <>
       <Checkbox
         style={{marginBottom: "12px"}}
         checked={activeMarker.draggable}
         onClick={() => {
-          updateMarkerProps(activeMarker, {
-            draggable: !activeMarker.draggable,
-          });
+          // updateMarkerProps(activeMarker, {
+          //   draggable: !activeMarker.draggable,
+          // });
         }}
       >
         Marker Draggable
@@ -36,10 +38,10 @@ const MarkerOptions: React.SFC<Props> = () => {
             cancelText: "No",
             onOk() {
               message.info(`Marker has been deleted!`);
-              deleteMarker(activeMarker.id);
-              updateAllMarkerLabels(activeMarker.id);
-              clearMarkerId();
-              setInfoWindowOpen(false);
+              // deleteMarker(activeMarker.id);
+              // updateAllMarkerLabels(activeMarker.id);
+              // clearMarkerId();
+              // setInfoWindowOpen(false);
             },
           });
         }}

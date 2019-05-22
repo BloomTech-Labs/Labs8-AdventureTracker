@@ -5,14 +5,15 @@ interface ArrivalDatePickerProps {}
 
 const ArrivalDatePicker: React.SFC<ArrivalDatePickerProps> = () => {
   // const { dateAndTime, setDateAndTime } = useContext(Context);
-  const {activeMarker, setMarkerDate} = useContext(MapContext);
-
+  // const {activeMarker, setMarkerDate} = useContext(MapContext);
+  const {markState, markDispatch} = useContext(MapContext);
+  const {activeMarker} = markState;
   function onChange(value: object, dateString: string) {
     console.log(typeof value, typeof dateString);
-    setMarkerDate(activeMarker, value);
+    // setMarkerDate(activeMarker, value);
   }
   function onOk(value: object) {
-    setMarkerDate(activeMarker, value);
+    // setMarkerDate(activeMarker, value);
   }
   return (
     <DatePicker

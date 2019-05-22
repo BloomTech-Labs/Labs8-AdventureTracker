@@ -1,6 +1,7 @@
 import {Button, Card, Divider, Checkbox, Modal} from "antd";
 import {InfoWindow, GoogleMap} from "react-google-maps";
-import {useRef, useEffect} from "react";
+import {useRef, useEffect, useContext} from "react";
+import MapContext from "../../context/MapContext";
 import styled from "styled-components";
 import ReachedCheckbox from "./ReachedCheckbox";
 import MarkerNameInput from "./MarkerNameInput";
@@ -9,11 +10,9 @@ import getReverseGeocoding from "../../../lib/requestEndpoints/getReverseGeocodi
 import MarkerOptions from "./MarkerOptions";
 
 const confirm = Modal.confirm;
-const CustomInfoWindow = ({
-  activeMarker,
-  setInfoWindowOpen,
-  // updateMarkerProps,
-}) => {
+const CustomInfoWindow = ({setInfoWindowOpen}) => {
+  const {markState, markDispatch} = useContext(MapContext);
+  const {activeMarker} = markState;
   const position =
     activeMarker.position !== undefined
       ? activeMarker.position
@@ -28,8 +27,7 @@ const CustomInfoWindow = ({
       }}
       activeMarker={activeMarker}
     >
-      <div>s</div>
-      {/* <>
+      <>
         <ExitBtn
           type="danger"
           onClick={() => {
@@ -59,8 +57,10 @@ const CustomInfoWindow = ({
             <Button
               onClick={async () => {
                 const {address} = await getReverseGeocoding(lat, lng);
-                updateMarkerProps(activeMarker, {
-                  address: address.display_name,
+                markDispatch({
+                  type: "UPDATE_MARKER",
+                  marker: activeMarker,
+                  props: {address: address.display_name},
                 });
               }}
               style={{marginBottom: "12px"}}
@@ -73,7 +73,7 @@ const CustomInfoWindow = ({
             <MarkerOptions />
           </CardGrid>
         </StyledCard>
-      </> */}
+      </>
     </StyledInfoWindow>
   );
 };

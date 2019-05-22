@@ -159,7 +159,6 @@ const MapComponent = compose(
       onClick={e => {
         // if (!isScreenOn) {
         markDispatch({type: "ADD_MARKER", event: e});
-        // addMarker(e);
         setInfoWindowOpen(false);
         // } else {
         // setScreenLatLng(e);
@@ -169,12 +168,18 @@ const MapComponent = compose(
       }}
       defaultCenter={{lat: 31, lng: -83}}
     >
-      {isInfoWindowOpen && (
-        <CustomInfoWindow
-          activeMarker={markState.activeMarker}
-          setInfoWindowOpen={setInfoWindowOpen}
-        />
-      )}
+      <MapContext.Provider
+        value={{
+          markState,
+          markDispatch,
+          lineState,
+          lineDispatch,
+        }}
+      >
+        {isInfoWindowOpen && (
+          <CustomInfoWindow setInfoWindowOpen={setInfoWindowOpen} />
+        )}
+      </MapContext.Provider>
       {/* <MapContext.Provider
         value={{
           markers
@@ -248,7 +253,6 @@ const MapComponent = compose(
             }}
             date={mark.date}
             onClick={() => {
-              // setMarkerId(mark.id);
               markDispatch({type: "SET_ACTIVE_MARKER", marker: mark});
               setInfoWindowOpen(true);
             }}
@@ -257,7 +261,6 @@ const MapComponent = compose(
               markDispatch({type: "SET_ACTIVE_MARKER", marker: mark});
             }}
             onDragEnd={(e: MapEvent) => {
-              // updateMarkerPosition(mark.id, e);
               markDispatch({
                 type: "UPDATE_MARKER",
                 marker: mark,
