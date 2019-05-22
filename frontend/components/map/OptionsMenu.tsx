@@ -65,7 +65,12 @@ const OverlayMenu = props => {
   //   deletedMarkerIds,
   //   setDeletedMarkerIds,
   // } = useContext(MapContext);
-  const {markState, markDispatch} = useContext(MapContext);
+  const {
+    markState,
+    markDispatch,
+    userLocationMarker,
+    setUserLocationMarker,
+  } = useContext(MapContext);
   const [updateTripLoading, setUpdateTripLoading] = useState(false);
   return (
     // <Mutation
@@ -137,32 +142,41 @@ const OverlayMenu = props => {
           <Icon type="link" /> Share
         </MenuItem>
       </CopyToClipboard>
-      {/* <MenuItem
-            onClick={() => {
-              if (!userPosition.lat) {
-                confirm({
-                  title: "Allow access to find your location?",
-                  content:
-                    "A marker will be placed at your location,\
+      <MenuItem
+        onClick={() => {
+          if (!userLocationMarker.isVisible) {
+            confirm({
+              title: "Allow access to find your location?",
+              content:
+                "A marker will be placed at your location,\
                 this will let followers know your current position. \
                 It might be in-accurate since GPS signals can be interfered with.",
-                  onOk() {
-                    const statusObj = getUserLocation(setUserPosition);
-                    if (statusObj.status === "failed") {
-                      message.error("We could not get your location.");
-                    }
-                  },
-                });
-              } else {
-                const statusObj = getUserLocation(setUserPosition);
-                if (statusObj.status === "failed") {
-                  message.error("We could not get your location.");
+              onOk() {
+                if (navigator.geolocation) {
+                  navigator.geolocation.getCurrentPosition(position => {
+                    const {coords} = position;
+                    setUserLocationMarker({
+                      position: {
+                        lat: coords.latitude,
+                        lng: coords.longitude,
+                      },
+                      isVisible: true,
+                    });
+                  });
+                } else {
+                  message.error(
+                    "Your browser does not support finding your location.",
+                  );
                 }
-              }
-            }}
-          >
-            {userPosition.lat ? "Update my position" : "Mark my position"}
-          </MenuItem> */}
+              }, //onOK
+            });
+          }
+        }}
+      >
+        {userLocationMarker.isVisible
+          ? "Update my position"
+          : "Update my position"}
+      </MenuItem>
     </MainMenu>
     //   )}
     // </Mutation>
