@@ -78,7 +78,7 @@ const MapComponent = compose(
   const {markers} = markState;
   const [lineState, lineDispatch] = lineReducer();
   const {lines} = lineState;
-  const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
+  const [isInfoWindowOpen, setInfoWindowOpen] = useState();
   // const [saveTripStep, setSaveTripStep] = useState(-1);
   // const [userPosition, setUserPosition] = useState({});
   // const {
