@@ -47,7 +47,7 @@ const markerReducer = (state: State, action: Action) => {
         markers: [
           ...state.markers.slice(0, updatedIndex),
           updatedMarker,
-          ...state.markers.slice(updatedIndex),
+          ...state.markers.slice(updatedIndex + 1),
         ],
       };
     }
