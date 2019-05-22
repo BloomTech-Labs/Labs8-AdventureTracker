@@ -28,6 +28,7 @@ import {MY_TRIP_BY_ID} from "../resolvers/Queries";
 import getConfig from "next/config";
 import lineReducer from "./reducers/lineReducer/lineReducer";
 import markerReducer from "./reducers/markerReducer/markerReducer";
+import {decideMarkerURL} from "./reducers/markerReducer/lib/helpers/index";
 const {publicRuntimeConfig} = getConfig();
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
@@ -51,29 +52,6 @@ const MapComponent = compose(
   withScriptjs,
   withGoogleMap,
 )(({client, tripId}) => {
-  // const {
-  //   //Methods
-  //   addMarker,
-  //   deleteMarker,
-  //   setMarkerId,
-  //   clearMarkerId,
-  //   updateMarkerPosition,
-  //   updateAllMarkerLabels,
-  //   setActiveMarker,
-  //   clearActiveMarker,
-  //   toggleMarkerReached,
-  //   setMarkers,
-  //   updateMarkerLabelName,
-  //   setMarkerDate,
-  //   setStartingMarkers,
-  //   setMarkersByTime,
-  //   updateMarkerProps,
-  //   setDeletedMarkerIds,
-  //   //State
-  //   markers,
-  //   activeMarker,
-  //   deletedMarkerIds,
-  // } = useMarker();
   const [markState, markDispatch] = markerReducer();
   const {markers} = markState;
   const [lineState, lineDispatch] = lineReducer();
@@ -102,19 +80,21 @@ const MapComponent = compose(
   // } = useTrip();
   const [tripExists, setTripExists] = useState(false);
   useEffect(() => {
-    lineDispatch({type: "UPDATE_LINES", markers: markState.markers});
-    // if (markState.activeMarker.id) {
-    //   markDispatch({
-    //     type: "SET_ACTIVE_MARKER",
-    //     marker: markState.activeMarker,
-    //   });
-    // }
-    // const m1 = setInterval(() => {
-    //   setMarkersByTime(markers);
-    // }, 30000);
-    // return () => {
-    //   clearInterval(m1);
-    // };
+    lineDispatch({type: "UPDATE_LINES", markers});
+    const changeMarkerIconByDate = setInterval(() => {
+      for (let i = 0; i < markers.length; i++) {
+        markDispatch({
+          type: "UPDATE_MARKER",
+          marker: markers[i],
+          props: {
+            url: decideMarkerURL(markers[i]),
+          },
+        });
+      }
+    }, 30000);
+    return () => {
+      clearInterval(changeMarkerIconByDate);
+    };
   }, [markers]);
 
   // useEffect(() => {
