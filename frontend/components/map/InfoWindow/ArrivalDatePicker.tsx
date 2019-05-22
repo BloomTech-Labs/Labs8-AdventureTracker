@@ -4,25 +4,27 @@ import MapContext from "../../context/MapContext";
 interface ArrivalDatePickerProps {}
 
 const ArrivalDatePicker: React.SFC<ArrivalDatePickerProps> = () => {
-  // const { dateAndTime, setDateAndTime } = useContext(Context);
-  // const {activeMarker, setMarkerDate} = useContext(MapContext);
   const {markState, markDispatch} = useContext(MapContext);
   const {activeMarker} = markState;
   function onChange(value: object, dateString: string) {
-    console.log(typeof value, typeof dateString);
-    // setMarkerDate(activeMarker, value);
+    // console.log(typeof value, typeof dateString);
+    // console.log(value, dateString);
+    markDispatch({
+      type: "UPDATE_MARKER",
+      marker: activeMarker,
+      props: {
+        date: value,
+      },
+    });
   }
-  function onOk(value: object) {
-    // setMarkerDate(activeMarker, value);
-  }
+
   return (
     <DatePicker
-      // disabledDate={false}
       onChange={onChange}
       showTime
       format="YYYY-MM-DD HH:mm:ss"
       value={activeMarker.date}
-      onOk={onOk}
+      onOk={() => {}}
       placeholder="Input Arrival Date"
     />
   );
