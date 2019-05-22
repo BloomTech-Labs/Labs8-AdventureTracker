@@ -273,6 +273,7 @@ const MapComponent = compose(
                 type: "UPDATE_MARKER",
                 marker: mark,
                 props: {
+                  address: "",
                   position: {
                     lat: e.latLng.lat(),
                     lng: e.latLng.lng(),
