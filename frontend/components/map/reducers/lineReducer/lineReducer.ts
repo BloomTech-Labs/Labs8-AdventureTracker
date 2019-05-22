@@ -5,7 +5,7 @@ import {updateLines} from "./lib/helpers";
 interface Action {
   type: string;
   [key: string]: any;
-  lines: Marker[];
+  markers: Marker[];
 }
 
 const initialState = {
