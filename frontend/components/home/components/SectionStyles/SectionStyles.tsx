@@ -26,6 +26,7 @@ const Title = styled.button`
   background: ${vars.orange};
   padding: 0.6em;
   font-size: 6.4rem;
+  min-height: 120px;
   border: none;
   width: 100%;
   ${media.phone` font-size: 4rem;`}
