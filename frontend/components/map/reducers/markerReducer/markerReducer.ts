@@ -36,9 +36,19 @@ const markerReducer = (state: State, action: Action) => {
       };
     }
     case "UPDATE_MARKER": {
+      const {updatedMarker, updatedIndex} = updateMarker(
+        state.markers,
+        action.marker,
+        action.props,
+      );
       return {
         ...state,
-        markers: updateMarker(state.markers, action.marker, action.props),
+        activeMarker: updatedMarker,
+        markers: [
+          ...state.markers.slice(0, updatedIndex),
+          updatedMarker,
+          ...state.markers.slice(updatedIndex),
+        ],
       };
     }
     case "SET_ACTIVE_MARKER": {

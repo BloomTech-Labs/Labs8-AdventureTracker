@@ -81,7 +81,9 @@ const MapComponent = compose(
   //   deletedMarkerIds,
   // } = useMarker();
   const [markState, markDispatch] = markerReducer();
+  const {activeMarker, markers} = markState;
   const [lineState, lineDispatch] = lineReducer();
+  const {lines} = lineState;
   const {isInfoWindowOpen, setInfoWindowOpen} = useInfoWindow();
   // const [saveTripStep, setSaveTripStep] = useState(-1);
   // const [userPosition, setUserPosition] = useState({});
@@ -107,13 +109,19 @@ const MapComponent = compose(
   const [tripExists, setTripExists] = useState(false);
   useEffect(() => {
     lineDispatch({type: "UPDATE_LINES", markers: markState.markers});
+    // if (markState.activeMarker.id) {
+    //   markDispatch({
+    //     type: "SET_ACTIVE_MARKER",
+    //     marker: markState.activeMarker,
+    //   });
+    // }
     // const m1 = setInterval(() => {
     //   setMarkersByTime(markers);
     // }, 30000);
     // return () => {
     //   clearInterval(m1);
     // };
-  }, [markState.markers]);
+  }, [markers]);
 
   // useEffect(() => {
   //   if (saveTripStep !== 1) {
@@ -232,7 +240,7 @@ const MapComponent = compose(
         setIsModalVisible={setTripModalOpen}
       />
       <Marker position={userPosition} /> */}
-      {markState.markers.map((mark: IMarker) => {
+      {markers.map((mark: IMarker) => {
         return (
           <MarkerWithLabel
             key={mark.id}
@@ -279,7 +287,7 @@ const MapComponent = compose(
           </MarkerWithLabel>
         );
       })}
-      {lineState.lines.map((line: IPolyline) => {
+      {lines.map((line: IPolyline) => {
         return (
           <Polyline
             key={line.id}

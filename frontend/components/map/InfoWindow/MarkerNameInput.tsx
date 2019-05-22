@@ -23,7 +23,7 @@ const MarkerNameInput: React.SFC<MarkerNameInputProps> = () => {
             type: "UPDATE_MARKER",
             marker: activeMarker,
             props: {
-              label: e.target.label,
+              label: e.target.value,
             },
           });
           // updateMarkerLabelName(activeMarker, e.target.value);

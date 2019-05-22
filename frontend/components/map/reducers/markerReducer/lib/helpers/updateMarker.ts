@@ -8,9 +8,8 @@ export default (markers: Marker[], marker: Marker, props: object) => {
     ...markers[oldIndex],
     ...props,
   };
-  return [
-    ...markers.slice(0, oldIndex),
+  return {
     updatedMarker,
-    ...markers.slice(oldIndex + 1),
-  ];
+    updatedIndex: oldIndex,
+  };
 };
