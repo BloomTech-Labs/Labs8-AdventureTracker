@@ -163,6 +163,7 @@ const MapComponent = compose(
           <CustomInfoWindow setInfoWindowOpen={setInfoWindowOpen} />
         )}
       </MapContext.Provider>
+      <ProgressCircle markers={markers} />
       {/* <MapContext.Provider
         value={{
           markers
