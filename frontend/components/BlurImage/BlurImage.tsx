@@ -1,16 +1,10 @@
 import {useEffect, useState, useRef} from "react";
 
-const loadImageWithPromiseTimeout = (src: string) =>
+const loadImage = (src: string) =>
   new Promise((resolve, reject) => {
     const image = new Image();
 
-    const timeout = setTimeout(() => {
-      image.onload = null;
-      reject();
-    }, 10000);
-
     image.onload = () => {
-      clearTimeout(timeout);
       resolve();
     };
 
@@ -33,10 +27,10 @@ const BlurImage: React.SFC<BlurImageProps> = (props: BlurImageProps) => {
   const awaitImage = async () => {
     try {
       console.log(imgRef);
-      await loadImageWithPromiseTimeout(props.src);
+      await loadImage(props.src);
       setLoaded(true);
     } catch {
-      console.error(`Unable to load ${props.src} in 10s`);
+      console.error(`Was not able to load ${props.src}`);
     }
   };
   const {src, base64, alt} = props;
