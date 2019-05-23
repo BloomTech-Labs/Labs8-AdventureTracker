@@ -39,8 +39,12 @@ const NextBtn = styled(Button)`
 const DoneBtn = styled(Button)`
   display: flex;
 `;
-const FinishTripForm: React.SFC<Props> = ({form, setStep, step}) => {
-  const {markers, googleImageUrl} = useContext(MapContext);
+const FinishTripForm: React.SFC<Props> = ({form}) => {
+  const {saveTripState, saveTripDispatch, markState} = useContext(
+    MapContext,
+  );
+  const {markers} = markState;
+  const {step, googleImageUrl} = saveTripState;
   const {getFieldDecorator} = form;
   const [tripInfo, setTripInfo] = useState({
     title: "",
@@ -97,12 +101,18 @@ const FinishTripForm: React.SFC<Props> = ({form, setStep, step}) => {
       ) : null}
       <Form.Item>
         <StepButtonGroup>
-          <ExitBtn step={step} type="danger" onClick={() => setStep(-1)}>
+          <ExitBtn
+            step={step}
+            type="danger"
+            onClick={() => saveTripDispatch({type: "SET_STEP", step: -1})}
+          >
             Exit
           </ExitBtn>
           <PreviousBtn
             step={step}
-            onClick={() => setStep((prevState: number) => prevState - 1)}
+            onClick={() =>
+              saveTripDispatch({type: "SET_STEP", step: step - 1})
+            }
             disabled={step === 0 ? true : false}
           >
             Previous
@@ -111,7 +121,9 @@ const FinishTripForm: React.SFC<Props> = ({form, setStep, step}) => {
             <NextBtn
               step={step}
               type="primary"
-              onClick={() => setStep((prevState: number) => prevState + 1)}
+              onClick={() =>
+                saveTripDispatch({type: "SET_STEP", step: step + 1})
+              }
               disabled={step > 2 ? true : false}
             >
               Next
@@ -142,7 +154,7 @@ const FinishTripForm: React.SFC<Props> = ({form, setStep, step}) => {
                 <DoneBtn
                   type="primary"
                   onClick={async () => {
-                    setStep(-1);
+                    saveTripDispatch({type: "SET_STEP", step: -1});
                     //@ts-ignore
                     const {data} = await createTrip();
                     console.log(data);

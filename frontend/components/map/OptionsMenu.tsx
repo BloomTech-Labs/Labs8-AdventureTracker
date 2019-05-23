@@ -68,11 +68,13 @@ const OverlayMenu = props => {
   const {
     markState,
     markDispatch,
+    saveTripState,
+    saveTripDispatch,
     userLocationMarker,
     setUserLocationMarker,
     setIsTripModalOpen,
   } = useContext(MapContext);
-  const [updateTripLoading, setUpdateTripLoading] = useState(false);
+
   return (
     // <Mutation
     //   mutation={UPDATE_TRIP_MUTATION}
@@ -111,15 +113,14 @@ const OverlayMenu = props => {
               Update Trip
             </MenuItem>
           ) : null} */}
-      {/* <MenuItem
-            onClick={() => {
-              setScreenOn(true);
-              setSaveTripStep(0);
-            }}
-          >
-            <Icon type="save" />
-            Save Trip
-          </MenuItem> */}
+      <MenuItem
+        onClick={() => {
+          saveTripDispatch({type: "SET_STEP", step: 0});
+        }}
+      >
+        <Icon type="save" />
+        Save Trip
+      </MenuItem>
       <MenuItem
         onClick={() => {
           setIsTripModalOpen(true);

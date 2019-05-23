@@ -21,13 +21,13 @@ import {message} from "antd";
 import {MapLoadingElement} from "./MapLoadingElement";
 import {centerMarkerLabel} from "./helper-functions/index";
 import SaveTripProcess from "./SaveTripProcess/SaveTripProcess";
-import StepsStatusBar from "./SaveTripProcess/StepsStatusBar";
 import TripModal from "./TripManager/TripModal";
 import {MY_TRIP_BY_ID} from "../resolvers/Queries";
 import getConfig from "next/config";
 import lineReducer from "./reducers/lineReducer/lineReducer";
 import markerReducer from "./reducers/markerReducer/markerReducer";
 import {decideMarkerURL} from "./reducers/markerReducer/lib/helpers/index";
+import saveTripReducer from "./reducers/saveTripReducer/saveTripReducer";
 const {publicRuntimeConfig} = getConfig();
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
@@ -53,8 +53,11 @@ const MapComponent = compose(
 )(({client, tripId}) => {
   const [markState, markDispatch] = markerReducer();
   const {markers} = markState;
+
   const [lineState, lineDispatch] = lineReducer();
   const {lines} = lineState;
+  const [saveTripState, saveTripDispatch] = saveTripReducer();
+  const {saveImageModeOn, step} = saveTripState;
   const [isInfoWindowOpen, setInfoWindowOpen] = useState();
   const [userLocationMarker, setUserLocationMarker] = useState({
     position: {
@@ -63,23 +66,9 @@ const MapComponent = compose(
     },
     isVisible: false,
   });
-  // const [saveTripStep, setSaveTripStep] = useState(-1);
-  // const [userPosition, setUserPosition] = useState({});
-  // const {
-  //   //state
-  //   screenLatLng,
-  //   isScreenOn,
-  //   crossHairs,
-  //   googleImageUrl,
-  //   //methods
-  //   setScreenOn,
-  //   setScreenLatLng,
-  //   onEndScreenCapture,
-  //   setCrossHairsPosition,
-  // } = useScreenCapture();
 
-  const [isTripModalOpen, setIsTripModalOpen] = useState(true);
-  const [tripExists, setTripExists] = useState(false);
+  const [isTripModalOpen, setIsTripModalOpen] = useState(false);
+
   useEffect(() => {
     lineDispatch({type: "UPDATE_LINES", markers});
     const changeMarkerIconByDate = setInterval(() => {
@@ -98,13 +87,13 @@ const MapComponent = compose(
     };
   }, [markers]);
 
-  // useEffect(() => {
-  //   if (saveTripStep !== 1) {
-  //     setScreenOn(false);
-  //   } else {
-  //     setScreenOn(true);
-  //   }
-  // }, [saveTripStep]);
+  useEffect(() => {
+    if (step !== 1) {
+      saveTripDispatch({type: "SET_IMAGE_MODE", saveImageModeOn: false});
+    } else {
+      saveTripDispatch({type: "SET_IMAGE_MODE", saveImageModeOn: true});
+    }
+  }, [step]);
   // useEffect(() => {
   //   const fetchInitialEntities = async () => {
   //     if (tripId) {
@@ -140,11 +129,24 @@ const MapComponent = compose(
     <GoogleMap
       defaultZoom={6}
       onClick={e => {
-        // if (!isScreenOn) {
-        markDispatch({type: "ADD_MARKER", event: e});
-        setInfoWindowOpen(false);
-        // } else {
-        // setScreenLatLng(e);
+        if (!saveImageModeOn) {
+          markDispatch({type: "ADD_MARKER", event: e});
+          setInfoWindowOpen(false);
+        } else {
+          saveTripDispatch({
+            type: "WHILE_IMAGE_MODE_ON",
+            urlProps: {
+              lat: e.latLng.lat(),
+              lng: e.latLng.lng(),
+              width: 400,
+              height: 400,
+              zoom: 6,
+              imgFormat: "jpg",
+              mapType: "roadmap",
+              apiKey: publicRuntimeConfig.GOOGLE_MAPS_API_KEY,
+            },
+          });
+        }
       }}
       options={{
         disableDefaultUI: true,
@@ -157,6 +159,8 @@ const MapComponent = compose(
           markDispatch,
           lineState,
           lineDispatch,
+          saveTripState,
+          saveTripDispatch,
           setInfoWindowOpen,
           userLocationMarker,
           setUserLocationMarker,
@@ -167,6 +171,7 @@ const MapComponent = compose(
           <CustomInfoWindow setInfoWindowOpen={setInfoWindowOpen} />
         )}
         <OptionsMenu />
+        <SaveTripProcess />
       </MapContext.Provider>
       <ProgressCircle markers={markers} />
       <TripModal
@@ -174,51 +179,7 @@ const MapComponent = compose(
         setIsModalVisible={setIsTripModalOpen}
         client={client}
       />
-      {/* <MapContext.Provider
-        value={{
-          markers
-          // activeMarker,
-          // markers,
-          // toggleMarkerReached,
-          // clearActiveMarker,
-          // setMarkers,
-          // setActiveMarker,
-          // updateMarkerLabelName,
-          // setMarkerDate,
-          // setScreenOn,
-          // isScreenOn,
-          // crossHairs,
-          // setSaveTripStep,
-          // setTripModalOpen,
-          // setUserPosition,
-          // userPosition,
-          // googleImageUrl,
-          // tripExists,
-          // tripId,
-          // deleteMarker,
-          // deletedMarkerIds,
-          // setDeletedMarkerIds,
-          // updateMarkerProps,
-          // updateAllMarkerLabels,
-          // clearMarkerId,
-          // setInfoWindowOpen,
-        }}
-      >
-        <SaveTripProcess step={saveTripStep} />
-        <StepsStatusBar
-          step={saveTripStep}
-          setStep={setSaveTripStep}
-          googleImageUrl={googleImageUrl}
-        />
-        {isScreenOn ? null : <OptionsMenu />}
-      </MapContext.Provider>
-      {isScreenOn ? null : <ProgressCircle markers={markers} />}
 
-      <TripModal
-        isModalVisible={tripModalOpen}
-        setIsModalVisible={setTripModalOpen}
-      />
-      <Marker position={userPosition} /> */}
       {userLocationMarker.isVisible ? (
         <Marker position={userLocationMarker.position} />
       ) : null}

@@ -69,11 +69,6 @@ const TripModal: React.SFC<Props> = ({
     <Modal
       title="Trips"
       visible={isModalVisible}
-      bodyStyle={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-      }}
       onCancel={() => setIsModalVisible(false)}
       footer={[
         <Button
