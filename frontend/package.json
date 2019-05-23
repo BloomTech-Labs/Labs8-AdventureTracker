@@ -8,7 +8,6 @@
     "build": "next build",
     "export": "npm run build && next export",
     "start": "next start",
-    "test": "NODE_ENV=test jest --watch",
     "test-win": "SET NODE_ENV=test&& jest --watch",
     "heroku-postbuild": "next build",
     "prettier": "prettier \"**/*.+(js|jsx|yml|yaml|ts|tsx|css|md|mdx|less)\"",
@@ -63,6 +62,7 @@
     "waait": "^1.0.2"
   },
   "devDependencies": {
+    "@types/jest": "^24.0.13",
     "babel-jest": "^23.6.0",
     "babel-plugin-module-resolver": "^3.1.1",
     "casual": "^1.5.19",
@@ -72,19 +72,9 @@
     "jest-transform-graphql": "^2.1.0",
     "next-compose": "0.0.2",
     "prettier": "1.16.4",
-    "react-testing-library": "^6.0.0"
-  },
-  "jest": {
-    "setupTestFrameworkScriptFile": "<rootDir>/jest.setup.js",
-    "testPathIgnorePatterns": [
-      "<rootDir>/.next/",
-      "<rootDir>/node_modules/"
-    ],
-    "transform": {
-      "\\.(gql|graphql)$": "jest-transform-graphql",
-      ".*": "babel-jest",
-      "^.+\\.js?$": "babel-jest"
-    }
+    "react-testing-library": "^6.0.0",
+    "ts-jest": "^24.0.2",
+    "typescript": "^3.4.5"
   },
   "//": "This is our babel config, I prefer this over a .babelrc file",
   "babel": {
