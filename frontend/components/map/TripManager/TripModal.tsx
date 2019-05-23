@@ -2,7 +2,6 @@ import {Modal, Button, Spin} from "antd";
 import TripCard from "./TripCard";
 import TripFilter from "./TripFilter";
 import {Trip} from "../interfaces";
-import tripPlaceholderImg from "static/trip-placeholder.jpg";
 import TripList from "./TripList";
 import tripManagerReducer from "./reducer/tripManagerReducer";
 import {useEffect, useState} from "react";
@@ -92,23 +91,23 @@ const TripModal: React.SFC<Props> = ({
       />
       {isLoading ? <Spin tip="Loading Trips..." size="large" /> : null}
       {!isLoading ? (
-      <TripList>
-        {filteredTrips.length ? (
-          filteredTrips.map((trip: Trip) => {
-            return (
-              <TripCard
-                key={trip.id}
-                trip={trip}
-                tripDispatch={tripDispatch}
-              />
-            );
-          })
-        ) : (
-          <Empty
-            description={`There are no trips with the ${filter} filter.`}
-          />
-        )}
-      </TripList>
+        <TripList>
+          {filteredTrips.length ? (
+            filteredTrips.map((trip: Trip) => {
+              return (
+                <TripCard
+                  key={trip.id}
+                  trip={trip}
+                  tripDispatch={tripDispatch}
+                />
+              );
+            })
+          ) : (
+            <Empty
+              description={`There are no trips with the ${filter} filter.`}
+            />
+          )}
+        </TripList>
       ) : null}
     </Modal>
   );
