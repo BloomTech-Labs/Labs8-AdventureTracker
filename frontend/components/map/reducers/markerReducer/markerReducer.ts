@@ -1,9 +1,11 @@
+import {QueryMarker} from "./../../interfaces/query-marker.interface";
 import {useReducer} from "react";
 import {Marker} from "../../interfaces";
 import {
   addMarker,
   updateMarker,
   findMarkerIndex,
+  setupMarkersFromDB,
 } from "./lib/helpers/index";
 
 interface State {
@@ -13,7 +15,7 @@ interface State {
 interface Action {
   type: string;
   [key: string]: any;
-  markers: Marker[];
+  markers: Marker[] | QueryMarker[];
   marker: Marker;
   props: object;
 }
@@ -63,6 +65,12 @@ const markerReducer = (state: State, action: Action) => {
       return {
         ...state,
         activeMarker: action.marker,
+      };
+    }
+    case "SET_MARKERS_FROM_DATABASE": {
+      return {
+        ...state,
+        markers: setupMarkersFromDB(action.markers),
       };
     }
     default: {
