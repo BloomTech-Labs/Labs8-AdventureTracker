@@ -3,8 +3,11 @@ export default (setUserPosition: Function) => {
     navigator.geolocation.getCurrentPosition(position => {
       const {coords} = position;
       setUserPosition({
-        lat: coords.latitude,
-        lng: coords.longitude,
+        position: {
+          lat: coords.latitude,
+          lng: coords.longitude,
+        },
+        isVisible: true,
       });
     });
     return {status: "success"};

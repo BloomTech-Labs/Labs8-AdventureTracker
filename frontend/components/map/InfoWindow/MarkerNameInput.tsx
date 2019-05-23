@@ -4,7 +4,8 @@ import {Input, Tooltip} from "antd";
 interface MarkerNameInputProps {}
 
 const MarkerNameInput: React.SFC<MarkerNameInputProps> = () => {
-  const {updateMarkerLabelName, activeMarker} = useContext(MapContext);
+  const {markState, markDispatch} = useContext(MapContext);
+  const {activeMarker} = markState;
   const maxLen = 20;
   return (
     <Tooltip
@@ -17,8 +18,15 @@ const MarkerNameInput: React.SFC<MarkerNameInputProps> = () => {
         placeholder={"Marker label name"}
         maxLength={maxLen}
         value={activeMarker.label}
-        onChange={e => {
-          updateMarkerLabelName(activeMarker, e.target.value);
+        onChange={(e: any) => {
+          markDispatch({
+            type: "UPDATE_MARKER",
+            marker: activeMarker,
+            props: {
+              label: e.target.value,
+            },
+          });
+          // updateMarkerLabelName(activeMarker, e.target.value);
         }}
       />
     </Tooltip>

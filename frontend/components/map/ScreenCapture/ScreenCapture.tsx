@@ -45,19 +45,19 @@ const ScreenCapture: React.SFC<Props> = ({
       <div className={`overlay`} />
       <div
         className="crosshairs"
-        style={{
-          left: crossHairs.left + "px",
-          top: crossHairs.top + "px",
-        }}
+        // style={{
+        //   left: crossHairs.left + "px",
+        //   top: crossHairs.top + "px",
+        // }}
       />
       <div
         className="capture-region"
-        style={{
-          left: crossHairs.left + "px",
-          top: crossHairs.top + "px",
-          width: captureWidth + "px",
-          height: captureHeight + "px",
-        }}
+        // style={{
+        //   left: crossHairs.left + "px",
+        //   top: crossHairs.top + "px",
+        //   width: captureWidth + "px",
+        //   height: captureHeight + "px",
+        // }}
       />
     </>
   );

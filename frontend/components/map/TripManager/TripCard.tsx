@@ -6,28 +6,16 @@ import {Trip} from "../interfaces";
 const {Meta} = Card;
 
 interface Props {
-  title: string;
-  description: string;
-  avatarImg: string;
-  imageCoverSrc: string;
-  archived: boolean;
-  id: string;
-  setTrips: Function;
+  trip: Trip;
+  tripDispatch: Function;
 }
 
-const TripCard: React.SFC<Props> = ({
-  title,
-  description,
-  avatarImg,
-  imageCoverSrc,
-  archived,
-  id,
-  setTrips,
-}) => {
+const TripCard: React.SFC<Props> = ({trip, tripDispatch}) => {
+  const {title, description, image, archived, id} = trip;
   return (
     <Card
       bodyStyle={{width: "275px"}}
-      cover={<img alt="" src={imageCoverSrc} />}
+      cover={<img alt="" src={image} />}
       actions={[
         <Mutation
           mutation={ARCHIVE_TRIP_MUTATION}
@@ -39,19 +27,12 @@ const TripCard: React.SFC<Props> = ({
                 //@ts-ignore
                 let {data} = await updateTrip();
                 const {id, archived} = data.updateTrip;
-                setTrips((trips: any) => {
-                  const updateIndex = trips.findIndex((trip: Trip) => {
-                    return trip.id === id;
-                  });
-                  const updatedTrip = {
-                    ...trips[updateIndex],
+                tripDispatch({
+                  type: "UPDATE_TRIP",
+                  tripId: id,
+                  props: {
                     archived,
-                  };
-                  return [
-                    ...trips.slice(0, updateIndex),
-                    updatedTrip,
-                    ...trips.slice(updateIndex + 1),
-                  ];
+                  },
                 });
               }}
             >
@@ -73,7 +54,7 @@ const TripCard: React.SFC<Props> = ({
       ]}
     >
       <Meta
-        avatar={<Avatar src={avatarImg} />}
+        avatar={<Avatar src={""} />}
         title={title}
         description={description}
       />
