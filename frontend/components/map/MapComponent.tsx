@@ -19,7 +19,7 @@ import OptionsMenu from "./OptionsMenu";
 import CustomInfoWindow from "./InfoWindow/InfoWindow";
 import {message} from "antd";
 import {MapLoadingElement} from "./MapLoadingElement";
-import {centerMarkerLabel} from "./helper-functions/index";
+import {centerMarkerLabel} from "./lib/helpers/index";
 import SaveTripProcess from "./SaveTripProcess/SaveTripProcess";
 import TripModal from "./TripManager/TripModal";
 import {MY_TRIP_BY_ID} from "../resolvers/Queries";
