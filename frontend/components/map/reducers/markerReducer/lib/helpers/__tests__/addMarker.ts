@@ -1,5 +1,5 @@
 import addMarker from "../addMarker";
-import { GREY_PIN } from "../../../../../map-icons/markerIcons";
+import {GREY_PIN} from "../../../../../map-icons/markerIcons";
 
 describe("testing addMarker function", () => {
   it("adds a marker with the required properties", () => {
@@ -20,13 +20,7 @@ describe("testing addMarker function", () => {
         lng: 22,
       },
       address: "",
-      url: GREY_PIN
+      url: GREY_PIN,
     });
   });
 });
-
-// describe("testing addMarker function", () => {
-//     it("", () => {
-
-//     })
-// });
