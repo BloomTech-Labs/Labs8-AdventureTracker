@@ -1,9 +1,12 @@
 import {Trip} from "../../interfaces/trip.interface";
 import {useReducer} from "react";
+import updateTrip from "./lib/helpers/updateTrip";
 
 interface Action {
   type: string;
   [key: string]: any;
+  trip: Trip;
+  props: object;
 }
 
 type Filter = "ALL" | "ACTIVE" | "ARCHIVED";
@@ -40,6 +43,12 @@ const tripManagerReducer = (state: State, action: Action) => {
         ...state,
         isLoading: false,
         hasError: true,
+      };
+    }
+    case "UPDATE_TRIP": {
+      return {
+        ...state,
+        trips: updateTrip(state.trips, action.tripId, action.props),
       };
     }
     case "SET_FILTER": {

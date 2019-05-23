@@ -85,15 +85,11 @@ const TripModal: React.SFC<Props> = ({
       <TripList>
         {filteredTrips.length ? (
           filteredTrips.map((trip: Trip) => {
-            const {id, title, description, archived, image} = trip;
             return (
               <TripCard
-                key={id}
-                id={id}
-                title={title}
-                description={description}
-                archived={archived}
-                imageCoverSrc={image}
+                key={trip.id}
+                trip={trip}
+                tripDispatch={tripDispatch}
               />
             );
           })
