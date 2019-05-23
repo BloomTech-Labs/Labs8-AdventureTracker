@@ -10,7 +10,6 @@ describe("testing addMarker function", () => {
       },
     };
     //@ts-ignore
-    const moment = () => 1;
     const marker = addMarker(e, 1);
     expect(marker).toMatchObject({
       hasReached: false,
