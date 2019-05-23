@@ -1,106 +1,105 @@
 import {Modal, Button, Spin} from "antd";
 import TripCard from "./TripCard";
-import {useState, useEffect} from "react";
-import {ApolloConsumer} from "react-apollo";
 import TripFilter from "./TripFilter";
 import {Trip} from "../interfaces";
 import tripPlaceholderImg from "static/trip-placeholder.jpg";
 import TripList from "./TripList";
+import tripManagerReducer from "./reducer/tripManagerReducer";
+import {useEffect} from "react";
+import {MY_TRIPS_QUERY} from "../../resolvers/Queries";
+import {Empty} from "antd";
+
 interface Props {
   isModalVisible: boolean;
   setIsModalVisible: Function;
+  client: any;
 }
 
 const TripModal: React.SFC<Props> = ({
   isModalVisible,
   setIsModalVisible,
+  client,
 }) => {
-  const [trips, setTrips] = useState([]);
-  const [filteredTrips, setFilteredTrips] = useState([]);
-  const [loadingTrips, setLoadingTrips] = useState(false);
-  const ALL = "all";
-  const ACTIVE = "active";
-  const ARCHIVED = "archived";
-  const [status, setStatus] = useState(ACTIVE);
-
+  const ALL = "ALL";
+  const ACTIVE = "ACTIVE";
+  const ARCHIVED = "ARCHIVED";
+  const [tripState, tripDispatch] = tripManagerReducer();
+  const {trips, filter, isLoading} = tripState;
   useEffect(() => {
-    if (status === ACTIVE) {
-      setFilteredTrips(
-        trips.filter((trip: Trip) => {
-          return trip.archived === false;
-        }),
-      );
-    } else if (status === ARCHIVED) {
-      setFilteredTrips(
-        trips.filter((trip: Trip) => {
-          return trip.archived === true;
-        }),
-      );
-    } else if (status === ALL) {
-      setFilteredTrips(trips);
-    }
-  }, [trips, status]);
+    const fetchMyTrips = async () => {
+      try {
+        tripDispatch({type: "FETCHING_TRIPS"});
+        const {data}: any = await client.query({
+          query: MY_TRIPS_QUERY,
+          variables: {
+            archived: false,
+          },
+        });
+        // console.log(data);
+        tripDispatch({type: "FETCHED_TRIPS", trips: data.myTrips});
+      } catch (err) {
+        tripDispatch({type: "ERROR_FETCHING_TRIPS"});
+      }
+    };
+    fetchMyTrips();
+  }, []);
+
   return (
-    <ApolloConsumer>
-      {client => {
-        return (
-          <Modal
-            title="Trips"
-            visible={isModalVisible}
-            bodyStyle={{
-              display: "flex",
-              flexDirection: "column",
-            }}
-            onCancel={() => setIsModalVisible(false)}
-            footer={[
-              <Button
-                type="danger"
-                key="back"
-                onClick={() => setIsModalVisible(false)}
-              >
-                Exit
-              </Button>,
-            ]}
-          >
-            <TripFilter
-              client={client}
-              setTrips={setTrips}
-              trips={trips}
-              setStatus={setStatus}
-              filterTypes={{ALL, ACTIVE, ARCHIVED}}
-              setLoadingTrips={setLoadingTrips}
-            />
-            {loadingTrips ? (
-              <Spin tip="Loading Trips..." size="large" />
-            ) : null}
-            {loadingTrips === false ? (
-              <TripList>
-                {filteredTrips !== undefined
-                  ? filteredTrips.map((trip: Trip) => {
-                      return (
-                        <TripCard
-                          key={trip.id}
-                          id={trip.id}
-                          title={trip.title}
-                          description={trip.description}
-                          avatarImg={trip.avatarImg}
-                          imageCoverSrc={
-                            trip.image === ""
-                              ? tripPlaceholderImg
-                              : trip.image
-                          }
-                          archived={trip.archived}
-                          setTrips={setTrips}
-                        />
-                      );
-                    })
-                  : null}
-              </TripList>
-            ) : null}
-          </Modal>
-        );
+    <Modal
+      title="Trips"
+      visible={isModalVisible}
+      bodyStyle={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
       }}
-    </ApolloConsumer>
+      onCancel={() => setIsModalVisible(false)}
+      footer={[
+        <Button
+          type="danger"
+          key="back"
+          onClick={() => setIsModalVisible(false)}
+        >
+          Exit
+        </Button>,
+      ]}
+    >
+      <TripFilter
+        tripDispatch={tripDispatch}
+        filterTypes={{ALL, ACTIVE, ARCHIVED}}
+      />
+      {isLoading ? <Spin tip="Loading Trips..." size="large" /> : null}
+
+      {trips.length ? (
+        trips
+          .filter((trip: Trip) => {
+            if (filter === ALL) {
+              return trip;
+            } else if (filter === ACTIVE) {
+              return trip.archived === false;
+            } else if (filter === ARCHIVED) {
+              return trip.archived;
+            }
+          })
+          .map((trip: Trip) => {
+            const {id, title, description, archived, image} = trip;
+            return (
+              <TripCard
+                key={id}
+                id={id}
+                title={title}
+                description={description}
+                archived={archived}
+                imageCoverSrc={image}
+              />
+            );
+          })
+      ) : (
+        <Empty
+          description={`There are no trips with the ${filter} filter.`}
+        />
+      )}
+    </Modal>
   );
 };
 

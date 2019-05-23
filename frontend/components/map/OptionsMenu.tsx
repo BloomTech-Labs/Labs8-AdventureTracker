@@ -70,6 +70,7 @@ const OverlayMenu = props => {
     markDispatch,
     userLocationMarker,
     setUserLocationMarker,
+    setIsTripModalOpen,
   } = useContext(MapContext);
   const [updateTripLoading, setUpdateTripLoading] = useState(false);
   return (
@@ -119,14 +120,14 @@ const OverlayMenu = props => {
             <Icon type="save" />
             Save Trip
           </MenuItem> */}
-      {/* <MenuItem
-            onClick={() => {
-              setTripModalOpen(true);
-            }}
-          >
-            <Icon type="bars" />
-            Trips
-          </MenuItem> */}
+      <MenuItem
+        onClick={() => {
+          setIsTripModalOpen(true);
+        }}
+      >
+        <Icon type="bars" />
+        Trips
+      </MenuItem>
       <MenuItem>
         <Icon type="user" />
         <Badge count={1} offset={[15, 7]}>

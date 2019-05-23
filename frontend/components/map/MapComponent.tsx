@@ -78,12 +78,7 @@ const MapComponent = compose(
   //   setCrossHairsPosition,
   // } = useScreenCapture();
 
-  // const {
-  //   //state
-  //   setTripModalOpen,
-  //   //methods
-  //   tripModalOpen,
-  // } = useTrip();
+  const [isTripModalOpen, setIsTripModalOpen] = useState(true);
   const [tripExists, setTripExists] = useState(false);
   useEffect(() => {
     lineDispatch({type: "UPDATE_LINES", markers});
@@ -165,6 +160,7 @@ const MapComponent = compose(
           setInfoWindowOpen,
           userLocationMarker,
           setUserLocationMarker,
+          setIsTripModalOpen,
         }}
       >
         {isInfoWindowOpen && (
@@ -173,6 +169,11 @@ const MapComponent = compose(
         <OptionsMenu />
       </MapContext.Provider>
       <ProgressCircle markers={markers} />
+      <TripModal
+        isModalVisible={isTripModalOpen}
+        setIsModalVisible={setIsTripModalOpen}
+        client={client}
+      />
       {/* <MapContext.Provider
         value={{
           markers
