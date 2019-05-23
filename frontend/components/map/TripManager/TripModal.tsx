@@ -79,6 +79,11 @@ const TripModal: React.SFC<Props> = ({
           Exit
         </Button>,
       ]}
+      bodyStyle={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
     >
       <TripFilter
         tripDispatch={tripDispatch}

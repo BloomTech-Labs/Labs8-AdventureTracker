@@ -11,6 +11,7 @@ const TripListWrapper = styled.div`
     margin: 24px;
   }
   max-height: 600px;
+  max-width: 100%;
   overflow-y: auto;
   overflow-x: scroll;
 `;
