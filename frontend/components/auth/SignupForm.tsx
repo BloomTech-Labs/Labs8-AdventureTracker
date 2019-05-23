@@ -1,7 +1,7 @@
 import {Form, Button, Input, Icon, message} from "antd";
 import {useState} from "react";
-import {formInputHandler} from "./helpers/functions/index";
-import {emailRegex} from "./helpers/regex";
+import {formInputHandler} from "../helpers/functions/index";
+import {emailRegex} from "../helpers/regex";
 import gql from "graphql-tag";
 import {Mutation} from "react-apollo";
 import {FormComponentProps} from "antd/lib/form";

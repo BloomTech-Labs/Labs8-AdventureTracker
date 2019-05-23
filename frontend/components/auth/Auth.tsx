@@ -1,9 +1,8 @@
 import styled from "styled-components";
 import {useState, useEffect} from "react";
 
-import LoginForm from "../LoginForm";
-``;
-import SignupForm from "../SignupForm";
+import LoginForm from "./LoginForm";
+import SignupForm from "./SignupForm";
 import {Card, Button, Icon} from "antd";
 //@ts-ignore
 import homeImg from "static/jumbotron-home.jpg";
