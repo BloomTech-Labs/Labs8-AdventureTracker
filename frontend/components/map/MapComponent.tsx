@@ -94,37 +94,29 @@ const MapComponent = compose(
       saveTripDispatch({type: "SET_IMAGE_MODE", saveImageModeOn: true});
     }
   }, [step]);
-  // useEffect(() => {
-  //   const fetchInitialEntities = async () => {
-  //     if (tripId) {
-  //       const {data} = await client.query({
-  //         query: MY_TRIP_BY_ID,
-  //         variables: {
-  //           id: tripId,
-  //         },
-  //       });
-  //       console.log(data);
-  //       if (!data.tripById) {
-  //         message.error(
-  //           `Sorry either you are not logged in or the trip does not exist`,
-  //         );
-  //       } else {
-  //         const {markers} = data.tripById;
-  //         setTripExists(true);
-  //         setStartingMarkers(markers);
-  //         return data;
-  //       }
-  //     }
-  //   };
-  //   fetchInitialEntities();
-  //   window.addEventListener("mousemove", setCrossHairsPosition);
-  //   return () => {
-  //     window.removeEventListener("mousemove", setCrossHairsPosition);
-  //   };
-  // }, []);
-  // useEffect(() => {
-  //   onEndScreenCapture(400, 400);
-  // }, [screenLatLng]);
+  useEffect(() => {
+    const fetchInitialEntities = async () => {
+      if (tripId) {
+        const {data} = await client.query({
+          query: MY_TRIP_BY_ID,
+          variables: {
+            id: tripId,
+          },
+        });
+        console.log(data);
+        if (!data.tripById) {
+          message.error(
+            `Sorry either you are not logged in or the trip does not exist`,
+          );
+        } else {
+          const {markers} = data.tripById;
+          markDispatch({type: "SET_MARKERS_FROM_DATABASE", markers});
+          return data;
+        }
+      }
+    };
+    fetchInitialEntities();
+  }, []);
   return (
     <GoogleMap
       defaultZoom={6}
