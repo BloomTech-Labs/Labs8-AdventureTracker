@@ -30,14 +30,23 @@ const TripModal: React.SFC<Props> = ({
     const fetchMyTrips = async () => {
       try {
         tripDispatch({type: "FETCHING_TRIPS"});
-        const {data}: any = await client.query({
+        const {data: archivedData}: any = await client.query({
+          query: MY_TRIPS_QUERY,
+          variables: {
+            archived: true,
+          },
+        });
+        const {data: activeData}: any = await client.query({
           query: MY_TRIPS_QUERY,
           variables: {
             archived: false,
           },
         });
-        // console.log(data);
-        tripDispatch({type: "FETCHED_TRIPS", trips: data.myTrips});
+        // console.log(archivedData, activeData);
+        tripDispatch({
+          type: "FETCHED_TRIPS",
+          trips: [...archivedData.myTrips, ...activeData.myTrips],
+        });
       } catch (err) {
         tripDispatch({type: "ERROR_FETCHING_TRIPS"});
       }
