@@ -5,7 +5,7 @@ import {Trip} from "../interfaces";
 import tripPlaceholderImg from "static/trip-placeholder.jpg";
 import TripList from "./TripList";
 import tripManagerReducer from "./reducer/tripManagerReducer";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {MY_TRIPS_QUERY} from "../../resolvers/Queries";
 import {Empty} from "antd";
 
@@ -25,6 +25,7 @@ const TripModal: React.SFC<Props> = ({
   const ARCHIVED = "ARCHIVED";
   const [tripState, tripDispatch] = tripManagerReducer();
   const {trips, filter, isLoading} = tripState;
+  const [filteredTrips, setFilteredTrips] = useState([]);
   useEffect(() => {
     const fetchMyTrips = async () => {
       try {
@@ -43,7 +44,19 @@ const TripModal: React.SFC<Props> = ({
     };
     fetchMyTrips();
   }, []);
-
+  useEffect(() => {
+    setFilteredTrips(
+      trips.filter((trip: Trip) => {
+        if (filter === ALL) {
+          return trip;
+        } else if (filter === ACTIVE) {
+          return trip.archived === false;
+        } else if (filter === ARCHIVED) {
+          return trip.archived;
+        }
+      }),
+    );
+  }, [trips, filter]);
   return (
     <Modal
       title="Trips"
@@ -70,30 +83,20 @@ const TripModal: React.SFC<Props> = ({
       />
       {isLoading ? <Spin tip="Loading Trips..." size="large" /> : null}
 
-      {trips.length ? (
-        trips
-          .filter((trip: Trip) => {
-            if (filter === ALL) {
-              return trip;
-            } else if (filter === ACTIVE) {
-              return trip.archived === false;
-            } else if (filter === ARCHIVED) {
-              return trip.archived;
-            }
-          })
-          .map((trip: Trip) => {
-            const {id, title, description, archived, image} = trip;
-            return (
-              <TripCard
-                key={id}
-                id={id}
-                title={title}
-                description={description}
-                archived={archived}
-                imageCoverSrc={image}
-              />
-            );
-          })
+      {filteredTrips.length ? (
+        filteredTrips.map((trip: Trip) => {
+          const {id, title, description, archived, image} = trip;
+          return (
+            <TripCard
+              key={id}
+              id={id}
+              title={title}
+              description={description}
+              archived={archived}
+              imageCoverSrc={image}
+            />
+          );
+        })
       ) : (
         <Empty
           description={`There are no trips with the ${filter} filter.`}

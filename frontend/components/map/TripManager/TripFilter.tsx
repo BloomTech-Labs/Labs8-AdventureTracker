@@ -12,6 +12,7 @@ const TripFilter: React.SFC<Props> = ({filterTypes, tripDispatch}) => {
       onChange={(e: any) => {
         tripDispatch({type: "SET_FILTER", filter: e.target.value});
       }}
+      defaultValue={ALL}
     >
       <Radio.Button value={ALL}>All</Radio.Button>
       <Radio.Button value={ACTIVE}>Active</Radio.Button>
