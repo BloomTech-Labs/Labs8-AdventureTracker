@@ -91,6 +91,7 @@ const TripModal: React.SFC<Props> = ({
         filterTypes={{ALL, ACTIVE, ARCHIVED}}
       />
       {isLoading ? <Spin tip="Loading Trips..." size="large" /> : null}
+      {!isLoading ? (
       <TripList>
         {filteredTrips.length ? (
           filteredTrips.map((trip: Trip) => {
@@ -108,6 +109,7 @@ const TripModal: React.SFC<Props> = ({
           />
         )}
       </TripList>
+      ) : null}
     </Modal>
   );
 };
