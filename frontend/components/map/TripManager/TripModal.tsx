@@ -82,26 +82,27 @@ const TripModal: React.SFC<Props> = ({
         filterTypes={{ALL, ACTIVE, ARCHIVED}}
       />
       {isLoading ? <Spin tip="Loading Trips..." size="large" /> : null}
-
-      {filteredTrips.length ? (
-        filteredTrips.map((trip: Trip) => {
-          const {id, title, description, archived, image} = trip;
-          return (
-            <TripCard
-              key={id}
-              id={id}
-              title={title}
-              description={description}
-              archived={archived}
-              imageCoverSrc={image}
-            />
-          );
-        })
-      ) : (
-        <Empty
-          description={`There are no trips with the ${filter} filter.`}
-        />
-      )}
+      <TripList>
+        {filteredTrips.length ? (
+          filteredTrips.map((trip: Trip) => {
+            const {id, title, description, archived, image} = trip;
+            return (
+              <TripCard
+                key={id}
+                id={id}
+                title={title}
+                description={description}
+                archived={archived}
+                imageCoverSrc={image}
+              />
+            );
+          })
+        ) : (
+          <Empty
+            description={`There are no trips with the ${filter} filter.`}
+          />
+        )}
+      </TripList>
     </Modal>
   );
 };
