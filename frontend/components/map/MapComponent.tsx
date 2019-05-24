@@ -14,7 +14,7 @@ import {
   Marker,
 } from "react-google-maps";
 import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
-import ProgressCircle from "./ProgressCircle";
+import ProgressCircle from "./ProgressCircle/ProgressCircle";
 import OptionsMenu from "./OptionsMenu";
 import CustomInfoWindow from "./InfoWindow/InfoWindow";
 import {message} from "antd";
