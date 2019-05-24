@@ -1,6 +1,6 @@
-import {Marker} from "./../../../../interfaces/marker.interface";
-import {GREY_PIN} from "../../../../map-icons/markerIcons";
+import {Marker} from "./../../interfaces/marker.interface";
 import * as moment from "moment";
+import {GREY_PIN} from "../../map-icons/markerIcons";
 
 export {markers};
 const markers: Marker[] = [
