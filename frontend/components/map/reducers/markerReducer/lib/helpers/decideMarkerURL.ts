@@ -6,7 +6,7 @@ import {
   YELLOW_EXCLAMATION_PIN,
   RED_EXCLAMATION_PIN,
 } from "../../../../map-icons/markerIcons";
-import moment from "moment";
+import * as moment from "moment";
 
 export default (marker: Marker | QueryMarker) => {
   let url = GREY_PIN;
