@@ -10,12 +10,14 @@ import {
 
 interface State {
   markers: Marker[];
+  deletedMarkersIdsFromDB: string[];
 }
 
 interface Action {
   type: string;
   [key: string]: any;
   markers: Marker[] | QueryMarker[];
+  deletedMarkerId: string;
   marker: Marker;
   props: object;
 }
@@ -23,6 +25,7 @@ interface Action {
 const initialState = {
   activeMarker: {},
   markers: [],
+  deletedMarkersIdsFromDB: [],
 };
 const markerReducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -37,8 +40,16 @@ const markerReducer = (state: State, action: Action) => {
     }
     case "DELETE_MARKER": {
       const index = findMarkerIndex(state.markers, action.marker);
+
+      // Ids from database are different from markers not saved to the database.
+      // Have to store ids from database to update trip.
+      const deletedIds = [...state.deletedMarkersIdsFromDB];
+      if (!state.markers[index].id.match(/(\w+-){4}\w+/)) {
+        deletedIds.push(state.markers[index].id);
+      }
       return {
         ...state,
+        deletedMarkersIdsFromDB: deletedIds,
         markers: [
           ...state.markers.slice(0, index),
           ...state.markers.slice(index + 1),
