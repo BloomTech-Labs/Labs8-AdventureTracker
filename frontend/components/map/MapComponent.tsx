@@ -126,11 +126,14 @@ const MapComponent = compose(
           markDispatch({type: "ADD_MARKER", event: e});
           setInfoWindowOpen(false);
         } else {
+          const {lat, lng} = e.latLng;
           saveTripDispatch({
             type: "WHILE_IMAGE_MODE_ON",
+            lat: lat(),
+            lng: lng(),
             urlProps: {
-              lat: e.latLng.lat(),
-              lng: e.latLng.lng(),
+              lat: lat(),
+              lng: lng(),
               width: 400,
               height: 400,
               zoom: 6,

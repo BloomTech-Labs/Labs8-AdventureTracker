@@ -8,18 +8,24 @@ interface Action {
   urlProps: {
     [key: string]: any;
   };
+  lat: number;
+  lng: number;
 }
 
 interface State {
   step: number;
   isScreenOn: boolean;
   googleImageUrl: string;
+  lat: number;
+  lng: number;
 }
 
 const initialState = {
   step: -1,
   saveImageModeOn: false,
   googleImageUrl: "",
+  lat: 0,
+  lng: 0,
 };
 const saveTripReducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -39,6 +45,8 @@ const saveTripReducer = (state: State, action: Action) => {
       return {
         ...state,
         googleImageUrl: mapImageUrlGenerator(action.urlProps),
+        lat: action.lat,
+        lng: action.lng,
       };
     }
     default: {

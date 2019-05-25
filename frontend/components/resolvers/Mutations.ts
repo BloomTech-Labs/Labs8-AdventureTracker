@@ -10,6 +10,8 @@ const CREATE_TRIP_MUTATION = gql`
     $archived: Boolean!
     $markers: [MarkerCreateManyWithoutTripInput!]!
     $image: String!
+    $lat: Float!
+    $lng: Float!
   ) {
     createTrip(
       title: $title
@@ -18,6 +20,8 @@ const CREATE_TRIP_MUTATION = gql`
       archived: $archived
       markers: $markers
       image: $image
+      lat: $lat
+      lng: $lng
     ) {
       id
     }
