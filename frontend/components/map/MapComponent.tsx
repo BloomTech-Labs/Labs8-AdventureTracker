@@ -114,6 +114,7 @@ const MapComponent = compose(
         } else {
           const {markers, lat, lng} = data.tripById;
           setTripExists(true);
+          setIsTripModalOpen(false);
           saveTripDispatch({
             type: "SAVE_TRIP_POSITION",
             tripPosition: {
@@ -127,7 +128,7 @@ const MapComponent = compose(
       }
     };
     fetchInitialEntities();
-  }, []);
+  }, [tripId]);
   return (
     <GoogleMap
       defaultZoom={6}
@@ -200,6 +201,7 @@ const MapComponent = compose(
         isModalVisible={isTripModalOpen}
         setIsModalVisible={setIsTripModalOpen}
         client={client}
+        tripId={tripId}
       />
 
       {userLocationMarker.isVisible ? (

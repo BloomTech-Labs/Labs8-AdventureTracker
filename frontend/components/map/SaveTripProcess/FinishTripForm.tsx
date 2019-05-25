@@ -162,7 +162,12 @@ const FinishTripForm: React.SFC<Props> = ({form}) => {
                     const {data} = await createTrip();
                     console.log(data);
                     const {id} = data.createTrip;
-                    window.location.href = `/map?id=${id}`;
+                    Router.push({
+                      pathname: "/map",
+                      query: {
+                        id: id,
+                      },
+                    });
                   }}
                 >
                   Done

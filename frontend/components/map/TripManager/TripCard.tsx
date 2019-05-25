@@ -2,15 +2,17 @@ import {Card, Icon, Avatar, Button} from "antd";
 import {Mutation} from "react-apollo";
 import {ARCHIVE_TRIP_MUTATION} from "../../resolvers/Mutations";
 import {Trip} from "../interfaces";
+import Router from "next/router";
 
 const {Meta} = Card;
 
 interface Props {
   trip: Trip;
   tripDispatch: Function;
+  urlTripId: String;
 }
 
-const TripCard: React.SFC<Props> = ({trip, tripDispatch}) => {
+const TripCard: React.SFC<Props> = ({trip, tripDispatch, urlTripId}) => {
   const {title, description, image, archived, id} = trip;
   return (
     <Card
@@ -45,11 +47,17 @@ const TripCard: React.SFC<Props> = ({trip, tripDispatch}) => {
         </Mutation>,
         <Button
           type="primary"
+          disabled={urlTripId === id ? true : false}
           onClick={() => {
-            window.location.href = `/map?id=${id}`;
+            Router.replace({
+              pathname: "/map",
+              query: {
+                id,
+              },
+            });
           }}
         >
-          Go To Trip
+          {urlTripId === id ? "Active Trip" : "Go To Trip"}
         </Button>,
       ]}
     >

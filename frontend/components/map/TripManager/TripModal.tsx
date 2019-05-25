@@ -12,12 +12,14 @@ interface Props {
   isModalVisible: boolean;
   setIsModalVisible: Function;
   client: any;
+  tripId: String;
 }
 
 const TripModal: React.SFC<Props> = ({
   isModalVisible,
   setIsModalVisible,
   client,
+  tripId
 }) => {
   const ALL = "ALL";
   const ACTIVE = "ACTIVE";
@@ -91,6 +93,7 @@ const TripModal: React.SFC<Props> = ({
                   key={trip.id}
                   trip={trip}
                   tripDispatch={tripDispatch}
+                  urlTripId={tripId}
                 />
               );
             })
