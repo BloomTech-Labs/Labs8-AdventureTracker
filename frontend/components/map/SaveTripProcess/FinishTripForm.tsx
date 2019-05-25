@@ -139,12 +139,13 @@ const FinishTripForm: React.SFC<Props> = ({form}) => {
                 image: googleImageUrl,
                 markers: {
                   create: markers.map((marker: Marker) => {
-                    const {hasReached, position, label} = marker;
+                    const {hasReached, position, label, date} = marker;
                     return {
                       hasReached,
                       lat: position.lat,
                       lng: position.lng,
                       label,
+                      date,
                     };
                   }),
                 },

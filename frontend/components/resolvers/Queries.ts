@@ -36,6 +36,7 @@ const MY_TRIP_BY_ID = gql`
         lng
         hasReached
         label
+        date
       }
     }
   }
