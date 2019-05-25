@@ -8,18 +8,30 @@ interface Action {
   urlProps: {
     [key: string]: any;
   };
+  tripPosition: {
+    lat: number;
+    lng: number;
+  };
 }
 
 interface State {
   step: number;
   isScreenOn: boolean;
   googleImageUrl: string;
+  tripPosition: {
+    lat: number;
+    lng: number;
+  };
 }
 
 const initialState = {
   step: -1,
   saveImageModeOn: false,
   googleImageUrl: "",
+  tripPosition: {
+    lat: 31,
+    lng: -83,
+  },
 };
 const saveTripReducer = (state: State, action: Action) => {
   switch (action.type) {
@@ -35,7 +47,13 @@ const saveTripReducer = (state: State, action: Action) => {
         saveImageModeOn: action.saveImageModeOn,
       };
     }
-    case "WHILE_IMAGE_MODE_ON": {
+    case "SAVE_TRIP_POSITION": {
+      return {
+        ...state,
+        tripPosition: action.tripPosition,
+      };
+    }
+    case "SAVE_TRIP_IMAGE": {
       return {
         ...state,
         googleImageUrl: mapImageUrlGenerator(action.urlProps),

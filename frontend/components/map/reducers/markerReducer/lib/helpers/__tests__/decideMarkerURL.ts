@@ -4,6 +4,7 @@ import {
   GREY_PIN,
   RED_EXCLAMATION_PIN,
   CHECKED_PIN,
+  YELLOW_EXCLAMATION_PIN,
 } from "../../../../../map-icons/markerIcons";
 import * as moment from "moment";
 
@@ -13,6 +14,9 @@ describe("testing decideMarkerURL function", () => {
     let activeMarker = mockMarkers[0];
 
     expect(decideMarkerURL(activeMarker)).toBe(GREY_PIN);
+
+    activeMarker.date = moment().minutes(5);
+    expect(decideMarkerURL(activeMarker)).toBe(YELLOW_EXCLAMATION_PIN);
 
     activeMarker.date = moment("2014-06-01T12:00:00Z");
     expect(decideMarkerURL(activeMarker)).toBe(RED_EXCLAMATION_PIN);
