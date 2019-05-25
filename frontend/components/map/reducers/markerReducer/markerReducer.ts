@@ -10,14 +10,18 @@ import {
 
 interface State {
   markers: Marker[];
-  deletedMarkersIdsFromDB: string[];
+  deletedMarkersIdsFromDB: {
+    id: String;
+  }[];
 }
 
 interface Action {
   type: string;
   [key: string]: any;
   markers: Marker[] | QueryMarker[];
-  deletedMarkerId: string;
+  deletedMarkerId: {
+    id: String;
+  };
   marker: Marker;
   props: object;
 }
@@ -45,7 +49,7 @@ const markerReducer = (state: State, action: Action) => {
       // Have to store ids from database to update trip.
       const deletedIds = [...state.deletedMarkersIdsFromDB];
       if (!state.markers[index].id.match(/(\w+-){4}\w+/)) {
-        deletedIds.push(state.markers[index].id);
+        deletedIds.push({id: state.markers[index].id});
       }
       return {
         ...state,
@@ -82,6 +86,12 @@ const markerReducer = (state: State, action: Action) => {
       return {
         ...state,
         markers: setupMarkersFromDB(action.markers),
+      };
+    }
+    case "EMPTY_DELETED_DB_MARKERS_IDS": {
+      return {
+        ...state,
+        deletedMarkersIdsFromDB: [],
       };
     }
     default: {

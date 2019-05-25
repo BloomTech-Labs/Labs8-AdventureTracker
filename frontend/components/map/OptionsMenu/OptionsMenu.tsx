@@ -96,7 +96,7 @@ const OverlayMenu = props => {
               const {data} = await client.mutate({
                 mutation: UPDATE_TRIP_MUTATION,
                 variables: {
-                  tripId,
+                  id: tripId,
                   data: {
                     markers: {
                       delete: deletedMarkersIdsFromDB,

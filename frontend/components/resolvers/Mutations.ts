@@ -28,8 +28,8 @@ const CREATE_TRIP_MUTATION = gql`
   }
 `;
 const UPDATE_TRIP_MUTATION = gql`
-  mutation UPDATE_TRIP_MUTATION($tripId: ID!, $data: TripUpdateInput!) {
-    updateTrip(id: $tripId, data: $data) {
+  mutation UPDATE_TRIP_MUTATION($id: ID!, $data: TripUpdateInput!) {
+    updateTrip(id: $id, data: $data) {
       id
     }
   }
