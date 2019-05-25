@@ -44,7 +44,7 @@ const FinishTripForm: React.SFC<Props> = ({form}) => {
     MapContext,
   );
   const {markers} = markState;
-  const {step, googleImageUrl, lat, lng} = saveTripState;
+  const {step, googleImageUrl, tripPosition} = saveTripState;
   const {getFieldDecorator} = form;
   const [tripInfo, setTripInfo] = useState({
     title: "",
@@ -137,8 +137,8 @@ const FinishTripForm: React.SFC<Props> = ({form}) => {
                 description: tripInfo.description,
                 archived: false,
                 image: googleImageUrl,
-                lat,
-                lng,
+                lat: tripPosition.lat,
+                lng: tripPosition.lng,
                 markers: {
                   create: markers.map((marker: Marker) => {
                     const {hasReached, position, label, date} = marker;

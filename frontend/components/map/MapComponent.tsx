@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import {compose, withProps} from "recompose";
 import {
   Marker as IMarker,
@@ -58,8 +58,9 @@ const MapComponent = compose(
   const [lineState, lineDispatch] = lineReducer();
   const {lines} = lineState;
   const [saveTripState, saveTripDispatch] = saveTripReducer();
-  const {saveImageModeOn, step} = saveTripState;
+  const {saveImageModeOn, step, tripPosition} = saveTripState;
   const [isInfoWindowOpen, setInfoWindowOpen] = useState();
+
   const [userLocationMarker, setUserLocationMarker] = useState({
     position: {
       lat: 0,
@@ -69,6 +70,8 @@ const MapComponent = compose(
   });
   const [tripExists, setTripExists] = useState(false);
   const [isTripModalOpen, setIsTripModalOpen] = useState(false);
+
+  const mapRef = useRef(null);
   useEffect(() => {
     lineDispatch({type: "UPDATE_LINES", markers});
     const changeMarkerIconByDate = setInterval(() => {
@@ -109,8 +112,15 @@ const MapComponent = compose(
             `Sorry either you are not logged in or the trip does not exist`,
           );
         } else {
-          const {markers} = data.tripById;
+          const {markers, lat, lng} = data.tripById;
           setTripExists(true);
+          saveTripDispatch({
+            type: "SAVE_TRIP_POSITION",
+            tripPosition: {
+              lat,
+              lng,
+            },
+          });
           markDispatch({type: "SET_MARKERS_FROM_DATABASE", markers});
           return data;
         }
@@ -121,6 +131,7 @@ const MapComponent = compose(
   return (
     <GoogleMap
       defaultZoom={6}
+      ref={mapRef}
       onClick={e => {
         if (!saveImageModeOn) {
           markDispatch({type: "ADD_MARKER", event: e});
@@ -128,12 +139,10 @@ const MapComponent = compose(
         } else {
           const {lat, lng} = e.latLng;
           saveTripDispatch({
-            type: "WHILE_IMAGE_MODE_ON",
-            lat: lat(),
-            lng: lng(),
+            type: "SAVE_TRIP_IMAGE",
             urlProps: {
-              lat: lat(),
-              lng: lng(),
+              lat: lat() || 0,
+              lng: lng() || 0,
               width: 400,
               height: 400,
               zoom: 6,
@@ -147,7 +156,21 @@ const MapComponent = compose(
       options={{
         disableDefaultUI: true,
       }}
-      defaultCenter={{lat: 31, lng: -83}}
+      onCenterChanged={() => {
+        // console.log(mapRef.current.getCenter());
+        const {lat, lng} = mapRef.current.getCenter();
+        saveTripDispatch({
+          type: "SAVE_TRIP_POSITION",
+          tripPosition: {
+            lat: lat(),
+            lng: lng(),
+          },
+        });
+      }}
+      center={{
+        lat: tripPosition.lat,
+        lng: tripPosition.lng,
+      }}
     >
       <MapContext.Provider
         value={{
