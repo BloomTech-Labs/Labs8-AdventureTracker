@@ -1,23 +1,12 @@
-import {
-  Menu,
-  Dropdown,
-  Button,
-  Icon,
-  Avatar,
-  Badge,
-  message,
-  Modal,
-} from "antd";
+import {Menu, Dropdown, Button, Icon, Badge, message, Modal} from "antd";
 import styled from "styled-components";
-import {useContext, useState} from "react";
+import {useContext} from "react";
 //@ts-ignore
 import {CopyToClipboard} from "react-copy-to-clipboard";
-import MapContext from "../context/MapContext";
-import {getUserLocation} from "./helper-functions/index";
-import {Mutation} from "react-apollo";
-import {UPDATE_TRIP_MUTATION} from "../resolvers/Mutations";
-import {changeMarkersForUpsert} from "../helpers/graphql/updateTrip";
-
+import MapContext from "../../context/MapContext";
+import optionsMenuReducer from "./optionsMenuReducer";
+import {UPDATE_TRIP_MUTATION} from "../../resolvers/Mutations";
+import {changeMarkersForUpsert} from "../lib/helpers/changeMarkersForUpsert";
 const confirm = Modal.confirm;
 
 const OptionsMenuWrapper = styled.div`
@@ -69,12 +58,17 @@ const OverlayMenu = props => {
     markState,
     markDispatch,
     saveTripState,
+    tripExists,
     saveTripDispatch,
+    client,
+    tripId,
     userLocationMarker,
     setUserLocationMarker,
     setIsTripModalOpen,
   } = useContext(MapContext);
-
+  const {deletedMarkersIdsFromDB, markers} = markState;
+  const [menuState, menuDispatch] = optionsMenuReducer();
+  const {isUpdating} = menuState;
   return (
     // <Mutation
     //   mutation={UPDATE_TRIP_MUTATION}
@@ -90,29 +84,41 @@ const OverlayMenu = props => {
     // >
     //   {updateTrip => (
     <MainMenu>
-      {/* {tripExists ? (
-            <MenuItem
-              disabled={updateTripLoading}
-              onClick={async () => {
-                const hide = message.loading("Saving trip...", 0);
-                try {
-                  setUpdateTripLoading(true);
-                  const {data} = await updateTrip();
-                  if (data) {
-                    message.success("Trip was successfully updated!");
-                    setDeletedMarkerIds([]);
-                  }
-                } catch (err) {
-                  message.error("Was unable to save trip");
-                } finally {
-                  setUpdateTripLoading(false);
-                  hide();
-                }
-              }}
-            >
-              Update Trip
-            </MenuItem>
-          ) : null} */}
+      {tripExists ? (
+        <MenuItem
+          disabled={isUpdating}
+          onClick={async () => {
+            const hide = message.loading("Saving trip...", 0);
+            console.log(client);
+            try {
+              console.log(deletedMarkersIdsFromDB, markers, tripId);
+              menuDispatch({type: "UPDATING_TRIP"});
+              const {data} = await client.mutate({
+                mutation: UPDATE_TRIP_MUTATION,
+                variables: {
+                  tripId,
+                  data: {
+                    markers: {
+                      delete: deletedMarkersIdsFromDB,
+                      upsert: changeMarkersForUpsert(markers),
+                    },
+                  },
+                },
+              });
+              console.log(data);
+              message.success("Trip was successfully updated!");
+              menuDispatch({type: "UPDATED_TRIP"});
+              markDispatch({type: "EMPTY_DELETED_DB_MARKERS_IDS"});
+            } catch (err) {
+              menuDispatch({type: "UPDATE_TRIP_ERROR"});
+              message.error("Was unable to save trip");
+            }
+            hide();
+          }}
+        >
+          Update Trip
+        </MenuItem>
+      ) : null}
       <MenuItem
         onClick={() => {
           saveTripDispatch({type: "SET_STEP", step: 0});
@@ -180,8 +186,6 @@ const OverlayMenu = props => {
           : "Update my position"}
       </MenuItem>
     </MainMenu>
-    //   )}
-    // </Mutation>
   );
 };
 

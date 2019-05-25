@@ -15,7 +15,7 @@ import {
 } from "react-google-maps";
 import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 import {ProgressCircle} from "./ProgressCircle/ProgressCircle";
-import OptionsMenu from "./OptionsMenu";
+import OptionsMenu from "./OptionsMenu/OptionsMenu";
 import CustomInfoWindow from "./InfoWindow/InfoWindow";
 import {message} from "antd";
 import {MapLoadingElement} from "./MapLoadingElement";
@@ -50,6 +50,7 @@ const MapComponent = compose(
   }),
   withScriptjs,
   withGoogleMap,
+  //@ts-ignore
 )(({client, tripId}) => {
   const [markState, markDispatch] = markerReducer();
   const {markers} = markState;
@@ -66,9 +67,8 @@ const MapComponent = compose(
     },
     isVisible: false,
   });
-
+  const [tripExists, setTripExists] = useState(false);
   const [isTripModalOpen, setIsTripModalOpen] = useState(false);
-
   useEffect(() => {
     lineDispatch({type: "UPDATE_LINES", markers});
     const changeMarkerIconByDate = setInterval(() => {
@@ -110,6 +110,7 @@ const MapComponent = compose(
           );
         } else {
           const {markers} = data.tripById;
+          setTripExists(true);
           markDispatch({type: "SET_MARKERS_FROM_DATABASE", markers});
           return data;
         }
@@ -157,6 +158,9 @@ const MapComponent = compose(
           userLocationMarker,
           setUserLocationMarker,
           setIsTripModalOpen,
+          tripExists,
+          tripId,
+          client,
         }}
       >
         {isInfoWindowOpen && (
