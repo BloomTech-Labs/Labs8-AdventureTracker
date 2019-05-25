@@ -30,12 +30,15 @@ const MY_TRIP_BY_ID = gql`
       title
       description
       archived
+      lat
+      lng
       markers {
         id
         lat
         lng
         hasReached
         label
+        date
       }
     }
   }

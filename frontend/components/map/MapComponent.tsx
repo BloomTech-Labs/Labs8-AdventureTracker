@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, useRef} from "react";
 import {compose, withProps} from "recompose";
 import {
   Marker as IMarker,
@@ -15,7 +15,7 @@ import {
 } from "react-google-maps";
 import MarkerWithLabel from "react-google-maps/lib/components/addons/MarkerWithLabel";
 import {ProgressCircle} from "./ProgressCircle/ProgressCircle";
-import OptionsMenu from "./OptionsMenu";
+import OptionsMenu from "./OptionsMenu/OptionsMenu";
 import CustomInfoWindow from "./InfoWindow/InfoWindow";
 import {message} from "antd";
 import {MapLoadingElement} from "./MapLoadingElement";
@@ -50,6 +50,7 @@ const MapComponent = compose(
   }),
   withScriptjs,
   withGoogleMap,
+  //@ts-ignore
 )(({client, tripId}) => {
   const [markState, markDispatch] = markerReducer();
   const {markers} = markState;
@@ -57,8 +58,9 @@ const MapComponent = compose(
   const [lineState, lineDispatch] = lineReducer();
   const {lines} = lineState;
   const [saveTripState, saveTripDispatch] = saveTripReducer();
-  const {saveImageModeOn, step} = saveTripState;
+  const {saveImageModeOn, step, tripPosition} = saveTripState;
   const [isInfoWindowOpen, setInfoWindowOpen] = useState();
+
   const [userLocationMarker, setUserLocationMarker] = useState({
     position: {
       lat: 0,
@@ -66,9 +68,10 @@ const MapComponent = compose(
     },
     isVisible: false,
   });
-
+  const [tripExists, setTripExists] = useState(false);
   const [isTripModalOpen, setIsTripModalOpen] = useState(false);
 
+  const mapRef = useRef(null);
   useEffect(() => {
     lineDispatch({type: "UPDATE_LINES", markers});
     const changeMarkerIconByDate = setInterval(() => {
@@ -109,27 +112,38 @@ const MapComponent = compose(
             `Sorry either you are not logged in or the trip does not exist`,
           );
         } else {
-          const {markers} = data.tripById;
+          const {markers, lat, lng} = data.tripById;
+          setTripExists(true);
+          setIsTripModalOpen(false);
+          saveTripDispatch({
+            type: "SAVE_TRIP_POSITION",
+            tripPosition: {
+              lat,
+              lng,
+            },
+          });
           markDispatch({type: "SET_MARKERS_FROM_DATABASE", markers});
           return data;
         }
       }
     };
     fetchInitialEntities();
-  }, []);
+  }, [tripId]);
   return (
     <GoogleMap
       defaultZoom={6}
+      ref={mapRef}
       onClick={e => {
         if (!saveImageModeOn) {
           markDispatch({type: "ADD_MARKER", event: e});
           setInfoWindowOpen(false);
         } else {
+          const {lat, lng} = e.latLng;
           saveTripDispatch({
-            type: "WHILE_IMAGE_MODE_ON",
+            type: "SAVE_TRIP_IMAGE",
             urlProps: {
-              lat: e.latLng.lat(),
-              lng: e.latLng.lng(),
+              lat: lat() || 0,
+              lng: lng() || 0,
               width: 400,
               height: 400,
               zoom: 6,
@@ -143,7 +157,21 @@ const MapComponent = compose(
       options={{
         disableDefaultUI: true,
       }}
-      defaultCenter={{lat: 31, lng: -83}}
+      onCenterChanged={() => {
+        // console.log(mapRef.current.getCenter());
+        const {lat, lng} = mapRef.current.getCenter();
+        saveTripDispatch({
+          type: "SAVE_TRIP_POSITION",
+          tripPosition: {
+            lat: lat(),
+            lng: lng(),
+          },
+        });
+      }}
+      center={{
+        lat: tripPosition.lat,
+        lng: tripPosition.lng,
+      }}
     >
       <MapContext.Provider
         value={{
@@ -157,6 +185,9 @@ const MapComponent = compose(
           userLocationMarker,
           setUserLocationMarker,
           setIsTripModalOpen,
+          tripExists,
+          tripId,
+          client,
         }}
       >
         {isInfoWindowOpen && (
@@ -170,6 +201,7 @@ const MapComponent = compose(
         isModalVisible={isTripModalOpen}
         setIsModalVisible={setIsTripModalOpen}
         client={client}
+        tripId={tripId}
       />
 
       {userLocationMarker.isVisible ? (

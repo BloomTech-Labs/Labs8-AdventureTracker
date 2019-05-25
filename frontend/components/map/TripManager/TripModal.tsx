@@ -12,12 +12,14 @@ interface Props {
   isModalVisible: boolean;
   setIsModalVisible: Function;
   client: any;
+  tripId: String;
 }
 
 const TripModal: React.SFC<Props> = ({
   isModalVisible,
   setIsModalVisible,
   client,
+  tripId
 }) => {
   const ALL = "ALL";
   const ACTIVE = "ACTIVE";
@@ -29,22 +31,14 @@ const TripModal: React.SFC<Props> = ({
     const fetchMyTrips = async () => {
       try {
         tripDispatch({type: "FETCHING_TRIPS"});
-        const {data: archivedData}: any = await client.query({
+        const {data}: any = await client.query({
           query: MY_TRIPS_QUERY,
-          variables: {
-            archived: true,
-          },
         });
-        const {data: activeData}: any = await client.query({
-          query: MY_TRIPS_QUERY,
-          variables: {
-            archived: false,
-          },
-        });
+
         // console.log(archivedData, activeData);
         tripDispatch({
           type: "FETCHED_TRIPS",
-          trips: [...archivedData.myTrips, ...activeData.myTrips],
+          trips: data.myTrips,
         });
       } catch (err) {
         tripDispatch({type: "ERROR_FETCHING_TRIPS"});
@@ -99,6 +93,7 @@ const TripModal: React.SFC<Props> = ({
                   key={trip.id}
                   trip={trip}
                   tripDispatch={tripDispatch}
+                  urlTripId={tripId}
                 />
               );
             })
