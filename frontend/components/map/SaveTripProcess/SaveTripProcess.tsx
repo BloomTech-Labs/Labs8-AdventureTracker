@@ -2,14 +2,12 @@ import {Steps, Card, Button} from "antd";
 import styled from "styled-components";
 import WrappedFinishTripForm from "./FinishTripForm";
 import ScreenCapture from "../ScreenCapture/ScreenCapture";
-import { useContext } from "react";
+import {useContext} from "react";
 import MapContext from "../../context/MapContext";
 
 const Step = Steps.Step;
 
-interface Props {
-
-}
+interface Props {}
 const StepsWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -26,8 +24,8 @@ const PreviewImage = styled.img`
   margin-bottom: 1.6rem;
 `;
 const StepsStatusBar: React.SFC<Props> = () => {
-  const { saveTripState, saveTripDispatch } = useContext(MapContext);
-  const { step, googleImageUrl } = saveTripState;
+  const {saveTripState, saveTripDispatch} = useContext(MapContext);
+  const {step, googleImageUrl} = saveTripState;
   if (step === -1) {
     return null;
   } else {
@@ -56,14 +54,21 @@ const StepsStatusBar: React.SFC<Props> = () => {
           </Steps>
           {step === 1 ? (
             <>
-            <PreviewImage
-              src={googleImageUrl}
-              alt="Google Map Preview Image"
-            />
-            <ScreenCapture captureHeight={"400"} captureWidth={"400"} />
+              {googleImageUrl ? (
+                <PreviewImage
+                  src={googleImageUrl}
+                  alt="Google Map Preview Image"
+                />
+              ) : (
+                <h2>Click on map to generate image.</h2>
+              )}
+              <ScreenCapture captureHeight={"400"} captureWidth={"400"} />
             </>
           ) : null}
-          <WrappedFinishTripForm step={step} saveTripDispatch={saveTripDispatch} />
+          <WrappedFinishTripForm
+            step={step}
+            saveTripDispatch={saveTripDispatch}
+          />
         </Card>
       </StepsWrapper>
     );
