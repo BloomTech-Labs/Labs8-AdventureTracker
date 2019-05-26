@@ -42,22 +42,9 @@ const MainMenu = styled(Menu)`
 
 //@ts-ignore
 const OverlayMenu = props => {
-  // const {
-  //   setScreenOn,
-  //   setSaveTripStep,
-  //   setTripModalOpen,
-  //   setUserPosition,
-  //   userPosition,
-  //   tripExists,
-  //   tripId,
-  //   markers,
-  //   deletedMarkerIds,
-  //   setDeletedMarkerIds,
-  // } = useContext(MapContext);
   const {
     markState,
     markDispatch,
-    saveTripState,
     tripExists,
     saveTripDispatch,
     client,
@@ -70,19 +57,6 @@ const OverlayMenu = props => {
   const [menuState, menuDispatch] = optionsMenuReducer();
   const {isUpdating} = menuState;
   return (
-    // <Mutation
-    //   mutation={UPDATE_TRIP_MUTATION}
-    //   variables={{
-    //     tripId: tripId,
-    //     data: {
-    //       markers: {
-    //         delete: deletedMarkerIds,
-    //         upsert: changeMarkersForUpsert(markers),
-    //       },
-    //     },
-    //   }}
-    // >
-    //   {updateTrip => (
     <MainMenu>
       {tripExists ? (
         <MenuItem
@@ -135,12 +109,12 @@ const OverlayMenu = props => {
         <Icon type="bars" />
         Trips
       </MenuItem>
-      <MenuItem>
+      {/* <MenuItem>
         <Icon type="user" />
         <Badge count={1} offset={[15, 7]}>
           Followers
         </Badge>
-      </MenuItem>
+      </MenuItem> */}
       <CopyToClipboard text={window.location.href}>
         <MenuItem
           onClick={() => {
@@ -181,9 +155,7 @@ const OverlayMenu = props => {
           }
         }}
       >
-        {userLocationMarker.isVisible
-          ? "Update my position"
-          : "Update my position"}
+        Update my position
       </MenuItem>
     </MainMenu>
   );
