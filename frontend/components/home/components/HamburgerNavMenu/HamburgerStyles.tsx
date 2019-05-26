@@ -34,7 +34,7 @@ const MenuList = styled.ul`
   align-items: center;
   list-style: none;
   padding: ${vars.space_sm};
-
+  padding-bottom: 0;
   width: 100%;
 `;
 
@@ -60,29 +60,27 @@ const Button = styled.button`
   }
 `;
 const HamDivider = styled.div`
-  border-top: 2px solid white;
+  display: flex;
+  justify-content: center;
   margin: 24px 0;
   position: relative;
-  /* background: pink; */
   padding: 1rem;
-  &:before {
-    content: "OR";
-    display: flex;
-    justify-content: center;
+  &::before {
+    content: "";
+    border-top: 2px solid white;
+    width: 40%;
     position: absolute;
-    top: -100%;
-    /* background: red; */
-    width: 100%;
+    top: 50%;
+    right: 0;
   }
-  /* &:before {
-    content: "OR";
+  &::after {
+    content: "";
+    border-top: 2px solid white;
+    width: 40%;
     position: absolute;
-    top: -20px;
-    left: 50%;
-    background: #303030dc;
-    padding: 0 0.1em;
-    transform: translateX(-50%);
-  } */
+    top: 50%;
+    left: 0;
+  }
 `;
 const NavLink = styled.a``;
 

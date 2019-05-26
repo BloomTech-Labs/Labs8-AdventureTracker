@@ -43,7 +43,7 @@ const HamburgerNavMenu: React.SFC<HamburgerNavMenuProps> = ({
           </NavLink>
         </ListItem>
       </MenuList>
-      <HamDivider />
+      <HamDivider>OR</HamDivider>
       <MenuList aria-label="menu">
         <ListItem role="menuitem" tabIndex={0}>
           <Link href={{pathname: "/auth", query: {start: "sign-up"}}}>
