@@ -19,7 +19,7 @@ import {
   Title,
   Description,
 } from "./components/SectionStyles/SectionStyles";
-import BlurImage from "../BlurImage/BlurImage";
+import BlurLazyImage from "../BlurLazyImage/BlurLazyImage";
 import {useState} from "react";
 import HamburgerNavMenu from "./components/HamburgerNavMenu/HamburgerNavMenu";
 import WrappedContactForm from "./components/ContactForm/ContactForm";
@@ -39,7 +39,7 @@ const Home: React.SFC<HomeProps> = () => {
         <HamburgerNavMenu setMenuActive={setNavbarMenuActive} />
       ) : null}
       <section className="jumbotron">
-        <BlurImage
+        <BlurLazyImage
           className="jumbotron__bg-image"
           src={AdventureTrackerJumbo}
           alt=""
@@ -69,7 +69,7 @@ const Home: React.SFC<HomeProps> = () => {
             No matter how big or small <br /> we've got you covered.
           </Description>
         </TextContent>
-        <BlurImage
+        <BlurLazyImage
           className="plan-trip__img"
           src={NorthAmericaWithMarkers}
           base64={blurNorthAmericaWithMarkers}
@@ -83,7 +83,7 @@ const Home: React.SFC<HomeProps> = () => {
             Share your trip with friends and family by sending a link.
           </Description>
         </TextContent>
-        <BlurImage
+        <BlurLazyImage
           className="share-family__img"
           src={ShareWithFamilySrc}
           base64={blurFamily}
