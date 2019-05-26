@@ -163,10 +163,7 @@ const FinishTripForm: React.SFC<Props> = ({form}) => {
                     console.log(data);
                     const {id} = data.createTrip;
                     Router.push({
-                      pathname: "/map",
-                      query: {
-                        id: id,
-                      },
+                      pathname: `/map/${id}`,
                     });
                   }}
                 >

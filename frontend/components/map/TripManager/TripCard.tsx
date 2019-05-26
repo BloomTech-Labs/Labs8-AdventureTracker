@@ -50,10 +50,7 @@ const TripCard: React.SFC<Props> = ({trip, tripDispatch, urlTripId}) => {
           disabled={urlTripId === id ? true : false}
           onClick={() => {
             Router.replace({
-              pathname: "/map",
-              query: {
-                id,
-              },
+              pathname: `/map/${id}`,
             });
           }}
         >

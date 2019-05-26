@@ -4,7 +4,6 @@ import {withRouter} from "next/router";
 
 const Map = props => {
   const {query} = props.router;
-  console.log({props});
   return (
     <ApolloConsumer>
       {client => <MapComponent client={client} tripId={query.id} />}
