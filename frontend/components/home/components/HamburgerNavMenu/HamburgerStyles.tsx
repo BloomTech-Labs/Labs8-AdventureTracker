@@ -20,6 +20,7 @@ const ExitBtn = styled.button`
   color: white;
   align-self: flex-end;
   font-size: 4rem;
+  padding: ${vars.space_sm};
   margin: ${vars.space_md};
   background: none;
   &:hover {
@@ -35,15 +36,16 @@ const MenuList = styled.ul`
   padding: ${vars.space_sm};
 
   width: 100%;
-  & > li {
-    margin-bottom: 18px;
-  }
 `;
 
 const ListItem = styled.li`
   width: 100%;
+  margin-bottom: 18px;
   &:hover {
     background: #dddddd;
+  }
+  &:last-child {
+    margin-bottom: 0px;
   }
 `;
 
@@ -60,7 +62,7 @@ const Button = styled.button`
 const HamDivider = styled.div`
   border-top: 2px solid white;
   position: relative;
-  margin-bottom: 24px;
+  margin: 24px 0;
   &:before {
     content: "OR";
     position: absolute;
