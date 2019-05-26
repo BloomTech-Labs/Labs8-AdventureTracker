@@ -11,7 +11,7 @@ const Map = props => {
     asPath.match(/\/map\/\?id=(\w+)/) &&
     process.env.NODE_ENV === "production"
   ) {
-    const productionQueryId = asPath.match(/\/map\/\?id=(\w+)/)[1];
+    productionQueryId = asPath.match(/\/map\/\?id=(\w+)/)[1];
     console.log("productionQueryId", productionQueryId);
   }
   return (
