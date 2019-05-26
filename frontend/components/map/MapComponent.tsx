@@ -123,7 +123,10 @@ const MapComponent = compose(
               lng,
             },
           });
-          markDispatch({type: "SET_MARKERS_FROM_DATABASE", markers});
+          markDispatch({
+            type: "SET_MARKERS_FROM_DATABASE",
+            queryMarkers: markers,
+          });
           return data;
         }
       }
