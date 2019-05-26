@@ -62,7 +62,7 @@ const Button = styled.button`
 const HamDivider = styled.div`
   display: flex;
   justify-content: center;
-  margin: 24px 0;
+  padding: 24px 0;
   position: relative;
   padding: 1rem;
   &::before {
