@@ -4,7 +4,7 @@ import vars from "lib/styles/variables";
 const Nav = styled.nav`
   display: none;
   flex-direction: column;
-  position: sticky;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
@@ -12,6 +12,7 @@ const Nav = styled.nav`
   z-index: 101;
   background: #303030dc;
   overflow-y: scroll;
+  min-height: 100vh;
   @media screen and (max-width: 890px) {
     display: flex;
   }
