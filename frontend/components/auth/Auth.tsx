@@ -24,7 +24,6 @@ const Auth: React.SFC<AuthProps> = props => {
   const [tab, setTab] = useState(SIGNUP);
   const [windowHeight, setWindowHeight] = useState(1000);
   useEffect(() => {
-    console.log(window.innerHeight);
     if (document.cookie.match(/ux/)) {
       Router.push({
         pathname: "/map",
