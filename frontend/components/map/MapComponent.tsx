@@ -160,7 +160,7 @@ const MapComponent = compose(
       }}
       onCenterChanged={() => {
         // console.log(mapRef.current.getCenter());
-        const {lat, lng} = mapRef.current.getCenter();
+        const {lat, lng} = (mapRef.current as any).getCenter();
         saveTripDispatch({
           type: "SAVE_TRIP_POSITION",
           tripPosition: {
