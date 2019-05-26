@@ -88,14 +88,13 @@ const AuthPageWrapper = styled.div`
   padding-top: 12px;
   overflow-y: scroll;
   height: 100vh;
-  background: lightblue;
 `;
 
 const Title = styled.h1`
   text-align: center;
   font-weight: 800;
   font-size: 8rem;
-  color: white;
+  color: ${props => props.theme.black};
   transform: rotateY(56deg);
   letter-spacing: 1rem;
   line-height: 1;
