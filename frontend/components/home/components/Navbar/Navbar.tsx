@@ -5,10 +5,9 @@ import Link from "next/link";
 
 export interface NavbarProps {
   setMenuActive: Function;
-  isMenuActive: boolean;
 }
 
-const Navbar: React.SFC<NavbarProps> = ({setMenuActive, isMenuActive}) => {
+const Navbar: React.SFC<NavbarProps> = ({setMenuActive}) => {
   return (
     <nav className="navbar">
       <h2 className="navbar__logo">
@@ -46,17 +45,13 @@ const Navbar: React.SFC<NavbarProps> = ({setMenuActive, isMenuActive}) => {
       </ul>
       <button
         className="nav__mobile-menu-btn"
-        onClick={() => setMenuActive((prevState: boolean) => !prevState)}
+        onClick={() => setMenuActive(true)}
       >
-        {isMenuActive ? (
-          <div className="mobile-menu__content-x">X</div>
-        ) : (
-          <img
-            src={mobileMenu}
-            className="mobile-menu__content-ham"
-            alt="navigation menu closed"
-          />
-        )}
+        <img
+          src={mobileMenu}
+          className="mobile-menu__content-ham"
+          alt="navigation menu closed"
+        />
       </button>
     </nav>
   );
