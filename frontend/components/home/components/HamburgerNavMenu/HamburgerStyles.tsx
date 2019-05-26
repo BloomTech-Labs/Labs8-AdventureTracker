@@ -10,7 +10,6 @@ const Nav = styled.nav`
   right: 0;
   bottom: 0;
   z-index: 101;
-  min-height: 100vh;
   background: #303030dc;
   overflow-y: scroll;
   @media screen and (max-width: 890px) {
