@@ -7,11 +7,10 @@ const Map = props => {
   // console.log({router: props.router});
   if (
     !query.id &&
-    asPath.match(/\/map\/\?id=(\w+)/)[1] &&
+    asPath.match(/\/map\/\?id=(\w+)/) &&
     process.env.NODE_ENV === "production"
   ) {
-    const productionQueryId =
-      props.router.asPath.match(/\/map\/\?id=(\w+)/)[1] || "";
+    const productionQueryId = asPath.match(/\/map\/\?id=(\w+)/)[1] || "";
     console.log("productionQueryId", productionQueryId);
   }
   return (
