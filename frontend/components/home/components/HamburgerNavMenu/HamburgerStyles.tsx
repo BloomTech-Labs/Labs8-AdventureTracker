@@ -12,6 +12,7 @@ const Nav = styled.nav`
   z-index: 101;
   background: #303030dc;
   overflow-y: scroll;
+  min-height: 100vh;
   @media screen and (max-width: 890px) {
     display: flex;
   }
@@ -20,6 +21,7 @@ const ExitBtn = styled.button`
   color: white;
   align-self: flex-end;
   font-size: 4rem;
+  padding: ${vars.space_sm};
   margin: ${vars.space_md};
   background: none;
   &:hover {
@@ -33,17 +35,18 @@ const MenuList = styled.ul`
   align-items: center;
   list-style: none;
   padding: ${vars.space_sm};
-
+  padding-bottom: 0;
   width: 100%;
-  & > li {
-    margin-bottom: 18px;
-  }
 `;
 
 const ListItem = styled.li`
   width: 100%;
+  margin-bottom: 18px;
   &:hover {
     background: #dddddd;
+  }
+  &:last-child {
+    margin-bottom: 0px;
   }
 `;
 
@@ -58,17 +61,26 @@ const Button = styled.button`
   }
 `;
 const HamDivider = styled.div`
-  border-top: 2px solid white;
+  display: flex;
+  justify-content: center;
   position: relative;
-  margin-bottom: 24px;
-  &:before {
-    content: "OR";
+  padding: 1em;
+  margin-top: ${vars.space_md};
+  &::before {
+    content: "";
+    border-top: 2px solid white;
+    width: 40%;
     position: absolute;
-    top: -20px;
-    left: 50%;
-    background: #303030dc;
-    padding: 0 0.4em;
-    transform: translateX(-50%);
+    top: 50%;
+    right: 0;
+  }
+  &::after {
+    content: "";
+    border-top: 2px solid white;
+    width: 40%;
+    position: absolute;
+    top: 50%;
+    left: 0;
   }
 `;
 const NavLink = styled.a``;
