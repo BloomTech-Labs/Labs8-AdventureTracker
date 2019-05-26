@@ -7,4 +7,4 @@
 NODE_ENV = "prod"
 base="frontend/"
 publish="frontend/out/"
-command="npm run export"
+command="npm run build && next export"
