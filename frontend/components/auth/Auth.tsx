@@ -99,9 +99,13 @@ const Title = styled.h1`
   transform: rotateY(56deg);
   letter-spacing: 1rem;
   line-height: 1;
+  @media screen and (max-width: 500px) {
+    font-size: 6rem;
+  }
   @media screen and (max-height: 500px) {
     font-size: 4rem;
   }
+
   @media screen and (max-height: 425px) {
     display: none;
   }
