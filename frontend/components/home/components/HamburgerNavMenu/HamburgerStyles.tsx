@@ -4,13 +4,13 @@ import vars from "lib/styles/variables";
 const Nav = styled.nav`
   display: none;
   flex-direction: column;
-  position: fixed;
+  position: sticky;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
   z-index: 101;
-  min-height: 100%;
+  min-height: 100vh;
   background: #303030dc;
   overflow-y: scroll;
   @media screen and (max-width: 890px) {
@@ -63,9 +63,8 @@ const Button = styled.button`
 const HamDivider = styled.div`
   display: flex;
   justify-content: center;
-  padding: 24px 0;
   position: relative;
-  padding: 1rem;
+  padding: 1em;
   &::before {
     content: "";
     border-top: 2px solid white;
