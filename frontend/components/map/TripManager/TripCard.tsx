@@ -49,7 +49,7 @@ const TripCard: React.SFC<Props> = ({trip, tripDispatch, urlTripId}) => {
           type="primary"
           disabled={urlTripId === id ? true : false}
           onClick={() => {
-            Router.replace({
+            Router.push({
               pathname: "/map",
               query: {
                 id,
