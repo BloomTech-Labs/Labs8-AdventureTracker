@@ -102,6 +102,7 @@ const MapComponent = compose(
       if (tripId) {
         const {data} = await client.query({
           query: MY_TRIP_BY_ID,
+          fetchPolicy: "no-cache",
           variables: {
             id: tripId,
           },
