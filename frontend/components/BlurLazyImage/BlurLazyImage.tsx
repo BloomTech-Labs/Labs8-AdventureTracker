@@ -16,7 +16,7 @@ const loadImage = (src: string) =>
 export interface BlurLazyImageProps {
   src: string;
   base64: string;
-  alt: string;
+  alt?: string;
   [key: string]: any;
 }
 
@@ -35,7 +35,7 @@ const BlurLazyImage: React.SFC<BlurLazyImageProps> = (
     }
   }, [imgRef]);
 
-  const onIntersection = async (entries: any[]) => {
+  const onIntersection = async (entries: IntersectionObserverEntry[]) => {
     for (const entry of entries) {
       if (entry.isIntersecting) {
         if (observer) {
