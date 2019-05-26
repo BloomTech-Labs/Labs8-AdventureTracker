@@ -3,11 +3,11 @@ import {ApolloConsumer} from "react-apollo";
 import {withRouter} from "next/router";
 
 const Map = props => {
-  const {query} = props.router;
+  const {query, asPath} = props.router;
   // console.log({router: props.router});
   if (
     !query.id &&
-    props.router.asPath &&
+    asPath.match(/\/map\/\?id=(\w+)/)[1] &&
     process.env.NODE_ENV === "production"
   ) {
     const productionQueryId =
