@@ -221,7 +221,7 @@ const MapComponent = compose(
                 26,
               )
             }
-            labelStyle={mark.labelStyle}
+            labelStyle={mark.label.length ? mark.labelStyle : ""}
             icon={{
               origin: new google.maps.Point(0, 0),
               url: mark.url,
