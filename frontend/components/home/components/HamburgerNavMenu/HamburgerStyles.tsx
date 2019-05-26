@@ -61,17 +61,28 @@ const Button = styled.button`
 `;
 const HamDivider = styled.div`
   border-top: 2px solid white;
-  position: relative;
   margin: 24px 0;
+  position: relative;
+  /* background: pink; */
+  padding: 1rem;
   &:before {
+    content: "OR";
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    top: -100%;
+    /* background: red; */
+    width: 100%;
+  }
+  /* &:before {
     content: "OR";
     position: absolute;
     top: -20px;
     left: 50%;
     background: #303030dc;
-    padding: 0 0.4em;
+    padding: 0 0.1em;
     transform: translateX(-50%);
-  }
+  } */
 `;
 const NavLink = styled.a``;
 
