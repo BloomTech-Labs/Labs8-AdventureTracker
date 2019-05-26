@@ -8,8 +8,9 @@ import {Card, Button, Icon} from "antd";
 import homeImg from "static/jumbotron-home.jpg";
 //@ts-ignore
 import media from "lib/mediaQueries";
+//@ts-ignore
+import vars from "lib/styles/variables";
 import Router from "next/router";
-
 export interface AuthProps {
   router: {
     query: any;
@@ -21,7 +22,9 @@ const Auth: React.SFC<AuthProps> = props => {
   const LOGIN = "login";
   const SIGNUP = "sign-up";
   const [tab, setTab] = useState(SIGNUP);
+  const [windowHeight, setWindowHeight] = useState(1000);
   useEffect(() => {
+    console.log(window.innerHeight);
     if (document.cookie.match(/ux/)) {
       Router.push({
         pathname: "/map",
@@ -31,10 +34,30 @@ const Auth: React.SFC<AuthProps> = props => {
       setTab(query.start === LOGIN ? LOGIN : SIGNUP);
     }
   }, []);
+  useEffect(() => {
+    window.addEventListener("resize", getWindowHeight);
+    return () => {
+      window.removeEventListener("resize", getWindowHeight);
+    };
+  }, [windowHeight]);
+  const getWindowHeight = () => {
+    const winHeight =
+      window.innerHeight ||
+      document.documentElement.clientHeight ||
+      document.body.clientHeight;
+    console.log(windowHeight);
+    setWindowHeight(winHeight);
+  };
   return (
     <AuthPageWrapper>
       <Title>Adventure Tracker</Title>
-      <AuthCard title={tab === SIGNUP ? "Signup" : "Login"}>
+      <AuthCard
+        title={
+          tab === SIGNUP
+            ? `${windowHeight <= 425 ? "Adventure Tracker" : ""} Signup`
+            : `${windowHeight <= 425 ? "Adventure Tracker" : ""} Login`
+        }
+      >
         <SignupForm isVisible={tab === SIGNUP ? true : false} />
         <LoginForm isVisible={tab === LOGIN ? true : false} />
 
@@ -76,12 +99,21 @@ const Title = styled.h1`
   transform: rotateY(56deg);
   letter-spacing: 1rem;
   line-height: 1;
+  @media screen and (max-height: 500px) {
+    font-size: 4rem;
+  }
+  @media screen and (max-height: 425px) {
+    display: none;
+  }
 `;
 
 const AuthCard = styled(Card)`
   max-width: 500px;
   width: 100%;
   margin: 0 auto;
+  position: -webkit-sticky;
+  position: sticky;
+  bottom: 0;
 `;
 const AuthTabGroup = styled(Button.Group)`
   position: absolute;
