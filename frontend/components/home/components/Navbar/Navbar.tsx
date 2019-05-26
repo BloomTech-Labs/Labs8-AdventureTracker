@@ -34,12 +34,12 @@ const Navbar: React.SFC<NavbarProps> = ({setMenuActive, isMenuActive}) => {
       </ul>
       <ul className="navbar__auth-list" aria-label="menu">
         <li className="auth-list__item" role="menuitem" tabIndex={0}>
-          <Link href={{pathname: "/auth", query: {start: "sign-up"}}}>
+          <Link href={"/auth?start=sign-up"}>
             <a className="auth-link">Sign up</a>
           </Link>
         </li>
         <li className="auth-list__item" role="menuitem" tabIndex={0}>
-          <Link href={{pathname: "/auth", query: {start: "login"}}}>
+          <Link href={"/auth?start=login"}>
             <a className="auth-link">Login</a>
           </Link>
         </li>
