@@ -4,7 +4,7 @@ import {withRouter} from "next/router";
 
 const Map = props => {
   const {query} = props.router;
-  console.log({router: props.router});
+  // console.log({router: props.router});
   if (
     !query.id &&
     props.router.asPath &&
