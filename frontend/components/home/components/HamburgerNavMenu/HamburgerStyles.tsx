@@ -65,6 +65,7 @@ const HamDivider = styled.div`
   justify-content: center;
   position: relative;
   padding: 1em;
+  margin-top: ${vars.space_md};
   &::before {
     content: "";
     border-top: 2px solid white;
