@@ -5,7 +5,11 @@ import {withRouter} from "next/router";
 const Map = props => {
   const {query} = props.router;
   console.log({router: props.router});
-  if (!query.id && process.env.NODE_ENV === "production") {
+  if (
+    !query.id &&
+    props.router.asPath &&
+    process.env.NODE_ENV === "production"
+  ) {
     const productionQueryId =
       props.router.asPath.match(/\/map\/\?id=(\w+)/)[1] || "";
     console.log("productionQueryId", productionQueryId);
