@@ -5,7 +5,6 @@ import {Mutation} from "react-apollo";
 import {CREATE_TRIP_MUTATION} from "../../resolvers/Mutations";
 import MapContext from "../../context/MapContext";
 import {Marker} from "../interfaces";
-import Router from "next/router";
 
 interface Props {
   form: {
@@ -162,12 +161,7 @@ const FinishTripForm: React.SFC<Props> = ({form}) => {
                     const {data} = await createTrip();
                     console.log(data);
                     const {id} = data.createTrip;
-                    Router.push({
-                      pathname: "/map",
-                      query: {
-                        id: id,
-                      },
-                    });
+                    window.location.href = `/map?id=${id}`;
                   }}
                 >
                   Done
