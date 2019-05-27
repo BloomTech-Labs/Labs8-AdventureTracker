@@ -1,4 +1,4 @@
-import {Button, Card, Divider, Checkbox, Modal} from "antd";
+import {Button, Card, Divider, Checkbox, Modal, message} from "antd";
 import {InfoWindow} from "react-google-maps";
 import {useEffect, useContext} from "react";
 import MapContext from "../../context/MapContext";
@@ -56,13 +56,19 @@ const CustomInfoWindow = ({setInfoWindowOpen}) => {
           <CardGrid>
             <Button
               onClick={async () => {
-                const data = await getReverseGeocoding(lat, lng);
-                if (data.address) {
-                  markDispatch({
-                    type: "UPDATE_MARKER",
-                    marker: activeMarker,
-                    props: {address: data.address.display_name},
-                  });
+                try {
+                  const data = await getReverseGeocoding(lat, lng);
+                  if (data.address) {
+                    markDispatch({
+                      type: "UPDATE_MARKER",
+                      marker: activeMarker,
+                      props: {address: data.address.display_name},
+                    });
+                  }
+                } catch (err) {
+                  message.error(
+                    "Was unable to generate an address at this location.",
+                  );
                 }
               }}
               style={{marginBottom: "12px"}}
