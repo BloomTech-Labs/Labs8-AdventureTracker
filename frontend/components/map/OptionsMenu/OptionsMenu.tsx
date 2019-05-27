@@ -63,11 +63,9 @@ const OverlayMenu = props => {
           disabled={isUpdating}
           onClick={async () => {
             const hide = message.loading("Saving trip...", 0);
-            console.log(client);
             try {
-              console.log(deletedMarkersIdsFromDB, markers, tripId);
               menuDispatch({type: "UPDATING_TRIP"});
-              const {data} = await client.mutate({
+              await client.mutate({
                 mutation: UPDATE_TRIP_MUTATION,
                 variables: {
                   id: tripId,
@@ -79,7 +77,6 @@ const OverlayMenu = props => {
                   },
                 },
               });
-              console.log(data);
               message.success("Trip was successfully updated!");
               menuDispatch({type: "UPDATED_TRIP"});
               markDispatch({type: "EMPTY_DELETED_DB_MARKERS_IDS"});
