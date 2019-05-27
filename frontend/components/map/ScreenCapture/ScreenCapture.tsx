@@ -1,16 +1,11 @@
-import {useEffect, useState, useContext} from "react";
+import {useEffect, useState} from "react";
 import "./screen.less";
-import MapContext from "../../context/MapContext";
-interface Props {
-  captureWidth: string;
-  captureHeight: string;
-}
+// import MapContext from "../../context/MapContext";
+interface Props {}
 
-const ScreenCapture: React.SFC<Props> = ({
-  captureWidth,
-  captureHeight,
-}) => {
-  const {crossHairs} = useContext(MapContext);
+const ScreenCapture: React.SFC<Props> = () => {
+  // const {crossHairs} = useContext(MapContext);
+  //@ts-ignore
   const [windowSize, setWindowSize] = useState({
     width: 0,
     height: 0,

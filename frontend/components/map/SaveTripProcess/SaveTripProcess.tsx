@@ -1,4 +1,4 @@
-import {Steps, Card, Button} from "antd";
+import {Steps, Card} from "antd";
 import styled from "styled-components";
 import WrappedFinishTripForm from "./FinishTripForm";
 import ScreenCapture from "../ScreenCapture/ScreenCapture";
@@ -62,7 +62,7 @@ const StepsStatusBar: React.SFC<Props> = () => {
               ) : (
                 <h2>Click on map to generate image.</h2>
               )}
-              <ScreenCapture captureHeight={"400"} captureWidth={"400"} />
+              <ScreenCapture />
             </>
           ) : null}
           <WrappedFinishTripForm

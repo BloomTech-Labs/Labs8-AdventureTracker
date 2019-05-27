@@ -96,7 +96,7 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
   };
   return (
     <Mutation mutation={SIGNUP_MUTATION} variables={{...signupInfo}}>
-      {(signup, {loading, error}) => (
+      {(signup, {loading}) => (
         <Form
           onSubmit={(e: any) => {
             submitSignup(e, signup);

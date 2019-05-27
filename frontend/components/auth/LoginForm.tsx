@@ -42,7 +42,7 @@ const LoginForm: React.SFC<Props> = ({form, isVisible}) => {
         return;
       }
       try {
-        const data = await loginCb();
+        await loginCb();
         // console.log(data);
         Router.push({
           pathname: "/map",
