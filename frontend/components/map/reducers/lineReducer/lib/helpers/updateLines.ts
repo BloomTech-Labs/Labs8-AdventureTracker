@@ -49,6 +49,5 @@ export default (markers: Marker[]) => {
       line = [{lat: markerLat, lng: markerLng}];
     }
   }
-  //@ts-ignore
   return lines;
 };

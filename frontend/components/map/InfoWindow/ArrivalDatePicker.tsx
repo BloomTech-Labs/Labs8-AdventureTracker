@@ -7,9 +7,7 @@ interface ArrivalDatePickerProps {}
 const ArrivalDatePicker: React.SFC<ArrivalDatePickerProps> = () => {
   const {markState, markDispatch} = useContext(MapContext);
   const {activeMarker} = markState;
-  function onChange(value: object, dateString: string) {
-    // console.log(typeof value, typeof dateString);
-    // console.log(value, dateString);
+  function onChange(value: object) {
     const activeMarkerWithNewDate = {
       ...activeMarker,
       date: value,

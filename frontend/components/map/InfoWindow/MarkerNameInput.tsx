@@ -26,7 +26,6 @@ const MarkerNameInput: React.SFC<MarkerNameInputProps> = () => {
               label: e.target.value,
             },
           });
-          // updateMarkerLabelName(activeMarker, e.target.value);
         }}
       />
     </Tooltip>
