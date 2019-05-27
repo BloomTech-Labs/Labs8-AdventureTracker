@@ -1,4 +1,9 @@
-export {CREATE_TRIP_MUTATION, UPDATE_TRIP_MUTATION, ARCHIVE_TRIP_MUTATION};
+export {
+  CREATE_TRIP_MUTATION,
+  UPDATE_TRIP_MUTATION,
+  ARCHIVE_TRIP_MUTATION,
+  LOGOUT_MUTATION,
+};
 
 import gql from "graphql-tag";
 
@@ -40,6 +45,14 @@ const ARCHIVE_TRIP_MUTATION = gql`
     updateTrip(id: $tripId, data: $data) {
       id
       archived
+    }
+  }
+`;
+
+const LOGOUT_MUTATION = gql`
+  mutation LOGOUT_MUTATION {
+    logout {
+      name
     }
   }
 `;
