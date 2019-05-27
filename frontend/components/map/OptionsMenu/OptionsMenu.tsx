@@ -90,6 +90,7 @@ const OverlayMenu = props => {
             hide();
           }}
         >
+          <Icon type="upload" />
           Update Trip
         </MenuItem>
       ) : null}
