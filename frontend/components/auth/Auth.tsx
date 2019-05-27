@@ -24,11 +24,6 @@ const Auth: React.SFC<AuthProps> = props => {
   const [tab, setTab] = useState(SIGNUP);
   const [windowHeight, setWindowHeight] = useState(1000);
   useEffect(() => {
-    if (document.cookie.match(/ux/)) {
-      Router.push({
-        pathname: "/map",
-      });
-    }
     if (query) {
       setTab(query.start === LOGIN ? LOGIN : SIGNUP);
     }
