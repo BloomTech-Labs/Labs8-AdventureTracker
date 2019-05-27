@@ -10,7 +10,6 @@ import homeImg from "static/jumbotron-home.jpg";
 import media from "lib/mediaQueries";
 //@ts-ignore
 import vars from "lib/styles/variables";
-import Router from "next/router";
 export interface AuthProps {
   router: {
     query: any;
