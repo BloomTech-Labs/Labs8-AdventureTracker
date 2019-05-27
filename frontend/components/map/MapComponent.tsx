@@ -101,6 +101,7 @@ const MapComponent = compose(
   useEffect(() => {
     const fetchInitialEntities = async () => {
       if (tripId) {
+        const hide = message.loading("Fetching Trip", 0);
         try {
           const {data} = await client.query({
             query: MY_TRIP_BY_ID,
@@ -124,8 +125,11 @@ const MapComponent = compose(
             type: "SET_MARKERS_FROM_DATABASE",
             queryMarkers: markers,
           });
+          message.success("Trip has successfully loaded");
         } catch (err) {
           message.error(err.message);
+        } finally {
+          hide();
         }
       }
     };
