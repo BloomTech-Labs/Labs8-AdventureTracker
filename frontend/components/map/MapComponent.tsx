@@ -123,7 +123,10 @@ const MapComponent = compose(
               lng,
             },
           });
-          markDispatch({type: "SET_MARKERS_FROM_DATABASE", markers});
+          markDispatch({
+            type: "SET_MARKERS_FROM_DATABASE",
+            queryMarkers: markers,
+          });
           return data;
         }
       }
@@ -160,7 +163,7 @@ const MapComponent = compose(
       }}
       onCenterChanged={() => {
         // console.log(mapRef.current.getCenter());
-        const {lat, lng} = mapRef.current.getCenter();
+        const {lat, lng} = (mapRef.current as any).getCenter();
         saveTripDispatch({
           type: "SAVE_TRIP_POSITION",
           tripPosition: {
@@ -221,7 +224,7 @@ const MapComponent = compose(
                 26,
               )
             }
-            labelStyle={mark.labelStyle}
+            labelStyle={mark.label.length ? mark.labelStyle : {}}
             icon={{
               origin: new google.maps.Point(0, 0),
               url: mark.url,

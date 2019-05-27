@@ -18,7 +18,8 @@ interface State {
 interface Action {
   type: string;
   [key: string]: any;
-  markers: Marker[] | QueryMarker[];
+  markers: Marker[];
+  queryMarkers: QueryMarker[];
   deletedMarkerId: {
     id: String;
   };
@@ -85,7 +86,7 @@ const markerReducer = (state: State, action: Action) => {
     case "SET_MARKERS_FROM_DATABASE": {
       return {
         ...state,
-        markers: setupMarkersFromDB(action.markers),
+        markers: setupMarkersFromDB(action.queryMarkers),
       };
     }
     case "EMPTY_DELETED_DB_MARKERS_IDS": {

@@ -1,13 +1,12 @@
 import {useReducer} from "react";
 import mapImageUrlGenerator from "./lib/helpers/mapImageUrlGenerator";
+import {GoogleLinkImageProps} from "./lib/interfaces";
 
 interface Action {
   type: string;
   [key: string]: any;
   step: number;
-  urlProps: {
-    [key: string]: any;
-  };
+  urlProps: GoogleLinkImageProps;
   tripPosition: {
     lat: number;
     lng: number;

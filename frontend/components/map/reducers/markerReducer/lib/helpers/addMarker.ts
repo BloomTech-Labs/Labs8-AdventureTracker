@@ -13,7 +13,6 @@ export default (e: MapEvent, numOfMarkers: number) => {
     url: GREY_PIN,
     date: moment(),
     address: "",
-    //@ts-ignore
     labelStyle,
     id: uuidv4(),
     position: {
@@ -22,6 +21,5 @@ export default (e: MapEvent, numOfMarkers: number) => {
     },
     hasReached: false,
   };
-  //@ts-ignore
   return newMarker;
 };

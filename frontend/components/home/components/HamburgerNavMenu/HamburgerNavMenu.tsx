@@ -4,7 +4,6 @@ import {
   ListItem,
   Button,
   NavLink,
-  AuthLink,
   ExitBtn,
   HamDivider,
 } from "./HamburgerStyles";

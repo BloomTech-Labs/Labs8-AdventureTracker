@@ -1,8 +1,6 @@
 import {Form, Button} from "antd";
-import {useEffect, useState} from "react";
 import {Input} from "antd";
 import TextArea from "antd/lib/input/TextArea";
-import {formInputHandler} from "../../../helpers/functions";
 
 export interface ContactFormProps {
   form: any;

@@ -1,20 +1,7 @@
-// import {Marker, Polyline} from "../interfaces";
+import {GoogleLinkImageProps} from "../interfaces";
 
-type ImageFormat = "png" | "jpg";
-
-type MapType = "roadmap";
-interface GeneratorProps {
-    lat: number | string,
-    lng: number | string,
-    width: number | string,
-    height: number | string,
-    zoom: number | string,
-    imgFormat: ImageFormat,
-    mapType: MapType,
-    apiKey: string,
-}
 export default ({
-    lat,
+  lat,
   lng,
   width,
   height,
@@ -22,7 +9,7 @@ export default ({
   imgFormat,
   mapType,
   apiKey,
-}: GeneratorProps) => {
+}: GoogleLinkImageProps) => {
   return `https://maps.googleapis.com/maps/api/staticmap?\
 center=${lat},${lng}&\
 size=${width}x${height}&\
