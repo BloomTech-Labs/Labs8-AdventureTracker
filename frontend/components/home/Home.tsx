@@ -31,10 +31,7 @@ const Home: React.SFC<HomeProps> = () => {
   const [navbarMenuActive, setNavbarMenuActive] = useState(false);
   return (
     <div className="home">
-      <Navbar
-        setMenuActive={setNavbarMenuActive}
-        isMenuActive={navbarMenuActive}
-      />
+      <Navbar setMenuActive={setNavbarMenuActive} />
       {navbarMenuActive ? (
         <HamburgerNavMenu setMenuActive={setNavbarMenuActive} />
       ) : null}
