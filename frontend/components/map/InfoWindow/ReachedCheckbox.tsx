@@ -2,7 +2,7 @@ import {useContext} from "react";
 import {Checkbox, Modal} from "antd";
 import {Marker} from "../interfaces/marker.interface";
 import MapContext from "../../context/MapContext";
-import {GREY_PIN, CHECKED_PIN} from "../map-icons/markerIcons";
+import {CHECKED_PIN} from "../map-icons/markerIcons";
 import {decideMarkerURL} from "../reducers/markerReducer/lib/helpers";
 const confirm = Modal.confirm;
 const ReachedCheckbox = () => {
@@ -47,12 +47,16 @@ const ReachedCheckbox = () => {
               "Markers ahead of the current marker will be confirmed as not reached.",
             onOk() {
               for (let i = markers.length - 1; i >= activeIndex; i--) {
+                const updatedMarker = {
+                  ...markers[i],
+                  hasReached: false,
+                };
                 markDispatch({
                   type: "UPDATE_MARKER",
                   marker: markers[i],
                   props: {
                     hasReached: false,
-                    url: GREY_PIN,
+                    url: decideMarkerURL(updatedMarker),
                   },
                 });
               }

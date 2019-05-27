@@ -10,7 +10,6 @@ import homeImg from "static/jumbotron-home.jpg";
 import media from "lib/mediaQueries";
 //@ts-ignore
 import vars from "lib/styles/variables";
-import Router from "next/router";
 export interface AuthProps {
   router: {
     query: any;
@@ -24,11 +23,6 @@ const Auth: React.SFC<AuthProps> = props => {
   const [tab, setTab] = useState(SIGNUP);
   const [windowHeight, setWindowHeight] = useState(1000);
   useEffect(() => {
-    if (document.cookie.match(/ux/)) {
-      Router.push({
-        pathname: "/map",
-      });
-    }
     if (query) {
       setTab(query.start === LOGIN ? LOGIN : SIGNUP);
     }

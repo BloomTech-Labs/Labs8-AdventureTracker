@@ -28,6 +28,7 @@ import lineReducer from "./reducers/lineReducer/lineReducer";
 import markerReducer from "./reducers/markerReducer/markerReducer";
 import {decideMarkerURL} from "./reducers/markerReducer/lib/helpers/index";
 import saveTripReducer from "./reducers/saveTripReducer/saveTripReducer";
+import LogoutBtn from "./LogoutBtn/LogoutBtn";
 const {publicRuntimeConfig} = getConfig();
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
@@ -198,6 +199,7 @@ const MapComponent = compose(
         <SaveTripProcess />
       </MapContext.Provider>
       <ProgressCircle markers={markers} />
+      <LogoutBtn client={client} />
       <TripModal
         isModalVisible={isTripModalOpen}
         setIsModalVisible={setIsTripModalOpen}
