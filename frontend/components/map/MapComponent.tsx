@@ -100,19 +100,15 @@ const MapComponent = compose(
   useEffect(() => {
     const fetchInitialEntities = async () => {
       if (tripId) {
-        const {data} = await client.query({
-          query: MY_TRIP_BY_ID,
-          fetchPolicy: "no-cache",
-          variables: {
-            id: tripId,
-          },
-        });
-        console.log(data);
-        if (!data.tripById) {
-          message.error(
-            `Sorry either you are not logged in or the trip does not exist`,
-          );
-        } else {
+        try {
+          const {data} = await client.query({
+            query: MY_TRIP_BY_ID,
+            fetchPolicy: "no-cache",
+            variables: {
+              id: tripId,
+            },
+          });
+
           const {markers, lat, lng} = data.tripById;
           setTripExists(true);
           setIsTripModalOpen(false);
@@ -127,7 +123,8 @@ const MapComponent = compose(
             type: "SET_MARKERS_FROM_DATABASE",
             queryMarkers: markers,
           });
-          return data;
+        } catch (err) {
+          message.error(err.message);
         }
       }
     };

@@ -48,16 +48,7 @@ const LoginForm: React.SFC<Props> = ({form, isVisible}) => {
           pathname: "/map",
         });
       } catch (err) {
-        // console.log({err});
-        if (err.graphQLErrors.length === 0) {
-          message.error(
-            "There might be a problem with the server, please try again later.",
-          );
-        } else {
-          message.error(
-            "Your email or password is incorrect, please try again.",
-          );
-        }
+        message.error(err.message);
       }
     });
   };

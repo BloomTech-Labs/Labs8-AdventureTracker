@@ -7,6 +7,7 @@ import tripManagerReducer from "./reducer/tripManagerReducer";
 import {useEffect, useState} from "react";
 import {MY_TRIPS_QUERY} from "../../resolvers/Queries";
 import {Empty} from "antd";
+import {message} from "antd";
 
 interface Props {
   isModalVisible: boolean;
@@ -19,7 +20,7 @@ const TripModal: React.SFC<Props> = ({
   isModalVisible,
   setIsModalVisible,
   client,
-  tripId
+  tripId,
 }) => {
   const ALL = "ALL";
   const ACTIVE = "ACTIVE";
@@ -42,6 +43,7 @@ const TripModal: React.SFC<Props> = ({
         });
       } catch (err) {
         tripDispatch({type: "ERROR_FETCHING_TRIPS"});
+        message.error(err.message);
       }
     };
     fetchMyTrips();
