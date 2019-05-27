@@ -85,7 +85,7 @@ const OverlayMenu = props => {
               markDispatch({type: "EMPTY_DELETED_DB_MARKERS_IDS"});
             } catch (err) {
               menuDispatch({type: "UPDATE_TRIP_ERROR"});
-              message.error("Was unable to save trip");
+              message.error(err.message);
             }
             hide();
           }}

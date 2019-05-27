@@ -57,24 +57,12 @@ const SignUpForm: React.SFC<Props> = ({form, isVisible}) => {
       }
 
       try {
-        const data = await signUpCb();
-        if (data) {
-          Router.push({
-            pathname: "/map",
-          });
-        }
+        await signUpCb();
+        Router.push({
+          pathname: "/map",
+        });
       } catch (err) {
-        // console.log({err});
-        if (err.graphQLErrors.length === 0) {
-          message.error("There has been a server error, try again later");
-        } else {
-          const {code, message: graphqlMsg} = err.graphQLErrors[0];
-          if (code === 3010) {
-            if (graphqlMsg.match(/email/i)) {
-              message.error("Email already taken.");
-            }
-          }
-        }
+        message.error(err.message);
       }
     });
   };
