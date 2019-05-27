@@ -3,7 +3,15 @@ import styled from "styled-components";
 export interface Props {}
 
 const TripList: React.SFC<Props> = ({children}) => {
-  return <TripListWrapper>{children}</TripListWrapper>;
+  return (
+    <TripListWrapper
+      onWheel={e => {
+        e.currentTarget.scrollLeft += e.deltaY;
+      }}
+    >
+      {children}
+    </TripListWrapper>
+  );
 };
 const TripListWrapper = styled.div`
   display: flex;
@@ -12,7 +20,6 @@ const TripListWrapper = styled.div`
   }
   max-height: 600px;
   max-width: 100%;
-  overflow-y: auto;
   overflow-x: scroll;
 `;
 export default TripList;
