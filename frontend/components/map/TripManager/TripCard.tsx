@@ -1,4 +1,4 @@
-import {Card, Icon, Avatar, Button} from "antd";
+import {Card, Icon, Avatar, Button, message} from "antd";
 import {Mutation} from "react-apollo";
 import {ARCHIVE_TRIP_MUTATION} from "../../resolvers/Mutations";
 import {Trip} from "../interfaces";
@@ -26,16 +26,20 @@ const TripCard: React.SFC<Props> = ({trip, tripDispatch, urlTripId}) => {
           {(updateTrip, {loading}) => (
             <Button
               onClick={async () => {
-                //@ts-ignore
-                let {data} = await updateTrip();
-                const {id, archived} = data.updateTrip;
-                tripDispatch({
-                  type: "UPDATE_TRIP",
-                  tripId: id,
-                  props: {
-                    archived,
-                  },
-                });
+                try {
+                  //@ts-ignore
+                  let {data} = await updateTrip();
+                  const {id, archived} = data.updateTrip;
+                  tripDispatch({
+                    type: "UPDATE_TRIP",
+                    tripId: id,
+                    props: {
+                      archived,
+                    },
+                  });
+                } catch (err) {
+                  message.error("Was not able to update archive status");
+                }
               }}
             >
               <Icon

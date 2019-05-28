@@ -7,6 +7,7 @@ import MapContext from "../../context/MapContext";
 import optionsMenuReducer from "./optionsMenuReducer";
 import {UPDATE_TRIP_MUTATION} from "../../resolvers/Mutations";
 import {changeMarkersForUpsert} from "../lib/helpers/changeMarkersForUpsert";
+import Router from "next/router";
 const confirm = Modal.confirm;
 
 const OptionsMenuWrapper = styled.div`
@@ -46,6 +47,7 @@ const OverlayMenu = props => {
     markState,
     markDispatch,
     tripExists,
+    setTripExists,
     saveTripDispatch,
     client,
     tripId,
@@ -60,14 +62,34 @@ const OverlayMenu = props => {
     <MainMenu>
       {tripExists ? (
         <MenuItem
+          onClick={() => {
+            markDispatch({type: "RESET_STATE"});
+            setTripExists(false);
+            Router.push({
+              pathname: "/map",
+            });
+          }}
+        >
+          <Icon type="plus-square" />
+          Create Trip
+        </MenuItem>
+      ) : null}
+      <MenuItem
+        onClick={() => {
+          saveTripDispatch({type: "SET_STEP", step: 0});
+        }}
+      >
+        <Icon type="save" />
+        Save Trip
+      </MenuItem>
+      {tripExists ? (
+        <MenuItem
           disabled={isUpdating}
           onClick={async () => {
             const hide = message.loading("Saving trip...", 0);
-            console.log(client);
             try {
-              console.log(deletedMarkersIdsFromDB, markers, tripId);
               menuDispatch({type: "UPDATING_TRIP"});
-              const {data} = await client.mutate({
+              await client.mutate({
                 mutation: UPDATE_TRIP_MUTATION,
                 variables: {
                   id: tripId,
@@ -79,7 +101,6 @@ const OverlayMenu = props => {
                   },
                 },
               });
-              console.log(data);
               message.success("Trip was successfully updated!");
               menuDispatch({type: "UPDATED_TRIP"});
               markDispatch({type: "EMPTY_DELETED_DB_MARKERS_IDS"});
@@ -94,14 +115,7 @@ const OverlayMenu = props => {
           Update Trip
         </MenuItem>
       ) : null}
-      <MenuItem
-        onClick={() => {
-          saveTripDispatch({type: "SET_STEP", step: 0});
-        }}
-      >
-        <Icon type="save" />
-        Save Trip
-      </MenuItem>
+
       <MenuItem
         onClick={() => {
           setIsTripModalOpen(true);
