@@ -1,4 +1,4 @@
-import {Form, Input, Button} from "antd";
+import {Form, Input, Button, message} from "antd";
 import React, {useState, useContext} from "react";
 import styled from "styled-components";
 import {Mutation} from "react-apollo";
@@ -156,12 +156,19 @@ const FinishTripForm: React.SFC<Props> = ({form}) => {
                 <DoneBtn
                   type="primary"
                   onClick={async () => {
-                    saveTripDispatch({type: "SET_STEP", step: -1});
-                    //@ts-ignore
-                    const {data} = await createTrip();
-                    console.log(data);
-                    const {id} = data.createTrip;
-                    window.location.href = `/map?id=${id}`;
+                    const hide = message.loading("Saving Trip", 0);
+                    try {
+                      //@ts-ignore
+                      const {data} = await createTrip();
+                      console.log(data);
+                      const {id} = data.createTrip;
+                      window.location.href = `/map?id=${id}`;
+                    } catch (err) {
+                      message.error(err.message);
+                    } finally {
+                      hide();
+                      saveTripDispatch({type: "SET_STEP", step: -1});
+                    }
                   }}
                 >
                   Done

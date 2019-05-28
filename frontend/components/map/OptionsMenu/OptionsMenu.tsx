@@ -86,7 +86,7 @@ const OverlayMenu = props => {
         <MenuItem
           disabled={isUpdating}
           onClick={async () => {
-            const hide = message.loading("Saving trip...", 0);
+            const hide = message.loading("Updating trip...", 0);
             try {
               menuDispatch({type: "UPDATING_TRIP"});
               await client.mutate({
