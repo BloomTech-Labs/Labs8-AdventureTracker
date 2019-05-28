@@ -192,6 +192,7 @@ const MapComponent = compose(
           setUserLocationMarker,
           setIsTripModalOpen,
           tripExists,
+          setTripExists,
           tripId,
           client,
         }}

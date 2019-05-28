@@ -47,6 +47,7 @@ const OverlayMenu = props => {
     markState,
     markDispatch,
     tripExists,
+    setTripExists,
     saveTripDispatch,
     client,
     tripId,
@@ -59,6 +60,28 @@ const OverlayMenu = props => {
   const {isUpdating} = menuState;
   return (
     <MainMenu>
+      {tripExists ? (
+        <MenuItem
+          onClick={() => {
+            markDispatch({type: "RESET_STATE"});
+            setTripExists(false);
+            Router.push({
+              pathname: "/map",
+            });
+          }}
+        >
+          <Icon type="plus-square" />
+          Create Trip
+        </MenuItem>
+      ) : null}
+      <MenuItem
+        onClick={() => {
+          saveTripDispatch({type: "SET_STEP", step: 0});
+        }}
+      >
+        <Icon type="save" />
+        Save Trip
+      </MenuItem>
       {tripExists ? (
         <MenuItem
           disabled={isUpdating}
@@ -92,27 +115,7 @@ const OverlayMenu = props => {
           Update Trip
         </MenuItem>
       ) : null}
-      <MenuItem
-        onClick={() => {
-          saveTripDispatch({type: "SET_STEP", step: 0});
-        }}
-      >
-        <Icon type="save" />
-        Save Trip
-      </MenuItem>
-      {tripExists ? (
-        <MenuItem
-          onClick={() => {
-            markDispatch({type: "RESET_STATE"});
-            Router.push({
-              pathname: "/map",
-            });
-          }}
-        >
-          <Icon type="plus-square" />
-          Create Trip
-        </MenuItem>
-      ) : null}
+
       <MenuItem
         onClick={() => {
           setIsTripModalOpen(true);
