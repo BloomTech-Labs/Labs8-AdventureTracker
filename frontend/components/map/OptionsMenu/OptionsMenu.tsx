@@ -7,6 +7,7 @@ import MapContext from "../../context/MapContext";
 import optionsMenuReducer from "./optionsMenuReducer";
 import {UPDATE_TRIP_MUTATION} from "../../resolvers/Mutations";
 import {changeMarkersForUpsert} from "../lib/helpers/changeMarkersForUpsert";
+import Router from "next/router";
 const confirm = Modal.confirm;
 
 const OptionsMenuWrapper = styled.div`
@@ -99,6 +100,19 @@ const OverlayMenu = props => {
         <Icon type="save" />
         Save Trip
       </MenuItem>
+      {tripExists ? (
+        <MenuItem
+          onClick={() => {
+            markDispatch({type: "RESET_STATE"});
+            Router.push({
+              pathname: "/map",
+            });
+          }}
+        >
+          <Icon type="plus-square" />
+          Create Trip
+        </MenuItem>
+      ) : null}
       <MenuItem
         onClick={() => {
           setIsTripModalOpen(true);

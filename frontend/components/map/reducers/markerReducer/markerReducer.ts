@@ -89,6 +89,13 @@ const markerReducer = (state: State, action: Action) => {
         markers: setupMarkersFromDB(action.queryMarkers),
       };
     }
+    case "RESET_STATE": {
+      return {
+        activeMarker: {},
+        markers: [],
+        deletedMarkersIdsFromDB: [],
+      };
+    }
     case "EMPTY_DELETED_DB_MARKERS_IDS": {
       return {
         ...state,
