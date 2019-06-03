@@ -29,6 +29,8 @@ import markerReducer from "./reducers/markerReducer/markerReducer";
 import {decideMarkerURL} from "./reducers/markerReducer/lib/helpers/index";
 import saveTripReducer from "./reducers/saveTripReducer/saveTripReducer";
 import LogoutBtn from "./LogoutBtn/LogoutBtn";
+import Joyride from "react-joyride";
+import JoyrideMapCover from "./tutorial-components/JoyrideMapCover/JoyrideMapCover";
 const {publicRuntimeConfig} = getConfig();
 // Google Maps API doc link: https://tomchentw.github.io/react-google-maps/
 const MapComponent = compose(
@@ -53,6 +55,13 @@ const MapComponent = compose(
   withGoogleMap,
   //@ts-ignore
 )(({client, tripId}) => {
+  const [steps, setSteps] = useState([
+    {
+      target: ".tutorial-step1",
+      content: "Click on the map to create markers!",
+      placement: "center",
+    },
+  ]);
   const [markState, markDispatch] = markerReducer();
   const {markers} = markState;
 
@@ -179,6 +188,9 @@ const MapComponent = compose(
         lng: tripPosition.lng,
       }}
     >
+      //@ts-ignore
+      <Joyride steps={steps} run={true} spotlightClicks />
+      <JoyrideMapCover className="tutorial-step1" />
       <MapContext.Provider
         value={{
           markState,
@@ -211,7 +223,6 @@ const MapComponent = compose(
         client={client}
         tripId={tripId}
       />
-
       {userLocationMarker.isVisible ? (
         <Marker position={userLocationMarker.position} />
       ) : null}
